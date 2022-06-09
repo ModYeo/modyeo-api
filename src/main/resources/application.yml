@@ -1,0 +1,24 @@
+spring:
+  profiles:
+    active: dev
+  datasource:
+    url: jdbc:h2:tcp:localhost/~/test
+    hikari:
+      username: sa
+      password:
+      driver-class-name: org.h2.Driver
+
+  jwt:
+    secret: test
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        show_sql: true
+logging:
+  level:
+    org.hibernate.sql: debug
