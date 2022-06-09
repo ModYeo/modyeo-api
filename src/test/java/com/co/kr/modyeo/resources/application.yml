@@ -1,8 +1,8 @@
 spring:
   profiles:
-    active: dev
+    active: test
   datasource:
-    url: jdbc:h2:tcp:localhost/~/modyeo
+    url: jdbc:h2:tcp:localhost/~/test
     hikari:
       username: sa
       password:
