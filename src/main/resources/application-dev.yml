@@ -2,14 +2,14 @@ spring:
   profiles:
     active: dev
   datasource:
-    url: jdbc:h2:tcp:localhost/~/test
+    url: jdbc:h2:tcp:localhost/~/modyeo
     hikari:
       username: sa
       password:
       driver-class-name: org.h2.Driver
 
   jwt:
-    secret: test
+    secret: Z2VvLWdhdGhlcmluZy1zeXN0ZW0tbW9keWVvLWFwaS1zZXJ2ZXItc3ByaW5nLWJvb3QtanBhLWp3dC1zcHJpbmctc2VjdXJpdHktd2lydHRlci1hbmpvbmdnaWwtamFuZ21pbnNlb2stMjAyMi0wNi0wOQo=
 
   jpa:
     hibernate:
