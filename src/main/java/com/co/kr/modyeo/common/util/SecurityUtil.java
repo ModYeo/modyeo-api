@@ -1,5 +1,8 @@
 package com.co.kr.modyeo.common.util;
 
+import com.co.kr.modyeo.common.exception.CustomAuthException;
+import com.co.kr.modyeo.common.exception.ErrorCode;
+import com.co.kr.modyeo.common.result.JsonResultData;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -11,7 +14,11 @@ public class SecurityUtil {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || authentication.getName() == null){
-            throw new RuntimeException("Security Context에 인증정보가 없습니다.");
+            throw new CustomAuthException(JsonResultData
+                    .failResultBuilder()
+                    .errorCode(ErrorCode.SECURITY_CONTEXT_NOT_FOUND.getCode())
+                    .errorMessage(ErrorCode.SECURITY_CONTEXT_NOT_FOUND.getMessage())
+                    .build());
         }
 
         return Long.parseLong(authentication.getName());

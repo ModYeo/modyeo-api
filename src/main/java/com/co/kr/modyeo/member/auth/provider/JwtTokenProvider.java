@@ -1,5 +1,8 @@
 package com.co.kr.modyeo.member.auth.provider;
 
+import com.co.kr.modyeo.common.exception.CustomAuthException;
+import com.co.kr.modyeo.common.exception.ErrorCode;
+import com.co.kr.modyeo.common.result.JsonResultData;
 import com.co.kr.modyeo.member.auth.domain.dto.TokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -66,7 +69,11 @@ public class JwtTokenProvider {
         Claims claims = parseClaims(token);
 
         if (claims.get(AUTHORITIES_KEY) == null){
-            throw new RuntimeException("권한 정보가 없는 토근입니다.");
+            throw new CustomAuthException(JsonResultData
+                    .failResultBuilder()
+                    .errorCode(ErrorCode.NOT_AUTH_TOKEN.getCode())
+                    .errorMessage(ErrorCode.NOT_AUTH_TOKEN.getMessage())
+                    .build());
         }
 
         Collection<? extends GrantedAuthority> authorities =
