@@ -1,5 +1,8 @@
 package com.co.kr.modyeo.member.auth.service.impl;
 
+import com.co.kr.modyeo.common.exception.CustomAuthException;
+import com.co.kr.modyeo.common.exception.ErrorCode;
+import com.co.kr.modyeo.common.result.JsonResultData;
 import com.co.kr.modyeo.member.auth.domain.dto.MemberRequestDto;
 import com.co.kr.modyeo.member.auth.domain.dto.MemberResponseDto;
 import com.co.kr.modyeo.member.auth.domain.dto.TokenDto;
@@ -30,7 +33,11 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public MemberResponseDto signup(MemberRequestDto memberRequestDto) {
         if (memberRepository.existsByEmail(memberRequestDto.getEmail())){
-            throw new RuntimeException("이미 가입되어 있는 유저입니다.");
+            throw new CustomAuthException(JsonResultData
+                    .failResultBuilder()
+                    .errorCode(ErrorCode.ALREADY_JOIN_USER.getCode())
+                    .errorMessage(ErrorCode.ALREADY_JOIN_USER.getMessage())
+                    .build());
         }
 
         Member member = memberRequestDto.toMember(passwordEncoder);
@@ -58,16 +65,28 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public TokenDto reissue(TokenRequestDto tokenRequestDto) {
         if (!jwtTokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
-            throw new RuntimeException("Refresh Token이 유요하지 않습니다.");
+            throw new CustomAuthException(JsonResultData
+                    .failResultBuilder()
+                    .errorCode(ErrorCode.NOT_VALID_TOKEN.getCode())
+                    .errorMessage(ErrorCode.NOT_VALID_TOKEN.getMessage())
+                    .build());
         }
 
         Authentication authentication = jwtTokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
 
         RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
-                .orElseThrow(()->new RuntimeException("로그아웃된 사용자 입니다."));
+                .orElseThrow(()-> new CustomAuthException(JsonResultData
+                .failResultBuilder()
+                .errorCode(ErrorCode.LOG_OUT_USER.getCode())
+                .errorMessage(ErrorCode.LOG_OUT_USER.getMessage())
+                .build()));
 
         if (!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())){
-            throw new RuntimeException("토큰의 유저 정보가 일치하지 않습니다.");
+            throw new CustomAuthException(JsonResultData
+                    .failResultBuilder()
+                    .errorCode(ErrorCode.NOT_MATCH_TOKEN_INFO.getCode())
+                    .errorMessage(ErrorCode.NOT_MATCH_TOKEN_INFO.getMessage())
+                    .build());
         }
 
         TokenDto tokenDto = jwtTokenProvider.generateTokenDto(authentication);
