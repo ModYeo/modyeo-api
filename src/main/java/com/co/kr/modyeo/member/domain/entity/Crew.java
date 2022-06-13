@@ -1,10 +1,14 @@
 package com.co.kr.modyeo.member.domain.entity;
 
+import com.co.kr.modyeo.member.domain.entity.link.CrewCategory;
+import com.co.kr.modyeo.member.domain.entity.link.MemberCrew;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -18,4 +22,7 @@ public class Crew {
 
     @Column(name = "crew_name")
     private String name;
+
+    @OneToMany(mappedBy = "crew")
+    private List<CrewCategory> categoryList = new ArrayList<>();
 }
