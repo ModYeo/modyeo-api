@@ -32,8 +32,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody MemberRequestDto memberRequestDto){
         TokenDto tokenDto = authService.login(memberRequestDto);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(JsonResultData.successResultBuilder()
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
                         .data(tokenDto)
                         .build());
     }
@@ -41,9 +40,16 @@ public class AuthController {
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(@RequestBody TokenRequestDto tokenRequestDto){
         TokenDto tokenDto = authService.reissue(tokenRequestDto);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(JsonResultData.successResultBuilder()
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
                         .data(tokenDto)
                         .build());
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestBody TokenRequestDto tokenRequestDto){
+        authService.logout(tokenRequestDto);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
+                .build());
     }
 }

@@ -7,18 +7,20 @@ import com.co.kr.modyeo.member.auth.domain.dto.MemberRequestDto;
 import com.co.kr.modyeo.member.auth.domain.dto.MemberResponseDto;
 import com.co.kr.modyeo.member.auth.domain.dto.TokenDto;
 import com.co.kr.modyeo.member.auth.domain.dto.TokenRequestDto;
-import com.co.kr.modyeo.member.auth.domain.entity.RefreshToken;
 import com.co.kr.modyeo.member.auth.provider.JwtTokenProvider;
 import com.co.kr.modyeo.member.auth.repository.RefreshTokenRepository;
 import com.co.kr.modyeo.member.auth.service.AuthService;
 import com.co.kr.modyeo.member.domain.entity.Member;
 import com.co.kr.modyeo.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +31,8 @@ public class AuthServiceImpl implements AuthService {
     private final MemberRepository memberRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+
+    private final StringRedisTemplate redisTemplate;
 
     @Override
     public MemberResponseDto signup(MemberRequestDto memberRequestDto) {
@@ -52,12 +56,11 @@ public class AuthServiceImpl implements AuthService {
 
         TokenDto tokenDto = jwtTokenProvider.generateTokenDto(authentication);
 
-        RefreshToken refreshToken = RefreshToken.builder()
-                .key(authentication.getName())
-                .value(tokenDto.getRefreshToken())
-                .build();
-
-        refreshTokenRepository.save(refreshToken);
+        redisTemplate.opsForValue()
+                .set("RT:" + authentication.getName(),
+                        tokenDto.getRefreshToken(),
+                        tokenDto.getAccessTokenExpiresIn(),
+                        TimeUnit.MILLISECONDS);
 
         return tokenDto;
     }
@@ -74,14 +77,9 @@ public class AuthServiceImpl implements AuthService {
 
         Authentication authentication = jwtTokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
 
-        RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
-                .orElseThrow(()-> new CustomAuthException(JsonResultData
-                .failResultBuilder()
-                .errorCode(ErrorCode.LOG_OUT_USER.getCode())
-                .errorMessage(ErrorCode.LOG_OUT_USER.getMessage())
-                .build()));
-
-        if (!refreshToken.getValue().equals(tokenRequestDto.getRefreshToken())){
+        String refreshToken = redisTemplate.opsForValue().get("RT:" + authentication.getName());
+        assert refreshToken != null;
+        if (!refreshToken.equals(tokenRequestDto.getRefreshToken())){
             throw new CustomAuthException(JsonResultData
                     .failResultBuilder()
                     .errorCode(ErrorCode.NOT_MATCH_TOKEN_INFO.getCode())
@@ -91,8 +89,32 @@ public class AuthServiceImpl implements AuthService {
 
         TokenDto tokenDto = jwtTokenProvider.generateTokenDto(authentication);
 
-        refreshToken.updateValue(tokenDto.getRefreshToken());
+        redisTemplate.opsForValue()
+                .set("RT:" + authentication.getName(),
+                        tokenDto.getRefreshToken(),
+                        tokenDto.getAccessTokenExpiresIn(), TimeUnit.MILLISECONDS);
 
         return tokenDto;
+    }
+
+    @Override
+    public void logout(TokenRequestDto tokenRequestDto) {
+        if(!jwtTokenProvider.validateToken(tokenRequestDto.getAccessToken())){
+            throw new CustomAuthException(JsonResultData
+                    .failResultBuilder()
+                    .errorCode(ErrorCode.NOT_VALID_TOKEN.getCode())
+                    .errorMessage(ErrorCode.NOT_VALID_TOKEN.getMessage())
+                    .build());
+        }
+
+        Authentication authentication = jwtTokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
+
+        if(redisTemplate.opsForValue().get("RT:" + authentication.getName()) != null){
+            redisTemplate.delete("RT:"+ authentication.getName());
+        }
+
+        Long expiration = jwtTokenProvider.getExpiration(tokenRequestDto.getAccessToken());
+        redisTemplate.opsForValue()
+                .set(tokenRequestDto.getAccessToken(),"logout", expiration, TimeUnit.MILLISECONDS);
     }
 }
