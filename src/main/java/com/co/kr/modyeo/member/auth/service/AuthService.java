@@ -11,4 +11,6 @@ public interface AuthService {
     TokenDto login(MemberRequestDto memberRequestDto);
 
     TokenDto reissue(TokenRequestDto tokenRequestDto);
+
+    void logout(TokenRequestDto tokenRequestDto);
 }
