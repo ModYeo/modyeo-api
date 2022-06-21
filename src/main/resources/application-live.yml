@@ -21,6 +21,13 @@ spring:
 #        show_sql: true
     open-in-view: false
 
+  redis:
+    host: localhost
+    port: 6379
+
 logging:
   level:
 #    org.hibernate.sql: debug
+
+profiles:
+  active: live
