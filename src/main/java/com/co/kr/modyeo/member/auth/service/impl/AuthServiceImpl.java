@@ -8,7 +8,6 @@ import com.co.kr.modyeo.member.auth.domain.dto.MemberResponseDto;
 import com.co.kr.modyeo.member.auth.domain.dto.TokenDto;
 import com.co.kr.modyeo.member.auth.domain.dto.TokenRequestDto;
 import com.co.kr.modyeo.member.auth.provider.JwtTokenProvider;
-import com.co.kr.modyeo.member.auth.repository.RefreshTokenRepository;
 import com.co.kr.modyeo.member.auth.service.AuthService;
 import com.co.kr.modyeo.member.domain.entity.Member;
 import com.co.kr.modyeo.member.repository.MemberRepository;
@@ -27,10 +26,12 @@ import java.util.concurrent.TimeUnit;
 public class AuthServiceImpl implements AuthService {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
     private final PasswordEncoder passwordEncoder;
+
     private final MemberRepository memberRepository;
+
     private final JwtTokenProvider jwtTokenProvider;
-    private final RefreshTokenRepository refreshTokenRepository;
 
     private final StringRedisTemplate redisTemplate;
 

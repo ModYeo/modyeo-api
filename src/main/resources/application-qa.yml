@@ -2,11 +2,11 @@ spring:
   profiles:
     active: qa
   datasource:
-    url: jdbc:h2:tcp:localhost/~/modyeo
+    url: jdbc:mysql://skysrd.iptime.org:3306/modyeo
     hikari:
-      username: sa
-      password:
-      driver-class-name: org.h2.Driver
+      username: api
+      password: modyeo!@
+      driver-class-name: com.mysql.cj.jdbc.Driver
 
   jwt:
     secret: Z2VvLWdhdGhlcmluZy1zeXN0ZW0tbW9keWVvLWFwaS1zZXJ2ZXItc3ByaW5nLWJvb3QtanBhLWp3dC1zcHJpbmctc2VjdXJpdHktd2lydHRlci1hbmpvbmdnaWwtamFuZ21pbnNlb2stMjAyMi0wNi0wOQo=
@@ -21,6 +21,14 @@ spring:
 #        show_sql: true
     open-in-view: false
 
+  redis:
+    host: skysrd.iptime.org
+    port: 6379
+
 logging:
   level:
 #    org.hibernate.sql: debug
+
+
+profiles:
+  active: qa

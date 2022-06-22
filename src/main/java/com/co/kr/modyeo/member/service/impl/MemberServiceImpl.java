@@ -20,7 +20,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<MemberResponse> getMembers() {
         return memberRepository.findMembers().stream()
-                .map(member -> MemberResponse.toRes(member))
+                .map(MemberResponse::toRes)
                 .collect(Collectors.toList());
     }
 }
