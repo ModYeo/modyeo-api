@@ -17,7 +17,7 @@ public class Category {
     private Long id;
     private String name;
 
-    @Builder
+    @Builder(builderClassName = "of",builderMethodName = "of")
     public Category(Long id, String name) {
         this.id = id;
         this.name = name;
