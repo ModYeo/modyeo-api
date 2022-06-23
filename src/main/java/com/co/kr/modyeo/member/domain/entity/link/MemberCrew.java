@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.member.domain.entity.link;
 
+import com.co.kr.modyeo.member.domain.entity.BaseEntity;
 import com.co.kr.modyeo.member.domain.entity.Crew;
 import com.co.kr.modyeo.member.domain.entity.Member;
 import lombok.Getter;
@@ -9,7 +10,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Table(name = "MEMBER_CREW")
-public class MemberCrew {
+public class MemberCrew extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_crew_id")
     private Long id;

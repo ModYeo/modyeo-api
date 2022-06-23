@@ -7,6 +7,8 @@ import com.co.kr.modyeo.member.service.MemberService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,18 +19,18 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
-@SpringBootTest
-@Transactional
 class MemberServiceImplTest {
 
-    @Autowired
-    MemberService memberService;
+    private MemberServiceImpl memberService;
 
-    @Autowired
-    MemberRepository memberRepository;
+    @Mock
+    private MemberRepository memberRepository;
 
-    @Autowired
-    EntityManager em;
+    @BeforeEach
+    public void setup(){
+        MockitoAnnotations.initMocks(this);
+        memberService = new MemberServiceImpl(memberRepository);
+    }
 
     @Test
     void getMembers(){

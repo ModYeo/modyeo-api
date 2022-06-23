@@ -5,20 +5,29 @@ import com.co.kr.modyeo.member.domain.entity.Category;
 import com.co.kr.modyeo.member.repository.CategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
 class CategoryServiceImplTest {
 
+    private CategoryServiceImpl categoryService;
+
+    @Mock
     private CategoryRepository categoryRepository;
 
+
     @BeforeEach
-    public void setUp(){
+    public void setup(){
         MockitoAnnotations.initMocks(this);
-        CategoryServiceImpl categoryService = new CategoryServiceImpl(categoryRepository);
+        categoryService = new CategoryServiceImpl(categoryRepository);
     }
 
     @Test
@@ -30,7 +39,16 @@ class CategoryServiceImplTest {
         Category category = categoryRequest.toEntity();
         category = categoryRepository.save(category);
 
-        assertThat(category.getId()).isEqualTo(1);
-        assertThat(category.getName()).isEqualTo("test category");
+        assertThat(category).isEqualTo(categoryRepository.findByName("test category"));
+    }
+
+    @Test
+    @Transactional
+    void createTest2(){
+        CategoryRequest categoryRequest = CategoryRequest.of()
+                .name("test category")
+                .build();
+        categoryService.create(categoryRequest);
+        Mockito.verify(categoryRepository).save(ArgumentMatchers.any());
     }
 }

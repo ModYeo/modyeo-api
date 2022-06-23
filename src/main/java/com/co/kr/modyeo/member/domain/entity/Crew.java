@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Table(name = "CREW")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Crew {
+public class Crew extends BaseEntity{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "crew_id")
@@ -23,6 +23,6 @@ public class Crew {
     @Column(name = "crew_name")
     private String name;
 
-    @OneToMany(mappedBy = "crew")
+    @OneToMany(mappedBy = "crew",cascade = CascadeType.ALL)
     private List<CrewCategory> categoryList = new ArrayList<>();
 }
