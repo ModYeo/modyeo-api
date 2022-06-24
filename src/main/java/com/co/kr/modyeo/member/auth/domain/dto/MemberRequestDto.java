@@ -3,6 +3,7 @@ package com.co.kr.modyeo.member.auth.domain.dto;
 import com.co.kr.modyeo.member.domain.entity.Member;
 import com.co.kr.modyeo.member.domain.enumerate.Authority;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -10,6 +11,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 @Getter
+@NoArgsConstructor
 public class MemberRequestDto {
 
     @Email
