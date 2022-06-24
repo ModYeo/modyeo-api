@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody MemberRequestDto memberRequestDto){
+    public ResponseEntity<?> signup(@Valid @RequestBody MemberRequestDto memberRequestDto){
         MemberResponseDto memberResponseDto = authService.signup(memberRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(JsonResultData.successResultBuilder()
@@ -30,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody MemberRequestDto memberRequestDto){
+    public ResponseEntity<?> login(@Valid @RequestBody MemberRequestDto memberRequestDto){
         TokenDto tokenDto = authService.login(memberRequestDto);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                         .data(tokenDto)
@@ -38,7 +40,7 @@ public class AuthController {
     }
 
     @PostMapping("/reissue")
-    public ResponseEntity<?> reissue(@RequestBody TokenRequestDto tokenRequestDto){
+    public ResponseEntity<?> reissue(@Valid @RequestBody TokenRequestDto tokenRequestDto){
         TokenDto tokenDto = authService.reissue(tokenRequestDto);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                         .data(tokenDto)
@@ -46,7 +48,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestBody TokenRequestDto tokenRequestDto){
+    public ResponseEntity<?> logout(@Valid @RequestBody TokenRequestDto tokenRequestDto){
         authService.logout(tokenRequestDto);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)

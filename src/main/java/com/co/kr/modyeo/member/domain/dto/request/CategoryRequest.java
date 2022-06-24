@@ -3,10 +3,12 @@ package com.co.kr.modyeo.member.domain.dto.request;
 import com.co.kr.modyeo.member.domain.entity.Category;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
+@NoArgsConstructor
 public class CategoryRequest {
 
     @NotNull
