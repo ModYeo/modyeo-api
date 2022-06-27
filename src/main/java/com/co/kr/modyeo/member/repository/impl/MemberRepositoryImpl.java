@@ -5,11 +5,11 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import javax.persistence.EntityManager;
 
-public class MemberCustomRepositoryImpl implements MemberCustomRepository {
+public class MemberRepositoryImpl implements MemberCustomRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public MemberCustomRepositoryImpl(EntityManager em) {
+    public MemberRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 }

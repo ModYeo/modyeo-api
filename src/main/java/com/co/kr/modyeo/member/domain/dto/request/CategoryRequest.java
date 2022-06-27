@@ -11,16 +11,20 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class CategoryRequest {
 
+    private Long id;
+
     @NotNull
     private String name;
 
     @Builder(builderMethodName = "of",builderClassName = "of")
-    public CategoryRequest(String name) {
+    public CategoryRequest(String name,Long id) {
         this.name = name;
+        this.id = id;
     }
 
     public Category toEntity(){
         return Category.of()
+                .id(id)
                 .name(this.name)
                 .build();
     }

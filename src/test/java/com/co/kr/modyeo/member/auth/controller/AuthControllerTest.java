@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.member.auth.controller;
 
+import com.co.kr.modyeo.member.annotation.WithMockCustomUser;
 import com.co.kr.modyeo.member.auth.domain.dto.MemberRequestDto;
 import com.co.kr.modyeo.member.auth.provider.JwtTokenProvider;
 import com.co.kr.modyeo.member.auth.service.AuthService;
@@ -9,10 +10,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -26,11 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(value = AuthController.class)
 @AutoConfigureMockMvc
-@DisplayName(value = "Auth Controller test")
-@ContextConfiguration(classes = {AuthController.class})
 class AuthControllerTest {
-
-    final String rootUrl = "/auth";
 
     MockMvc mockMvc;
 
@@ -60,6 +62,6 @@ class AuthControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(memberRequestDto))
         ).andDo(print())
-                .andExpect(status().is2xxSuccessful());
+                .andExpect(status().isCreated());
     }
 }

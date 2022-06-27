@@ -1,9 +1,9 @@
-package com.co.kr.modyeo.common.exception;
+package com.co.kr.modyeo.common.exception.code;
 
 import lombok.Getter;
 
 @Getter
-public enum ErrorCode {
+public enum AuthErrorCode {
     SECURITY_CONTEXT_NOT_FOUND("SECURITY_CONTEXT_NOT_FOUND","Security Context에 인증정보가 없습니다."),
     NOT_AUTH_TOKEN("NOT_AUTH_TOKEN","권한 정보가 없는 토근입니다."),
     ALREADY_JOIN_USER("ALREADY_JOIN_USER","이미 가입되어 있는 유저입니다."),
@@ -17,7 +17,7 @@ public enum ErrorCode {
     private final String code;
     private final String message;
 
-    ErrorCode(String code, String message){
+    AuthErrorCode(String code, String message){
         this.code = code;
         this.message = message;
     }

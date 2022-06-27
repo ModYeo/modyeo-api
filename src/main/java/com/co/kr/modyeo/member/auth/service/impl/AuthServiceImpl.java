@@ -1,7 +1,7 @@
 package com.co.kr.modyeo.member.auth.service.impl;
 
 import com.co.kr.modyeo.common.exception.CustomAuthException;
-import com.co.kr.modyeo.common.exception.ErrorCode;
+import com.co.kr.modyeo.common.exception.code.AuthErrorCode;
 import com.co.kr.modyeo.common.result.JsonResultData;
 import com.co.kr.modyeo.member.auth.domain.dto.MemberRequestDto;
 import com.co.kr.modyeo.member.auth.domain.dto.MemberResponseDto;
@@ -40,8 +40,8 @@ public class AuthServiceImpl implements AuthService {
         if (memberRepository.existsByEmail(memberRequestDto.getEmail())){
             throw new CustomAuthException(JsonResultData
                     .failResultBuilder()
-                    .errorCode(ErrorCode.ALREADY_JOIN_USER.getCode())
-                    .errorMessage(ErrorCode.ALREADY_JOIN_USER.getMessage())
+                    .errorCode(AuthErrorCode.ALREADY_JOIN_USER.getCode())
+                    .errorMessage(AuthErrorCode.ALREADY_JOIN_USER.getMessage())
                     .build());
         }
 
@@ -71,8 +71,8 @@ public class AuthServiceImpl implements AuthService {
         if (!jwtTokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
             throw new CustomAuthException(JsonResultData
                     .failResultBuilder()
-                    .errorCode(ErrorCode.NOT_VALID_TOKEN.getCode())
-                    .errorMessage(ErrorCode.NOT_VALID_TOKEN.getMessage())
+                    .errorCode(AuthErrorCode.NOT_VALID_TOKEN.getCode())
+                    .errorMessage(AuthErrorCode.NOT_VALID_TOKEN.getMessage())
                     .build());
         }
 
@@ -83,8 +83,8 @@ public class AuthServiceImpl implements AuthService {
         if (!refreshToken.equals(tokenRequestDto.getRefreshToken())){
             throw new CustomAuthException(JsonResultData
                     .failResultBuilder()
-                    .errorCode(ErrorCode.NOT_MATCH_TOKEN_INFO.getCode())
-                    .errorMessage(ErrorCode.NOT_MATCH_TOKEN_INFO.getMessage())
+                    .errorCode(AuthErrorCode.NOT_MATCH_TOKEN_INFO.getCode())
+                    .errorMessage(AuthErrorCode.NOT_MATCH_TOKEN_INFO.getMessage())
                     .build());
         }
 
@@ -103,8 +103,8 @@ public class AuthServiceImpl implements AuthService {
         if(!jwtTokenProvider.validateToken(tokenRequestDto.getAccessToken())){
             throw new CustomAuthException(JsonResultData
                     .failResultBuilder()
-                    .errorCode(ErrorCode.NOT_VALID_TOKEN.getCode())
-                    .errorMessage(ErrorCode.NOT_VALID_TOKEN.getMessage())
+                    .errorCode(AuthErrorCode.NOT_VALID_TOKEN.getCode())
+                    .errorMessage(AuthErrorCode.NOT_VALID_TOKEN.getMessage())
                     .build());
         }
 

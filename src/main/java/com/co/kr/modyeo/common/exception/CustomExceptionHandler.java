@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.common.exception;
 
+import com.co.kr.modyeo.common.exception.code.AuthErrorCode;
 import com.co.kr.modyeo.common.result.JsonResultData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,16 @@ import java.util.List;
 
 @RestControllerAdvice
 public class CustomExceptionHandler {
+
+    @ExceptionHandler({ApiException.class})
+    public ResponseEntity<?> exceptionHandler(HttpServletRequest request, final ApiException e){
+        return ResponseEntity
+                .status(e.getStatus())
+                .body(JsonResultData.failResultBuilder()
+                        .errorCode(e.getErrorEntity().getError().getCode())
+                        .errorMessage(e.getErrorEntity().getError().getMessage())
+                        .build());
+    }
 
     @ExceptionHandler({CustomAuthException.class})
     public ResponseEntity<?> exceptionHandler(HttpServletRequest request, final CustomAuthException e){
@@ -34,7 +45,7 @@ public class CustomExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(JsonResultData.failResultBuilder()
-                        .errorCode(ErrorCode.BAD_REQUEST_BODY.getCode())
+                        .errorCode(AuthErrorCode.BAD_REQUEST_BODY.getCode())
                         .errorMessage(stringBuilder.toString())
                         .build());
     }
