@@ -1,7 +1,7 @@
 package com.co.kr.modyeo.common.util;
 
 import com.co.kr.modyeo.common.exception.CustomAuthException;
-import com.co.kr.modyeo.common.exception.ErrorCode;
+import com.co.kr.modyeo.common.exception.code.AuthErrorCode;
 import com.co.kr.modyeo.common.result.JsonResultData;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -16,8 +16,8 @@ public class SecurityUtil {
         if (authentication == null || authentication.getName() == null){
             throw new CustomAuthException(JsonResultData
                     .failResultBuilder()
-                    .errorCode(ErrorCode.SECURITY_CONTEXT_NOT_FOUND.getCode())
-                    .errorMessage(ErrorCode.SECURITY_CONTEXT_NOT_FOUND.getMessage())
+                    .errorCode(AuthErrorCode.SECURITY_CONTEXT_NOT_FOUND.getCode())
+                    .errorMessage(AuthErrorCode.SECURITY_CONTEXT_NOT_FOUND.getMessage())
                     .build());
         }
 

@@ -1,7 +1,7 @@
 package com.co.kr.modyeo.member.auth.provider;
 
 import com.co.kr.modyeo.common.exception.CustomAuthException;
-import com.co.kr.modyeo.common.exception.ErrorCode;
+import com.co.kr.modyeo.common.exception.code.AuthErrorCode;
 import com.co.kr.modyeo.common.result.JsonResultData;
 import com.co.kr.modyeo.member.auth.domain.dto.TokenDto;
 import io.jsonwebtoken.*;
@@ -71,8 +71,8 @@ public class JwtTokenProvider {
         if (claims.get(AUTHORITIES_KEY) == null){
             throw new CustomAuthException(JsonResultData
                     .failResultBuilder()
-                    .errorCode(ErrorCode.NOT_AUTH_TOKEN.getCode())
-                    .errorMessage(ErrorCode.NOT_AUTH_TOKEN.getMessage())
+                    .errorCode(AuthErrorCode.NOT_AUTH_TOKEN.getCode())
+                    .errorMessage(AuthErrorCode.NOT_AUTH_TOKEN.getMessage())
                     .build());
         }
 
