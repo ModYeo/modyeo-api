@@ -13,4 +13,6 @@ public interface CategoryService {
     List<CategoryResponse> read(CategorySearch categorySearch);
 
     Category update(CategoryRequest categoryUpdateRequest);
+
+    void delete(Long categoryId);
 }

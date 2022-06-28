@@ -53,6 +53,18 @@ public class CategoryServiceImpl implements CategoryService {
         return category;
     }
 
+    @Override
+    public void delete(Long categoryId) {
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorMessage(CategoryErrorCode.NOT_FOUND_CATEGORY.getMessage())
+                        .errorCode(CategoryErrorCode.NOT_FOUND_CATEGORY.getCode())
+                        .build());
+
+        categoryRepository.delete(category);
+    }
+
     private void overlapCategoryCheck(CategoryRequest categoryRequest){
         Category findCategory = categoryRepository.findByName(categoryRequest.getName());
         if (findCategory != null){

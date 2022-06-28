@@ -1,13 +1,18 @@
 package com.co.kr.modyeo.member.controller.api;
 
 import com.co.kr.modyeo.member.domain.dto.request.CategoryRequest;
+import com.co.kr.modyeo.member.domain.dto.response.CategoryResponse;
 import com.co.kr.modyeo.member.domain.dto.search.CategorySearch;
 import com.co.kr.modyeo.member.domain.entity.Category;
 import com.co.kr.modyeo.member.service.CategoryService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -24,13 +29,17 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(
@@ -72,23 +81,65 @@ class CategoryApiControllerTest {
                         .content(request)
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(
-                MockMvcResultMatchers.status().isCreated()
-        ).andDo(MockMvcResultHandlers.print());
+                status().isCreated()
+        ).andDo(print());
     }
 
-    @Test
-    void readTest() throws Exception {
-        CategorySearch categorySearch = CategorySearch.
-                builder()
-                .id(1L)
-                .name("test")
+    @ParameterizedTest
+    @ValueSource(ints = {10,20,30})
+    void readTest(int num) throws Exception {
+        CategorySearch categorySearch = CategorySearch
+                .builder()
                 .build();
+
+        List<Category> categoryList = new ArrayList<>();
+        for (Long i = 0L; i < num;i++){
+            Category category = Category.of()
+                    .id(i)
+                    .name("test Category" + i)
+                    .build();
+
+            categoryList.add(category);
+        }
+
+        List<CategoryResponse> responses =
+                categoryList.stream().map(CategoryResponse::toRes)
+                        .collect(Collectors.toList());
+
+        given(categoryService.read(any()))
+                .willReturn(responses);
+
 
         mockMvc.perform(
               get("/api/category")
                       .content(objectMapper.writeValueAsBytes(categorySearch))
                       .contentType(MediaType.APPLICATION_JSON)
-        ).andExpect(MockMvcResultMatchers.status().isOk())
-                .andDo(MockMvcResultHandlers.print());
+        ).andExpect(status().isOk())
+                .andExpect(jsonPath("$.data").isNotEmpty())
+                .andExpect(jsonPath("$.data").isArray())
+                .andExpect(jsonPath("$.data.length()",equalTo(num)))
+                .andDo(print());
+    }
+
+    @Test
+    void updateTest() throws Exception {
+        CategoryRequest categoryRequest = CategoryRequest.of()
+                .id(1L)
+                .name("update category")
+                .build();
+
+        given(categoryService.update(any()))
+                .willReturn(Category.of()
+                        .id(1L)
+                        .name("update category")
+                        .build());
+
+        mockMvc.perform(
+                patch("/api/category")
+                        .with(csrf())
+                        .content(objectMapper.writeValueAsBytes(categoryRequest))
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk())
+                .andDo(print());
     }
 }

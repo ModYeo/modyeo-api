@@ -167,4 +167,34 @@ class CategoryServiceImplTest {
             categoryService.update(categoryUpdateRequest);
         }).isInstanceOf(Exception.class).hasMessageContaining(CategoryErrorCode.NOT_FOUND_CATEGORY.getMessage());
     }
+
+    @Test
+    @DisplayName("카테고리 삭제 실패")
+    void deleteFailTest() {
+        given(categoryRepository.findById(any())).willThrow(ApiException.builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .errorMessage(CategoryErrorCode.NOT_FOUND_CATEGORY.getMessage())
+                .errorCode(CategoryErrorCode.NOT_FOUND_CATEGORY.getCode())
+                .build());
+
+        assertThatThrownBy(() -> {
+            categoryService.delete(1L);
+        }).isInstanceOf(Exception.class).hasMessageContaining(CategoryErrorCode.NOT_FOUND_CATEGORY.getMessage());
+    }
+
+    @Test
+    @DisplayName("카테고리 삭제 성공")
+    void deleteSuccessTest(){
+        Category category = Category.of()
+                .id(1L)
+                .name("test code")
+                .build();
+
+        given(categoryRepository.findById(any())).willReturn(Optional.of(category));
+
+        categoryService.delete(1L);
+
+        then(categoryRepository).should(times(1)).delete(any());
+        then(categoryRepository).should(times(1)).findById(any());
+    }
 }

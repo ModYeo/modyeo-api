@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -51,4 +52,32 @@ public class CategoryApiController {
                         .build());
     }
 
+    @PatchMapping("")
+    public ResponseEntity<?> update(@Valid @RequestBody CategoryRequest categoryRequest){
+        Category category = categoryService.update(categoryRequest);
+        if (Objects.equals(categoryRequest.getName(), category.getName())){
+            return ResponseEntity
+                    .ok(JsonResultData
+                            .successResultBuilder()
+                            .data(null)
+                            .build());
+        }else{
+            return ResponseEntity
+                    .ok(JsonResultData
+                            .failResultBuilder()
+                            .errorCode(CategoryErrorCode.FAIL_UPDATE_CATEGORY.getCode())
+                            .errorMessage(CategoryErrorCode.FAIL_UPDATE_CATEGORY.getMessage())
+                            .build());
+        }
+    }
+
+    @DeleteMapping("/{category_id}")
+    public ResponseEntity<?> delete(@PathVariable(value = "category_id")Long categoryId){
+        categoryService.delete(categoryId);
+        return ResponseEntity
+                .ok(JsonResultData
+                        .successResultBuilder()
+                        .data(null)
+                        .build());
+    }
 }
