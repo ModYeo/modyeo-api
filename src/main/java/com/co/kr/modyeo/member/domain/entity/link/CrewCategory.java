@@ -3,6 +3,7 @@ package com.co.kr.modyeo.member.domain.entity.link;
 import com.co.kr.modyeo.member.domain.entity.BaseEntity;
 import com.co.kr.modyeo.member.domain.entity.Crew;
 import com.co.kr.modyeo.member.domain.entity.Category;
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -22,4 +23,11 @@ public class CrewCategory extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @Builder(builderClassName = "of", builderMethodName = "of")
+    public CrewCategory(Long id, Crew crew, Category category) {
+        this.id = id;
+        this.crew = crew;
+        this.category = category;
+    }
 }
