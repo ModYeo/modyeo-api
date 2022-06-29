@@ -13,7 +13,6 @@ public class CategoryRequest {
 
     private Long id;
 
-    @NotNull
     private String name;
 
     @Builder(builderMethodName = "of",builderClassName = "of")

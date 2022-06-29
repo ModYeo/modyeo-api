@@ -3,6 +3,7 @@ package com.co.kr.modyeo.member.domain.entity;
 import com.co.kr.modyeo.member.domain.entity.link.CrewCategory;
 import com.co.kr.modyeo.member.domain.entity.link.MemberCrew;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,4 +26,10 @@ public class Crew extends BaseEntity{
 
     @OneToMany(mappedBy = "crew",cascade = CascadeType.ALL)
     private List<CrewCategory> categoryList = new ArrayList<>();
+
+    @Builder(builderMethodName = "of",builderClassName = "of")
+    public Crew(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }
