@@ -5,5 +5,6 @@ import com.co.kr.modyeo.member.domain.entity.Crew;
 
 import java.util.List;
 
-public interface CrewCustomRepository {
+public interface CrewCategoryCustomRepository {
+    List<Crew> searchCrew(CrewSearch crewSearch);
 }
