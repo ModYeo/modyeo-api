@@ -14,4 +14,6 @@ public interface CrewService {
     Slice<CrewResponse> getCrew(CrewSearch crewSearch);
 
     Crew updateCrew(CrewRequest crewRequest);
+
+    void deleteCrew(Long crewId);
 }

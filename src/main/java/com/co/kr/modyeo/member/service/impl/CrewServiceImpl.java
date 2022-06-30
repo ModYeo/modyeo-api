@@ -2,6 +2,7 @@ package com.co.kr.modyeo.member.service.impl;
 
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.CategoryErrorCode;
+import com.co.kr.modyeo.common.exception.code.CrewErrorCode;
 import com.co.kr.modyeo.member.domain.dto.request.CrewRequest;
 import com.co.kr.modyeo.member.domain.dto.response.CrewResponse;
 import com.co.kr.modyeo.member.domain.dto.search.CrewSearch;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,8 +67,25 @@ public class CrewServiceImpl implements CrewService {
     @Override
     public Crew updateCrew(CrewRequest crewRequest) {
         overlapCrewCheck(crewRequest);
+        Crew findCrew = crewRepository.findCrewById(crewRequest.getId()).orElseThrow(() -> ApiException.builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .errorMessage(CrewErrorCode.NOT_FOUND_CREW.getMessage())
+                .errorCode(CrewErrorCode.NOT_FOUND_CREW.getCode())
+                .build());
 
-        return null;
+        findCrew.changeCrew(crewRequest.getName());
+        return findCrew;
+    }
+
+    @Override
+    public void deleteCrew(Long crewId) {
+        Crew crew = crewRepository.findById(crewId).orElseThrow(() -> ApiException.builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .errorMessage(CrewErrorCode.NOT_FOUND_CREW.getMessage())
+                .errorCode(CrewErrorCode.NOT_FOUND_CREW.getCode())
+                .build());
+
+        crewRepository.delete(crew);
     }
 
     private void overlapCrewCheck(CrewRequest crewRequest){
@@ -74,8 +93,8 @@ public class CrewServiceImpl implements CrewService {
         if (findCrew != null){
             throw ApiException.builder()
                     .status(HttpStatus.BAD_REQUEST)
-                    .errorCode(CategoryErrorCode.OVERLAP_CATEGORY.getCode())
-                    .errorMessage(CategoryErrorCode.OVERLAP_CATEGORY.getMessage())
+                    .errorCode(CrewErrorCode.OVERLAP_CREW.getCode())
+                    .errorMessage(CrewErrorCode.OVERLAP_CREW.getMessage())
                     .build();
 
         }

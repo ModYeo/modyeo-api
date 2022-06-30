@@ -33,4 +33,8 @@ public class Crew extends BaseEntity{
         this.name = name;
         this.categoryList = categoryList;
     }
+
+    public void changeCrew(String name){
+        this.name = name;
+    }
 }
