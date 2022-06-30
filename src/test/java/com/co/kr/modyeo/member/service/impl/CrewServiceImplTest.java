@@ -4,7 +4,6 @@ import com.co.kr.modyeo.member.domain.dto.request.CrewRequest;
 import com.co.kr.modyeo.member.domain.entity.Category;
 import com.co.kr.modyeo.member.domain.entity.Crew;
 import com.co.kr.modyeo.member.domain.entity.link.CrewCategory;
-import com.co.kr.modyeo.member.repository.CategoryRepository;
 import com.co.kr.modyeo.member.repository.CrewCategoryRepository;
 import com.co.kr.modyeo.member.repository.CrewRepository;
 import com.co.kr.modyeo.member.service.CrewService;
@@ -15,13 +14,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -92,7 +88,7 @@ class CrewServiceImplTest {
 
         given(crewRepository.save(any())).willReturn(crew);
         given(crewCategoryRepository.save(any())).willReturn(crewCategory);
-        crew = crewService.crewCreate(crewCreateRequest);
+        crew = crewService.createCrew(crewCreateRequest);
 
         then(crewRepository).should().save(any());
         then(crewCategoryRepository).should().save(any());

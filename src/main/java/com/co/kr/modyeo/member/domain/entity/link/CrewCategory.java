@@ -3,14 +3,17 @@ package com.co.kr.modyeo.member.domain.entity.link;
 import com.co.kr.modyeo.member.domain.entity.BaseEntity;
 import com.co.kr.modyeo.member.domain.entity.Crew;
 import com.co.kr.modyeo.member.domain.entity.Category;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @Table(name = "CREW_CATEGORY")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CrewCategory extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "crew_category_id")

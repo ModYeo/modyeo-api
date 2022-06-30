@@ -7,6 +7,5 @@ import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
-public interface CrewCustomRepository {
-    Slice<Crew> searchCrew(CrewSearch crewSearch, Pageable pageable);
+public interface CrewCategoryCustomRepository {
 }
