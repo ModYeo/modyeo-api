@@ -1,5 +1,9 @@
 package com.co.kr.modyeo.member.service.impl;
 
+import com.co.kr.modyeo.common.Querydsl4RepositorySupport;
+import com.co.kr.modyeo.common.exception.ApiException;
+import com.co.kr.modyeo.common.exception.code.CategoryErrorCode;
+import com.co.kr.modyeo.member.domain.dto.request.CategoryRequest;
 import com.co.kr.modyeo.member.domain.dto.request.CrewRequest;
 import com.co.kr.modyeo.member.domain.dto.response.CrewResponse;
 import com.co.kr.modyeo.member.domain.dto.search.CrewSearch;
@@ -10,10 +14,15 @@ import com.co.kr.modyeo.member.repository.CrewCategoryRepository;
 import com.co.kr.modyeo.member.repository.CrewRepository;
 import com.co.kr.modyeo.member.service.CrewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.print.Pageable;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +37,7 @@ public class CrewServiceImpl implements CrewService {
     @Override
     @Transactional
     public Crew createCrew(CrewRequest crewRequest) {
+        overlapCrewCheck(crewRequest);
         Crew crew = crewRequest.toEntity();
         crew = crewRepository.save(crew);
 
@@ -49,8 +59,21 @@ public class CrewServiceImpl implements CrewService {
     }
 
     @Override
-    public List<CrewResponse> getCrew(CrewSearch crewSearch) {
-        List<Crew> crewList = crewCategoryRepository.searchCrew(crewSearch);
-        return crewList.stream().map(CrewResponse::toRes).collect(Collectors.toList());
+    public Slice<CrewResponse> getCrew(CrewSearch crewSearch) {
+        PageRequest page = PageRequest.of(crewSearch.getOffset(), crewSearch.getLimit(), crewSearch.getDirection(),crewSearch.getOrderBy());
+        Slice<Crew> crewList = crewRepository.searchCrew(crewSearch,page);
+        return crewList.map(CrewResponse::toRes);
+    }
+
+    private void overlapCrewCheck(CrewRequest crewRequest){
+        Crew findCrew = crewRepository.findByName(crewRequest.getName());
+        if (findCrew != null){
+            throw ApiException.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .errorCode(CategoryErrorCode.OVERLAP_CATEGORY.getCode())
+                    .errorMessage(CategoryErrorCode.OVERLAP_CATEGORY.getMessage())
+                    .build();
+
+        }
     }
 }

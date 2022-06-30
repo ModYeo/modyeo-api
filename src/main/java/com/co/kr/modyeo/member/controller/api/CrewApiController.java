@@ -7,10 +7,12 @@ import com.co.kr.modyeo.member.domain.dto.search.CrewSearch;
 import com.co.kr.modyeo.member.domain.entity.Crew;
 import com.co.kr.modyeo.member.service.CrewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 @RestController
@@ -37,7 +39,7 @@ public class CrewApiController {
 
     @GetMapping("")
     public ResponseEntity<?> getCrew(CrewSearch crewSearch){
-        List<CrewResponse> crewResponseList = crewService.getCrew(crewSearch);
+        Slice<CrewResponse> crewResponseList = crewService.getCrew(crewSearch);
         return ResponseEntity.ok(crewResponseList);
     }
 
