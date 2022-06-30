@@ -46,7 +46,25 @@ public class CrewApiController {
     @PatchMapping("")
     public ResponseEntity<?> updateCrew(@RequestBody CrewRequest crewRequest){
         Crew crew = crewService.updateCrew(crewRequest);
-        return ResponseEntity.ok(null);
+
+        if (crew.getId() != null){
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(JsonResultData.successResultBuilder()
+                            .data(null)
+                            .build());
+        }else{
+            return ResponseEntity
+                    .badRequest()
+                    .body(JsonResultData.failResultBuilder()
+                            .build());
+        }
+    }
+
+    @DeleteMapping("/{crew_id}")
+    public ResponseEntity<?> deleteCrew(
+            @PathVariable("crew_id")Long crewId
+    ){
+        crewService.deleteCrew(crewId);
     }
 
 }
