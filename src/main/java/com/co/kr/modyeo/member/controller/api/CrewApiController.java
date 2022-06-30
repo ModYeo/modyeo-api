@@ -43,4 +43,10 @@ public class CrewApiController {
         return ResponseEntity.ok(crewResponseList);
     }
 
+    @PatchMapping("")
+    public ResponseEntity<?> updateCrew(@RequestBody CrewRequest crewRequest){
+        Crew crew = crewService.updateCrew(crewRequest);
+        return ResponseEntity.ok(null);
+    }
+
 }

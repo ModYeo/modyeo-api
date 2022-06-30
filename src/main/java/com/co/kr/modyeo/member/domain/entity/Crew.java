@@ -28,8 +28,9 @@ public class Crew extends BaseEntity{
     private List<CrewCategory> categoryList = new ArrayList<>();
 
     @Builder(builderMethodName = "of",builderClassName = "of")
-    public Crew(Long id, String name) {
+    public Crew(Long id, String name, List<CrewCategory> categoryList) {
         this.id = id;
         this.name = name;
+        this.categoryList = categoryList;
     }
 }

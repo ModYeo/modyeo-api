@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.member.domain.dto.search;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -23,6 +24,7 @@ public class CrewSearch {
 
     private Sort.Direction direction;
 
+    @Builder
     public CrewSearch(Long crewId, String name, Long categoryId, Integer limit, Integer offset, String orderBy, Sort.Direction direction) {
         this.crewId = crewId;
         this.name = name;

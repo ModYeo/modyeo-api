@@ -1,4 +1,4 @@
-package com.co.kr.modyeo.common;
+package com.co.kr.modyeo.common.support;
 
 import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Expression;

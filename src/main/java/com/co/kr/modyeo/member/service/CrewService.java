@@ -12,4 +12,6 @@ public interface CrewService {
     Crew createCrew(CrewRequest crewRequest);
 
     Slice<CrewResponse> getCrew(CrewSearch crewSearch);
+
+    Crew updateCrew(CrewRequest crewRequest);
 }

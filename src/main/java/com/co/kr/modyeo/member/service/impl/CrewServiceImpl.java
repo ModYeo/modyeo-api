@@ -1,9 +1,7 @@
 package com.co.kr.modyeo.member.service.impl;
 
-import com.co.kr.modyeo.common.Querydsl4RepositorySupport;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.CategoryErrorCode;
-import com.co.kr.modyeo.member.domain.dto.request.CategoryRequest;
 import com.co.kr.modyeo.member.domain.dto.request.CrewRequest;
 import com.co.kr.modyeo.member.domain.dto.response.CrewResponse;
 import com.co.kr.modyeo.member.domain.dto.search.CrewSearch;
@@ -20,9 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Pageable;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,17 +38,18 @@ public class CrewServiceImpl implements CrewService {
         crew = crewRepository.save(crew);
 
         if(!crewRequest.getCategoryDtoList().isEmpty()){
-            Crew finalCrew = crew;
-            crewRequest.getCategoryDtoList()
-                    .forEach(categoryDto -> {
-                        Category category = categoryDto.toEntity();
-                        CrewCategory crewCategory = CrewCategory.of()
-                                .crew(finalCrew)
-                                .category(category)
-                                .build();
+            List<Category> categories = crewRequest
+                    .getCategoryDtoList().stream()
+                    .map(CrewRequest.CategoryDto::toEntity)
+                    .collect(Collectors.toList());
 
-                        crewCategoryRepository.save(crewCategory);
-                    });
+            Crew finalCrew = crew;
+            List<CrewCategory> crewCategories = categories.stream().map(category -> CrewCategory.of()
+                    .category(category)
+                    .crew(finalCrew)
+                    .build()).collect(Collectors.toList());
+
+            crewCategoryRepository.saveAll(crewCategories);
         }
 
         return crew;
@@ -63,6 +60,13 @@ public class CrewServiceImpl implements CrewService {
         PageRequest page = PageRequest.of(crewSearch.getOffset(), crewSearch.getLimit(), crewSearch.getDirection(),crewSearch.getOrderBy());
         Slice<Crew> crewList = crewRepository.searchCrew(crewSearch,page);
         return crewList.map(CrewResponse::toRes);
+    }
+
+    @Override
+    public Crew updateCrew(CrewRequest crewRequest) {
+        overlapCrewCheck(crewRequest);
+
+        return null;
     }
 
     private void overlapCrewCheck(CrewRequest crewRequest){
