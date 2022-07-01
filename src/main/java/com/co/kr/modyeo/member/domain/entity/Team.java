@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.member.domain.entity;
 
+import com.co.kr.modyeo.member.domain.entity.link.Crew;
 import com.co.kr.modyeo.member.domain.entity.link.TeamCategory;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -26,11 +27,15 @@ public class Team extends BaseEntity{
     @OneToMany(mappedBy = "team",cascade = CascadeType.ALL)
     private List<TeamCategory> categoryList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "team",cascade = CascadeType.ALL)
+    private List<Crew> crewList = new ArrayList<>();
+
     @Builder(builderMethodName = "of",builderClassName = "of")
-    public Team(Long id, String name, List<TeamCategory> categoryList) {
+    public Team(Long id, String name, List<TeamCategory> categoryList, List<Crew> crewList) {
         this.id = id;
         this.name = name;
         this.categoryList = categoryList;
+        this.crewList = crewList;
     }
 
     public void changeTeamInfo(String name){

@@ -10,7 +10,14 @@ public enum TeamErrorCode {
 
     OVERLAP_TEAM("OVERLAP_TEAM","팀 이름 중복으로 등록 실패했습니다."),
 
-    NOT_FOUND_TEAM("NOT_FOUND_TEAM","팀 찾지 못했습니다.");
+    NOT_FOUND_TEAM("NOT_FOUND_TEAM","팀 찾지 못했습니다."),
+
+    ALREADY_JOINED_TEAM("ALREADY_JOINED_TEAM","이미 가입된 팀 입니다."),
+
+    ALREADY_APPLICANT_TEAM("ALREADY_APPLICANT_TEAM", "이미 가입 신청했습니다."),
+
+    NOT_FOUND_APPLICANT("NOT_FOUND_APPLICANT","찾을 수 없는 가입신청입니다.");
+
     private final String code;
     private final String message;
 

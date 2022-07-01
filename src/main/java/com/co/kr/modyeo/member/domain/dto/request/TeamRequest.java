@@ -13,22 +13,24 @@ import java.util.List;
 @NoArgsConstructor
 public class TeamRequest {
 
-    private Long id;
+    private Long team_id;
+
+    private Long member_id;
 
     private String name;
 
     private List<CategoryDto> categoryDtoList = new ArrayList<>();
 
     @Builder
-    public TeamRequest(Long id, String name, List<CategoryDto> categoryDtoList) {
-        this.id = id;
+    public TeamRequest(Long team_id, String name, List<CategoryDto> categoryDtoList) {
+        this.team_id = team_id;
         this.name = name;
         this.categoryDtoList = categoryDtoList;
     }
 
     public Team toEntity(){
         return Team.of()
-                .id(this.id)
+                .id(this.team_id)
                 .name(this.name)
                 .build();
     }
