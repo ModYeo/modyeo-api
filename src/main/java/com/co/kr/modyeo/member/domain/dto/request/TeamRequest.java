@@ -1,7 +1,7 @@
 package com.co.kr.modyeo.member.domain.dto.request;
 
 import com.co.kr.modyeo.member.domain.entity.Category;
-import com.co.kr.modyeo.member.domain.entity.Crew;
+import com.co.kr.modyeo.member.domain.entity.Team;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class CrewRequest {
+public class TeamRequest {
 
     private Long id;
 
@@ -20,14 +20,14 @@ public class CrewRequest {
     private List<CategoryDto> categoryDtoList = new ArrayList<>();
 
     @Builder
-    public CrewRequest(Long id, String name, List<CategoryDto> categoryDtoList) {
+    public TeamRequest(Long id, String name, List<CategoryDto> categoryDtoList) {
         this.id = id;
         this.name = name;
         this.categoryDtoList = categoryDtoList;
     }
 
-    public Crew toEntity(){
-        return Crew.of()
+    public Team toEntity(){
+        return Team.of()
                 .id(this.id)
                 .name(this.name)
                 .build();

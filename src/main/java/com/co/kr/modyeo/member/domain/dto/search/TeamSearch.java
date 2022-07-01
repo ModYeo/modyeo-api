@@ -8,7 +8,7 @@ import org.springframework.data.domain.Sort;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class CrewSearch {
+public class TeamSearch {
 
     private Long crewId;
 
@@ -25,7 +25,7 @@ public class CrewSearch {
     private Sort.Direction direction;
 
     @Builder
-    public CrewSearch(Long crewId, String name, Long categoryId, Integer limit, Integer offset, String orderBy, Sort.Direction direction) {
+    public TeamSearch(Long crewId, String name, Long categoryId, Integer limit, Integer offset, String orderBy, Sort.Direction direction) {
         this.crewId = crewId;
         this.name = name;
         this.categoryId = categoryId;

@@ -1,7 +1,7 @@
 package com.co.kr.modyeo.member.domain.entity.link;
 
 import com.co.kr.modyeo.member.domain.entity.BaseEntity;
-import com.co.kr.modyeo.member.domain.entity.Crew;
+import com.co.kr.modyeo.member.domain.entity.Team;
 import com.co.kr.modyeo.member.domain.entity.Category;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,25 +12,25 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(name = "CREW_CATEGORY")
+@Table(name = "TEAM_CATEGORY")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CrewCategory extends BaseEntity {
+public class TeamCategory extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "crew_category_id")
+    @Column(name = "team_category_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "crew_id")
-    private Crew crew;
+    @JoinColumn(name = "team_id")
+    private Team team;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public CrewCategory(Long id, Crew crew, Category category) {
+    public TeamCategory(Long id, Team team, Category category) {
         this.id = id;
-        this.crew = crew;
+        this.team = team;
         this.category = category;
     }
 }

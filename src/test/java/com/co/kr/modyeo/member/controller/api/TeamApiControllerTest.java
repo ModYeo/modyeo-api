@@ -1,14 +1,10 @@
 package com.co.kr.modyeo.member.controller.api;
 
-import com.co.kr.modyeo.member.domain.dto.request.CrewRequest;
 import com.co.kr.modyeo.member.domain.dto.response.CategoryResponse;
-import com.co.kr.modyeo.member.domain.dto.response.CrewResponse;
-import com.co.kr.modyeo.member.domain.dto.search.CrewSearch;
-import com.co.kr.modyeo.member.domain.entity.Crew;
-import com.co.kr.modyeo.member.domain.entity.link.CrewCategory;
-import com.co.kr.modyeo.member.service.CrewService;
+import com.co.kr.modyeo.member.domain.dto.response.TeamResponse;
+import com.co.kr.modyeo.member.domain.dto.search.TeamSearch;
+import com.co.kr.modyeo.member.service.TeamService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +13,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
-import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -29,7 +23,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -39,13 +32,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(
-        controllers = CrewApiController.class,
+        controllers = TeamApiController.class,
         excludeFilters = {
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurerAdapter.class)
         }
 )
 @WithMockUser
-class CrewApiControllerTest {
+class TeamApiControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
@@ -54,21 +47,21 @@ class CrewApiControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private CrewService crewService;
+    private TeamService teamService;
 
     @Test
     void getCrew() throws Exception {
-        CrewSearch crewSearch = CrewSearch.builder()
+        TeamSearch teamSearch = TeamSearch.builder()
                 .categoryId(1L)
                 .build();
 
         PageRequest pageRequest = PageRequest.of(0,20);
         List<CategoryResponse> categories = new ArrayList<>();
-        List<CrewResponse> crews = new ArrayList<>();
+        List<TeamResponse> crews = new ArrayList<>();
         for (Long i = 0L; i < 10; i++){
-            CrewResponse crewResponse = new CrewResponse();
-            crewResponse.setId(i);
-            crewResponse.setName("test crew" + i);
+            TeamResponse teamResponse = new TeamResponse();
+            teamResponse.setId(i);
+            teamResponse.setName("test crew" + i);
 
             for (Long j = 0L; j < 2;j++){
                 CategoryResponse categoryResponse = CategoryResponse.of()
@@ -79,14 +72,14 @@ class CrewApiControllerTest {
                 categories.add(categoryResponse);
             }
 
-            crews.add(crewResponse);
+            crews.add(teamResponse);
         }
-        Slice<CrewResponse> crewResponses = new SliceImpl<>(crews,pageRequest,true);
-        given(crewService.getCrew(any())).willReturn(crewResponses);
+        Slice<TeamResponse> crewResponses = new SliceImpl<>(crews,pageRequest,true);
+        given(teamService.getTeam(any())).willReturn(crewResponses);
 
         mockMvc.perform(
                 get("/api/crew") .with(csrf())
-                        .content(objectMapper.writeValueAsString(crewSearch))
+                        .content(objectMapper.writeValueAsString(teamSearch))
         ).andExpect(status().isOk())
                 .andDo(print());
     }

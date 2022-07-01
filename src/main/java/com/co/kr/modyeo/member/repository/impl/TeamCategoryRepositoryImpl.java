@@ -1,16 +1,16 @@
 package com.co.kr.modyeo.member.repository.impl;
 
-import com.co.kr.modyeo.member.repository.custom.CrewCategoryCustomRepository;
+import com.co.kr.modyeo.member.repository.custom.TeamCategoryCustomRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 
 @Repository
-public class CrewCategoryRepositoryImpl implements CrewCategoryCustomRepository {
+public class TeamCategoryRepositoryImpl implements TeamCategoryCustomRepository {
     private final JPAQueryFactory queryFactory;
 
-    public CrewCategoryRepositoryImpl(EntityManager em) {
+    public TeamCategoryRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 }
