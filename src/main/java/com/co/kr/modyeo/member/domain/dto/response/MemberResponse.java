@@ -21,17 +21,17 @@ public class MemberResponse {
     private String username;
     private Address address;
     private Sex sex;
-    private List<CrewResponse> crewResponses = new ArrayList<>();
+    private List<TeamResponse> teamResponseList = new ArrayList<>();
     private List<CategoryResponse> categoryResponses = new ArrayList<>();
 
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public MemberResponse(Long id, String email, String username, Address address, Sex sex, List<CrewResponse> crewResponses, List<CategoryResponse> categoryResponses) {
+    public MemberResponse(Long id, String email, String username, Address address, Sex sex, List<TeamResponse> teamResponseList, List<CategoryResponse> categoryResponses) {
         this.id = id;
         this.email = email;
         this.username = username;
         this.address = address;
         this.sex = sex;
-        this.crewResponses = crewResponses;
+        this.teamResponseList = teamResponseList;
         this.categoryResponses = categoryResponses;
     }
 
@@ -42,8 +42,8 @@ public class MemberResponse {
                 .username(member.getUsername())
                 .address(member.getAddress())
                 .sex(member.getSex())
-                .crewResponses(member.getMemberCrewList().stream()
-                        .map(memberCrew -> CrewResponse.toRes(memberCrew.getCrew()))
+                .teamResponseList(member.getMemberTeamList().stream()
+                        .map(memberCrew -> TeamResponse.toRes(memberCrew.getTeam()))
                         .collect(Collectors.toList()))
                 .categoryResponses(member.getInterestCategoryList().stream()
                         .map(memberCategory -> CategoryResponse.toRes(memberCategory.getCategory()))

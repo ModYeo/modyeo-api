@@ -1,30 +1,27 @@
 package com.co.kr.modyeo.member.controller.api;
 
 import com.co.kr.modyeo.common.result.JsonResultData;
-import com.co.kr.modyeo.member.domain.dto.request.CrewRequest;
-import com.co.kr.modyeo.member.domain.dto.response.CrewResponse;
-import com.co.kr.modyeo.member.domain.dto.search.CrewSearch;
-import com.co.kr.modyeo.member.domain.entity.Crew;
-import com.co.kr.modyeo.member.service.CrewService;
+import com.co.kr.modyeo.member.domain.dto.request.TeamRequest;
+import com.co.kr.modyeo.member.domain.dto.response.TeamResponse;
+import com.co.kr.modyeo.member.domain.dto.search.TeamSearch;
+import com.co.kr.modyeo.member.domain.entity.Team;
+import com.co.kr.modyeo.member.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Pageable;
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/crew")
+@RequestMapping("/api/team")
 @RequiredArgsConstructor
-public class CrewApiController {
-    private final CrewService crewService;
+public class TeamApiController {
+    private final TeamService teamService;
 
     @PostMapping("")
-    public ResponseEntity<?> createCrew(@RequestBody CrewRequest crewRequest){
-        Crew crew = crewService.createCrew(crewRequest);
-        if (crew != null){
+    public ResponseEntity<?> createTeam(@RequestBody TeamRequest teamRequest){
+        Team team = teamService.createTeam(teamRequest);
+        if (team != null){
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(JsonResultData.successResultBuilder()
                             .data(null)
@@ -38,16 +35,16 @@ public class CrewApiController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getCrew(CrewSearch crewSearch){
-        Slice<CrewResponse> crewResponseList = crewService.getCrew(crewSearch);
-        return ResponseEntity.ok(crewResponseList);
+    public ResponseEntity<?> getTeam(TeamSearch teamSearch){
+        Slice<TeamResponse> teamResponses = teamService.getTeam(teamSearch);
+        return ResponseEntity.ok(teamResponses);
     }
 
     @PatchMapping("")
-    public ResponseEntity<?> updateCrew(@RequestBody CrewRequest crewRequest){
-        Crew crew = crewService.updateCrew(crewRequest);
+    public ResponseEntity<?> updateTeam(@RequestBody TeamRequest teamRequest){
+        Team team = teamService.updateTeam(teamRequest);
 
-        if (crew.getId() != null){
+        if (team.getId() != null){
             return ResponseEntity.status(HttpStatus.OK)
                     .body(JsonResultData.successResultBuilder()
                             .data(null)
@@ -60,11 +57,15 @@ public class CrewApiController {
         }
     }
 
-    @DeleteMapping("/{crew_id}")
-    public ResponseEntity<?> deleteCrew(
-            @PathVariable("crew_id")Long crewId
+    @DeleteMapping("/{team_id}")
+    public ResponseEntity<?> deleteTeam(
+            @PathVariable("team_id")Long teamId
     ){
-        crewService.deleteCrew(crewId);
+        teamService.deleteTeam(teamId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(JsonResultData.successResultBuilder()
+                        .data(null)
+                        .build());
     }
 
 }

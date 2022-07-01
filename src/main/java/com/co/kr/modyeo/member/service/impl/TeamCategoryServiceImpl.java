@@ -2,42 +2,42 @@ package com.co.kr.modyeo.member.service.impl;
 
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.CategoryErrorCode;
-import com.co.kr.modyeo.common.exception.code.CrewErrorCode;
+import com.co.kr.modyeo.common.exception.code.TeamErrorCode;
 import com.co.kr.modyeo.member.domain.entity.Category;
-import com.co.kr.modyeo.member.domain.entity.Crew;
-import com.co.kr.modyeo.member.domain.entity.link.CrewCategory;
+import com.co.kr.modyeo.member.domain.entity.Team;
+import com.co.kr.modyeo.member.domain.entity.link.TeamCategory;
 import com.co.kr.modyeo.member.repository.CategoryRepository;
-import com.co.kr.modyeo.member.repository.CrewCategoryRepository;
-import com.co.kr.modyeo.member.repository.CrewRepository;
-import com.co.kr.modyeo.member.service.CrewCategoryService;
+import com.co.kr.modyeo.member.repository.TeamCategoryRepository;
+import com.co.kr.modyeo.member.repository.TeamRepository;
+import com.co.kr.modyeo.member.service.TeamCategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CrewCategoryServiceImpl implements CrewCategoryService {
-    private final CrewRepository crewRepository;
+public class TeamCategoryServiceImpl implements TeamCategoryService {
+    private final TeamRepository teamRepository;
     private final CategoryRepository categoryRepository;
-    private final CrewCategoryRepository crewCategoryRepository;
+    private final TeamCategoryRepository teamCategoryRepository;
 
     @Override
-    public CrewCategory createCrewCategory(Long crewId, Long categoryId) {
-        Crew crew = findCrew(crewId);
+    public TeamCategory createTeamCategory(Long teamId, Long categoryId) {
+        Team team = findTeam(teamId);
         Category category = findCategory(categoryId);
 
-        CrewCategory crewCategory = CrewCategory.of()
-                .crew(crew)
+        TeamCategory teamCategory = TeamCategory.of()
+                .team(team)
                 .category(category)
                 .build();
 
-        crewCategoryRepository.save(crewCategory);
-        return crewCategory;
+        teamCategoryRepository.save(teamCategory);
+        return teamCategory;
     }
 
     @Override
-    public void deleteCrewCategory(Long crewCategoryId) {
-        CrewCategory crewCategory = crewCategoryRepository.findById(crewCategoryId).orElseThrow(
+    public void deleteTeamCategory(Long teamCategoryId) {
+        TeamCategory teamCategory = teamCategoryRepository.findById(teamCategoryId).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
                         .errorCode(null)
@@ -45,15 +45,15 @@ public class CrewCategoryServiceImpl implements CrewCategoryService {
                         .build()
         );
 
-        crewCategoryRepository.delete(crewCategory);
+        teamCategoryRepository.delete(teamCategory);
     }
 
-    private Crew findCrew(Long crewId){
-        return crewRepository.findById(crewId)
+    private Team findTeam(Long teamId){
+        return teamRepository.findById(teamId)
                 .orElseThrow(() -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
-                        .errorMessage(CrewErrorCode.NOT_FOUND_CREW.getMessage())
-                        .errorCode(CrewErrorCode.NOT_FOUND_CREW.getCode())
+                        .errorMessage(TeamErrorCode.NOT_FOUND_TEAM.getMessage())
+                        .errorCode(TeamErrorCode.NOT_FOUND_TEAM.getCode())
                         .build());
     }
 

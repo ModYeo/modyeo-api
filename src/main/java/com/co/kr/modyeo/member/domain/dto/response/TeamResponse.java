@@ -1,8 +1,7 @@
 package com.co.kr.modyeo.member.domain.dto.response;
 
-import com.co.kr.modyeo.member.domain.entity.Crew;
+import com.co.kr.modyeo.member.domain.entity.Team;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -12,7 +11,7 @@ import java.util.stream.Collectors;
 
 @Setter
 @NoArgsConstructor
-public class CrewResponse {
+public class TeamResponse {
 
     private Long id;
     private String name;
@@ -20,17 +19,17 @@ public class CrewResponse {
 
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public CrewResponse(Long id, String name,List<CategoryResponse> categoryResponses) {
+    public TeamResponse(Long id, String name, List<CategoryResponse> categoryResponses) {
         this.id = id;
         this.name = name;
         this.categoryResponseList = categoryResponses;
     }
 
-    public static CrewResponse toRes(Crew crew) {
+    public static TeamResponse toRes(Team team) {
         return of()
-                .id(crew.getId())
-                .name(crew.getName())
-                .categoryResponses(crew.getCategoryList().stream().map(crewCategory -> CategoryResponse.of()
+                .id(team.getId())
+                .name(team.getName())
+                .categoryResponses(team.getCategoryList().stream().map(crewCategory -> CategoryResponse.of()
                         .id(crewCategory.getCategory().getId())
                         .name(crewCategory.getCategory().getName())
                         .build()).collect(Collectors.toList()))
