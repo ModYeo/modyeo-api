@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.bbs.service;
 
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
@@ -11,5 +12,5 @@ public interface BoardService {
 
     Article createArticle(ArticleRequest articleRequest);
 
-    ArticleResponse getArticle(Long id);
+    ArticleDetail getArticle(Long id);
 }

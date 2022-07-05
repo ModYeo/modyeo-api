@@ -6,10 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
-public class ArticleResponse {
+public class ArticleDetail {
 
     private Long articleId;
 
@@ -25,8 +28,18 @@ public class ArticleResponse {
 
     private LocalDateTime createdTime;
 
-    @Builder(builderClassName = "of",builderMethodName = "of")
-    public ArticleResponse(Long articleId, String title, String content, Boolean isHidden,Long hitCount, String createdBy, LocalDateTime createdTime) {
+    private List<ReplyResponse> replyResponses = new ArrayList<>();
+
+
+    @Builder(builderMethodName = "of",builderClassName = "of")
+    public ArticleDetail(Long articleId,
+                         String title,
+                         String content,
+                         Boolean isHidden,
+                         String createdBy,
+                         LocalDateTime createdTime,
+                         Long hitCount,
+                         List<ReplyResponse> replyResponses) {
         this.articleId = articleId;
         this.title = title;
         this.content = content;
@@ -34,10 +47,11 @@ public class ArticleResponse {
         this.hitCount = hitCount;
         this.createdBy = createdBy;
         this.createdTime = createdTime;
+        this.replyResponses = replyResponses;
     }
 
-    public static ArticleResponse toDto(Article article) {
-        return ArticleResponse.of()
+    public static ArticleDetail toDto(Article article){
+        return ArticleDetail.of()
                 .articleId(article.getId())
                 .title(article.getTitle())
                 .content(article.getContent())
@@ -45,6 +59,7 @@ public class ArticleResponse {
                 .hitCount(article.getHitCount())
                 .createdBy(article.getCreatedBy())
                 .createdTime(article.getCreatedDate())
+                .replyResponses(article.getReplyList().stream().map(ReplyResponse::toDto).collect(Collectors.toList()))
                 .build();
     }
 }

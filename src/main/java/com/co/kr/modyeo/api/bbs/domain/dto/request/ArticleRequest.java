@@ -38,4 +38,13 @@ public class ArticleRequest {
                 .hitCount(articleRequest.hitCount)
                 .build();
     }
+
+    public static Article createArticle(ArticleRequest articleRequest){
+        return Article.createArticleBuilder()
+                .content(articleRequest.getContent())
+                .title(articleRequest.getTitle())
+                .filePath(articleRequest.getFilePath())
+                .isHidden(articleRequest.getIsHidden())
+                .build();
+    }
 }
