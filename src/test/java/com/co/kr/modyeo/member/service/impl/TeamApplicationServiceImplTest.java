@@ -1,13 +1,14 @@
 package com.co.kr.modyeo.member.service.impl;
 
-import com.co.kr.modyeo.member.domain.entity.Team;
+import com.co.kr.modyeo.team.domain.entity.Team;
 import com.co.kr.modyeo.member.domain.entity.Member;
-import com.co.kr.modyeo.member.domain.entity.link.MemberTeam;
-import com.co.kr.modyeo.member.domain.enumerate.JoinStatus;
-import com.co.kr.modyeo.member.repository.TeamRepository;
-import com.co.kr.modyeo.member.repository.MemberTeamRepository;
+import com.co.kr.modyeo.team.domain.entity.link.MemberTeam;
+import com.co.kr.modyeo.team.domain.entity.enumerate.JoinStatus;
+import com.co.kr.modyeo.team.repository.TeamRepository;
+import com.co.kr.modyeo.team.repository.MemberTeamRepository;
 import com.co.kr.modyeo.member.repository.MemberRepository;
-import com.co.kr.modyeo.member.service.TeamApplicationService;
+import com.co.kr.modyeo.team.service.TeamApplicationService;
+import com.co.kr.modyeo.team.service.impl.TeamApplicationServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

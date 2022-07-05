@@ -1,8 +1,9 @@
 package com.co.kr.modyeo.member.domain.entity;
 
+import com.co.kr.modyeo.common.entity.BaseEntity;
 import com.co.kr.modyeo.member.domain.entity.embed.Address;
 import com.co.kr.modyeo.member.domain.entity.link.MemberCategory;
-import com.co.kr.modyeo.member.domain.entity.link.MemberTeam;
+import com.co.kr.modyeo.team.domain.entity.link.MemberTeam;
 import com.co.kr.modyeo.member.domain.enumerate.Authority;
 import com.co.kr.modyeo.member.domain.enumerate.Sex;
 import lombok.AccessLevel;
@@ -18,7 +19,7 @@ import java.util.List;
 @Getter
 @Table(name = "MEMBER")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member extends BaseEntity{
+public class Member extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;

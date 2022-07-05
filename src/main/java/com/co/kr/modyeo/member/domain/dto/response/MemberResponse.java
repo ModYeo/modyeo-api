@@ -1,8 +1,10 @@
 package com.co.kr.modyeo.member.domain.dto.response;
 
+import com.co.kr.modyeo.category.domain.dto.response.CategoryResponse;
 import com.co.kr.modyeo.member.domain.entity.Member;
 import com.co.kr.modyeo.member.domain.entity.embed.Address;
 import com.co.kr.modyeo.member.domain.enumerate.Sex;
+import com.co.kr.modyeo.team.domain.dto.response.TeamResponse;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

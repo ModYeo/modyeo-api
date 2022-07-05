@@ -1,12 +1,13 @@
 package com.co.kr.modyeo.member.service.impl;
 
+import com.co.kr.modyeo.category.service.impl.CategoryServiceImpl;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.CategoryErrorCode;
-import com.co.kr.modyeo.member.domain.dto.request.CategoryRequest;
-import com.co.kr.modyeo.member.domain.dto.response.CategoryResponse;
-import com.co.kr.modyeo.member.domain.dto.search.CategorySearch;
-import com.co.kr.modyeo.member.domain.entity.Category;
-import com.co.kr.modyeo.member.repository.CategoryRepository;
+import com.co.kr.modyeo.category.domain.dto.request.CategoryRequest;
+import com.co.kr.modyeo.category.domain.dto.response.CategoryResponse;
+import com.co.kr.modyeo.category.domain.dto.search.CategorySearch;
+import com.co.kr.modyeo.category.domain.entity.Category;
+import com.co.kr.modyeo.category.repository.CategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
