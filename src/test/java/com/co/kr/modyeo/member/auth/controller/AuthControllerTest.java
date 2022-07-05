@@ -1,30 +1,20 @@
 package com.co.kr.modyeo.member.auth.controller;
 
-import com.co.kr.modyeo.member.annotation.WithMockCustomUser;
-import com.co.kr.modyeo.member.auth.domain.dto.MemberRequestDto;
-import com.co.kr.modyeo.member.auth.provider.JwtTokenProvider;
-import com.co.kr.modyeo.member.auth.service.AuthService;
-import com.co.kr.modyeo.member.controller.api.MemberApiController;
+import com.co.kr.modyeo.api.member.auth.controller.AuthController;
+import com.co.kr.modyeo.api.member.auth.domain.dto.MemberRequestDto;
+import com.co.kr.modyeo.api.member.auth.service.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

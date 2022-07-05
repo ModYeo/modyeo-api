@@ -1,13 +1,13 @@
 package com.co.kr.modyeo.member.service.impl;
 
-import com.co.kr.modyeo.team.domain.dto.request.TeamRequest;
-import com.co.kr.modyeo.category.domain.entity.Category;
-import com.co.kr.modyeo.team.domain.entity.Team;
-import com.co.kr.modyeo.team.domain.entity.link.TeamCategory;
-import com.co.kr.modyeo.team.repository.TeamCategoryRepository;
-import com.co.kr.modyeo.team.repository.TeamRepository;
-import com.co.kr.modyeo.team.service.TeamService;
-import com.co.kr.modyeo.team.service.impl.TeamServiceImpl;
+import com.co.kr.modyeo.api.team.domain.dto.request.TeamRequest;
+import com.co.kr.modyeo.api.category.domain.entity.Category;
+import com.co.kr.modyeo.api.team.domain.entity.Team;
+import com.co.kr.modyeo.api.team.domain.entity.link.TeamCategory;
+import com.co.kr.modyeo.api.team.repository.TeamCategoryRepository;
+import com.co.kr.modyeo.api.team.repository.TeamRepository;
+import com.co.kr.modyeo.api.team.service.TeamService;
+import com.co.kr.modyeo.api.team.service.impl.TeamServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

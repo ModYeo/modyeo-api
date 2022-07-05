@@ -1,11 +1,11 @@
 package com.co.kr.modyeo.member.controller.api;
 
-import com.co.kr.modyeo.category.controller.api.CategoryApiController;
-import com.co.kr.modyeo.category.domain.dto.request.CategoryRequest;
-import com.co.kr.modyeo.category.domain.dto.response.CategoryResponse;
-import com.co.kr.modyeo.category.domain.dto.search.CategorySearch;
-import com.co.kr.modyeo.category.domain.entity.Category;
-import com.co.kr.modyeo.category.service.CategoryService;
+import com.co.kr.modyeo.api.category.controller.api.CategoryApiController;
+import com.co.kr.modyeo.api.category.domain.dto.request.CategoryRequest;
+import com.co.kr.modyeo.api.category.domain.dto.response.CategoryResponse;
+import com.co.kr.modyeo.api.category.domain.dto.search.CategorySearch;
+import com.co.kr.modyeo.api.category.domain.entity.Category;
+import com.co.kr.modyeo.api.category.service.CategoryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
