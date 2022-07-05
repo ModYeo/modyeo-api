@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.bbs.domain.dto.search;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -21,6 +22,7 @@ public class ArticleSearch {
 
     private Sort.Direction direction;
 
+    @Builder(builderMethodName = "of",builderClassName = "of")
     public ArticleSearch(String title, String content, Integer limit, Integer offset, String orderBy, Sort.Direction direction) {
         this.title = title;
         this.content = content;

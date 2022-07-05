@@ -37,8 +37,9 @@ public class Article extends BaseEntity {
     private List<Reply> replyList = new ArrayList<>();
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public Article(Long id, String content, String filePath, Boolean isHidden, Long hitCount, List<Reply> replyList) {
+    public Article(Long id,String title, String content, String filePath, Boolean isHidden, Long hitCount, List<Reply> replyList) {
         this.id = id;
+        this.title = title;
         this.content = content;
         this.filePath = filePath;
         this.isHidden = isHidden;
@@ -47,7 +48,8 @@ public class Article extends BaseEntity {
     }
 
     @Builder(builderMethodName = "createArticleBuilder",builderClassName = "createArticleBuilder")
-    public Article(String content, String filePath, Boolean isHidden) {
+    public Article(String title, String content, String filePath, Boolean isHidden) {
+        this.title = title;
         this.content = content;
         this.filePath = filePath;
         this.isHidden = isHidden;
@@ -55,7 +57,8 @@ public class Article extends BaseEntity {
     }
 
     @Builder(builderMethodName = "updateArticleBuilder",builderClassName = "updateArticleBuilder")
-    public Article(String content, String filePath, Boolean isHidden,Long hitCount){
+    public Article(String title, String content, String filePath, Boolean isHidden,Long hitCount){
+        this.title = title;
         this.content = content;
         this.filePath = filePath;
         this.isHidden = isHidden;

@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.bbs.service.impl;
 
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
@@ -13,8 +14,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService {
 
@@ -27,18 +30,23 @@ public class BoardServiceImpl implements BoardService {
         return articleRepository.searchArticle(articleSearch,pageRequest).map(ArticleResponse::toDto);
     }
 
+    @Transactional
     @Override
     public Article createArticle(ArticleRequest articleRequest) {
-        return null;
+        return articleRepository.save(ArticleRequest.createArticle(articleRequest));
     }
 
+    @Transactional
     @Override
-    public ArticleResponse getArticle(Long id) {
-        return ArticleResponse.toDto(articleRepository.findById(id).orElseThrow(
-                ()-> ApiException.builder()
+    public ArticleDetail getArticle(Long id) {
+        Article article = articleRepository.findById(id).orElseThrow(
+                () -> ApiException.builder()
                         .errorMessage("찾을 수 없는 게시글 입니다.")
                         .errorCode("NOT_FOUND_ARTICLE")
                         .status(HttpStatus.BAD_REQUEST)
-                        .build()));
+                        .build());
+
+        article.plusHitCount();
+        return ArticleDetail.toDto(article);
     }
 }

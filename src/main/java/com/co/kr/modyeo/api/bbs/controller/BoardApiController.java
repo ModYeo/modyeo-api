@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.bbs.controller;
 
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
@@ -23,9 +24,9 @@ public class BoardApiController {
     public ResponseEntity<?> getArticle(
             @PathVariable(value = "article_id")Long id
     ){
-        ArticleResponse articleResponse = boardService.getArticle(id);
+        ArticleDetail articleDetail = boardService.getArticle(id);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(articleResponse)
+                .data(articleDetail)
                 .build());
     }
 
