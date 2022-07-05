@@ -1,4 +1,4 @@
-package com.co.kr.modyeo.api.member.controller.api;
+package com.co.kr.modyeo.api.member.controller;
 
 import com.co.kr.modyeo.api.member.domain.dto.response.MemberResponse;
 import com.co.kr.modyeo.api.member.service.MemberService;

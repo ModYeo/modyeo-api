@@ -1,6 +1,6 @@
 package com.co.kr.modyeo.member.controller.api;
 
-import com.co.kr.modyeo.api.member.controller.api.MemberApiController;
+import com.co.kr.modyeo.api.member.controller.MemberApiController;
 import com.co.kr.modyeo.api.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
 package com.co.kr.modyeo.member.controller.api;
 
-import com.co.kr.modyeo.api.category.controller.api.CategoryApiController;
+import com.co.kr.modyeo.api.category.controller.CategoryApiController;
 import com.co.kr.modyeo.api.category.domain.dto.request.CategoryRequest;
 import com.co.kr.modyeo.api.category.domain.dto.response.CategoryResponse;
 import com.co.kr.modyeo.api.category.domain.dto.search.CategorySearch;

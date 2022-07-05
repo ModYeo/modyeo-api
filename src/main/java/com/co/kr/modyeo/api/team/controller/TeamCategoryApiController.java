@@ -1,4 +1,4 @@
-package com.co.kr.modyeo.api.team.controller.api;
+package com.co.kr.modyeo.api.team.controller;
 
 import com.co.kr.modyeo.api.team.domain.entity.link.TeamCategory;
 import com.co.kr.modyeo.api.team.service.TeamCategoryService;

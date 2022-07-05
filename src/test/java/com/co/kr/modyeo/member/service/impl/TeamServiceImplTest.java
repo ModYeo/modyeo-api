@@ -1,9 +1,11 @@
 package com.co.kr.modyeo.member.service.impl;
 
+import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.api.team.domain.dto.request.TeamRequest;
 import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.api.team.domain.entity.link.TeamCategory;
+import com.co.kr.modyeo.api.team.repository.CrewRepository;
 import com.co.kr.modyeo.api.team.repository.TeamCategoryRepository;
 import com.co.kr.modyeo.api.team.repository.TeamRepository;
 import com.co.kr.modyeo.api.team.service.TeamService;
@@ -34,10 +36,16 @@ class TeamServiceImplTest {
     @Mock
     private TeamCategoryRepository teamCategoryRepository;
 
+    @Mock
+    private CrewRepository crewRepository;
+
+    @Mock
+    private MemberRepository memberRepository;
+
     @BeforeEach
     public void setup(){
         MockitoAnnotations.initMocks(this);
-        teamService = new TeamServiceImpl(teamRepository, teamCategoryRepository);
+        teamService = new TeamServiceImpl(teamRepository, teamCategoryRepository,crewRepository,memberRepository);
     }
 
     private TeamRequest.CategoryDto categoryDto = TeamRequest.CategoryDto.builder()
@@ -56,7 +64,7 @@ class TeamServiceImplTest {
         Team team = crewCreateRequest.toEntity();
         TeamCategory teamCategory = TeamCategory.of()
                 .id(1L)
-                .crew(team)
+                .team(team)
                 .category(categoryDto.toEntity())
                 .build();
 
@@ -69,7 +77,7 @@ class TeamServiceImplTest {
             for (TeamRequest.CategoryDto categoryDto : crewCreateRequest.getCategoryDtoList()) {
                 Category category = categoryDto.toEntity();
                 TeamCategory teamCategory1 = TeamCategory.of()
-                        .crew(team)
+                        .team(team)
                         .category(category)
                         .build();
                 teamCategoryRepository.save(teamCategory1);
@@ -83,7 +91,7 @@ class TeamServiceImplTest {
         Team team = crewCreateRequest.toEntity();
         TeamCategory teamCategory = TeamCategory.of()
                 .id(1L)
-                .crew(team)
+                .team(team)
                 .category(categoryDto.toEntity())
                 .build();
 

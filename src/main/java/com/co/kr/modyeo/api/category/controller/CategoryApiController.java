@@ -1,4 +1,4 @@
-package com.co.kr.modyeo.api.category.controller.api;
+package com.co.kr.modyeo.api.category.controller;
 
 import com.co.kr.modyeo.api.category.domain.dto.request.CategoryRequest;
 import com.co.kr.modyeo.api.category.domain.dto.search.CategorySearch;
