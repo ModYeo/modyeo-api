@@ -1,7 +1,7 @@
 package com.co.kr.modyeo.config;
 
-import com.co.kr.modyeo.member.auth.filter.JwtAuthenticationFilter;
-import com.co.kr.modyeo.member.auth.provider.JwtTokenProvider;
+import com.co.kr.modyeo.api.member.auth.filter.JwtAuthenticationFilter;
+import com.co.kr.modyeo.api.member.auth.provider.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

@@ -1,14 +1,15 @@
 package com.co.kr.modyeo.member.service.impl;
 
-import com.co.kr.modyeo.team.domain.entity.Team;
-import com.co.kr.modyeo.member.domain.entity.Member;
-import com.co.kr.modyeo.team.domain.entity.link.MemberTeam;
-import com.co.kr.modyeo.team.domain.entity.enumerate.JoinStatus;
-import com.co.kr.modyeo.team.repository.TeamRepository;
-import com.co.kr.modyeo.team.repository.MemberTeamRepository;
-import com.co.kr.modyeo.member.repository.MemberRepository;
-import com.co.kr.modyeo.team.service.TeamApplicationService;
-import com.co.kr.modyeo.team.service.impl.TeamApplicationServiceImpl;
+import com.co.kr.modyeo.api.team.domain.entity.Team;
+import com.co.kr.modyeo.api.member.domain.entity.Member;
+import com.co.kr.modyeo.api.team.domain.entity.link.MemberTeam;
+import com.co.kr.modyeo.api.team.domain.entity.enumerate.JoinStatus;
+import com.co.kr.modyeo.api.team.repository.CrewRepository;
+import com.co.kr.modyeo.api.team.repository.TeamRepository;
+import com.co.kr.modyeo.api.team.repository.MemberTeamRepository;
+import com.co.kr.modyeo.api.member.repository.MemberRepository;
+import com.co.kr.modyeo.api.team.service.TeamApplicationService;
+import com.co.kr.modyeo.api.team.service.impl.TeamApplicationServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,10 +39,13 @@ class TeamApplicationServiceImplTest {
     @Mock
     private MemberTeamRepository memberTeamRepository;
 
+    @Mock
+    private CrewRepository crewRepository;
+
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        teamApplicationService = new TeamApplicationServiceImpl(memberRepository, teamRepository, memberTeamRepository);
+        teamApplicationService = new TeamApplicationServiceImpl(memberRepository, teamRepository, memberTeamRepository,crewRepository);
     }
 
     @Test
@@ -58,7 +62,7 @@ class TeamApplicationServiceImplTest {
                 .build();
 
         MemberTeam memberTeam = MemberTeam.joinApplicationBuilder()
-                .crew(team)
+                .team(team)
                 .member(member)
                 .build();
 

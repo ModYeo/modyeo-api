@@ -1,10 +1,10 @@
 package com.co.kr.modyeo.member.controller.api;
 
-import com.co.kr.modyeo.category.domain.dto.response.CategoryResponse;
-import com.co.kr.modyeo.team.domain.dto.response.TeamResponse;
-import com.co.kr.modyeo.team.domain.dto.search.TeamSearch;
-import com.co.kr.modyeo.team.service.TeamService;
-import com.co.kr.modyeo.team.controller.api.TeamApiController;
+import com.co.kr.modyeo.api.category.domain.dto.response.CategoryResponse;
+import com.co.kr.modyeo.api.team.domain.dto.response.TeamResponse;
+import com.co.kr.modyeo.api.team.domain.dto.search.TeamSearch;
+import com.co.kr.modyeo.api.team.service.TeamService;
+import com.co.kr.modyeo.api.team.controller.TeamApiController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

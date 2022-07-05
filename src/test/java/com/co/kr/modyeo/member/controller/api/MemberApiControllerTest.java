@@ -1,9 +1,7 @@
 package com.co.kr.modyeo.member.controller.api;
 
-import com.co.kr.modyeo.config.SecurityConfig;
-import com.co.kr.modyeo.member.auth.provider.JwtTokenProvider;
-import com.co.kr.modyeo.member.auth.service.AuthService;
-import com.co.kr.modyeo.member.service.MemberService;
+import com.co.kr.modyeo.api.member.controller.MemberApiController;
+import com.co.kr.modyeo.api.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +9,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcResultMatchersDsl;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
