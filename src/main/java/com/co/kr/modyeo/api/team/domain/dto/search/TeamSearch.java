@@ -10,8 +10,6 @@ import org.springframework.data.domain.Sort;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TeamSearch {
 
-    private Long crewId;
-
     private String name;
 
     private Long categoryId;
@@ -25,8 +23,7 @@ public class TeamSearch {
     private Sort.Direction direction;
 
     @Builder
-    public TeamSearch(Long crewId, String name, Long categoryId, Integer limit, Integer offset, String orderBy, Sort.Direction direction) {
-        this.crewId = crewId;
+    public TeamSearch(String name, Long categoryId, Integer limit, Integer offset, String orderBy, Sort.Direction direction) {
         this.name = name;
         this.categoryId = categoryId;
         this.limit = limit != null? limit : 20;

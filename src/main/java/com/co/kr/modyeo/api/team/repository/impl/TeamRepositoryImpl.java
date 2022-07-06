@@ -9,8 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 
-import static com.co.kr.modyeo.member.domain.entity.QTeam.team;
-import static com.co.kr.modyeo.member.domain.entity.link.QTeamCategory.teamCategory;
+import static com.co.kr.modyeo.api.team.domain.entity.QTeam.team;
+import static com.co.kr.modyeo.api.team.domain.entity.link.QTeamCategory.teamCategory;
 
 @Repository
 public class TeamRepositoryImpl extends Querydsl4RepositorySupport implements TeamCustomRepository {
@@ -25,8 +25,7 @@ public class TeamRepositoryImpl extends Querydsl4RepositorySupport implements Te
             contentQuery.select(team)
                     .from(team)
                     .innerJoin(team.categoryList,teamCategory)
-                    .where(crewIdEq(teamSearch.getCrewId())
-                            ,crewNameEq(teamSearch.getName())
+                    .where(crewNameEq(teamSearch.getName())
                             ,categoryIdEq(teamSearch.getCategoryId())));
 
     }

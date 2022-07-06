@@ -76,7 +76,7 @@ class TeamApiControllerTest {
             crews.add(teamResponse);
         }
         Slice<TeamResponse> crewResponses = new SliceImpl<>(crews,pageRequest,true);
-        given(teamService.getTeam(any())).willReturn(crewResponses);
+        given(teamService.getTeams(any())).willReturn(crewResponses);
 
         mockMvc.perform(
                 get("/api/crew") .with(csrf())

@@ -9,7 +9,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.co.kr.modyeo.member.domain.entity.QCategory.category;
+import static com.co.kr.modyeo.api.category.domain.entity.QCategory.category;
 
 public class CategoryRepositoryImpl implements CategoryCustomRepository {
     private final JPAQueryFactory queryFactory;

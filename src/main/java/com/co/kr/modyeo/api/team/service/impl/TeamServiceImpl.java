@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.team.service.impl;
 
 import com.co.kr.modyeo.api.team.domain.dto.request.TeamRequest;
+import com.co.kr.modyeo.api.team.domain.dto.response.TeamDetail;
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamResponse;
 import com.co.kr.modyeo.api.team.domain.dto.search.TeamSearch;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
@@ -75,7 +76,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public Slice<TeamResponse> getTeam(TeamSearch teamSearch) {
+    public Slice<TeamResponse> getTeams(TeamSearch teamSearch) {
         PageRequest page = PageRequest.of(teamSearch.getOffset(), teamSearch.getLimit(), teamSearch.getDirection(), teamSearch.getOrderBy());
         Slice<Team> teams = teamRepository.searchTeam(teamSearch,page);
         return teams.map(TeamResponse::toRes);
@@ -103,6 +104,15 @@ public class TeamServiceImpl implements TeamService {
                 .build());
 
         teamRepository.delete(team);
+    }
+
+    @Override
+    public TeamDetail getTeam(Long teamId) {
+        return TeamDetail.toDto(teamRepository.findById(teamId).orElseThrow(() -> ApiException.builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .errorMessage(TeamErrorCode.NOT_FOUND_TEAM.getMessage())
+                .errorCode(TeamErrorCode.NOT_FOUND_TEAM.getCode())
+                .build()));
     }
 
     private void overlapTeamCheck(TeamRequest teamRequest){

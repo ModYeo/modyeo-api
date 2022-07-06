@@ -13,4 +13,8 @@ public interface BoardService {
     Article createArticle(ArticleRequest articleRequest);
 
     ArticleDetail getArticle(Long id);
+
+    Article updateArticle(ArticleRequest articleRequest);
+
+    void deleteArticle(Long articleId);
 }

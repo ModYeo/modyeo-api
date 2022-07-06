@@ -27,7 +27,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Slice<ArticleResponse> getArticles(ArticleSearch articleSearch) {
         PageRequest pageRequest = PageRequest.of(articleSearch.getOffset(),articleSearch.getLimit(),articleSearch.getDirection(),articleSearch.getOrderBy());
-        return articleRepository.searchArticle(articleSearch,pageRequest).map(ArticleResponse::toDto);
+        return articleRepository.searchArticle(articleSearch,pageRequest);
     }
 
     @Transactional
@@ -48,5 +48,36 @@ public class BoardServiceImpl implements BoardService {
 
         article.plusHitCount();
         return ArticleDetail.toDto(article);
+    }
+
+    @Override
+    public Article updateArticle(ArticleRequest articleRequest) {
+        Article article = articleRepository.findById(articleRequest.getId()).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage("찾을 수 없는 게시글 입니다.")
+                        .errorCode("NOT_FOUND_ARTICLE")
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
+        article.updateArticleBuilder()
+                .title(articleRequest.getTitle())
+                .content(articleRequest.getContent())
+                .filePath(articleRequest.getFilePath())
+                .isHidden(articleRequest.getIsHidden())
+                .build();
+
+        return article;
+    }
+
+    @Override
+    public void deleteArticle(Long articleId) {
+        Article article = articleRepository.findById(articleId).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage("찾을 수 없는 게시글 입니다.")
+                        .errorCode("NOT_FOUND_ARTICLE")
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
+        articleRepository.delete(article);
     }
 }

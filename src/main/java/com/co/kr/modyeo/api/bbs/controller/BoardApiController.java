@@ -33,15 +33,34 @@ public class BoardApiController {
     @GetMapping("/article")
     public ResponseEntity<?> getArticles(ArticleSearch articleSearch){
         Slice<ArticleResponse> articleResponses = boardService.getArticles(articleSearch);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(articleResponses)
+                .build());
     }
 
     @PostMapping("/article")
     public ResponseEntity<?> createArticle(ArticleRequest articleRequest){
-        Article article = boardService.createArticle(articleRequest);
+        boardService.createArticle(articleRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(JsonResultData.successResultBuilder()
                         .data(null)
                         .build());
+    }
+
+    @PatchMapping("/article")
+    public ResponseEntity<?> updateArticle(ArticleRequest articleRequest){
+        boardService.updateArticle(articleRequest);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
+                .build());
+    }
+
+    @DeleteMapping("/article/{article_id}")
+    public ResponseEntity<?> deleteArticle(
+            @PathVariable(value = "article_id")Long articleId){
+        boardService.deleteArticle(articleId);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
+                .build());
     }
 }
