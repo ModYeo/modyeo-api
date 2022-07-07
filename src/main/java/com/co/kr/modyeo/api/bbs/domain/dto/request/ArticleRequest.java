@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.bbs.domain.dto.request;
 
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
+import com.co.kr.modyeo.api.category.domain.entity.Category;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ArticleRequest {
 
-    private Long id;
+    private Long articleId;
+
+    private Long categoryId;
 
     private String title;
 
@@ -22,8 +25,8 @@ public class ArticleRequest {
     private Boolean isHidden;
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public ArticleRequest(Long id,String title, String content, String filePath, Long hitCount, Boolean isHidden) {
-        this.id = id;
+    public ArticleRequest(Long articleId, String title, String content, String filePath, Long hitCount, Boolean isHidden) {
+        this.articleId = articleId;
         this.title = title;
         this.content = content;
         this.filePath = filePath;
@@ -33,7 +36,7 @@ public class ArticleRequest {
 
     public static Article toEntity(ArticleRequest articleRequest){
         return Article.of()
-                .id(articleRequest.id)
+                .id(articleRequest.articleId)
                 .title(articleRequest.title)
                 .content(articleRequest.content)
                 .filePath(articleRequest.filePath)
@@ -41,7 +44,7 @@ public class ArticleRequest {
                 .build();
     }
 
-    public static Article createArticle(ArticleRequest articleRequest){
+    public static Article createArticle(ArticleRequest articleRequest, Category category){
         return Article.createArticleBuilder()
                 .content(articleRequest.getContent())
                 .title(articleRequest.getTitle())

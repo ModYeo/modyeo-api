@@ -13,6 +13,7 @@ import org.springframework.data.domain.Slice;
 
 import static com.co.kr.modyeo.api.bbs.domain.entity.QArticle.article;
 import static com.co.kr.modyeo.api.bbs.domain.entity.QReply.reply;
+import static com.co.kr.modyeo.api.category.domain.entity.QCategory.category;
 
 public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements ArticleCustomRepository {
 
@@ -27,6 +28,7 @@ public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements
                                 article.id.as("articleId"),
                                 article.title,
                                 article.content,
+                                category.name.as("categoryName"),
                                 article.filePath,
                                 article.isHidden,
                                 reply.id.count().as("replyCount"),
@@ -35,9 +37,15 @@ public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements
                                 article.createdDate))
                         .from(article)
                         .innerJoin(article.replyList,reply)
+                        .innerJoin(article.category,category)
                         .where(articleTitleLike(articleSearch.getTitle()),
-                                articleContentLike(articleSearch.getContent()))
+                                articleContentLike(articleSearch.getContent()),
+                                categoryIdEq(articleSearch.getCategoryId()))
                         .groupBy(reply.id));
+    }
+
+    private BooleanExpression categoryIdEq(Long categoryId) {
+        return categoryId != null ? category.id.eq(categoryId) : null;
     }
 
     private BooleanExpression articleContentLike(String content) {

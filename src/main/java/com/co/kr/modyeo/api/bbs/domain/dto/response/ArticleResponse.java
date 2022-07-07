@@ -18,6 +18,8 @@ public class ArticleResponse {
 
     private String content;
 
+    private String categoryName;
+
     private String filePath;
 
     private Boolean isHidden;
@@ -32,10 +34,11 @@ public class ArticleResponse {
 
     @QueryProjection
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public ArticleResponse(Long articleId, String title, String content,String filePath, Boolean isHidden,Long hitCount,Long replyCount, String createdBy, LocalDateTime createdTime) {
+    public ArticleResponse(Long articleId, String title, String content,String categoryName,String filePath, Boolean isHidden,Long hitCount,Long replyCount, String createdBy, LocalDateTime createdTime) {
         this.articleId = articleId;
         this.title = title;
         this.content = content;
+        this.categoryName = categoryName;
         this.filePath = filePath;
         this.isHidden = isHidden;
         this.replyCount = replyCount;

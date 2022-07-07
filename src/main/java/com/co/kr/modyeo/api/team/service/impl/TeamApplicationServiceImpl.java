@@ -16,8 +16,10 @@ import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class TeamApplicationServiceImpl implements TeamApplicationService {
     private final MemberRepository memberRepository;
@@ -26,6 +28,7 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
     private final CrewRepository crewRepository;
 
     @Override
+    @Transactional
     public MemberTeam applicantCrew(Long memberId, Long crewId) {
         Member member = findMember(memberId);
         Team team = findTeam(crewId);
@@ -50,6 +53,7 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
     }
 
     @Override
+    @Transactional
     public MemberTeam updateJoinStatus(Long memberCrewId, JoinStatus joinStatus) {
         MemberTeam memberTeam = memberTeamRepository.findMemberTeamById(memberCrewId)
                 .orElseThrow(() -> ApiException.builder()

@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.api.bbs.domain.entity;
 
+import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.common.entity.BaseEntity;
 import lombok.AccessLevel;
@@ -25,6 +26,14 @@ public class Article extends BaseEntity {
 
     private String content;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member writer;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     @Column(name = "file_path")
     private String filePath;
 
@@ -38,8 +47,9 @@ public class Article extends BaseEntity {
     private List<Reply> replyList = new ArrayList<>();
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public Article(Long id,String title, String content, String filePath, Boolean isHidden, Long hitCount, List<Reply> replyList) {
+    public Article(Long id,Category category,String title, String content, String filePath, Boolean isHidden, Long hitCount, List<Reply> replyList) {
         this.id = id;
+        this.category = category;
         this.title = title;
         this.content = content;
         this.filePath = filePath;
@@ -49,7 +59,8 @@ public class Article extends BaseEntity {
     }
 
     @Builder(builderMethodName = "createArticleBuilder",builderClassName = "createArticleBuilder")
-    public Article(String title, String content, String filePath, Boolean isHidden) {
+    public Article(Category category,String title, String content, String filePath, Boolean isHidden) {
+        this.category = category;
         this.title = title;
         this.content = content;
         this.filePath = filePath;
@@ -62,7 +73,8 @@ public class Article extends BaseEntity {
     }
 
     @Builder(builderMethodName = "updateArticleBuilder",builderClassName = "updateArticleBuilder")
-    public void changeArticle(String title, String content, String filePath, Boolean isHidden) {
+    public void changeArticle(Category category, String title, String content, String filePath, Boolean isHidden) {
+        this.category = category;
         this.title = title;
         this.content = content;
         this.filePath = filePath;

@@ -13,8 +13,10 @@ import com.co.kr.modyeo.api.team.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class TeamCategoryServiceImpl implements TeamCategoryService {
     private final TeamRepository teamRepository;
@@ -22,6 +24,7 @@ public class TeamCategoryServiceImpl implements TeamCategoryService {
     private final TeamCategoryRepository teamCategoryRepository;
 
     @Override
+    @Transactional
     public TeamCategory createTeamCategory(Long teamId, Long categoryId) {
         Team team = findTeam(teamId);
         Category category = findCategory(categoryId);
@@ -36,6 +39,7 @@ public class TeamCategoryServiceImpl implements TeamCategoryService {
     }
 
     @Override
+    @Transactional
     public void deleteTeamCategory(Long teamCategoryId) {
         TeamCategory teamCategory = teamCategoryRepository.findById(teamCategoryId).orElseThrow(
                 () -> ApiException.builder()
