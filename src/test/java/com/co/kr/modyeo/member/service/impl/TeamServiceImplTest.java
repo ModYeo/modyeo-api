@@ -61,7 +61,7 @@ class TeamServiceImplTest {
     @Test
     @DisplayName("crew 생성 테스트1")
     void crewCreate() {
-        Team team = crewCreateRequest.toEntity();
+        Team team = TeamRequest.toEntity(crewCreateRequest);
         TeamCategory teamCategory = TeamCategory.of()
                 .id(1L)
                 .team(team)
@@ -88,7 +88,7 @@ class TeamServiceImplTest {
     @Test
     @DisplayName("crew 생성 테스트2")
     void crewCreate2() {
-        Team team = crewCreateRequest.toEntity();
+        Team team = TeamRequest.toEntity(crewCreateRequest);
         TeamCategory teamCategory = TeamCategory.of()
                 .id(1L)
                 .team(team)

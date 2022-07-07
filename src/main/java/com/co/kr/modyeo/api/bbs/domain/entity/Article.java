@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.api.bbs.domain.entity;
 
+import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.common.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -56,16 +57,15 @@ public class Article extends BaseEntity {
         this.hitCount = 0L;
     }
 
+    public void plusHitCount(){
+        this.hitCount++;
+    }
+
     @Builder(builderMethodName = "updateArticleBuilder",builderClassName = "updateArticleBuilder")
-    public Article(String title, String content, String filePath, Boolean isHidden,Long hitCount){
+    public void changeArticle(String title, String content, String filePath, Boolean isHidden) {
         this.title = title;
         this.content = content;
         this.filePath = filePath;
-        this.isHidden = isHidden;
-        this.hitCount = hitCount;
-    }
-
-    public void plusHitCount(){
-        this.hitCount++;
+        this.isHidden =isHidden;
     }
 }

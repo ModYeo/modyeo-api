@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.api.team.controller;
 
+import com.co.kr.modyeo.api.team.domain.dto.response.TeamDetail;
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamResponse;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.common.result.JsonResultData;
@@ -35,9 +36,20 @@ public class TeamApiController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getTeam(TeamSearch teamSearch){
-        Slice<TeamResponse> teamResponses = teamService.getTeam(teamSearch);
-        return ResponseEntity.ok(teamResponses);
+    public ResponseEntity<?> getTeams(TeamSearch teamSearch){
+        Slice<TeamResponse> teamResponses = teamService.getTeams(teamSearch);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(teamResponses)
+                .build());
+    }
+
+    @GetMapping("/{team_id}")
+    public ResponseEntity<?> getTeam(
+            @PathVariable(value = "team_id") Long teamId){
+        TeamDetail teamDetail = teamService.getTeam(teamId);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(teamDetail)
+                .build());
     }
 
     @PatchMapping("")

@@ -2,15 +2,13 @@ package com.co.kr.modyeo.api.team.domain.dto.response;
 
 import com.co.kr.modyeo.api.category.domain.dto.response.CategoryResponse;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Setter
+@Data
 @NoArgsConstructor
 public class TeamResponse {
 

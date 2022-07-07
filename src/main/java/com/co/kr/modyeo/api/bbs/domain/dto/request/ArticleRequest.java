@@ -22,8 +22,9 @@ public class ArticleRequest {
     private Boolean isHidden;
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public ArticleRequest(Long id, String content, String filePath, Long hitCount, Boolean isHidden) {
+    public ArticleRequest(Long id,String title, String content, String filePath, Long hitCount, Boolean isHidden) {
         this.id = id;
+        this.title = title;
         this.content = content;
         this.filePath = filePath;
         this.hitCount = hitCount;
@@ -33,6 +34,7 @@ public class ArticleRequest {
     public static Article toEntity(ArticleRequest articleRequest){
         return Article.of()
                 .id(articleRequest.id)
+                .title(articleRequest.title)
                 .content(articleRequest.content)
                 .filePath(articleRequest.filePath)
                 .hitCount(articleRequest.hitCount)
