@@ -14,6 +14,8 @@ public class ArticleSearch {
 
     private String content;
 
+    private Long CategoryId;
+
     private Integer limit;
 
     private Integer offset;

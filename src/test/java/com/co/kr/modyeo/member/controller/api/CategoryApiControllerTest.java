@@ -64,7 +64,7 @@ class CategoryApiControllerTest {
 
         String request = objectMapper.writeValueAsString(categoryRequest);
 
-        given(categoryService.create(any()))
+        given(categoryService.createCategory(any()))
                 .willReturn(Category.of()
                         .id(1L)
                         .name("test category")
@@ -101,9 +101,8 @@ class CategoryApiControllerTest {
                 categoryList.stream().map(CategoryResponse::toRes)
                         .collect(Collectors.toList());
 
-        given(categoryService.read(any()))
+        given(categoryService.getCategories(any()))
                 .willReturn(responses);
-
 
         mockMvc.perform(
               get("/api/category")
@@ -123,7 +122,7 @@ class CategoryApiControllerTest {
                 .name("update category")
                 .build();
 
-        given(categoryService.update(any()))
+        given(categoryService.updateCategory(any()))
                 .willReturn(Category.of()
                         .id(1L)
                         .name("update category")

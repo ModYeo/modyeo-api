@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.category.controller;
 
 import com.co.kr.modyeo.api.category.domain.dto.request.CategoryRequest;
+import com.co.kr.modyeo.api.category.domain.dto.response.CategoryDetail;
 import com.co.kr.modyeo.api.category.domain.dto.search.CategorySearch;
 import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.category.service.CategoryService;
@@ -26,8 +27,8 @@ public class CategoryApiController {
     private final CategoryService categoryService;
 
     @PostMapping("")
-    public ResponseEntity<?> create(@Valid @RequestBody CategoryRequest categoryRequest){
-        Category category = categoryService.create(categoryRequest);
+    public ResponseEntity<?> createCategory(@Valid @RequestBody CategoryRequest categoryRequest){
+        Category category = categoryService.createCategory(categoryRequest);
         if (category != null){
             return ResponseEntity
                     .status(HttpStatus.CREATED)
@@ -41,9 +42,20 @@ public class CategoryApiController {
         }
     }
 
+    @GetMapping("/{category_id}")
+    public ResponseEntity<?> getCategory(
+            @PathVariable(value = "category_id")Long categoryId){
+        CategoryDetail categoryDetail = categoryService.getCategory(categoryId);
+        return ResponseEntity
+                .ok(JsonResultData
+                        .successResultBuilder()
+                        .data(categoryDetail)
+                        .build());
+    }
+
     @GetMapping("")
-    public ResponseEntity<?> read(@Valid CategorySearch categorySearch){
-        List<CategoryResponse> categoryList = categoryService.read(categorySearch);
+    public ResponseEntity<?> getCategories(@Valid CategorySearch categorySearch){
+        List<CategoryResponse> categoryList = categoryService.getCategories(categorySearch);
         return ResponseEntity
                 .ok(JsonResultData
                         .successResultBuilder()
@@ -52,8 +64,8 @@ public class CategoryApiController {
     }
 
     @PatchMapping("")
-    public ResponseEntity<?> update(@Valid @RequestBody CategoryRequest categoryRequest){
-        Category category = categoryService.update(categoryRequest);
+    public ResponseEntity<?> updateCategory(@Valid @RequestBody CategoryRequest categoryRequest){
+        Category category = categoryService.updateCategory(categoryRequest);
         if (Objects.equals(categoryRequest.getName(), category.getName())){
             return ResponseEntity
                     .ok(JsonResultData
@@ -71,8 +83,8 @@ public class CategoryApiController {
     }
 
     @DeleteMapping("/{category_id}")
-    public ResponseEntity<?> delete(@PathVariable(value = "category_id")Long categoryId){
-        categoryService.delete(categoryId);
+    public ResponseEntity<?> deleteCategory(@PathVariable(value = "category_id")Long categoryId){
+        categoryService.deleteCategory(categoryId);
         return ResponseEntity
                 .ok(JsonResultData
                         .successResultBuilder()

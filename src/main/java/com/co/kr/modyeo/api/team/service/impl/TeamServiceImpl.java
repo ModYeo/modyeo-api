@@ -83,6 +83,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    @Transactional
     public Team updateTeam(TeamRequest teamRequest) {
         overlapTeamCheck(teamRequest);
         Team findTeam = teamRepository.findTeamById(teamRequest.getTeam_id()).orElseThrow(() -> ApiException.builder()
@@ -96,6 +97,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    @Transactional
     public void deleteTeam(Long teamId) {
         Team team = teamRepository.findById(teamId).orElseThrow(() -> ApiException.builder()
                 .status(HttpStatus.BAD_REQUEST)

@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.member.service.impl;
 
 import com.co.kr.modyeo.api.category.service.impl.CategoryServiceImpl;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.CategoryErrorCode;
 import com.co.kr.modyeo.api.category.domain.dto.request.CategoryRequest;
@@ -54,7 +55,7 @@ class CategoryServiceImplTest {
                 .name("test category")
                 .build();
 
-        Category category = categoryRequest.toEntity();
+        Category category = CategoryRequest.toEntity(categoryRequest);
         category = categoryRepository.save(category);
 
         assertThat(category).isEqualTo(categoryRepository.findByName("test category"));
@@ -70,14 +71,14 @@ class CategoryServiceImplTest {
         given(categoryRepository.save(any()))
                 .willReturn(category);
 
-        category = categoryService.create(categoryCreateRequest);
+        category = categoryService.createCategory(categoryCreateRequest);
         assertThat(category.getId()).isEqualTo(1L);
     }
 
     @Test
     void readByOne(){
         List<Category> categories = new ArrayList<>();
-        Category category = new Category(1L,"test category");
+        Category category = new Category(1L,"test category", Yn.Y);
 
         categories.add(category);
 
@@ -90,7 +91,7 @@ class CategoryServiceImplTest {
     @Test
     void readByOne2(){
         List<Category> categories = new ArrayList<>();
-        Category category = new Category(1L,"test category");
+        Category category = new Category(1L,"test category",Yn.Y);
 
         categories.add(category);
 
@@ -98,8 +99,8 @@ class CategoryServiceImplTest {
                 .map(CategoryResponse::toRes)
                 .collect(Collectors.toList());
 
-        given(categoryService.read(new CategorySearch())).willReturn(categoryResponses);
-        List<CategoryResponse> categoryResponseList = categoryService.read(new CategorySearch());
+        given(categoryService.getCategories(new CategorySearch())).willReturn(categoryResponses);
+        List<CategoryResponse> categoryResponseList = categoryService.getCategories(new CategorySearch());
 
         assertThat(categoryResponseList.size()).isEqualTo(1);
     }
@@ -135,7 +136,7 @@ class CategoryServiceImplTest {
         given(categoryRepository.findByName(any())).willReturn(null);
 //        given(categoryRepository.save(any())).willReturn(category);
 
-        category = categoryService.update(categoryUpdateRequest);
+        category = categoryService.updateCategory(categoryUpdateRequest);
         System.out.println("category.getName() = " + category.getName());
 
         assertThat(category.getName()).isEqualTo("update test");
@@ -150,7 +151,7 @@ class CategoryServiceImplTest {
                 .build());
 
         assertThatThrownBy(() -> {
-            categoryService.update(categoryUpdateRequest);
+            categoryService.updateCategory(categoryUpdateRequest);
         }).isInstanceOf(Exception.class).hasMessageContaining(CategoryErrorCode.OVERLAP_CATEGORY.getMessage());
     }
 
@@ -165,7 +166,7 @@ class CategoryServiceImplTest {
                 .build());
 
         assertThatThrownBy(() -> {
-            categoryService.update(categoryUpdateRequest);
+            categoryService.updateCategory(categoryUpdateRequest);
         }).isInstanceOf(Exception.class).hasMessageContaining(CategoryErrorCode.NOT_FOUND_CATEGORY.getMessage());
     }
 
@@ -179,7 +180,7 @@ class CategoryServiceImplTest {
                 .build());
 
         assertThatThrownBy(() -> {
-            categoryService.delete(1L);
+            categoryService.deleteCategory(1L);
         }).isInstanceOf(Exception.class).hasMessageContaining(CategoryErrorCode.NOT_FOUND_CATEGORY.getMessage());
     }
 
@@ -193,7 +194,7 @@ class CategoryServiceImplTest {
 
         given(categoryRepository.findById(any())).willReturn(Optional.of(category));
 
-        categoryService.delete(1L);
+        categoryService.deleteCategory(1L);
 
         then(categoryRepository).should(times(1)).delete(any());
         then(categoryRepository).should(times(1)).findById(any());

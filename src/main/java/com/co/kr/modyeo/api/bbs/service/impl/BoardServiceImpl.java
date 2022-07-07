@@ -10,7 +10,10 @@ import com.co.kr.modyeo.api.bbs.domain.entity.Reply;
 import com.co.kr.modyeo.api.bbs.repository.ArticleRepository;
 import com.co.kr.modyeo.api.bbs.repository.ReplyRepository;
 import com.co.kr.modyeo.api.bbs.service.BoardService;
+import com.co.kr.modyeo.api.category.domain.entity.Category;
+import com.co.kr.modyeo.api.category.repository.CategoryRepository;
 import com.co.kr.modyeo.common.exception.ApiException;
+import com.co.kr.modyeo.common.exception.code.CategoryErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -26,6 +29,8 @@ public class BoardServiceImpl implements BoardService {
     private final ArticleRepository articleRepository;
     private final ReplyRepository replyRepository;
 
+    private final CategoryRepository categoryRepository;
+
     @Override
     public Slice<ArticleResponse> getArticles(ArticleSearch articleSearch) {
         PageRequest pageRequest = PageRequest.of(articleSearch.getOffset(),articleSearch.getLimit(),articleSearch.getDirection(),articleSearch.getOrderBy());
@@ -35,7 +40,14 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     @Override
     public Article createArticle(ArticleRequest articleRequest) {
-        return articleRepository.save(ArticleRequest.createArticle(articleRequest));
+        Category category = categoryRepository.findById(articleRequest.getCategoryId()).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage(CategoryErrorCode.NOT_FOUND_CATEGORY.getMessage())
+                        .errorCode(CategoryErrorCode.NOT_FOUND_CATEGORY.getCode())
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
+        return articleRepository.save(ArticleRequest.createArticle(articleRequest,category));
     }
 
     @Transactional
@@ -54,14 +66,22 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Article updateArticle(ArticleRequest articleRequest) {
-        Article article = articleRepository.findById(articleRequest.getId()).orElseThrow(
+        Article article = articleRepository.findById(articleRequest.getArticleId()).orElseThrow(
                 () -> ApiException.builder()
                         .errorMessage("찾을 수 없는 게시글 입니다.")
                         .errorCode("NOT_FOUND_ARTICLE")
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
+        Category category = categoryRepository.findById(articleRequest.getCategoryId()).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage(CategoryErrorCode.NOT_FOUND_CATEGORY.getMessage())
+                        .errorCode(CategoryErrorCode.NOT_FOUND_CATEGORY.getCode())
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
         article.updateArticleBuilder()
+                .category(category)
                 .title(articleRequest.getTitle())
                 .content(articleRequest.getContent())
                 .filePath(articleRequest.getFilePath())

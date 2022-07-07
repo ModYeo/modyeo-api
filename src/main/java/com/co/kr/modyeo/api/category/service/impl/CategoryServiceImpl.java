@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.category.service.impl;
 
 import com.co.kr.modyeo.api.category.domain.dto.request.CategoryRequest;
+import com.co.kr.modyeo.api.category.domain.dto.response.CategoryDetail;
 import com.co.kr.modyeo.api.category.domain.dto.response.CategoryResponse;
 import com.co.kr.modyeo.api.category.domain.dto.search.CategorySearch;
 import com.co.kr.modyeo.api.category.domain.entity.Category;
@@ -25,21 +26,21 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public Category create(CategoryRequest categoryRequest) {
+    public Category createCategory(CategoryRequest categoryRequest) {
         overlapCategoryCheck(categoryRequest);
-        Category category = categoryRequest.toEntity();
+        Category category = CategoryRequest.toEntity(categoryRequest);
         return categoryRepository.save(category);
     }
 
     @Override
-    public List<CategoryResponse> read(CategorySearch categorySearch) {
+    public List<CategoryResponse> getCategories(CategorySearch categorySearch) {
         List<Category> categoryList = categoryRepository.searchCategory(categorySearch);
         return categoryList.stream().map(CategoryResponse::toRes).collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public Category update(CategoryRequest categoryUpdateRequest) {
+    public Category updateCategory(CategoryRequest categoryUpdateRequest) {
         overlapCategoryCheck(categoryUpdateRequest);
         Category category = categoryRepository.findById(categoryUpdateRequest.getId())
                 .orElseThrow(() -> ApiException.builder()
@@ -53,7 +54,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void delete(Long categoryId) {
+    public void deleteCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -62,6 +63,16 @@ public class CategoryServiceImpl implements CategoryService {
                         .build());
 
         categoryRepository.delete(category);
+    }
+
+    @Override
+    public CategoryDetail getCategory(Long categoryId) {
+        return CategoryDetail.toDto(categoryRepository.findById(categoryId).orElseThrow(
+                ()-> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorMessage(CategoryErrorCode.NOT_FOUND_CATEGORY.getMessage())
+                        .errorCode(CategoryErrorCode.NOT_FOUND_CATEGORY.getCode())
+                        .build()));
     }
 
     private void overlapCategoryCheck(CategoryRequest categoryRequest){
