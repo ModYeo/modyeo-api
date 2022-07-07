@@ -1,10 +1,12 @@
 package com.co.kr.modyeo.api.bbs.service.impl;
 
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
+import com.co.kr.modyeo.api.bbs.domain.entity.Reply;
 import com.co.kr.modyeo.api.bbs.repository.ArticleRepository;
 import com.co.kr.modyeo.api.bbs.repository.ReplyRepository;
 import com.co.kr.modyeo.api.bbs.service.BoardService;
@@ -79,5 +81,49 @@ public class BoardServiceImpl implements BoardService {
                         .build());
 
         articleRepository.delete(article);
+    }
+
+    @Override
+    public Reply createReply(ReplyRequest replyRequest) {
+        Article article = articleRepository.findById(replyRequest.getArticleId()).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage("찾을 수 없는 게시글 입니다.")
+                        .errorCode("NOT_FOUND_ARTICLE")
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
+        Reply reply = replyRequest.getReplyDepth() == 0 ?
+                ReplyRequest.toReply(replyRequest, article) : ReplyRequest.toNestedReply(replyRequest, article);
+
+        replyRepository.save(reply);
+        return reply;
+    }
+
+    @Override
+    public Reply updateReply(ReplyRequest replyRequest) {
+        Reply reply = replyRepository.findById(replyRequest.getId()).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage("찾을 수 없는 댓글 입니다.")
+                        .errorCode("NOT_FOUND_REPLY")
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
+        reply.changeReplyBuilder()
+                .content(reply.getContent())
+                .build();
+
+        return reply;
+    }
+
+    @Override
+    public void deleteReply(Long replyId) {
+        Reply reply = replyRepository.findById(replyId).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage("찾을 수 없는 댓글 입니다.")
+                        .errorCode("NOT_FOUND_REPLY")
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
+        replyRepository.delete(reply);
     }
 }

@@ -1,6 +1,6 @@
 package com.co.kr.modyeo.api.team.domain.entity.link;
 
-import com.co.kr.modyeo.api.team.domain.entity.enumerate.Level;
+import com.co.kr.modyeo.api.team.domain.entity.enumerate.CrewLevel;
 import com.co.kr.modyeo.common.entity.BaseEntity;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
@@ -31,17 +31,17 @@ public class Crew extends BaseEntity {
     private Team team;
 
     @Enumerated(value = EnumType.STRING)
-    private Level level;
+    private CrewLevel crewLevel;
 
     @Column(name = "is_activated")
     private Boolean isActivated;
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public Crew(Long id, Member member, Team team, Level level, Boolean isActivated) {
+    public Crew(Long id, Member member, Team team, CrewLevel crewLevel, Boolean isActivated) {
         this.id = id;
         this.member = member;
         this.team = team;
-        this.level = level;
+        this.crewLevel = crewLevel;
         this.isActivated = isActivated;
     }
 
@@ -50,7 +50,7 @@ public class Crew extends BaseEntity {
         return Crew.of()
                 .member(member)
                 .team(team)
-                .level(Level.NORMAL)
+                .crewLevel(CrewLevel.NORMAL)
                 .isActivated(true)
                 .build();
     }
@@ -60,12 +60,12 @@ public class Crew extends BaseEntity {
         return Crew.of()
                 .member(member)
                 .team(team)
-                .level(Level.OWNER)
+                .crewLevel(CrewLevel.OWNER)
                 .isActivated(true)
                 .build();
     }
 
-    public void changeLevel(Level level){
-        this.level = level;
+    public void changeLevel(CrewLevel crewLevel){
+        this.crewLevel = crewLevel;
     }
 }

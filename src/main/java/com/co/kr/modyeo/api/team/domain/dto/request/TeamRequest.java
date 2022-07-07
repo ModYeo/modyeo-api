@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.team.domain.dto.request;
 
 import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
+import com.co.kr.modyeo.api.team.domain.entity.enumerate.ScaleLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,19 +20,21 @@ public class TeamRequest {
 
     private String name;
 
+    private ScaleLevel scaleLevel;
+
     private List<CategoryDto> categoryDtoList = new ArrayList<>();
 
     @Builder
-    public TeamRequest(Long team_id, String name, List<CategoryDto> categoryDtoList) {
+    public TeamRequest(Long team_id, String name,ScaleLevel scaleLevel, List<CategoryDto> categoryDtoList) {
         this.team_id = team_id;
         this.name = name;
+        this.scaleLevel = scaleLevel;
         this.categoryDtoList = categoryDtoList;
     }
 
-    public Team toEntity(){
-        return Team.of()
-                .id(this.team_id)
-                .name(this.name)
+    public static Team toEntity(TeamRequest teamRequest){
+        return Team.createTeamBuilder()
+                .name(teamRequest.name)
                 .build();
     }
 

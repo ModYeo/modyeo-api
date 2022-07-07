@@ -47,7 +47,7 @@ public class TeamServiceImpl implements TeamService {
                         .errorMessage("")
                         .build());
 
-        Team team = teamRequest.toEntity();
+        Team team = TeamRequest.toEntity(teamRequest);
         team = teamRepository.save(team);
 
         if(!teamRequest.getCategoryDtoList().isEmpty()){

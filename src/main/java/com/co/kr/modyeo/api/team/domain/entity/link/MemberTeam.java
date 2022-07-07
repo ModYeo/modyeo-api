@@ -49,7 +49,7 @@ public class MemberTeam extends BaseEntity {
                 .build();
     }
 
-    public void chanegeDenial() {
+    public void changeDenial() {
         this.joinStatus = JoinStatus.DENIAL;
     }
 }

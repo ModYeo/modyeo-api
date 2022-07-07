@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.api.bbs.domain.entity;
 
+import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.common.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -59,13 +59,17 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
                         .build());
 
         if (JoinStatus.DENIAL.equals(joinStatus)){
-            memberTeam.chanegeDenial();
+            memberTeam.changeDenial();
         }else{
+            Team team = memberTeam.getTeam();
+            Member member = memberTeam.getMember();
+
             Crew crew = Crew.createCrewBuilder()
-                    .member(memberTeam.getMember())
-                    .team(memberTeam.getTeam())
+                    .member(member)
+                    .team(team)
                     .build();
 
+            team.upScaleLevel(team.getCrewList().size());
             crewRepository.save(crew);
             memberTeamRepository.delete(memberTeam);
         }
