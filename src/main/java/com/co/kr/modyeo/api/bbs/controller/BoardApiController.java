@@ -4,6 +4,7 @@ import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
+import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.api.bbs.domain.entity.Reply;
@@ -89,6 +90,15 @@ public class BoardApiController {
         boardService.deleteReply(replyId);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)
+                .build());
+    }
+
+    @GetMapping("/reply/{reply_id}")
+    public ResponseEntity<?> getReply(
+            @PathVariable(value = "reply_id")Long replyId){
+        ReplyDetail replyDetail = boardService.getReply(replyId);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(replyDetail)
                 .build());
     }
 }
