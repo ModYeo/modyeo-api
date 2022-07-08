@@ -4,6 +4,7 @@ import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
+import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.api.bbs.domain.entity.Reply;
@@ -21,6 +22,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -28,7 +31,6 @@ public class BoardServiceImpl implements BoardService {
 
     private final ArticleRepository articleRepository;
     private final ReplyRepository replyRepository;
-
     private final CategoryRepository categoryRepository;
 
     @Override
@@ -145,5 +147,18 @@ public class BoardServiceImpl implements BoardService {
                         .build());
 
         replyRepository.delete(reply);
+    }
+
+    @Override
+    public ReplyDetail getReply(Long replyId) {
+        Reply reply = replyRepository.findById(replyId).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage("찾을 수 없는 댓글 입니다.")
+                        .errorCode("NOT_FOUND_REPLY")
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
+        List<Reply> nestedReplies = replyRepository.findByReplyGroup(replyId);
+        return ReplyDetail.toDto(reply, nestedReplies);
     }
 }

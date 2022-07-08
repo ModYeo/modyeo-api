@@ -4,6 +4,7 @@ import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
+import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.api.bbs.domain.entity.Reply;
@@ -25,4 +26,6 @@ public interface BoardService {
     Reply updateReply(ReplyRequest replyRequest);
 
     void deleteReply(Long replyId);
+
+    ReplyDetail getReply(Long replyId);
 }
