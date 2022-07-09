@@ -1,4 +1,4 @@
-package com.co.kr.modyeo.config;
+package com.co.kr.modyeo.config.Auditor;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
