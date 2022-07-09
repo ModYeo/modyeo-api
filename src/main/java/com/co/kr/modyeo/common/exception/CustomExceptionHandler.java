@@ -4,6 +4,7 @@ import com.co.kr.modyeo.common.exception.code.AuthErrorCode;
 import com.co.kr.modyeo.common.result.JsonResultData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -49,4 +50,15 @@ public class CustomExceptionHandler {
                         .errorMessage(stringBuilder.toString())
                         .build());
     }
+
+    @ExceptionHandler({UsernameNotFoundException.class})
+    public ResponseEntity<?> exceptionHandler(HttpServletRequest request, final UsernameNotFoundException e){
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(JsonResultData.failResultBuilder()
+                        .errorCode("NOT_FOUND_EMAIL")
+                        .errorMessage(e.getMessage())
+                        .build());
+    }
+
 }
