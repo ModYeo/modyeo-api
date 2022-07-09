@@ -1,8 +1,6 @@
-package com.co.kr.modyeo.config;
+package com.co.kr.modyeo.config.Auditor;
 
-import com.co.kr.modyeo.api.member.auth.domain.dto.AuthenticationUserDto;
 import org.springframework.data.domain.AuditorAware;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
