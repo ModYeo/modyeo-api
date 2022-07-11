@@ -4,6 +4,7 @@ import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.common.entity.BaseEntity;
 import com.co.kr.modyeo.api.category.domain.entity.Category;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,4 +26,19 @@ public class MemberCategory extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @Builder(builderClassName = "of",builderMethodName = "of")
+    public MemberCategory(Long id, Member member, Category category) {
+        this.id = id;
+        this.member = member;
+        this.category = category;
+    }
+
+    @Builder(builderClassName = "createMemberCategoryBuilder",builderMethodName = "createMemberCategoryBuilder")
+    public static MemberCategory createMemberCategory(Member member, Category category) {
+        return of()
+                .category(category)
+                .member(member)
+                .build();
+    }
 }

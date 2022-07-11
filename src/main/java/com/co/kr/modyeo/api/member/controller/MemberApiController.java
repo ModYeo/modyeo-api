@@ -28,7 +28,5 @@ public class MemberApiController {
 
 //    @PostMapping("")
 //    public ResponseEntity<?> createMemberInfo(@RequestBody MemberRequest memberRequest){
-//
 //    }
-
 }

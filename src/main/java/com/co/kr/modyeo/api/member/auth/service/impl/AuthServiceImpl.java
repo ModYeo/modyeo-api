@@ -1,7 +1,12 @@
 package com.co.kr.modyeo.api.member.auth.service.impl;
 
+import com.co.kr.modyeo.api.category.domain.dto.request.CategoryRequest;
+import com.co.kr.modyeo.api.category.domain.entity.Category;
+import com.co.kr.modyeo.api.category.repository.CategoryRepository;
 import com.co.kr.modyeo.api.member.auth.provider.JwtTokenProvider;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
+import com.co.kr.modyeo.api.member.domain.entity.link.MemberCategory;
+import com.co.kr.modyeo.api.member.repository.MemberCategoryRepository;
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.common.exception.CustomAuthException;
 import com.co.kr.modyeo.common.exception.code.AuthErrorCode;
@@ -19,7 +24,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +42,10 @@ public class AuthServiceImpl implements AuthService {
 
     private final StringRedisTemplate redisTemplate;
 
+    private final CategoryRepository categoryRepository;
+
+    private final MemberCategoryRepository memberCategoryRepository;
+
     @Override
     public MemberResponseDto signup(MemberRequestDto memberRequestDto) {
         if (memberRepository.existsByEmail(memberRequestDto.getEmail())){
@@ -45,8 +56,25 @@ public class AuthServiceImpl implements AuthService {
                     .build());
         }
 
-        Member member = memberRequestDto.toMember(passwordEncoder);
-        return MemberResponseDto.toResponse(memberRepository.save(member));
+        Member member = MemberRequestDto.toMember(memberRequestDto,passwordEncoder);
+        member = memberRepository.save(member);
+
+        if (!memberRequestDto.getCategoryRequests().isEmpty()){
+            List<Long> categoryIds = memberRequestDto.getCategoryRequests()
+                    .stream().map(CategoryRequest::getId).collect(Collectors.toList());
+
+            List<Category> categoryList = categoryRepository.findByCategoryIds(categoryIds);
+
+            Member finalMember = member;
+            List<MemberCategory> memberCategoryList = categoryList.stream().map(category -> MemberCategory.createMemberCategoryBuilder()
+                    .member(finalMember)
+                    .category(category)
+                    .build()).collect(Collectors.toList());
+
+            memberCategoryRepository.saveAll(memberCategoryList);
+        }
+
+        return MemberResponseDto.toResponse(member);
     }
 
     @Override
