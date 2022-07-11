@@ -60,10 +60,8 @@ public class AuthServiceImpl implements AuthService {
         member = memberRepository.save(member);
 
         if (!memberRequestDto.getCategoryRequests().isEmpty()){
-            List<Long> categoryIds = memberRequestDto.getCategoryRequests()
-                    .stream().map(CategoryRequest::getId).collect(Collectors.toList());
-
-            List<Category> categoryList = categoryRepository.findByCategoryIds(categoryIds);
+            List<Long> categoryIdList = CategoryRequest.getCategoryIdList(memberRequestDto.getCategoryRequests());
+            List<Category> categoryList = categoryRepository.findByCategoryIds(categoryIdList);
 
             Member finalMember = member;
             List<MemberCategory> memberCategoryList = categoryList.stream().map(category -> MemberCategory.createMemberCategoryBuilder()
