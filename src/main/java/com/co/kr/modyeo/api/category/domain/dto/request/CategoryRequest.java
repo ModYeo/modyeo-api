@@ -6,6 +6,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 @NoArgsConstructor
 public class CategoryRequest {
@@ -30,5 +34,13 @@ public class CategoryRequest {
                 .name(categoryRequest.getName())
                 .useYn(categoryRequest.getUseYn())
                 .build();
+    }
+
+    public static List<Long> getCategoryIdList(List<CategoryRequest> categoryRequests){
+        if (!categoryRequests.isEmpty()){
+            return categoryRequests.stream().map(CategoryRequest::getId).collect(Collectors.toList());
+        }else{
+            return new ArrayList<>();
+        }
     }
 }
