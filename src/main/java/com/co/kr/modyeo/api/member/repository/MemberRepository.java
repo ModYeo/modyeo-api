@@ -12,6 +12,5 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberCus
     Optional<Member> findByEmail(String email);
     boolean existsByEmail(String email);
 
-    @Query(value = "select m,mcl,cl from Member m left join m.memberTeamList mcl left join m.interestCategoryList cl")
-    List<Member> findMembers();
+
 }

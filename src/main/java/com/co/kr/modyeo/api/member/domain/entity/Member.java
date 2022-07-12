@@ -40,9 +40,6 @@ public class Member extends BaseEntity {
     private Authority authority;
 
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
-    private List<MemberTeam> memberTeamList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<MemberCategory> interestCategoryList = new ArrayList<>();
 
     @Builder(buildMethodName = "createMemberBuilder",builderClassName = "createMemberBuilder")
@@ -62,7 +59,6 @@ public class Member extends BaseEntity {
                   Address address,
                   Sex sex,
                   Authority authority,
-                  List<MemberTeam> memberTeamList,
                   List<MemberCategory> interestCategoryList) {
         this.id = id;
         this.email = email;
@@ -71,7 +67,6 @@ public class Member extends BaseEntity {
         this.address = address;
         this.sex = sex;
         this.authority = authority;
-        this.memberTeamList = memberTeamList;
         this.interestCategoryList = interestCategoryList;
     }
 }
