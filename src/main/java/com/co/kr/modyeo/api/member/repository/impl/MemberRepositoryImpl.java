@@ -1,15 +1,18 @@
 package com.co.kr.modyeo.api.member.repository.impl;
 
+import com.co.kr.modyeo.api.member.domain.dto.response.MemberDetail;
+import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.repository.custom.MemberCustomRepository;
-import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
 
-import javax.persistence.EntityManager;
+public class MemberRepositoryImpl extends Querydsl4RepositorySupport implements MemberCustomRepository {
 
-public class MemberRepositoryImpl implements MemberCustomRepository {
+    public MemberRepositoryImpl() {
+        super(Member.class);
+    }
 
-    private final JPAQueryFactory queryFactory;
-
-    public MemberRepositoryImpl(EntityManager em) {
-        this.queryFactory = new JPAQueryFactory(em);
+    @Override
+    public MemberDetail getMemberDetail(Long memberId) {
+        return null;
     }
 }

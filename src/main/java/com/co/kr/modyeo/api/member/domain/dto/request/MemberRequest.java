@@ -13,5 +13,10 @@ public class MemberRequest {
 
     private Long memberId;
 
-    private List<CategoryRequest> categoryRequests = new ArrayList<>();
+    private List<Long> categoryIdList = new ArrayList<>();
+
+    public MemberRequest(Long memberId, List<Long> categoryIdList) {
+        this.memberId = memberId;
+        this.categoryIdList = categoryIdList;
+    }
 }
