@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.member.domain.entity;
 import com.co.kr.modyeo.api.member.domain.entity.embed.Address;
 import com.co.kr.modyeo.api.member.domain.enumerate.Authority;
 import com.co.kr.modyeo.api.member.domain.enumerate.Sex;
+import com.co.kr.modyeo.api.team.domain.entity.link.Crew;
 import com.co.kr.modyeo.common.entity.BaseEntity;
 import com.co.kr.modyeo.api.member.domain.entity.link.MemberCategory;
 import com.co.kr.modyeo.api.team.domain.entity.link.MemberTeam;
@@ -39,6 +40,9 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+    @OneToMany(mappedBy = "member")
+    private List<Crew> teamList = new ArrayList<>();
+
     @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<MemberCategory> interestCategoryList = new ArrayList<>();
 
@@ -59,6 +63,7 @@ public class Member extends BaseEntity {
                   Address address,
                   Sex sex,
                   Authority authority,
+                  List<Crew> teamList,
                   List<MemberCategory> interestCategoryList) {
         this.id = id;
         this.email = email;
@@ -67,6 +72,7 @@ public class Member extends BaseEntity {
         this.address = address;
         this.sex = sex;
         this.authority = authority;
+        this.teamList = teamList;
         this.interestCategoryList = interestCategoryList;
     }
 }
