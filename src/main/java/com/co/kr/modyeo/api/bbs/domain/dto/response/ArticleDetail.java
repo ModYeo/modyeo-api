@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.bbs.domain.dto.response;
 
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,7 @@ public class ArticleDetail {
 
     private String content;
 
-    private Boolean isHidden;
+    private Yn isHidden;
 
     private Long hitCount;
 
@@ -35,7 +36,7 @@ public class ArticleDetail {
     public ArticleDetail(Long articleId,
                          String title,
                          String content,
-                         Boolean isHidden,
+                         Yn isHidden,
                          String createdBy,
                          LocalDateTime createdTime,
                          Long hitCount,

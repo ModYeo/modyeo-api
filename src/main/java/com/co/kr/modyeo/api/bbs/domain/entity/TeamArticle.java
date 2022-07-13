@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.bbs.domain.entity;
 
 import com.co.kr.modyeo.api.team.domain.entity.Team;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,10 +32,13 @@ public class TeamArticle {
     private String filePath;
 
     @Column(name = "is_hidden")
-    private Boolean isHidden;
+    private Yn isHidden;
 
     @Column(name = "hit_count")
     private Long hitCount;
+
+    @Column(name = "recommend_count")
+    private Long recommendCount;
 
     @OneToMany(mappedBy = "teamArticle",cascade = CascadeType.ALL)
     private List<TeamReply> teamReplieList = new ArrayList<>();

@@ -27,4 +27,7 @@ public class TeamReply {
 
     @Column(name = "reply_group")
     private Long replyGroup;
+
+    @Column(name = "recommend_count")
+    private Long recommendCount;
 }

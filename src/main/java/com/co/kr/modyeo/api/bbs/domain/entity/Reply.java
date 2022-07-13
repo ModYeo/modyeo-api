@@ -24,6 +24,9 @@ public class Reply extends BaseEntity {
 
     private String content;
 
+    @Column(name = "recommend_count")
+    private Long recommendCount;
+
     @Column(name = "reply_depth")
     private Integer replyDepth;
 
@@ -31,12 +34,13 @@ public class Reply extends BaseEntity {
     private Long replyGroup;
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public Reply(Long id, Article article, String content, Integer replyDepth, Long replyGroup) {
+    public Reply(Long id, Article article, String content, Integer replyDepth, Long replyGroup, Long recommendCount) {
         this.id = id;
         this.article = article;
         this.content = content;
         this.replyDepth = replyDepth;
         this.replyGroup = replyGroup;
+        this.recommendCount = recommendCount;
     }
 
     @Builder(builderClassName = "createReplyBuilder",builderMethodName = "createReplyBuilder")
@@ -45,6 +49,7 @@ public class Reply extends BaseEntity {
                 .article(article)
                 .content(content)
                 .replyDepth(0)
+                .recommendCount(0L)
                 .build();
     }
 
@@ -55,11 +60,20 @@ public class Reply extends BaseEntity {
                 .content(content)
                 .replyDepth(1)
                 .replyGroup(replyGroup)
+                .recommendCount(0L)
                 .build();
     }
 
     @Builder(builderClassName = "changeReplyBuilder",builderMethodName = "changeReplyBuilder")
     public void changeReply(String content){
         this.content = content;
+    }
+
+    public void updateRecommendCount(String operation) {
+        if ("plus".equals(operation)){
+            this.recommendCount++;
+        } else if ("minus".equals(operation)) {
+            this.recommendCount--;
+        }
     }
 }

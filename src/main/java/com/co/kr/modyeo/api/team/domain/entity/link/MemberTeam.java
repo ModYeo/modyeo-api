@@ -13,11 +13,11 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table(name = "MEMBER_TEAM")
+@Table(name = "TEAM_APPLICATION")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberTeam extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_team_id")
+    @Column(name = "team_application_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
