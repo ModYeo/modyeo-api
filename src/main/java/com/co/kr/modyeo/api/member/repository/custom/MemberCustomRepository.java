@@ -1,7 +1,7 @@
 package com.co.kr.modyeo.api.member.repository.custom;
 
-import com.co.kr.modyeo.api.member.domain.dto.response.MemberDetail;
+import com.co.kr.modyeo.api.member.domain.entity.Member;
 
 public interface MemberCustomRepository {
-    MemberDetail getMemberDetail(Long memberId);
+    Member getMember(Long memberId);
 }

@@ -44,7 +44,7 @@ public class MemberResponse {
                 .username(member.getUsername())
                 .address(member.getAddress())
                 .sex(member.getSex())
-                .teamResponseList(member.getMemberTeamList().stream()
+                .teamResponseList(member.getTeamList().stream()
                         .map(memberCrew -> TeamResponse.toRes(memberCrew.getTeam()))
                         .collect(Collectors.toList()))
                 .categoryResponses(member.getInterestCategoryList().stream()

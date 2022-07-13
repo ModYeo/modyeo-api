@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.bbs.domain.dto.response;
 
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +23,7 @@ public class ArticleResponse {
 
     private String filePath;
 
-    private Boolean isHidden;
+    private Yn isHidden;
 
     private Long replyCount;
 
@@ -34,7 +35,7 @@ public class ArticleResponse {
 
     @QueryProjection
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public ArticleResponse(Long articleId, String title, String content,String categoryName,String filePath, Boolean isHidden,Long hitCount,Long replyCount, String createdBy, LocalDateTime createdTime) {
+    public ArticleResponse(Long articleId, String title, String content,String categoryName,String filePath, Yn isHidden,Long hitCount,Long replyCount, String createdBy, LocalDateTime createdTime) {
         this.articleId = articleId;
         this.title = title;
         this.content = content;

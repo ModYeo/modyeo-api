@@ -4,6 +4,7 @@ import com.co.kr.modyeo.api.team.domain.entity.enumerate.CrewLevel;
 import com.co.kr.modyeo.common.entity.BaseEntity;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,13 +32,14 @@ public class Crew extends BaseEntity {
     private Team team;
 
     @Enumerated(value = EnumType.STRING)
+    @Column(name = "crew_level")
     private CrewLevel crewLevel;
 
     @Column(name = "is_activated")
-    private Boolean isActivated;
+    private Yn isActivated;
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public Crew(Long id, Member member, Team team, CrewLevel crewLevel, Boolean isActivated) {
+    public Crew(Long id, Member member, Team team, CrewLevel crewLevel, Yn isActivated) {
         this.id = id;
         this.member = member;
         this.team = team;
@@ -51,7 +53,7 @@ public class Crew extends BaseEntity {
                 .member(member)
                 .team(team)
                 .crewLevel(CrewLevel.NORMAL)
-                .isActivated(true)
+                .isActivated(Yn.Y)
                 .build();
     }
 
@@ -61,7 +63,7 @@ public class Crew extends BaseEntity {
                 .member(member)
                 .team(team)
                 .crewLevel(CrewLevel.OWNER)
-                .isActivated(true)
+                .isActivated(Yn.Y)
                 .build();
     }
 

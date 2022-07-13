@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.bbs.domain.dto.request;
 
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.api.category.domain.entity.Category;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,10 +23,10 @@ public class ArticleRequest {
 
     private Long hitCount;
 
-    private Boolean isHidden;
+    private Yn isHidden;
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public ArticleRequest(Long articleId, String title, String content, String filePath, Long hitCount, Boolean isHidden) {
+    public ArticleRequest(Long articleId, String title, String content, String filePath, Long hitCount, Yn isHidden) {
         this.articleId = articleId;
         this.title = title;
         this.content = content;

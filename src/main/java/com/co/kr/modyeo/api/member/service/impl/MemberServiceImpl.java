@@ -54,6 +54,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberDetail getMember(Long memberId) {
-        return null;
+        Member member = memberRepository.getMember(memberId);
+        return MemberDetail.createMemberDetail(member);
     }
 }
