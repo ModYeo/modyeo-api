@@ -16,7 +16,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberCategory extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_category")
+    @Column(name = "member_category_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

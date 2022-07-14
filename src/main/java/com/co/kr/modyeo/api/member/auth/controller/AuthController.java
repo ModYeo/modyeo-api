@@ -1,9 +1,6 @@
 package com.co.kr.modyeo.api.member.auth.controller;
 
-import com.co.kr.modyeo.api.member.auth.domain.dto.MemberRequestDto;
-import com.co.kr.modyeo.api.member.auth.domain.dto.MemberResponseDto;
-import com.co.kr.modyeo.api.member.auth.domain.dto.TokenDto;
-import com.co.kr.modyeo.api.member.auth.domain.dto.TokenRequestDto;
+import com.co.kr.modyeo.api.member.auth.domain.dto.*;
 import com.co.kr.modyeo.api.member.auth.service.AuthService;
 import com.co.kr.modyeo.common.result.JsonResultData;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +20,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@Valid @RequestBody MemberRequestDto memberRequestDto){
-        MemberResponseDto memberResponseDto = authService.signup(memberRequestDto);
+    public ResponseEntity<?> signup(@Valid @RequestBody MemberJoinDto memberJoinDto){
+        MemberResponseDto memberResponseDto = authService.signup(memberJoinDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(JsonResultData.successResultBuilder()
                         .data(memberResponseDto)
@@ -32,8 +29,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody MemberRequestDto memberRequestDto){
-        TokenDto tokenDto = authService.login(memberRequestDto);
+    public ResponseEntity<?> login(@Valid @RequestBody MemberLoginDto memberLoginDto){
+        TokenDto tokenDto = authService.login(memberLoginDto);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                         .data(tokenDto)
                         .build());

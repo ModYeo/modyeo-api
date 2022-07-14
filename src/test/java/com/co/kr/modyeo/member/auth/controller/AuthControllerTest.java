@@ -1,7 +1,7 @@
 package com.co.kr.modyeo.member.auth.controller;
 
 import com.co.kr.modyeo.api.member.auth.controller.AuthController;
-import com.co.kr.modyeo.api.member.auth.domain.dto.MemberRequestDto;
+import com.co.kr.modyeo.api.member.auth.domain.dto.MemberJoinDto;
 import com.co.kr.modyeo.api.member.auth.service.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,12 +45,12 @@ class AuthControllerTest {
 
     @Test
     void join_success() throws Exception {
-        MemberRequestDto memberRequestDto = new MemberRequestDto("qws458","Qwpo1209");
+        MemberJoinDto memberJoinDto = new MemberJoinDto("qws458","Qwpo1209");
 
         mockMvc.perform(
                 post("/auth/signup")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(memberRequestDto))
+                        .content(objectMapper.writeValueAsString(memberJoinDto))
         ).andDo(print())
                 .andExpect(status().isCreated());
     }

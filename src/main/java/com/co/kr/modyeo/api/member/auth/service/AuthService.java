@@ -1,14 +1,11 @@
 package com.co.kr.modyeo.api.member.auth.service;
 
-import com.co.kr.modyeo.api.member.auth.domain.dto.MemberRequestDto;
-import com.co.kr.modyeo.api.member.auth.domain.dto.MemberResponseDto;
-import com.co.kr.modyeo.api.member.auth.domain.dto.TokenDto;
-import com.co.kr.modyeo.api.member.auth.domain.dto.TokenRequestDto;
+import com.co.kr.modyeo.api.member.auth.domain.dto.*;
 
 public interface AuthService {
-    MemberResponseDto signup(MemberRequestDto memberRequestDto);
+    MemberResponseDto signup(MemberJoinDto memberJoinDto);
 
-    TokenDto login(MemberRequestDto memberRequestDto);
+    TokenDto login(MemberLoginDto memberLoginDto);
 
     TokenDto reissue(TokenRequestDto tokenRequestDto);
 

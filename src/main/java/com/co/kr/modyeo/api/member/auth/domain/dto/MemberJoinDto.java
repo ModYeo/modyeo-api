@@ -18,7 +18,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class MemberRequestDto {
+public class MemberJoinDto {
 
     @Email
     @NotNull
@@ -36,12 +36,12 @@ public class MemberRequestDto {
 
     private List<CategoryRequest> categoryRequests = new ArrayList<>();
 
-    public MemberRequestDto(String email, String password) {
+    public MemberJoinDto(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
-    public MemberRequestDto(String email, String password, String username, Address address, Sex sex, List<CategoryRequest> categoryRequests) {
+    public MemberJoinDto(String email, String password, String username, Address address, Sex sex, List<CategoryRequest> categoryRequests) {
         this.email = email;
         this.password = password;
         this.username = username;
@@ -50,14 +50,14 @@ public class MemberRequestDto {
         this.categoryRequests = categoryRequests;
     }
 
-    public static Member toMember(MemberRequestDto memberRequestDto,PasswordEncoder passwordEncoder){
+    public static Member toMember(MemberJoinDto memberJoinDto, PasswordEncoder passwordEncoder){
         return Member.of()
-                .email(memberRequestDto.email)
-                .password(passwordEncoder.encode(memberRequestDto.password))
+                .email(memberJoinDto.email)
+                .password(passwordEncoder.encode(memberJoinDto.password))
                 .authority(Authority.ROLE_USER)
-                .username(memberRequestDto.username)
-                .address(memberRequestDto.address)
-                .sex(memberRequestDto.sex)
+                .username(memberJoinDto.username)
+                .address(memberJoinDto.address)
+                .sex(memberJoinDto.sex)
                 .build();
     }
 
