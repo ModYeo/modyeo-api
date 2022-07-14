@@ -9,6 +9,7 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.co.kr.modyeo.api.member.domain.entity.QMember.member;
 import static com.co.kr.modyeo.api.member.domain.entity.link.QMemberCategory.memberCategory;
@@ -21,14 +22,14 @@ public class MemberRepositoryImpl extends Querydsl4RepositorySupport implements 
     }
 
     @Override
-    public Member getMember(Long memberId) {
-        return select(member)
+    public Optional<Member> getMember(Long memberId) {
+        return Optional.ofNullable(select(member)
                 .from(member)
-                .innerJoin(member.teamList, crew)
-                .innerJoin(member.interestCategoryList, memberCategory)
+                .leftJoin(member.teamList, crew)
+                .leftJoin(member.interestCategoryList, memberCategory)
                 .fetchJoin()
                 .where(memberIdEq(memberId))
-                .fetchOne();
+                .fetchOne());
 
     }
 

@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.member.auth.service.impl;
 import com.co.kr.modyeo.api.category.domain.dto.request.CategoryRequest;
 import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.category.repository.CategoryRepository;
+import com.co.kr.modyeo.api.member.auth.domain.dto.*;
 import com.co.kr.modyeo.api.member.auth.provider.JwtTokenProvider;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.domain.entity.link.MemberCategory;
@@ -11,10 +12,6 @@ import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.common.exception.CustomAuthException;
 import com.co.kr.modyeo.common.exception.code.AuthErrorCode;
 import com.co.kr.modyeo.common.result.JsonResultData;
-import com.co.kr.modyeo.api.member.auth.domain.dto.MemberRequestDto;
-import com.co.kr.modyeo.api.member.auth.domain.dto.MemberResponseDto;
-import com.co.kr.modyeo.api.member.auth.domain.dto.TokenDto;
-import com.co.kr.modyeo.api.member.auth.domain.dto.TokenRequestDto;
 import com.co.kr.modyeo.api.member.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -47,8 +44,8 @@ public class AuthServiceImpl implements AuthService {
     private final MemberCategoryRepository memberCategoryRepository;
 
     @Override
-    public MemberResponseDto signup(MemberRequestDto memberRequestDto) {
-        if (memberRepository.existsByEmail(memberRequestDto.getEmail())){
+    public MemberResponseDto signup(MemberJoinDto memberJoinDto) {
+        if (memberRepository.existsByEmail(memberJoinDto.getEmail())){
             throw new CustomAuthException(JsonResultData
                     .failResultBuilder()
                     .errorCode(AuthErrorCode.ALREADY_JOIN_USER.getCode())
@@ -56,11 +53,11 @@ public class AuthServiceImpl implements AuthService {
                     .build());
         }
 
-        Member member = MemberRequestDto.toMember(memberRequestDto,passwordEncoder);
+        Member member = MemberJoinDto.toMember(memberJoinDto,passwordEncoder);
         member = memberRepository.save(member);
 
-        if (!memberRequestDto.getCategoryRequests().isEmpty()){
-            List<Long> categoryIdList = CategoryRequest.getCategoryIdList(memberRequestDto.getCategoryRequests());
+        if (!memberJoinDto.getCategoryRequests().isEmpty()){
+            List<Long> categoryIdList = CategoryRequest.getCategoryIdList(memberJoinDto.getCategoryRequests());
             List<Category> categoryList = categoryRepository.findByCategoryIds(categoryIdList);
 
             Member finalMember = member;
@@ -76,8 +73,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public TokenDto login(MemberRequestDto memberRequestDto) {
-        UsernamePasswordAuthenticationToken authenticationToken = memberRequestDto.toAuthentication();
+    public TokenDto login(MemberLoginDto memberLoginDto) {
+        UsernamePasswordAuthenticationToken authenticationToken = memberLoginDto.toAuthentication();
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 

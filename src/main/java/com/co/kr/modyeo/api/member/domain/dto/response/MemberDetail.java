@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Data
@@ -43,12 +44,14 @@ public class MemberDetail {
                 .sex(member.getSex())
                 .teamResponseList(member.getTeamList()
                         .stream()
+                        .filter(Objects::nonNull)
                         .map(team -> TeamResponse.of()
                                 .id(team.getTeam().getId())
                                 .name(team.getTeam().getName())
                                 .build()).collect(Collectors.toList()))
                 .categoryResponseList(member.getInterestCategoryList()
                         .stream()
+                        .filter(Objects::nonNull)
                         .map(memberCategory -> CategoryResponse.of()
                                 .id(memberCategory.getCategory().getId())
                                 .name(memberCategory.getCategory().getName())

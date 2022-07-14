@@ -54,7 +54,13 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberDetail getMember(Long memberId) {
-        Member member = memberRepository.getMember(memberId);
+        Member member = memberRepository.getMember(memberId).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
+                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
+                        .build());
+
         return MemberDetail.createMemberDetail(member);
     }
 }
