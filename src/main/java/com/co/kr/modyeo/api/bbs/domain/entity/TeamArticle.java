@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.bbs.domain.entity;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -41,5 +42,29 @@ public class TeamArticle {
     private Long recommendCount;
 
     @OneToMany(mappedBy = "teamArticle",cascade = CascadeType.ALL)
-    private List<TeamReply> teamReplieList = new ArrayList<>();
+    private List<TeamReply> teamReplyList = new ArrayList<>();
+
+    @Builder(builderClassName = "of",builderMethodName = "of")
+    public TeamArticle(Long id, Team team, String title, String content, String filePath, Yn isHidden, Long hitCount, Long recommendCount, List<TeamReply> teamReplyList) {
+        this.id = id;
+        this.team = team;
+        this.title = title;
+        this.content = content;
+        this.filePath = filePath;
+        this.isHidden = isHidden;
+        this.hitCount = hitCount;
+        this.recommendCount = recommendCount;
+        this.teamReplyList = teamReplyList;
+    }
+
+    @Builder(builderClassName = "createTeamArticleBuilder",builderMethodName = "createTeamArticleBuilder")
+    public TeamArticle(Team team, String title, String content, String filePath, Yn isHidden) {
+        this.team = team;
+        this.title = title;
+        this.content = content;
+        this.filePath = filePath;
+        this.isHidden = isHidden;
+        this.hitCount = 0L;
+        this.recommendCount = 0L;
+    }
 }
