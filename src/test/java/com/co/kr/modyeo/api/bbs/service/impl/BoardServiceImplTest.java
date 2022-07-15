@@ -7,6 +7,7 @@ import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.api.bbs.repository.ArticleRepository;
 import com.co.kr.modyeo.api.bbs.repository.ReplyRepository;
 import com.co.kr.modyeo.api.bbs.service.BoardService;
+import com.co.kr.modyeo.api.category.repository.CategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,10 +38,13 @@ class BoardServiceImplTest {
     @Mock
     private ReplyRepository replyRepository;
 
+    @Mock
+    private CategoryRepository categoryRepository;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        boardService = new BoardServiceImpl(articleRepository,replyRepository);
+        boardService = new BoardServiceImpl(articleRepository,replyRepository,categoryRepository);
     }
 
     @Test
@@ -89,7 +93,6 @@ class BoardServiceImplTest {
     @Test
     void updateArticle(){
         ArticleRequest articleRequest = ArticleRequest.of()
-                .id(1L)
                 .title("test title2")
                 .content("test contents2")
                 .build();
