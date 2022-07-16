@@ -48,6 +48,7 @@ public class ArticleRequest {
     public static Article createArticle(ArticleRequest articleRequest, Category category){
         return Article.createArticleBuilder()
                 .content(articleRequest.getContent())
+                .category(category)
                 .title(articleRequest.getTitle())
                 .filePath(articleRequest.getFilePath())
                 .isHidden(articleRequest.getIsHidden())
