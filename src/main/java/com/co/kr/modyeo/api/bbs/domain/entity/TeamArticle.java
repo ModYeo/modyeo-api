@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.bbs.domain.entity;
 
 import com.co.kr.modyeo.api.team.domain.entity.Team;
+import com.co.kr.modyeo.common.entity.BaseEntity;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -15,7 +16,7 @@ import java.util.List;
 @Getter
 @Table(name = "TEAM_ARTICLE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TeamArticle {
+public class TeamArticle extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "team_article_id")

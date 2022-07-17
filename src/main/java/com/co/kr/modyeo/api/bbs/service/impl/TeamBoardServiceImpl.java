@@ -45,7 +45,12 @@ public class TeamBoardServiceImpl implements TeamBoardService {
 
     @Override
     public TeamArticleDetail getTeamArticle(Long teamArticleId) {
-        return null;
+        return TeamArticleDetail.toDto(teamArticleRepository.findById(teamArticleId)
+                .orElseThrow(() -> ApiException.builder()
+                        .errorMessage("찾을 수 없는 게시글 입니다.")
+                        .errorCode("NOT_FOUND_ARTICLE")
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build()));
     }
 
     @Override
