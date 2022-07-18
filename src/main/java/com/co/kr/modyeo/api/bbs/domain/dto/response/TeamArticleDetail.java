@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class TeamArticleDetail {
 
@@ -27,10 +28,18 @@ public class TeamArticleDetail {
 
     private LocalDateTime createdTime;
 
-    private List<ReplyResponse> replyResponses = new ArrayList<>();
+    private List<TeamReplyResponse> replyResponses = new ArrayList<>();
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public TeamArticleDetail(Long articleId, String title, String content, Yn isHidden, Long hitCount, Long recommendCount, String createdBy, LocalDateTime createdTime, List<ReplyResponse> replyResponses) {
+    public TeamArticleDetail(Long articleId,
+                             String title,
+                             String content,
+                             Yn isHidden,
+                             Long hitCount,
+                             Long recommendCount,
+                             String createdBy,
+                             LocalDateTime createdTime,
+                             List<TeamReplyResponse> replyResponses) {
         this.articleId = articleId;
         this.title = title;
         this.content = content;
@@ -52,6 +61,7 @@ public class TeamArticleDetail {
                 .recommendCount(teamArticle.getRecommendCount())
                 .createdBy(teamArticle.getCreatedBy())
                 .createdTime(teamArticle.getCreatedDate())
+                .replyResponses(teamArticle.getTeamReplyList().stream().map(TeamReplyResponse::toDto).collect(Collectors.toList()))
                 .build();
     }
 }
