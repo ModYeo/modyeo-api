@@ -26,8 +26,8 @@ spring:
     host: skysrd.iptime.org
     port: 6379
 
-logging:
-  level:
+#logging:
+#  level:
 #    org.hibernate.sql: debug
 
 
