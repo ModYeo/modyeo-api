@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: qa
   datasource:
     url: jdbc:mysql://skysrd.iptime.org:3306/modyeo
     hikari:

@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.member.auth.controller;
 import com.co.kr.modyeo.api.member.auth.domain.dto.*;
 import com.co.kr.modyeo.api.member.auth.service.AuthService;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import javax.validation.Valid;
 public class AuthController {
     private final AuthService authService;
 
+    @ApiOperation(value = "회원가입 API")
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody MemberJoinDto memberJoinDto){
         MemberResponseDto memberResponseDto = authService.signup(memberJoinDto);
