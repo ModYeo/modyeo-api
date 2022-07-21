@@ -4,6 +4,7 @@ import com.co.kr.modyeo.api.team.domain.entity.enumerate.JoinStatus;
 import com.co.kr.modyeo.api.team.domain.entity.link.MemberTeam;
 import com.co.kr.modyeo.api.team.service.TeamApplicationService;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class TeamApplicationApiController {
     private final TeamApplicationService teamApplicationService;
 
+    @ApiOperation(value = "팀 가입신청 API")
     @PostMapping("")
     public ResponseEntity<?> applicantCrew(
             @RequestParam(value = "memberId",name = "memberId",required = true)Long memberId,
@@ -36,6 +38,7 @@ public class TeamApplicationApiController {
         }
     }
 
+    @ApiOperation(value = "팀 가입신청 변경 API")
     @PatchMapping("")
     public ResponseEntity<?> updateJoinState(
             @RequestParam(value = "memberTeamId",name = "memberTeamId",required = true) Long memberTeamId,

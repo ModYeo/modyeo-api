@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.team.controller;
 import com.co.kr.modyeo.api.team.domain.entity.link.TeamCategory;
 import com.co.kr.modyeo.api.team.service.TeamCategoryService;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class TeamCategoryApiController {
     private final TeamCategoryService teamCategoryService;
 
+    @ApiOperation(value = "팀_카테고리 생성 API")
     @PostMapping("/team/{team_id}/category/{category_id}")
     public ResponseEntity<?> createTeamCategory(
             @PathVariable("team_id") Long crewId,
@@ -32,6 +34,7 @@ public class TeamCategoryApiController {
         }
     }
 
+    @ApiOperation(value = "팀_카테고리 삭제 API")
     @DeleteMapping("/team_category/{team_category_id}")
     public ResponseEntity<?> deleteTeamCategory(
             @PathVariable("team_category_id") Long teamCategoryId

@@ -10,4 +10,6 @@ public interface AuthService {
     TokenDto reissue(TokenRequestDto tokenRequestDto);
 
     void logout(TokenRequestDto tokenRequestDto);
+
+    void updatePassword(PasswordUpdateRequest passwordUpdateRequest);
 }

@@ -33,8 +33,8 @@ public class MemberJoinDto {
     @ApiModelProperty(value = "회원명", dataType = "string", required = true)
     private String username;
 
-    @Embedded
-    private Address address;
+//    @Embedded
+//    private Address address;
 
     @ApiModelProperty(value = "성별", dataType = "string", required = true)
     private Sex sex;
@@ -50,7 +50,7 @@ public class MemberJoinDto {
         this.email = email;
         this.password = password;
         this.username = username;
-        this.address = address;
+//        this.address = address;
         this.sex = sex;
     }
 
@@ -60,7 +60,7 @@ public class MemberJoinDto {
                 .password(passwordEncoder.encode(memberJoinDto.password))
                 .authority(Authority.ROLE_USER)
                 .username(memberJoinDto.username)
-                .address(memberJoinDto.address)
+//                .address(memberJoinDto.address)
                 .sex(memberJoinDto.sex)
                 .build();
     }
