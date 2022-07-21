@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -74,5 +75,9 @@ public class Member extends BaseEntity {
         this.authority = authority;
         this.teamList = teamList;
         this.interestCategoryList = interestCategoryList;
+    }
+
+    public void changePassword(String password, PasswordEncoder passwordEncoder){
+        this.password = passwordEncoder.encode(password);
     }
 }

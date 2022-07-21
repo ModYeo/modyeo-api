@@ -7,10 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -30,6 +27,7 @@ public class AuthController {
                         .build());
     }
 
+    @ApiOperation(value = "로그인 API")
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody MemberLoginDto memberLoginDto){
         TokenDto tokenDto = authService.login(memberLoginDto);
@@ -38,6 +36,7 @@ public class AuthController {
                         .build());
     }
 
+    @ApiOperation(value = "토큰 재발급 API")
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(@Valid @RequestBody TokenRequestDto tokenRequestDto){
         TokenDto tokenDto = authService.reissue(tokenRequestDto);
@@ -46,9 +45,18 @@ public class AuthController {
                         .build());
     }
 
+    @ApiOperation(value = "로그아웃 API")
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@Valid @RequestBody TokenRequestDto tokenRequestDto){
         authService.logout(tokenRequestDto);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
+                .build());
+    }
+
+    @PatchMapping("/password")
+    public ResponseEntity<?> updatePassword(PasswordUpdateRequest passwordUpdateRequest){
+        authService.updatePassword(passwordUpdateRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)
                 .build());
