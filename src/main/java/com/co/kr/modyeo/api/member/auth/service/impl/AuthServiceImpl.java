@@ -1,13 +1,8 @@
 package com.co.kr.modyeo.api.member.auth.service.impl;
 
-import com.co.kr.modyeo.api.category.domain.dto.request.CategoryRequest;
-import com.co.kr.modyeo.api.category.domain.entity.Category;
-import com.co.kr.modyeo.api.category.repository.CategoryRepository;
 import com.co.kr.modyeo.api.member.auth.domain.dto.*;
 import com.co.kr.modyeo.api.member.auth.provider.JwtTokenProvider;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
-import com.co.kr.modyeo.api.member.domain.entity.link.MemberCategory;
-import com.co.kr.modyeo.api.member.repository.MemberCategoryRepository;
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.CustomAuthException;
@@ -24,9 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

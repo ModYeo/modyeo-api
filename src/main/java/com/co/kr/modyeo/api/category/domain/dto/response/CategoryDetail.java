@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.category.domain.dto.response;
 
 import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.common.enumerate.Yn;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,10 +22,12 @@ public class CategoryDetail {
 
     private String createdBy;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
 
     private String updatedBy;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime updatedTime;
 
     @Builder(builderMethodName = "of",builderClassName = "of")

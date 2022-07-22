@@ -2,7 +2,10 @@ package com.co.kr.modyeo.api.bbs.domain.dto.response;
 
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamArticle;
 import com.co.kr.modyeo.common.enumerate.Yn;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,6 +13,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+@Data
+@NoArgsConstructor
 public class TeamArticleDetail {
 
     private Long articleId;
@@ -26,6 +31,7 @@ public class TeamArticleDetail {
 
     private String createdBy;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
 
     private List<TeamReplyResponse> replyResponses = new ArrayList<>();

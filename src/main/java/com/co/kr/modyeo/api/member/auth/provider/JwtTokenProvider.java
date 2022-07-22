@@ -1,6 +1,5 @@
 package com.co.kr.modyeo.api.member.auth.provider;
 
-import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.CustomAuthException;
 import com.co.kr.modyeo.common.exception.code.AuthErrorCode;
 import com.co.kr.modyeo.common.result.JsonResultData;
@@ -10,7 +9,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -96,24 +94,17 @@ public class JwtTokenProvider {
             log.error("잘못된 JWT 서명입니다.");
         }catch (ExpiredJwtException e) {
             log.info("만료된 JWT 토큰입니다.");
-
-            throw ApiException.builder()
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .errorCode("EXPIRED_JWT_TOKEN")
-                    .errorMessage("만료된 JWT 토큰입니다.")
-                    .build();
         } catch (UnsupportedJwtException e) {
             log.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
             log.info("JWT 토큰이 잘못되었습니다.");
-
-            throw ApiException.builder()
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .errorCode("BAD_JWT_TOKEN")
-                    .errorMessage("JWT 토큰이 잘못되었습니다.")
-                    .build();
         }
         return false;
+    }
+
+    public boolean validateTokenFilter(String token){
+        Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+        return true;
     }
 
     private Claims parseClaims(String token) {

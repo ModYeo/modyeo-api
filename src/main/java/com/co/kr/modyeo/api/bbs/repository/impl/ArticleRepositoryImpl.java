@@ -22,26 +22,15 @@ public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements
     }
 
     @Override
-    public Slice<ArticleResponse> searchArticle(ArticleSearch articleSearch, PageRequest pageRequest) {
+    public Slice<Article> searchArticle(ArticleSearch articleSearch, PageRequest pageRequest) {
         return applySlicing(pageRequest,contentQuery ->
-                contentQuery.select(new QArticleResponse(
-                                article.id.as("articleId"),
-                                article.title,
-                                article.content,
-                                category.name.as("categoryName"),
-                                article.filePath,
-                                article.isHidden,
-                                reply.id.count().as("replyCount"),
-                                article.hitCount,
-                                article.createdBy,
-                                article.createdDate))
+                contentQuery.select(article)
                         .from(article)
-                        .innerJoin(article.replyList,reply)
                         .innerJoin(article.category,category)
+                        .fetchJoin()
                         .where(articleTitleLike(articleSearch.getTitle()),
                                 articleContentLike(articleSearch.getContent()),
-                                categoryIdEq(articleSearch.getCategoryId()))
-                        .groupBy(reply.id));
+                                categoryIdEq(articleSearch.getCategoryId())));
     }
 
     private BooleanExpression categoryIdEq(Long categoryId) {

@@ -1,6 +1,6 @@
 package com.co.kr.modyeo.api.member.controller;
 
-import com.co.kr.modyeo.api.member.domain.dto.request.MemberRequest;
+import com.co.kr.modyeo.api.member.domain.dto.request.MemberCategoryRequest;
 import com.co.kr.modyeo.api.member.domain.dto.response.MemberDetail;
 import com.co.kr.modyeo.api.member.service.MemberService;
 import com.co.kr.modyeo.common.result.JsonResultData;
@@ -20,8 +20,8 @@ public class MemberApiController {
 
     @ApiOperation(value = "회원 카테고리 정보 생성")
     @PostMapping("")
-    public ResponseEntity<?> createMemberInfo(@RequestBody MemberRequest memberRequest){
-        memberService.createMemberInfo(memberRequest);
+    public ResponseEntity<?> createMemberInfo(@RequestBody MemberCategoryRequest memberCategoryRequest){
+        memberService.createMemberInfo(memberCategoryRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(JsonResultData.successResultBuilder()
                         .data(null)
