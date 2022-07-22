@@ -32,7 +32,15 @@ public class Category extends BaseEntity {
         this.useYn = useYn;
     }
 
-    public void changeCategory(String name){
+    @Builder(builderClassName = "createCategoryBuilder",builderMethodName = "createCategoryBuilder")
+    public Category(String name) {
         this.name = name;
+        this.useYn = Yn.Y;
+    }
+
+
+    public void changeCategory(String name,Yn useYn){
+        this.name = name;
+        this.useYn = useYn;
     }
 }

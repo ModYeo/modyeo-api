@@ -1,6 +1,5 @@
 package com.co.kr.modyeo.api.member.auth.domain.dto;
 
-import com.co.kr.modyeo.api.category.domain.dto.request.CategoryRequest;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.domain.entity.embed.Address;
 import com.co.kr.modyeo.api.member.domain.enumerate.Authority;
@@ -11,11 +10,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.persistence.Embedded;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor

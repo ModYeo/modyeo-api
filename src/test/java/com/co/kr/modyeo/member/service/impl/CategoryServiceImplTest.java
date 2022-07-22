@@ -4,7 +4,7 @@ import com.co.kr.modyeo.api.category.service.impl.CategoryServiceImpl;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.CategoryErrorCode;
-import com.co.kr.modyeo.api.category.domain.dto.request.CategoryRequest;
+import com.co.kr.modyeo.api.category.domain.dto.request.CategoryCreateRequest;
 import com.co.kr.modyeo.api.category.domain.dto.response.CategoryResponse;
 import com.co.kr.modyeo.api.category.domain.dto.search.CategorySearch;
 import com.co.kr.modyeo.api.category.domain.entity.Category;
@@ -34,11 +34,11 @@ class CategoryServiceImplTest {
     @Mock
     private CategoryRepository categoryRepository;
 
-    private CategoryRequest categoryCreateRequest = CategoryRequest.of()
+    private CategoryCreateRequest categoryCreateRequest = CategoryCreateRequest.of()
             .name("test Category")
             .build();
 
-    private CategoryRequest categoryUpdateRequest = CategoryRequest.of()
+    private CategoryCreateRequest categoryUpdateRequest = CategoryCreateRequest.of()
             .id(1L)
             .name("update test")
             .build();
@@ -51,11 +51,11 @@ class CategoryServiceImplTest {
 
     @Test
     void createTest() {
-        CategoryRequest categoryRequest = CategoryRequest.of()
+        CategoryCreateRequest categoryCreateRequest = CategoryCreateRequest.of()
                 .name("test category")
                 .build();
 
-        Category category = CategoryRequest.toEntity(categoryRequest);
+        Category category = CategoryCreateRequest.createCategory(categoryCreateRequest);
         category = categoryRepository.save(category);
 
         assertThat(category).isEqualTo(categoryRepository.findByName("test category"));

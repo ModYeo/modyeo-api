@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.bbs.domain.dto.response;
 
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.common.enumerate.Yn;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ public class ArticleDetail {
 
     private String createdBy;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
 
     private List<ReplyResponse> replyResponses = new ArrayList<>();

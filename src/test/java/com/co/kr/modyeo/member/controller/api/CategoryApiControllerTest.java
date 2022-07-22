@@ -1,7 +1,7 @@
 package com.co.kr.modyeo.member.controller.api;
 
 import com.co.kr.modyeo.api.category.controller.CategoryApiController;
-import com.co.kr.modyeo.api.category.domain.dto.request.CategoryRequest;
+import com.co.kr.modyeo.api.category.domain.dto.request.CategoryCreateRequest;
 import com.co.kr.modyeo.api.category.domain.dto.response.CategoryResponse;
 import com.co.kr.modyeo.api.category.domain.dto.search.CategorySearch;
 import com.co.kr.modyeo.api.category.domain.entity.Category;
@@ -58,11 +58,11 @@ class CategoryApiControllerTest {
     @Test
     @DisplayName("카테고리 생성 성공")
     void createTest() throws Exception {
-        CategoryRequest categoryRequest = CategoryRequest.of()
+        CategoryCreateRequest categoryCreateRequest = CategoryCreateRequest.of()
                 .name("test category")
                 .build();
 
-        String request = objectMapper.writeValueAsString(categoryRequest);
+        String request = objectMapper.writeValueAsString(categoryCreateRequest);
 
         given(categoryService.createCategory(any()))
                 .willReturn(Category.of()
@@ -117,7 +117,7 @@ class CategoryApiControllerTest {
 
     @Test
     void updateTest() throws Exception {
-        CategoryRequest categoryRequest = CategoryRequest.of()
+        CategoryCreateRequest categoryCreateRequest = CategoryCreateRequest.of()
                 .id(1L)
                 .name("update category")
                 .build();
@@ -131,7 +131,7 @@ class CategoryApiControllerTest {
         mockMvc.perform(
                 patch("/api/category")
                         .with(csrf())
-                        .content(objectMapper.writeValueAsBytes(categoryRequest))
+                        .content(objectMapper.writeValueAsBytes(categoryCreateRequest))
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk())
                 .andDo(print());

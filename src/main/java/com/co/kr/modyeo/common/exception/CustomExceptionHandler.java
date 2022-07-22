@@ -2,6 +2,10 @@ package com.co.kr.modyeo.common.exception;
 
 import com.co.kr.modyeo.common.exception.code.AuthErrorCode;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.security.SecurityException;
+import io.swagger.models.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -54,11 +58,30 @@ public class CustomExceptionHandler {
     @ExceptionHandler({UsernameNotFoundException.class})
     public ResponseEntity<?> exceptionHandler(HttpServletRequest request, final UsernameNotFoundException e){
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(JsonResultData.failResultBuilder()
                         .errorCode("NOT_FOUND_EMAIL")
                         .errorMessage(e.getMessage())
                         .build());
     }
 
+    @ExceptionHandler({ExpiredJwtException.class})
+    public ResponseEntity<?> exceptionHandler(HttpServletRequest request, final ExpiredJwtException e){
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(JsonResultData.failResultBuilder()
+                        .errorCode(AuthErrorCode.EXPIRED_TOKEN.getCode())
+                        .errorMessage(AuthErrorCode.EXPIRED_TOKEN.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler({UnsupportedJwtException.class})
+    public ResponseEntity<?> exceptionHandler(HttpServletRequest request, final UnsupportedJwtException e){
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(JsonResultData.failResultBuilder()
+                        .errorCode(AuthErrorCode.UNSUPPORTED_TOKEN.getCode())
+                        .errorMessage(AuthErrorCode.UNSUPPORTED_TOKEN.getMessage())
+                        .build());
+    }
 }

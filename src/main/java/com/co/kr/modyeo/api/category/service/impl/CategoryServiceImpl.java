@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.category.service.impl;
 
-import com.co.kr.modyeo.api.category.domain.dto.request.CategoryRequest;
+import com.co.kr.modyeo.api.category.domain.dto.request.CategoryCreateRequest;
+import com.co.kr.modyeo.api.category.domain.dto.request.CategoryUpdateRequest;
 import com.co.kr.modyeo.api.category.domain.dto.response.CategoryDetail;
 import com.co.kr.modyeo.api.category.domain.dto.response.CategoryResponse;
 import com.co.kr.modyeo.api.category.domain.dto.search.CategorySearch;
@@ -26,9 +27,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public Category createCategory(CategoryRequest categoryRequest) {
-        overlapCategoryCheck(categoryRequest);
-        Category category = CategoryRequest.toEntity(categoryRequest);
+    public Category createCategory(CategoryCreateRequest categoryCreateRequest) {
+        overlapCategoryCheck(categoryCreateRequest);
+        Category category = CategoryCreateRequest.createCategory(categoryCreateRequest);
         return categoryRepository.save(category);
     }
 
@@ -40,17 +41,16 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public Category updateCategory(CategoryRequest categoryUpdateRequest) {
+    public void updateCategory(CategoryUpdateRequest categoryUpdateRequest) {
         overlapCategoryCheck(categoryUpdateRequest);
-        Category category = categoryRepository.findById(categoryUpdateRequest.getId())
+        Category category = categoryRepository.findById(categoryUpdateRequest.getCategoryId())
                 .orElseThrow(() -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
                         .errorMessage(CategoryErrorCode.NOT_FOUND_CATEGORY.getMessage())
                         .errorCode(CategoryErrorCode.NOT_FOUND_CATEGORY.getCode())
                         .build());
 
-        category.changeCategory(categoryUpdateRequest.getName());
-        return category;
+        category.changeCategory(categoryUpdateRequest.getName(),categoryUpdateRequest.getUseYn());
     }
 
     @Override
@@ -75,8 +75,20 @@ public class CategoryServiceImpl implements CategoryService {
                         .build()));
     }
 
-    private void overlapCategoryCheck(CategoryRequest categoryRequest){
-        Category findCategory = categoryRepository.findByName(categoryRequest.getName());
+    private void overlapCategoryCheck(CategoryCreateRequest categoryCreateRequest){
+        Category findCategory = categoryRepository.findByName(categoryCreateRequest.getName());
+        if (findCategory != null){
+            throw ApiException.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .errorCode(CategoryErrorCode.OVERLAP_CATEGORY.getCode())
+                    .errorMessage(CategoryErrorCode.OVERLAP_CATEGORY.getMessage())
+                    .build();
+
+        }
+    }
+
+    private void overlapCategoryCheck(CategoryUpdateRequest categoryUpdateRequest){
+        Category findCategory = categoryRepository.findByName(categoryUpdateRequest.getName());
         if (findCategory != null){
             throw ApiException.builder()
                     .status(HttpStatus.BAD_REQUEST)

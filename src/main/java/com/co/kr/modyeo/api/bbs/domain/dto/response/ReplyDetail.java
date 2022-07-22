@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.bbs.domain.dto.response;
 
 import com.co.kr.modyeo.api.bbs.domain.entity.Reply;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,8 +29,10 @@ public class ReplyDetail {
 
     private String updatedBy;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime updatedTime;
 
     private List<NestedReplyDetail> nestedReplyDetails;
@@ -51,8 +54,10 @@ public class ReplyDetail {
 
         private String updatedBy;
 
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
         private LocalDateTime createdTime;
 
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
         private LocalDateTime updatedTime;
 
         @Builder(builderClassName = "of",builderMethodName = "of")

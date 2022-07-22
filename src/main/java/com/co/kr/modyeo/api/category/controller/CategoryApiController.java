@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.category.controller;
 
-import com.co.kr.modyeo.api.category.domain.dto.request.CategoryRequest;
+import com.co.kr.modyeo.api.category.domain.dto.request.CategoryCreateRequest;
+import com.co.kr.modyeo.api.category.domain.dto.request.CategoryUpdateRequest;
 import com.co.kr.modyeo.api.category.domain.dto.response.CategoryDetail;
 import com.co.kr.modyeo.api.category.domain.dto.response.CategoryResponse;
 import com.co.kr.modyeo.api.category.domain.dto.search.CategorySearch;
@@ -29,12 +30,14 @@ public class CategoryApiController {
 
     @ApiOperation(value = "카테고리 생성 API")
     @PostMapping("")
-    public ResponseEntity<?> createCategory(@Valid @RequestBody CategoryRequest categoryRequest){
-        Category category = categoryService.createCategory(categoryRequest);
+    public ResponseEntity<?> createCategory(@Valid @RequestBody CategoryCreateRequest categoryCreateRequest){
+        Category category = categoryService.createCategory(categoryCreateRequest);
         if (category != null){
             return ResponseEntity
                     .status(HttpStatus.CREATED)
-                    .body(null);
+                    .body(JsonResultData.successResultBuilder()
+                            .data(null)
+                            .build());
         }else{
             return ResponseEntity
                     .badRequest()
@@ -69,22 +72,13 @@ public class CategoryApiController {
 
     @ApiOperation(value = "카테고리 수정 API")
     @PatchMapping("")
-    public ResponseEntity<?> updateCategory(@Valid @RequestBody CategoryRequest categoryRequest){
-        Category category = categoryService.updateCategory(categoryRequest);
-        if (Objects.equals(categoryRequest.getName(), category.getName())){
-            return ResponseEntity
+    public ResponseEntity<?> updateCategory(@Valid @RequestBody CategoryUpdateRequest categoryUpdateRequest){
+        categoryService.updateCategory(categoryUpdateRequest);
+        return ResponseEntity
                     .ok(JsonResultData
                             .successResultBuilder()
                             .data(null)
                             .build());
-        }else{
-            return ResponseEntity
-                    .ok(JsonResultData
-                            .failResultBuilder()
-                            .errorCode(CategoryErrorCode.FAIL_UPDATE_CATEGORY.getCode())
-                            .errorMessage(CategoryErrorCode.FAIL_UPDATE_CATEGORY.getMessage())
-                            .build());
-        }
     }
 
     @ApiOperation(value = "카테고리 삭제 API")

@@ -4,11 +4,14 @@ import com.co.kr.modyeo.api.category.domain.dto.response.CategoryResponse;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.domain.enumerate.Sex;
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamResponse;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -23,16 +26,20 @@ public class MemberDetail {
 
     private Sex sex;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    private LocalDateTime createdTime;
+
     private List<TeamResponse> teamResponseList;
 
     private List<CategoryResponse> categoryResponseList;
 
     @QueryProjection
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public MemberDetail(Long memberId, String username, Sex sex, List<TeamResponse> teamResponseList, List<CategoryResponse> categoryResponseList) {
+    public MemberDetail(Long memberId, String username, Sex sex, List<TeamResponse> teamResponseList, List<CategoryResponse> categoryResponseList, LocalDateTime createdTime) {
         this.memberId = memberId;
         this.username = username;
         this.sex = sex;
+        this.createdTime = createdTime;
         this.teamResponseList = teamResponseList;
         this.categoryResponseList = categoryResponseList;
     }
@@ -42,6 +49,7 @@ public class MemberDetail {
                 .memberId(member.getId())
                 .username(member.getUsername())
                 .sex(member.getSex())
+                .createdTime(member.getCreatedDate())
                 .teamResponseList(member.getTeamList()
                         .stream()
                         .filter(Objects::nonNull)
