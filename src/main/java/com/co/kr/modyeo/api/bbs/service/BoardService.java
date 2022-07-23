@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.bbs.service;
 
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.RecommendRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
@@ -28,4 +29,6 @@ public interface BoardService {
     void deleteReply(Long replyId);
 
     ReplyDetail getReply(Long replyId);
+
+    void updateArticleRecommend(RecommendRequest recommendRequest);
 }

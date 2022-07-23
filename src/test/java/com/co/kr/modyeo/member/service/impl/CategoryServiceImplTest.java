@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.member.service.impl;
 
+import com.co.kr.modyeo.api.category.domain.dto.request.CategoryUpdateRequest;
 import com.co.kr.modyeo.api.category.service.impl.CategoryServiceImpl;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.exception.ApiException;
@@ -38,8 +39,8 @@ class CategoryServiceImplTest {
             .name("test Category")
             .build();
 
-    private CategoryCreateRequest categoryUpdateRequest = CategoryCreateRequest.of()
-            .id(1L)
+    private CategoryUpdateRequest categoryUpdateRequest = CategoryUpdateRequest.of()
+            .categoryId(1L)
             .name("update test")
             .build();
 
@@ -117,7 +118,7 @@ class CategoryServiceImplTest {
         Optional<Category> findCategory = categoryRepository.findById(1004L);
 
         category = findCategory.get();
-        category.changeCategory("update test");
+        category.changeCategory("update test",Yn.Y);
         given(categoryRepository.save(any())).willReturn(category);
         category = categoryRepository.save(category);
 
@@ -136,7 +137,7 @@ class CategoryServiceImplTest {
         given(categoryRepository.findByName(any())).willReturn(null);
 //        given(categoryRepository.save(any())).willReturn(category);
 
-        category = categoryService.updateCategory(categoryUpdateRequest);
+        categoryService.updateCategory(categoryUpdateRequest);
         System.out.println("category.getName() = " + category.getName());
 
         assertThat(category.getName()).isEqualTo("update test");

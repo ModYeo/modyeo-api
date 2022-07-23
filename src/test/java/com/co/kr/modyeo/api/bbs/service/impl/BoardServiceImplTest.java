@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.bbs.service.impl;
 
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.RecommendRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
@@ -8,6 +9,7 @@ import com.co.kr.modyeo.api.bbs.repository.ArticleRepository;
 import com.co.kr.modyeo.api.bbs.repository.ReplyRepository;
 import com.co.kr.modyeo.api.bbs.service.BoardService;
 import com.co.kr.modyeo.api.category.repository.CategoryRepository;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -125,5 +127,27 @@ class BoardServiceImplTest {
         boardService.deleteArticle(1L);
         then(articleRepository).should().findById(any());
         then(articleRepository).should().delete(any());
+    }
+
+    @Test
+    void updateRecommend(){
+        RecommendRequest recommendRequest = RecommendRequest.of()
+                .articleId(1L)
+                .recommendYn(Yn.Y)
+                .build();
+
+        Article article = Article.of()
+                .id(1L)
+                .title("test title")
+                .content("test contents")
+                .recommendCount(0L)
+                .build();
+
+        given(articleRepository.findById(any())).willReturn(Optional.of(article));
+        boardService.updateArticleRecommend(recommendRequest);
+
+        then(articleRepository).should().findById(any());
+
+        assertThat(article.getRecommendCount()).isEqualTo(1L);
     }
 }
