@@ -150,4 +150,26 @@ class BoardServiceImplTest {
 
         assertThat(article.getRecommendCount()).isEqualTo(1L);
     }
+
+    @Test
+    void updateRecommendN(){
+        RecommendRequest recommendRequest = RecommendRequest.of()
+                .articleId(1L)
+                .recommendYn(Yn.N)
+                .build();
+
+        Article article = Article.of()
+                .id(1L)
+                .title("test title")
+                .content("test contents")
+                .recommendCount(1L)
+                .build();
+
+        given(articleRepository.findById(any())).willReturn(Optional.of(article));
+        boardService.updateArticleRecommend(recommendRequest);
+
+        then(articleRepository).should().findById(any());
+
+        assertThat(article.getRecommendCount()).isEqualTo(0L);
+    }
 }
