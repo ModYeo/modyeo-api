@@ -74,10 +74,10 @@ public class Article extends BaseEntity {
         this.hitCount++;
     }
 
-    public void updateRecommendCount(String operation) {
-        if ("plus".equals(operation)){
+    public void updateRecommendCount(Yn recommendYn) {
+        if (Yn.Y.equals(recommendYn)){
             this.recommendCount++;
-        } else if ("minus".equals(operation)) {
+        } else if (Yn.N.equals(recommendYn)) {
             this.recommendCount--;
         }
     }

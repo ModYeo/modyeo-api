@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.bbs.controller;
 
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.RecommendRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
@@ -107,6 +108,15 @@ public class BoardApiController {
         ReplyDetail replyDetail = boardService.getReply(replyId);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(replyDetail)
+                .build());
+    }
+
+    @ApiOperation("추천 업데이트")
+    @PatchMapping("/article/recommend")
+    public ResponseEntity<?> updateArticleRecommend(RecommendRequest recommendRequest){
+        boardService.updateArticleRecommend(recommendRequest);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
                 .build());
     }
 }

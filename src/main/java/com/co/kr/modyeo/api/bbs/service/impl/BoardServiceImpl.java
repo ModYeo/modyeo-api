@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.bbs.service.impl;
 
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.RecommendRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
@@ -160,5 +161,17 @@ public class BoardServiceImpl implements BoardService {
 
         List<Reply> nestedReplies = replyRepository.findByReplyGroup(replyId);
         return ReplyDetail.toDto(reply, nestedReplies);
+    }
+
+    @Override
+    public void updateArticleRecommend(RecommendRequest recommendRequest) {
+        Article article = articleRepository.findById(recommendRequest.getArticleId()).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage("찾을 수 없는 게시글 입니다.")
+                        .errorCode("NOT_FOUND_ARTICLE")
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
+        article.updateRecommendCount(recommendRequest.getRecommendYn());
     }
 }
