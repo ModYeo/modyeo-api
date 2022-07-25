@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.api.bbs.domain.entity;
 
+import com.co.kr.modyeo.api.bbs.domain.entity.link.ArticleRecommend;
 import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.common.entity.BaseEntity;
@@ -40,14 +41,14 @@ public class Article extends BaseEntity {
     @Column(name = "hit_count")
     private Long hitCount;
 
-    @Column(name = "recommend_count")
-    private Long recommendCount;
-
     @OneToMany(mappedBy = "article",cascade = CascadeType.ALL)
     private List<Reply> replyList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "article",cascade = CascadeType.ALL)
+    private List<ArticleRecommend> articleRecommendList = new ArrayList<>();
+
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public Article(Long id,Category category,String title, String content, String filePath, Yn isHidden, Long hitCount,Long recommendCount, List<Reply> replyList) {
+    public Article(Long id,Category category,String title, String content, String filePath, Yn isHidden, Long hitCount, List<Reply> replyList, List<ArticleRecommend> articleRecommendList) {
         this.id = id;
         this.category = category;
         this.title = title;
@@ -55,8 +56,8 @@ public class Article extends BaseEntity {
         this.filePath = filePath;
         this.isHidden = isHidden;
         this.hitCount = hitCount;
-        this.recommendCount = recommendCount;
         this.replyList = replyList;
+        this.articleRecommendList = articleRecommendList;
     }
 
     @Builder(builderMethodName = "createArticleBuilder",builderClassName = "createArticleBuilder")
@@ -67,19 +68,10 @@ public class Article extends BaseEntity {
         this.filePath = filePath;
         this.isHidden = isHidden;
         this.hitCount = 0L;
-        this.recommendCount = 0L;
     }
 
     public void plusHitCount(){
         this.hitCount++;
-    }
-
-    public void updateRecommendCount(Yn recommendYn) {
-        if (Yn.Y.equals(recommendYn)){
-            this.recommendCount++;
-        } else if (Yn.N.equals(recommendYn)) {
-            this.recommendCount--;
-        }
     }
 
     @Builder(builderMethodName = "updateArticleBuilder",builderClassName = "updateArticleBuilder")

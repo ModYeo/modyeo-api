@@ -1,7 +1,8 @@
 package com.co.kr.modyeo.api.bbs.controller;
 
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRequest;
-import com.co.kr.modyeo.api.bbs.domain.dto.request.RecommendRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRecommendRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyRecommendRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
@@ -111,10 +112,19 @@ public class BoardApiController {
                 .build());
     }
 
-    @ApiOperation("추천 업데이트")
-    @PatchMapping("/article/recommend")
-    public ResponseEntity<?> updateArticleRecommend(RecommendRequest recommendRequest){
-        boardService.updateArticleRecommend(recommendRequest);
+    @ApiOperation("게시글 추천 업데이트 API")
+    @PutMapping("/article/recommend")
+    public ResponseEntity<?> updateArticleRecommend(ArticleRecommendRequest articleRecommendRequest){
+        boardService.updateArticleRecommend(articleRecommendRequest);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
+                .build());
+    }
+
+    @ApiOperation("댓글 추천 업데이트 API")
+    @PutMapping("/Reply/recommend")
+    public ResponseEntity<?> updateReplyRecommend(ReplyRecommendRequest replyRecommendRequest){
+        boardService.updateReplyRecommend(replyRecommendRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)
                 .build());

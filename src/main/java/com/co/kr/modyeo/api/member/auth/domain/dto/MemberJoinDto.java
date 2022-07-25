@@ -29,6 +29,8 @@ public class MemberJoinDto {
     @ApiModelProperty(value = "회원명", dataType = "string", required = true)
     private String username;
 
+    private String nickname;
+
 //    @Embedded
 //    private Address address;
 
@@ -56,7 +58,7 @@ public class MemberJoinDto {
                 .password(passwordEncoder.encode(memberJoinDto.password))
                 .authority(Authority.ROLE_USER)
                 .username(memberJoinDto.username)
-//                .address(memberJoinDto.address)
+                .nickname(memberJoinDto.nickname)
                 .sex(memberJoinDto.sex)
                 .build();
     }

@@ -32,8 +32,7 @@ public class Member extends BaseEntity {
 
     private String username;
 
-    @Embedded
-    private Address address;
+    private String nickname;
 
     @Enumerated(EnumType.STRING)
     private Sex sex;
@@ -48,11 +47,12 @@ public class Member extends BaseEntity {
     private List<MemberCategory> interestCategoryList = new ArrayList<>();
 
     @Builder(buildMethodName = "createMemberBuilder",builderClassName = "createMemberBuilder")
-    public Member(Long id, String email, String password, Authority authority, Sex sex) {
+    public Member(Long id, String email, String password, Authority authority,String nickname, Sex sex) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.authority = authority;
+        this.nickname = nickname;
         this.sex = sex;
     }
 
@@ -61,7 +61,7 @@ public class Member extends BaseEntity {
                   String email,
                   String password,
                   String username,
-                  Address address,
+                  String nickname,
                   Sex sex,
                   Authority authority,
                   List<Crew> teamList,
@@ -70,7 +70,7 @@ public class Member extends BaseEntity {
         this.email = email;
         this.password = password;
         this.username = username;
-        this.address = address;
+        this.nickname = nickname;
         this.sex = sex;
         this.authority = authority;
         this.teamList = teamList;
@@ -79,5 +79,9 @@ public class Member extends BaseEntity {
 
     public void changePassword(String password, PasswordEncoder passwordEncoder){
         this.password = passwordEncoder.encode(password);
+    }
+
+    public void changeNickname(String nickname){
+        this.nickname = nickname;
     }
 }

@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.member.service.impl;
 
 import com.co.kr.modyeo.api.category.repository.CategoryRepository;
 import com.co.kr.modyeo.api.member.domain.dto.request.MemberCategoryRequest;
+import com.co.kr.modyeo.api.member.domain.dto.request.NicknameUpdateRequest;
 import com.co.kr.modyeo.api.member.domain.dto.response.MemberDetail;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.domain.entity.link.MemberCategory;
@@ -60,5 +61,17 @@ public class MemberServiceImpl implements MemberService {
                         .build());
 
         return MemberDetail.createMemberDetail(member);
+    }
+
+    @Override
+    public void updateNickname(NicknameUpdateRequest nicknameUpdateRequest) {
+        Member member = memberRepository.findById(nicknameUpdateRequest.getMemberId()).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
+                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
+                        .build());
+
+        member.changeNickname(nicknameUpdateRequest.getNickname());
     }
 }

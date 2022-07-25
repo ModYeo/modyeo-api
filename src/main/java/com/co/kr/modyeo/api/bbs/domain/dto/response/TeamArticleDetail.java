@@ -27,7 +27,7 @@ public class TeamArticleDetail {
 
     private Long hitCount;
 
-    private Long recommendCount;
+    private Integer recommendCount;
 
     private String createdBy;
 
@@ -42,7 +42,7 @@ public class TeamArticleDetail {
                              String content,
                              Yn isHidden,
                              Long hitCount,
-                             Long recommendCount,
+                             Integer recommendCount,
                              String createdBy,
                              LocalDateTime createdTime,
                              List<TeamReplyResponse> replyResponses) {
@@ -64,7 +64,7 @@ public class TeamArticleDetail {
                 .content(teamArticle.getContent())
                 .isHidden(teamArticle.getIsHidden())
                 .hitCount(teamArticle.getHitCount())
-                .recommendCount(teamArticle.getRecommendCount())
+                .recommendCount(teamArticle.getTeamArticleRecommendList().size())
                 .createdBy(teamArticle.getCreatedBy())
                 .createdTime(teamArticle.getCreatedDate())
                 .replyResponses(teamArticle.getTeamReplyList().stream().map(TeamReplyResponse::toDto).collect(Collectors.toList()))
