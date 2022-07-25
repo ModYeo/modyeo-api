@@ -30,6 +30,8 @@ public class ArticleResponse {
 
     private Integer replyCount;
 
+    private Integer recommendCount;
+
     private Long hitCount;
 
     private String createdBy;
@@ -47,6 +49,7 @@ public class ArticleResponse {
                            String filePath,
                            Yn isHidden,
                            Long hitCount,
+                           Integer recommendCount,
                            Integer replyCount,
                            String createdBy,
                            LocalDateTime createdTime) {
@@ -58,6 +61,7 @@ public class ArticleResponse {
         this.filePath = filePath;
         this.isHidden = isHidden;
         this.replyCount = replyCount;
+        this.recommendCount = recommendCount;
         this.hitCount = hitCount;
         this.createdBy = createdBy;
         this.createdTime = createdTime;
@@ -73,6 +77,7 @@ public class ArticleResponse {
                 .content(article.getContent())
                 .isHidden(article.getIsHidden())
                 .hitCount(article.getHitCount())
+                .recommendCount((int) article.getArticleRecommendList().stream().filter(articleRecommend -> articleRecommend.getRecommendYn() == Yn.Y).count())
                 .replyCount(article.getReplyList().size())
                 .createdBy(article.getCreatedBy())
                 .createdTime(article.getCreatedDate())

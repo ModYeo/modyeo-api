@@ -35,10 +35,6 @@ public class AuthServiceImpl implements AuthService {
 
     private final StringRedisTemplate redisTemplate;
 
-//    private final CategoryRepository categoryRepository;
-//
-//    private final MemberCategoryRepository memberCategoryRepository;
-
     @Override
     public MemberResponseDto signup(MemberJoinDto memberJoinDto) {
         if (memberRepository.existsByEmail(memberJoinDto.getEmail())){
@@ -51,19 +47,6 @@ public class AuthServiceImpl implements AuthService {
 
         Member member = MemberJoinDto.toMember(memberJoinDto,passwordEncoder);
         member = memberRepository.save(member);
-
-//        if (!memberJoinDto.getCategoryRequests().isEmpty()){
-//            List<Long> categoryIdList = CategoryRequest.getCategoryIdList(memberJoinDto.getCategoryRequests());
-//            List<Category> categoryList = categoryRepository.findByCategoryIds(categoryIdList);
-//
-//            Member finalMember = member;
-//            List<MemberCategory> memberCategoryList = categoryList.stream().map(category -> MemberCategory.createMemberCategoryBuilder()
-//                    .member(finalMember)
-//                    .category(category)
-//                    .build()).collect(Collectors.toList());
-//
-//            memberCategoryRepository.saveAll(memberCategoryList);
-//        }
 
         return MemberResponseDto.toResponse(member);
     }

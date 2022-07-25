@@ -1,5 +1,7 @@
 package com.co.kr.modyeo.api.bbs.domain.entity;
 
+import com.co.kr.modyeo.api.bbs.domain.entity.link.ArticleRecommend;
+import com.co.kr.modyeo.api.bbs.domain.entity.link.TeamArticleRecommend;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.common.entity.BaseEntity;
 import com.co.kr.modyeo.common.enumerate.Yn;
@@ -39,14 +41,15 @@ public class TeamArticle extends BaseEntity {
     @Column(name = "hit_count")
     private Long hitCount;
 
-    @Column(name = "recommend_count")
-    private Long recommendCount;
 
     @OneToMany(mappedBy = "teamArticle",cascade = CascadeType.ALL)
     private List<TeamReply> teamReplyList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "teamArticle",cascade = CascadeType.ALL)
+    private List<TeamArticleRecommend> teamArticleRecommendList = new ArrayList<>();
+
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public TeamArticle(Long id, Team team, String title, String content, String filePath, Yn isHidden, Long hitCount, Long recommendCount, List<TeamReply> teamReplyList) {
+    public TeamArticle(Long id, Team team, String title, String content, String filePath, Yn isHidden, Long hitCount, List<TeamReply> teamReplyList, List<TeamArticleRecommend> teamArticleRecommendList) {
         this.id = id;
         this.team = team;
         this.title = title;
@@ -54,8 +57,8 @@ public class TeamArticle extends BaseEntity {
         this.filePath = filePath;
         this.isHidden = isHidden;
         this.hitCount = hitCount;
-        this.recommendCount = recommendCount;
         this.teamReplyList = teamReplyList;
+        this.teamArticleRecommendList = teamArticleRecommendList;
     }
 
     @Builder(builderClassName = "createTeamArticleBuilder",builderMethodName = "createTeamArticleBuilder")
@@ -66,6 +69,5 @@ public class TeamArticle extends BaseEntity {
         this.filePath = filePath;
         this.isHidden = isHidden;
         this.hitCount = 0L;
-        this.recommendCount = 0L;
     }
 }

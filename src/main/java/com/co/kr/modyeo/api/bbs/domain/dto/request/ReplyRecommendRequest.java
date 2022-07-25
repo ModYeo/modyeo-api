@@ -5,17 +5,25 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 @NoArgsConstructor
-public class RecommendRequest {
+public class ReplyRecommendRequest {
 
-    private Long articleId;
+    @NotNull
+    private Long memberId;
 
+    @NotNull
+    private Long replyId;
+
+    @NotNull
     private Yn recommendYn;
 
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public RecommendRequest(Long articleId, Yn recommendYn) {
-        this.articleId = articleId;
+    public ReplyRecommendRequest(Long memberId, Long replyId, Yn recommendYn) {
+        this.memberId = memberId;
+        this.replyId = replyId;
         this.recommendYn = recommendYn;
     }
 }

@@ -1,7 +1,8 @@
 package com.co.kr.modyeo.api.bbs.service.impl;
 
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRequest;
-import com.co.kr.modyeo.api.bbs.domain.dto.request.RecommendRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRecommendRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyRecommendRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
@@ -9,13 +10,20 @@ import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.api.bbs.domain.entity.Reply;
+import com.co.kr.modyeo.api.bbs.domain.entity.link.ArticleRecommend;
+import com.co.kr.modyeo.api.bbs.domain.entity.link.ReplyRecommend;
+import com.co.kr.modyeo.api.bbs.repository.ArticleRecommendRepository;
 import com.co.kr.modyeo.api.bbs.repository.ArticleRepository;
+import com.co.kr.modyeo.api.bbs.repository.ReplyRecommendRepository;
 import com.co.kr.modyeo.api.bbs.repository.ReplyRepository;
 import com.co.kr.modyeo.api.bbs.service.BoardService;
 import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.category.repository.CategoryRepository;
+import com.co.kr.modyeo.api.member.domain.entity.Member;
+import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.CategoryErrorCode;
+import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -31,8 +39,16 @@ import java.util.List;
 public class BoardServiceImpl implements BoardService {
 
     private final ArticleRepository articleRepository;
+
     private final ReplyRepository replyRepository;
+
     private final CategoryRepository categoryRepository;
+
+    private final MemberRepository memberRepository;
+
+    private final ArticleRecommendRepository articleRecommendRepository;
+
+    private final ReplyRecommendRepository replyRecommendRepository;
 
     @Override
     public Slice<ArticleResponse> getArticles(ArticleSearch articleSearch) {
@@ -164,14 +180,62 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public void updateArticleRecommend(RecommendRequest recommendRequest) {
-        Article article = articleRepository.findById(recommendRequest.getArticleId()).orElseThrow(
+    public void updateArticleRecommend(ArticleRecommendRequest articleRecommendRequest) {
+        Member member = memberRepository.findById(articleRecommendRequest.getMemberId()).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
+                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
+        Article article = articleRepository.findById(articleRecommendRequest.getArticleId()).orElseThrow(
                 () -> ApiException.builder()
                         .errorMessage("찾을 수 없는 게시글 입니다.")
                         .errorCode("NOT_FOUND_ARTICLE")
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
-        article.updateRecommendCount(recommendRequest.getRecommendYn());
+        ArticleRecommend findArticleRecommend = articleRecommendRepository.findByMemberAndArticle(member,article);
+
+        if (findArticleRecommend == null){
+            ArticleRecommend articleRecommend = ArticleRecommend.createArticleRecommendBuilder()
+                    .member(member)
+                    .article(article)
+                    .build();
+
+            articleRecommendRepository.save(articleRecommend);
+        } else{
+            findArticleRecommend.changeRecommendYn(articleRecommendRequest.getRecommendYn());
+        }
+    }
+
+    @Override
+    public void updateReplyRecommend(ReplyRecommendRequest replyRecommendRequest) {
+        Member member = memberRepository.findById(replyRecommendRequest.getMemberId()).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
+                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
+        Reply reply = replyRepository.findById(replyRecommendRequest.getReplyId()).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage("찾을 수 없는 댓글 입니다.")
+                        .errorCode("NOT_FOUND_REPLY")
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
+        ReplyRecommend findReplyRecommend = replyRecommendRepository.findByMemberAndReply(member, reply);
+
+        if (findReplyRecommend == null){
+            ReplyRecommend replyRecommend = ReplyRecommend.createReplyRecommendBuilder()
+                    .reply(reply)
+                    .member(member)
+                    .build();
+
+            replyRecommendRepository.save(replyRecommend);
+        }else {
+            findReplyRecommend.changeRecommend(replyRecommendRequest.getRecommendYn());
+        }
     }
 }

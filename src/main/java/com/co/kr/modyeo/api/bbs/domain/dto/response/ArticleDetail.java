@@ -26,7 +26,7 @@ public class ArticleDetail {
 
     private Long hitCount;
 
-    private Long recommendCount;
+    private Integer recommendCount;
 
     private String createdBy;
 
@@ -44,7 +44,7 @@ public class ArticleDetail {
                          String createdBy,
                          LocalDateTime createdTime,
                          Long hitCount,
-                         Long recommendCount,
+                         Integer recommendCount,
                          List<ReplyResponse> replyResponses) {
         this.articleId = articleId;
         this.title = title;
@@ -64,7 +64,7 @@ public class ArticleDetail {
                 .content(article.getContent())
                 .isHidden(article.getIsHidden())
                 .hitCount(article.getHitCount())
-                .recommendCount(article.getRecommendCount())
+                .recommendCount((int) article.getArticleRecommendList().stream().filter(articleRecommend -> articleRecommend.getRecommendYn() == Yn.Y).count())
                 .createdBy(article.getCreatedBy())
                 .createdTime(article.getCreatedDate())
                 .replyResponses(article.getReplyList().stream().map(ReplyResponse::toDto).collect(Collectors.toList()))

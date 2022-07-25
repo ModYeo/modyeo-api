@@ -1,7 +1,7 @@
 package com.co.kr.modyeo.api.bbs.service.impl;
 
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRequest;
-import com.co.kr.modyeo.api.bbs.domain.dto.request.RecommendRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRecommendRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
@@ -131,7 +131,7 @@ class BoardServiceImplTest {
 
     @Test
     void updateRecommend(){
-        RecommendRequest recommendRequest = RecommendRequest.of()
+        ArticleRecommendRequest articleRecommendRequest = ArticleRecommendRequest.of()
                 .articleId(1L)
                 .recommendYn(Yn.Y)
                 .build();
@@ -144,7 +144,7 @@ class BoardServiceImplTest {
                 .build();
 
         given(articleRepository.findById(any())).willReturn(Optional.of(article));
-        boardService.updateArticleRecommend(recommendRequest);
+        boardService.updateArticleRecommend(articleRecommendRequest);
 
         then(articleRepository).should().findById(any());
 
@@ -153,7 +153,7 @@ class BoardServiceImplTest {
 
     @Test
     void updateRecommendN(){
-        RecommendRequest recommendRequest = RecommendRequest.of()
+        ArticleRecommendRequest articleRecommendRequest = ArticleRecommendRequest.of()
                 .articleId(1L)
                 .recommendYn(Yn.N)
                 .build();
@@ -166,7 +166,7 @@ class BoardServiceImplTest {
                 .build();
 
         given(articleRepository.findById(any())).willReturn(Optional.of(article));
-        boardService.updateArticleRecommend(recommendRequest);
+        boardService.updateArticleRecommend(articleRecommendRequest);
 
         then(articleRepository).should().findById(any());
 
