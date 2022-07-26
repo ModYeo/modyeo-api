@@ -34,7 +34,9 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
 
         log.info("====================== START ======================");
         log.info("Request URL : {}",request.getRequestURI());
-        log.info("Request User : {}", authentication.getName());
+        if (authentication != null){
+            log.info("Request User : {}", authentication.getName());
+        }
 
         final ContentCachingRequestWrapper cachingRequest = (ContentCachingRequestWrapper) request;
         final ContentCachingResponseWrapper cachingResponse = (ContentCachingResponseWrapper) response;
