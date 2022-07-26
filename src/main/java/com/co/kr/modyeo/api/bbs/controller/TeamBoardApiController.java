@@ -5,6 +5,7 @@ import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleResponse;
+import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamReplyDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.TeamArticleSearch;
 import com.co.kr.modyeo.api.bbs.service.TeamBoardService;
 import com.co.kr.modyeo.common.result.JsonResultData;
@@ -104,9 +105,9 @@ public class TeamBoardApiController {
     @GetMapping("/reply/{team_reply_id}")
     public ResponseEntity<?> getReply(
             @PathVariable(value = "team_reply_id")Long teamReplyId){
-        ReplyDetail replyDetail = teamBoardService.getTeamReply(teamReplyId);
+        TeamReplyDetail teamReplyDetail = teamBoardService.getTeamReply(teamReplyId);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(replyDetail)
+                .data(teamReplyDetail)
                 .build());
     }
 }
