@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.bbs.domain.entity;
 
 import com.co.kr.modyeo.api.bbs.domain.entity.link.ArticleRecommend;
 import com.co.kr.modyeo.api.bbs.domain.entity.link.TeamArticleRecommend;
+import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.common.entity.BaseEntity;
 import com.co.kr.modyeo.common.enumerate.Yn;
@@ -69,5 +70,17 @@ public class TeamArticle extends BaseEntity {
         this.filePath = filePath;
         this.isHidden = isHidden;
         this.hitCount = 0L;
+    }
+
+    @Builder(builderMethodName = "updateTeamArticleBuilder",builderClassName = "updateTeamArticleBuilder")
+    public void changeTeamArticle( String title, String content, String filePath, Yn isHidden) {
+        this.title = title;
+        this.content = content;
+        this.filePath = filePath;
+        this.isHidden =isHidden;
+    }
+
+    public void plusHitCount(){
+        this.hitCount++;
     }
 }
