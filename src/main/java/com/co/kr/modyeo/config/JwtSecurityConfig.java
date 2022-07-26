@@ -1,8 +1,9 @@
 package com.co.kr.modyeo.config;
 
-import com.co.kr.modyeo.member.auth.filter.JwtAuthenticationFilter;
-import com.co.kr.modyeo.member.auth.provider.JwtTokenProvider;
+import com.co.kr.modyeo.api.member.auth.filter.JwtAuthenticationFilter;
+import com.co.kr.modyeo.api.member.auth.provider.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.DefaultSecurityFilterChain;
@@ -13,9 +14,11 @@ public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurity
 
     private final JwtTokenProvider jwtTokenProvider;
 
+    private final StringRedisTemplate stringRedisTemplate;
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        JwtAuthenticationFilter customFilter = new JwtAuthenticationFilter(jwtTokenProvider);
+        JwtAuthenticationFilter customFilter = new JwtAuthenticationFilter(jwtTokenProvider,stringRedisTemplate);
         http.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

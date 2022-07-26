@@ -13,14 +13,24 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
 #        format_sql: true
 #        use_sql_comments: true
 #        show_sql: true
+      default_batch_fetch_size: 1000
     open-in-view: false
 
-logging:
-  level:
+  redis:
+    host: localhost
+    port: 6379
+#
+#logging:
+#  level:
 #    org.hibernate.sql: debug
+
+profiles:
+  active: live
