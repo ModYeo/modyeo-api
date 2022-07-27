@@ -31,6 +31,7 @@ public class ArticleRecommend extends BaseEntity {
     private Article article;
 
     @Column(name = "recommend_yn")
+    @Enumerated(value = EnumType.STRING)
     private Yn recommendYn;
 
     @Builder(builderClassName = "of",builderMethodName = "of")

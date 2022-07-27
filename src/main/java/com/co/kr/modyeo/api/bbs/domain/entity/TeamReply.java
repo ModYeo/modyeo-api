@@ -2,8 +2,12 @@ package com.co.kr.modyeo.api.bbs.domain.entity;
 
 import com.co.kr.modyeo.api.bbs.domain.entity.link.TeamArticleRecommend;
 import com.co.kr.modyeo.api.bbs.domain.entity.link.TeamReplyRecommend;
+import com.co.kr.modyeo.api.member.domain.entity.Member;
+import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.common.entity.BaseEntity;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,4 +39,37 @@ public class TeamReply extends BaseEntity {
 
     @OneToMany(mappedBy = "teamReply",cascade = CascadeType.ALL)
     private List<TeamReplyRecommend> teamReplyRecommendList = new ArrayList<>();
+
+    @Builder(builderClassName = "of",builderMethodName = "of")
+    public TeamReply(Long id, TeamArticle teamArticle, String content, Integer replyDepth, Long replyGroup, List<TeamReplyRecommend> teamReplyRecommendList) {
+        this.id = id;
+        this.teamArticle = teamArticle;
+        this.content = content;
+        this.replyDepth = replyDepth;
+        this.replyGroup = replyGroup;
+        this.teamReplyRecommendList = teamReplyRecommendList;
+    }
+
+    @Builder(builderClassName = "createTeamReplyBuilder",builderMethodName = "createTeamReplyBuilder")
+    public static TeamReply createTeamReply(TeamArticle article, String content){
+        return of()
+                .teamArticle(article)
+                .content(content)
+                .replyDepth(0)
+                .build();
+    }
+
+    @Builder(builderClassName = "createNestedTeamReplyBuilder",builderMethodName = "createNestedTeamReplyBuilder")
+    public static TeamReply createTeamNestedReply(TeamArticle article, String content, Long replyGroup){
+        return of()
+                .teamArticle(article)
+                .content(content)
+                .replyDepth(1)
+                .replyGroup(replyGroup)
+                .build();
+    }
+
+    public void changeTeamReply(String content) {
+        this.content = content;
+    }
 }

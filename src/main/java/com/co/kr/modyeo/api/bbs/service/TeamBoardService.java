@@ -1,7 +1,6 @@
 package com.co.kr.modyeo.api.bbs.service;
 
-import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamArticleRequest;
-import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamReplyRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.*;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamReplyDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.TeamArticleSearch;
@@ -29,4 +28,8 @@ public interface TeamBoardService {
     void deleteTeamReply(Long teamReplyId);
 
     TeamReplyDetail getTeamReply(Long teamReplyId);
+
+    void updateTeamArticleRecommend(TeamArticleRecommendRequest articleRecommendRequest);
+
+    void updateTeamReplyRecommend(TeamReplyRecommendRequest replyRecommendRequest);
 }

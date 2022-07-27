@@ -36,6 +36,7 @@ public class Article extends BaseEntity {
     private String filePath;
 
     @Column(name = "is_hidden")
+    @Enumerated(value = EnumType.STRING)
     private Yn isHidden;
 
     @Column(name = "hit_count")

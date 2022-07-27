@@ -1,6 +1,8 @@
 package com.co.kr.modyeo.api.bbs.controller;
 
+import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamArticleRecommendRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamArticleRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamReplyRecommendRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleDetail;
@@ -72,7 +74,7 @@ public class TeamBoardApiController {
                 .build());
     }
 
-    @ApiOperation(value = "댓글 생성 API")
+    @ApiOperation(value = "팀 댓글 생성 API")
     @PostMapping("/reply")
     public ResponseEntity<?> createReply(@RequestBody TeamReplyRequest teamReplyRequest){
         teamBoardService.createTeamReply(teamReplyRequest);
@@ -82,7 +84,7 @@ public class TeamBoardApiController {
                         .build());
     }
 
-    @ApiOperation(value = "댓글 수정 API")
+    @ApiOperation(value = "팀 댓글 수정 API")
     @PatchMapping("/reply")
     public ResponseEntity<?> updateReply(@RequestBody TeamReplyRequest teamReplyRequest){
         teamBoardService.updateTeamReply(teamReplyRequest);
@@ -91,7 +93,7 @@ public class TeamBoardApiController {
                 .build());
     }
 
-    @ApiOperation(value = "댓글 삭제 API")
+    @ApiOperation(value = "팀 댓글 삭제 API")
     @DeleteMapping("/reply/{team_reply_id}")
     public ResponseEntity<?> deleteReply(
             @PathVariable(value = "team_reply_id")Long teamReplyId){
@@ -101,13 +103,31 @@ public class TeamBoardApiController {
                 .build());
     }
 
-    @ApiOperation(value = "댓글 상세 조회 API")
+    @ApiOperation(value = "팀 댓글 상세 조회 API")
     @GetMapping("/reply/{team_reply_id}")
     public ResponseEntity<?> getReply(
             @PathVariable(value = "team_reply_id")Long teamReplyId){
         TeamReplyDetail teamReplyDetail = teamBoardService.getTeamReply(teamReplyId);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(teamReplyDetail)
+                .build());
+    }
+
+    @ApiOperation(value = "팀 게시글 추천 API")
+    @PutMapping("/article/recommend")
+    public ResponseEntity<?> updateTeamArticleRecommend(TeamArticleRecommendRequest teamArticleRecommendRequest){
+        teamBoardService.updateTeamArticleRecommend(teamArticleRecommendRequest);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
+                .build());
+    }
+
+    @ApiOperation(value = "팀 댓글 추천 API")
+    @PutMapping("/reply/recommend")
+    public ResponseEntity<?> updateTeamReplyRecommend(TeamReplyRecommendRequest teamReplyRecommendRequest){
+        teamBoardService.updateTeamReplyRecommend(teamReplyRecommendRequest);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
                 .build());
     }
 }

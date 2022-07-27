@@ -36,6 +36,7 @@ public class Crew extends BaseEntity {
     private CrewLevel crewLevel;
 
     @Column(name = "is_activated")
+    @Enumerated(value = EnumType.STRING)
     private Yn isActivated;
 
     @Builder(builderClassName = "of",builderMethodName = "of")

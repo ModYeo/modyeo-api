@@ -6,6 +6,7 @@ import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.common.entity.BaseEntity;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,5 +31,27 @@ public class TeamArticleRecommend extends BaseEntity {
     private TeamArticle teamArticle;
 
     @Column(name = "recommend_yn")
+    @Enumerated(value = EnumType.STRING)
     private Yn recommendYn;
+
+    @Builder(builderClassName = "of",builderMethodName = "of")
+    public TeamArticleRecommend(Long id, Member member, TeamArticle teamArticle, Yn recommendYn) {
+        this.id = id;
+        this.member = member;
+        this.teamArticle = teamArticle;
+        this.recommendYn = recommendYn;
+    }
+
+    @Builder(builderClassName = "createRecommendBuilder",builderMethodName = "createRecommendBuilder")
+    public static TeamArticleRecommend createRecommend(Member member, TeamArticle teamArticle){
+        return of()
+                .member(member)
+                .teamArticle(teamArticle)
+                .recommendYn(Yn.Y)
+                .build();
+    }
+
+    public void changeRecommendYn(Yn recommendYn) {
+        this.recommendYn = recommendYn;
+    }
 }

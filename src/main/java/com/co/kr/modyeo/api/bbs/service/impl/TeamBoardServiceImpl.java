@@ -1,19 +1,31 @@
 package com.co.kr.modyeo.api.bbs.service.impl;
 
+import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamArticleRecommendRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamArticleRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamReplyRecommendRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamReplyDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.TeamArticleSearch;
+import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamArticle;
+import com.co.kr.modyeo.api.bbs.domain.entity.TeamReply;
+import com.co.kr.modyeo.api.bbs.domain.entity.link.ArticleRecommend;
+import com.co.kr.modyeo.api.bbs.domain.entity.link.TeamArticleRecommend;
+import com.co.kr.modyeo.api.bbs.domain.entity.link.TeamReplyRecommend;
+import com.co.kr.modyeo.api.bbs.repository.TeamArticleRecommendRepository;
 import com.co.kr.modyeo.api.bbs.repository.TeamArticleRepository;
+import com.co.kr.modyeo.api.bbs.repository.TeamReplyRecommendRepository;
 import com.co.kr.modyeo.api.bbs.repository.TeamReplyRepository;
 import com.co.kr.modyeo.api.bbs.service.TeamBoardService;
+import com.co.kr.modyeo.api.member.domain.entity.Member;
+import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.api.team.repository.TeamRepository;
 import com.co.kr.modyeo.common.exception.ApiException;
+import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
 import com.co.kr.modyeo.common.exception.code.TeamErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +33,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -32,6 +46,12 @@ public class TeamBoardServiceImpl implements TeamBoardService {
     private final TeamReplyRepository teamReplyRepository;
 
     private final TeamRepository teamRepository;
+
+    private final MemberRepository memberRepository;
+
+    private final TeamArticleRecommendRepository teamArticleRecommendRepository;
+
+    private final TeamReplyRecommendRepository teamReplyRecommendRepository;
 
     @Override
     @Transactional
@@ -99,22 +119,116 @@ public class TeamBoardServiceImpl implements TeamBoardService {
     }
 
     @Override
+    @Transactional
     public void createTeamReply(TeamReplyRequest teamReplyRequest) {
+        TeamArticle teamArticle = teamArticleRepository.findById(teamReplyRequest.getArticleId()).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode("NOT_FOUND_ARTICLE")
+                        .errorMessage("찾을 수 없는 게시글 입니다.")
+                        .build());
 
+        TeamReply teamReply = teamReplyRequest.getReplyDepth() == 0?
+                TeamReplyRequest.toTeamReply(teamArticle, teamReplyRequest.getContent()) : TeamReplyRequest.toTeamNestedReply(teamArticle,teamReplyRequest.getContent(),teamReplyRequest.getReplyGroup());
+        teamReplyRepository.save(teamReply);
     }
 
     @Override
+    @Transactional
     public void updateTeamReply(TeamReplyRequest teamReplyRequest) {
+        TeamReply teamReply = teamReplyRepository.findById(teamReplyRequest.getReplyId()).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode("NOT_FOUND_REPLY")
+                        .errorMessage("찾을 수 없는 댓글 입니다.")
+                        .build());
 
+        teamReply.changeTeamReply(teamReplyRequest.getContent());
     }
 
     @Override
+    @Transactional
     public void deleteTeamReply(Long teamReplyId) {
+        TeamReply teamReply = teamReplyRepository.findById(teamReplyId).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode("NOT_FOUND_REPLY")
+                        .errorMessage("찾을 수 없는 댓글 입니다.")
+                        .build());
 
+        teamReplyRepository.delete(teamReply);
     }
 
     @Override
     public TeamReplyDetail getTeamReply(Long teamReplyId) {
-        return null;
+        TeamReply teamReply = teamReplyRepository.findById(teamReplyId).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode("NOT_FOUND_REPLY")
+                        .errorMessage("찾을 수 없는 댓글 입니다.")
+                        .build());
+
+        List<TeamReply> nestedTeamReplyList = teamReplyRepository.findByReplyGroup(teamReply.getReplyGroup());
+        return TeamReplyDetail.toDto(teamReply,nestedTeamReplyList);
+    }
+
+    @Override
+    public void updateTeamArticleRecommend(TeamArticleRecommendRequest articleRecommendRequest) {
+        Member member = memberRepository.findById(articleRecommendRequest.getMemberId()).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
+                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
+        TeamArticle teamArticle = teamArticleRepository.findById(articleRecommendRequest.getTeamArticleId()).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage("찾을 수 없는 게시글 입니다.")
+                        .errorCode("NOT_FOUND_ARTICLE")
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
+        TeamArticleRecommend findTeamArticleRecommend = teamArticleRecommendRepository.findByMemberAndTeamArticle(member,teamArticle);
+
+        if (findTeamArticleRecommend == null){
+            TeamArticleRecommend teamArticleRecommend = TeamArticleRecommend.createRecommendBuilder()
+                    .member(member)
+                    .teamArticle(teamArticle)
+                    .build();
+
+            teamArticleRecommendRepository.save(teamArticleRecommend);
+        } else{
+            findTeamArticleRecommend.changeRecommendYn(articleRecommendRequest.getRecommendYn());
+        }
+    }
+
+    @Override
+    public void updateTeamReplyRecommend(TeamReplyRecommendRequest replyRecommendRequest) {
+        Member member = memberRepository.findById(replyRecommendRequest.getMemberId()).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
+                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
+        TeamReply teamReply = teamReplyRepository.findById(replyRecommendRequest.getTeamReplyId()).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage("찾을 수 없는 게시글 입니다.")
+                        .errorCode("NOT_FOUND_ARTICLE")
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
+        TeamReplyRecommend findTeamReplyRecommend = teamReplyRecommendRepository.findByMemberAndTeamReply(member,teamReply);
+
+        if (findTeamReplyRecommend == null){
+            TeamReplyRecommend teamReplyRecommend = TeamReplyRecommend.createRecommendBuilder()
+                    .member(member)
+                    .teamReply(teamReply)
+                    .build();
+
+            teamReplyRecommendRepository.save(teamReplyRecommend);
+        } else{
+            findTeamReplyRecommend.changeRecommendYn(replyRecommendRequest.getRecommendYn());
+        }
     }
 }

@@ -32,6 +32,7 @@ public class ReplyRecommend extends BaseEntity {
     private Reply reply;
 
     @Column(name = "recommend_yn")
+    @Enumerated(value = EnumType.STRING)
     private Yn recommendYn;
 
     @Builder(builderClassName = "of",builderMethodName = "of")
