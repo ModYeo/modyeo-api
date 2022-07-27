@@ -22,7 +22,7 @@ public class TeamReplyRequest {
 
     @Builder(builderClassName = "of", builderMethodName = "of")
     public TeamReplyRequest(Long id, Long articleId, String content, Integer replyDepth, Long replyGroup) {
-        this.id = id;
+        this.replyId = id;
         this.articleId = articleId;
         this.content = content;
         this.replyDepth = replyDepth;
