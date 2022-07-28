@@ -1,12 +1,10 @@
 package com.co.kr.modyeo.api.member.domain.entity;
 
-import com.co.kr.modyeo.api.member.domain.entity.embed.Address;
+import com.co.kr.modyeo.api.member.domain.entity.link.MemberCategory;
 import com.co.kr.modyeo.api.member.domain.enumerate.Authority;
 import com.co.kr.modyeo.api.member.domain.enumerate.Sex;
 import com.co.kr.modyeo.api.team.domain.entity.link.Crew;
 import com.co.kr.modyeo.common.entity.BaseEntity;
-import com.co.kr.modyeo.api.member.domain.entity.link.MemberCategory;
-import com.co.kr.modyeo.api.team.domain.entity.link.MemberTeam;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +20,8 @@ import java.util.List;
 @Table(name = "MEMBER")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
 
@@ -43,11 +42,11 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member")
     private List<Crew> teamList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<MemberCategory> interestCategoryList = new ArrayList<>();
 
-    @Builder(buildMethodName = "createMemberBuilder",builderClassName = "createMemberBuilder")
-    public Member(Long id, String email, String password, Authority authority,String nickname, Sex sex) {
+    @Builder(buildMethodName = "createMemberBuilder", builderClassName = "createMemberBuilder")
+    public Member(Long id, String email, String password, Authority authority, String nickname, Sex sex) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -56,7 +55,7 @@ public class Member extends BaseEntity {
         this.sex = sex;
     }
 
-    @Builder(builderClassName = "of",builderMethodName = "of")
+    @Builder(builderClassName = "of", builderMethodName = "of")
     public Member(Long id,
                   String email,
                   String password,
@@ -77,11 +76,11 @@ public class Member extends BaseEntity {
         this.interestCategoryList = interestCategoryList;
     }
 
-    public void changePassword(String password, PasswordEncoder passwordEncoder){
+    public void changePassword(String password, PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(password);
     }
 
-    public void changeNickname(String nickname){
+    public void changeNickname(String nickname) {
         this.nickname = nickname;
     }
 }

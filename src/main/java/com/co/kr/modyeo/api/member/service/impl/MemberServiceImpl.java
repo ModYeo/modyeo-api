@@ -40,7 +40,7 @@ public class MemberServiceImpl implements MemberService {
                         .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
                         .build());
 
-        if (!memberCategoryRequest.getCategoryIdList().isEmpty()){
+        if (!memberCategoryRequest.getCategoryIdList().isEmpty()) {
             List<MemberCategory> memberCategoryList = categoryRepository.findByCategoryIds(memberCategoryRequest.getCategoryIdList())
                     .stream().map(category -> MemberCategory.createMemberCategoryBuilder()
                             .member(member)

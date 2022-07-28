@@ -15,13 +15,13 @@ public class CategoryCreateRequest {
     private Yn useYn;
 
 
-    @Builder(builderMethodName = "of",builderClassName = "of")
+    @Builder(builderMethodName = "of", builderClassName = "of")
     public CategoryCreateRequest(String name, Yn useYn) {
         this.name = name;
         this.useYn = useYn;
     }
 
-    public static Category createCategory(CategoryCreateRequest categoryCreateRequest){
+    public static Category createCategory(CategoryCreateRequest categoryCreateRequest) {
         return Category.createCategoryBuilder()
                 .name(categoryCreateRequest.getName())
                 .build();

@@ -26,7 +26,7 @@ public class TeamReplyResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
 
-    @Builder(builderClassName = "of",builderMethodName = "of")
+    @Builder(builderClassName = "of", builderMethodName = "of")
     public TeamReplyResponse(Long replyId, Long teamArticleId, String content, Integer replyDepth, Long replyGroup, String createBy, LocalDateTime createdTime) {
         this.replyId = replyId;
         this.teamArticleId = teamArticleId;
@@ -37,7 +37,7 @@ public class TeamReplyResponse {
         this.createdTime = createdTime;
     }
 
-    public static TeamReplyResponse toDto(TeamReply reply){
+    public static TeamReplyResponse toDto(TeamReply reply) {
         return TeamReplyResponse.of()
                 .replyId(reply.getId())
                 .teamArticleId(reply.getTeamArticle().getId())

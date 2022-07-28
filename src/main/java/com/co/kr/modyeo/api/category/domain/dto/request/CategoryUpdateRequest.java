@@ -15,7 +15,7 @@ public class CategoryUpdateRequest {
 
     private Yn useYn;
 
-    @Builder(builderClassName = "of",builderMethodName = "of")
+    @Builder(builderClassName = "of", builderMethodName = "of")
     public CategoryUpdateRequest(Long categoryId, String name, Yn useYn) {
         this.categoryId = categoryId;
         this.name = name;

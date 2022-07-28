@@ -11,12 +11,12 @@ public class JsonResultData<T> {
     private ErrorInfo error;
 
     @Getter
-    public static class ErrorInfo{
+    public static class ErrorInfo {
         private String code;
         private String message;
 
         @Builder
-        public ErrorInfo(String code, String message){
+        public ErrorInfo(String code, String message) {
             this.code = code;
             this.message = message;
         }

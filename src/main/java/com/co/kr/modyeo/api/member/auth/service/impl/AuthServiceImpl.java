@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.member.auth.service.impl;
 
 import com.co.kr.modyeo.api.member.auth.domain.dto.*;
 import com.co.kr.modyeo.api.member.auth.provider.JwtTokenProvider;
+import com.co.kr.modyeo.api.member.auth.service.AuthService;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.common.exception.ApiException;
@@ -9,7 +10,6 @@ import com.co.kr.modyeo.common.exception.CustomAuthException;
 import com.co.kr.modyeo.common.exception.code.AuthErrorCode;
 import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
 import com.co.kr.modyeo.common.result.JsonResultData;
-import com.co.kr.modyeo.api.member.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -37,7 +37,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public MemberResponseDto signup(MemberJoinDto memberJoinDto) {
-        if (memberRepository.existsByEmail(memberJoinDto.getEmail())){
+        if (memberRepository.existsByEmail(memberJoinDto.getEmail())) {
             throw new CustomAuthException(JsonResultData
                     .failResultBuilder()
                     .errorCode(AuthErrorCode.ALREADY_JOIN_USER.getCode())
@@ -45,7 +45,7 @@ public class AuthServiceImpl implements AuthService {
                     .build());
         }
 
-        Member member = MemberJoinDto.toMember(memberJoinDto,passwordEncoder);
+        Member member = MemberJoinDto.toMember(memberJoinDto, passwordEncoder);
         member = memberRepository.save(member);
 
         return MemberResponseDto.toResponse(member);
@@ -82,7 +82,7 @@ public class AuthServiceImpl implements AuthService {
 
         String refreshToken = redisTemplate.opsForValue().get("RT:" + authentication.getName());
         assert refreshToken != null;
-        if (!refreshToken.equals(tokenRequestDto.getRefreshToken())){
+        if (!refreshToken.equals(tokenRequestDto.getRefreshToken())) {
             throw new CustomAuthException(JsonResultData
                     .failResultBuilder()
                     .errorCode(AuthErrorCode.NOT_MATCH_TOKEN_INFO.getCode())
@@ -102,7 +102,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void logout(TokenRequestDto tokenRequestDto) {
-        if(!jwtTokenProvider.validateToken(tokenRequestDto.getAccessToken())){
+        if (!jwtTokenProvider.validateToken(tokenRequestDto.getAccessToken())) {
             throw new CustomAuthException(JsonResultData
                     .failResultBuilder()
                     .errorCode(AuthErrorCode.NOT_VALID_TOKEN.getCode())
@@ -112,13 +112,13 @@ public class AuthServiceImpl implements AuthService {
 
         Authentication authentication = jwtTokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
 
-        if(redisTemplate.opsForValue().get("RT:" + authentication.getName()) != null){
-            redisTemplate.delete("RT:"+ authentication.getName());
+        if (redisTemplate.opsForValue().get("RT:" + authentication.getName()) != null) {
+            redisTemplate.delete("RT:" + authentication.getName());
         }
 
         Long expiration = jwtTokenProvider.getExpiration(tokenRequestDto.getAccessToken());
         redisTemplate.opsForValue()
-                .set(tokenRequestDto.getAccessToken(),"logout", expiration, TimeUnit.MILLISECONDS);
+                .set(tokenRequestDto.getAccessToken(), "logout", expiration, TimeUnit.MILLISECONDS);
     }
 
     @Override

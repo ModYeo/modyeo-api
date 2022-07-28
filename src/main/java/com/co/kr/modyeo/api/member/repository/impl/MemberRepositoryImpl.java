@@ -1,14 +1,10 @@
 package com.co.kr.modyeo.api.member.repository.impl;
 
-import com.co.kr.modyeo.api.member.domain.dto.response.MemberDetail;
-import com.co.kr.modyeo.api.member.domain.dto.response.QMemberDetail;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.repository.custom.MemberCustomRepository;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
-import java.util.List;
 import java.util.Optional;
 
 import static com.co.kr.modyeo.api.member.domain.entity.QMember.member;
@@ -34,7 +30,7 @@ public class MemberRepositoryImpl extends Querydsl4RepositorySupport implements 
     }
 
     private BooleanExpression memberIdEq(Long memberId) {
-        return memberId != null? member.id.eq(memberId) : null;
+        return memberId != null ? member.id.eq(memberId) : null;
     }
 
 }

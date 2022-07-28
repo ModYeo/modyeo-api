@@ -24,7 +24,7 @@ public class TeamArticleRequest {
 
     private Yn isHidden;
 
-    @Builder(builderClassName = "of",builderMethodName = "of")
+    @Builder(builderClassName = "of", builderMethodName = "of")
     public TeamArticleRequest(Long articleId, String title, String content, String filePath, Long hitCount, Yn isHidden) {
         this.articleId = articleId;
         this.title = title;
@@ -34,7 +34,7 @@ public class TeamArticleRequest {
         this.isHidden = isHidden;
     }
 
-    public static TeamArticle toEntity(TeamArticleRequest articleRequest){
+    public static TeamArticle toEntity(TeamArticleRequest articleRequest) {
         return TeamArticle.of()
                 .id(articleRequest.articleId)
                 .title(articleRequest.title)
@@ -44,7 +44,7 @@ public class TeamArticleRequest {
                 .build();
     }
 
-    public static TeamArticle createArticle(TeamArticleRequest articleRequest, Team team){
+    public static TeamArticle createArticle(TeamArticleRequest articleRequest, Team team) {
         return TeamArticle.createTeamArticleBuilder()
                 .content(articleRequest.getContent())
                 .team(team)

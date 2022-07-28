@@ -10,7 +10,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -34,7 +33,7 @@ public class MemberDetail {
     private List<CategoryResponse> categoryResponseList;
 
     @QueryProjection
-    @Builder(builderClassName = "of",builderMethodName = "of")
+    @Builder(builderClassName = "of", builderMethodName = "of")
     public MemberDetail(Long memberId, String username, Sex sex, List<TeamResponse> teamResponseList, List<CategoryResponse> categoryResponseList, LocalDateTime createdTime) {
         this.memberId = memberId;
         this.username = username;
@@ -44,7 +43,7 @@ public class MemberDetail {
         this.categoryResponseList = categoryResponseList;
     }
 
-    public static MemberDetail createMemberDetail(Member member){
+    public static MemberDetail createMemberDetail(Member member) {
         return of()
                 .memberId(member.getId())
                 .username(member.getUsername())

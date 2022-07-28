@@ -19,10 +19,10 @@ public class TeamArticleRepositoryImpl extends Querydsl4RepositorySupport implem
 
     @Override
     public Slice<TeamArticle> searchTeamArticle(TeamArticleSearch teamArticleSearch, PageRequest pageRequest) {
-        return applySlicing(pageRequest,contentQuery ->
+        return applySlicing(pageRequest, contentQuery ->
                 contentQuery.select(teamArticle)
                         .from(teamArticle)
-                        .innerJoin(teamArticle.team,team)
+                        .innerJoin(teamArticle.team, team)
                         .fetchJoin()
                         .where(articleTitleLike(teamArticleSearch.getTitle()),
                                 articleContentLike(teamArticleSearch.getContent()),

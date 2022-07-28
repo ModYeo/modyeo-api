@@ -1,7 +1,6 @@
 package com.co.kr.modyeo.api.member.auth.filter;
 
 import com.co.kr.modyeo.api.member.auth.provider.JwtTokenProvider;
-import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.AuthErrorCode;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -9,7 +8,6 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.ObjectUtils;
@@ -34,25 +32,25 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String token = resolveToken((HttpServletRequest)request);
-        try{
-            if (StringUtils.hasText(token) && jwtTokenProvider.validateTokenFilter(token)){
-                String isLogout = (String)redisTemplate.opsForValue().get(token);
+        String token = resolveToken((HttpServletRequest) request);
+        try {
+            if (StringUtils.hasText(token) && jwtTokenProvider.validateTokenFilter(token)) {
+                String isLogout = (String) redisTemplate.opsForValue().get(token);
                 if (ObjectUtils.isEmpty(isLogout)) {
                     Authentication authentication = jwtTokenProvider.getAuthentication(token);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
 
-        }catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e){
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             request.setAttribute("exception", AuthErrorCode.WRONG_TYPE_TOKEN.getCode());
-        }catch (ExpiredJwtException e) {
+        } catch (ExpiredJwtException e) {
             request.setAttribute("exception", AuthErrorCode.EXPIRED_TOKEN.getCode());
         } catch (UnsupportedJwtException e) {
             request.setAttribute("exception", AuthErrorCode.UNSUPPORTED_TOKEN.getCode());
         } catch (IllegalArgumentException e) {
             request.setAttribute("exception", AuthErrorCode.WRONG_TOKEN.getCode());
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error("================================================");
             log.error("JwtFilter - doFilterInternal() 오류발생");
             log.error("token : {}", token);
@@ -64,12 +62,12 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             request.setAttribute("exception", AuthErrorCode.UNKNOWN_ERROR.getCode());
         }
 
-        chain.doFilter(request,response);
+        chain.doFilter(request, response);
     }
 
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)){
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
             return bearerToken.substring(7);
         }
         return null;

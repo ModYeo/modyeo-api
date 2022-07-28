@@ -1,7 +1,5 @@
 package com.co.kr.modyeo.api.bbs.domain.dto.response;
 
-import com.co.kr.modyeo.api.bbs.domain.entity.Reply;
-import com.co.kr.modyeo.api.bbs.domain.entity.TeamArticle;
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamReply;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
@@ -40,7 +38,7 @@ public class TeamReplyDetail {
     private List<NestedTeamReplyDetail> nestedTeamReplyDetails = new ArrayList<>();
 
     @Data
-    static class NestedTeamReplyDetail{
+    static class NestedTeamReplyDetail {
 
         private Long teamReplyId;
 
@@ -62,16 +60,16 @@ public class TeamReplyDetail {
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
         private LocalDateTime updatedTime;
 
-        @Builder(builderClassName = "of",builderMethodName = "of")
+        @Builder(builderClassName = "of", builderMethodName = "of")
         public NestedTeamReplyDetail(Long teamReplyId,
-                                 Long teamArticleId,
-                                 String content,
-                                 Integer replyDepth,
-                                 Long replyGroup,
-                                 String createBy,
-                                 String updatedBy,
-                                 LocalDateTime createdTime,
-                                 LocalDateTime updatedTime) {
+                                     Long teamArticleId,
+                                     String content,
+                                     Integer replyDepth,
+                                     Long replyGroup,
+                                     String createBy,
+                                     String updatedBy,
+                                     LocalDateTime createdTime,
+                                     LocalDateTime updatedTime) {
             this.teamReplyId = teamReplyId;
             this.teamArticleId = teamArticleId;
             this.content = content;
@@ -83,7 +81,7 @@ public class TeamReplyDetail {
             this.updatedTime = updatedTime;
         }
 
-        public static NestedTeamReplyDetail toDto(TeamReply teamReply){
+        public static NestedTeamReplyDetail toDto(TeamReply teamReply) {
             return of()
                     .teamReplyId(teamReply.getId())
                     .teamArticleId(teamReply.getTeamArticle().getId())
@@ -98,17 +96,17 @@ public class TeamReplyDetail {
         }
     }
 
-    @Builder(builderClassName = "of",builderMethodName = "of")
+    @Builder(builderClassName = "of", builderMethodName = "of")
     public TeamReplyDetail(Long teamReplyId,
-                       Long teamArticleId,
-                       String content,
-                       Integer replyDepth,
-                       Long replyGroup,
-                       String createBy,
-                       String updatedBy,
-                       LocalDateTime createdTime,
-                       LocalDateTime updatedTime,
-                       List<NestedTeamReplyDetail> nestedTeamReplyDetails) {
+                           Long teamArticleId,
+                           String content,
+                           Integer replyDepth,
+                           Long replyGroup,
+                           String createBy,
+                           String updatedBy,
+                           LocalDateTime createdTime,
+                           LocalDateTime updatedTime,
+                           List<NestedTeamReplyDetail> nestedTeamReplyDetails) {
         this.teamReplyId = teamReplyId;
         this.teamArticleId = teamArticleId;
         this.content = content;
@@ -121,7 +119,7 @@ public class TeamReplyDetail {
         this.nestedTeamReplyDetails = nestedTeamReplyDetails;
     }
 
-    public static TeamReplyDetail toDto(TeamReply teamReply, List<TeamReply> nestedTeamReply){
+    public static TeamReplyDetail toDto(TeamReply teamReply, List<TeamReply> nestedTeamReply) {
         return of()
                 .teamReplyId(teamReply.getId())
                 .teamArticleId(teamReply.getTeamArticle().getId())

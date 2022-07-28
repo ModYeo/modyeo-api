@@ -40,7 +40,7 @@ public class ArticleResponse {
     private LocalDateTime createdTime;
 
     @QueryProjection
-    @Builder(builderClassName = "of",builderMethodName = "of")
+    @Builder(builderClassName = "of", builderMethodName = "of")
     public ArticleResponse(Long articleId,
                            String title,
                            String content,

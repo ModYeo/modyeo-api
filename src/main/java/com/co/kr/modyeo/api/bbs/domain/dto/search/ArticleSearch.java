@@ -24,13 +24,13 @@ public class ArticleSearch {
 
     private Sort.Direction direction;
 
-    @Builder(builderMethodName = "of",builderClassName = "of")
+    @Builder(builderMethodName = "of", builderClassName = "of")
     public ArticleSearch(String title, String content, Integer limit, Integer offset, String orderBy, Sort.Direction direction) {
         this.title = title;
         this.content = content;
-        this.limit = limit != null? limit : 20;
-        this.offset = offset != null? offset : 0;
-        this.orderBy = orderBy != null? orderBy : "id";
-        this.direction = direction != null? direction : Sort.Direction.DESC;
+        this.limit = limit != null ? limit : 20;
+        this.offset = offset != null ? offset : 0;
+        this.orderBy = orderBy != null ? orderBy : "id";
+        this.direction = direction != null ? direction : Sort.Direction.DESC;
     }
 }

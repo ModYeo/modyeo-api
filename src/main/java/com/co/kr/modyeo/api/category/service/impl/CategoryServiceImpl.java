@@ -50,7 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
                         .errorCode(CategoryErrorCode.NOT_FOUND_CATEGORY.getCode())
                         .build());
 
-        category.changeCategory(categoryUpdateRequest.getName(),categoryUpdateRequest.getUseYn());
+        category.changeCategory(categoryUpdateRequest.getName(), categoryUpdateRequest.getUseYn());
     }
 
     @Override
@@ -68,16 +68,16 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDetail getCategory(Long categoryId) {
         return CategoryDetail.toDto(categoryRepository.findById(categoryId).orElseThrow(
-                ()-> ApiException.builder()
+                () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
                         .errorMessage(CategoryErrorCode.NOT_FOUND_CATEGORY.getMessage())
                         .errorCode(CategoryErrorCode.NOT_FOUND_CATEGORY.getCode())
                         .build()));
     }
 
-    private void overlapCategoryCheck(CategoryCreateRequest categoryCreateRequest){
+    private void overlapCategoryCheck(CategoryCreateRequest categoryCreateRequest) {
         Category findCategory = categoryRepository.findByName(categoryCreateRequest.getName());
-        if (findCategory != null){
+        if (findCategory != null) {
             throw ApiException.builder()
                     .status(HttpStatus.BAD_REQUEST)
                     .errorCode(CategoryErrorCode.OVERLAP_CATEGORY.getCode())
@@ -87,9 +87,9 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
-    private void overlapCategoryCheck(CategoryUpdateRequest categoryUpdateRequest){
+    private void overlapCategoryCheck(CategoryUpdateRequest categoryUpdateRequest) {
         Category findCategory = categoryRepository.findByName(categoryUpdateRequest.getName());
-        if (findCategory != null){
+        if (findCategory != null) {
             throw ApiException.builder()
                     .status(HttpStatus.BAD_REQUEST)
                     .errorCode(CategoryErrorCode.OVERLAP_CATEGORY.getCode())

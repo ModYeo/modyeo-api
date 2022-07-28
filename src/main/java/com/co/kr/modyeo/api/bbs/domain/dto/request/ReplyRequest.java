@@ -19,14 +19,14 @@ public class ReplyRequest {
 
     private Long replyGroup;
 
-    public static Reply toReply(ReplyRequest replyRequest, Article article){
+    public static Reply toReply(ReplyRequest replyRequest, Article article) {
         return Reply.createReplyBuilder()
                 .article(article)
                 .content(replyRequest.getContent())
                 .build();
     }
 
-    public static Reply toNestedReply(ReplyRequest replyRequest, Article article){
+    public static Reply toNestedReply(ReplyRequest replyRequest, Article article) {
         return Reply.createNestedReplyBuilder()
                 .article(article)
                 .content(replyRequest.getContent())

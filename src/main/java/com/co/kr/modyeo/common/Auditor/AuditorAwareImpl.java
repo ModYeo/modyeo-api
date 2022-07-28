@@ -1,4 +1,4 @@
-package com.co.kr.modyeo.config.Auditor;
+package com.co.kr.modyeo.common.Auditor;
 
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.GrantedAuthority;

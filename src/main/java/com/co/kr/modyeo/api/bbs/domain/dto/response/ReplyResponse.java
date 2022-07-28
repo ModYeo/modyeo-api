@@ -27,7 +27,7 @@ public class ReplyResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
 
-    @Builder(builderClassName = "of",builderMethodName = "of")
+    @Builder(builderClassName = "of", builderMethodName = "of")
     public ReplyResponse(Long replyId, Long articleId, String content, Integer replyDepth, Long replyGroup, String createBy, LocalDateTime createdTime) {
         this.replyId = replyId;
         this.articleId = articleId;
@@ -38,7 +38,7 @@ public class ReplyResponse {
         this.createdTime = createdTime;
     }
 
-    public static ReplyResponse toDto(Reply reply){
+    public static ReplyResponse toDto(Reply reply) {
         return ReplyResponse.of()
                 .replyId(reply.getId())
                 .articleId(reply.getArticle().getId())

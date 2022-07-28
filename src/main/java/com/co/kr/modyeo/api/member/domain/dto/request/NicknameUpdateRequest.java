@@ -12,7 +12,7 @@ public class NicknameUpdateRequest {
 
     private String nickname;
 
-    @Builder(builderClassName = "of",builderMethodName = "of")
+    @Builder(builderClassName = "of", builderMethodName = "of")
     public NicknameUpdateRequest(Long memberId, String nickname) {
         this.memberId = memberId;
         this.nickname = nickname;

@@ -31,28 +31,22 @@ public class MemberJoinDto {
 
     private String nickname;
 
-//    @Embedded
-//    private Address address;
-
     @ApiModelProperty(value = "성별", dataType = "string", required = true)
     private Sex sex;
-
-//    private List<CategoryRequest> categoryRequests = new ArrayList<>();
 
     public MemberJoinDto(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
-    public MemberJoinDto(String email, String password, String username, Address address, Sex sex) {
+    public MemberJoinDto(String email, String password, String username, Sex sex) {
         this.email = email;
         this.password = password;
         this.username = username;
-//        this.address = address;
         this.sex = sex;
     }
 
-    public static Member toMember(MemberJoinDto memberJoinDto, PasswordEncoder passwordEncoder){
+    public static Member toMember(MemberJoinDto memberJoinDto, PasswordEncoder passwordEncoder) {
         return Member.of()
                 .email(memberJoinDto.email)
                 .password(passwordEncoder.encode(memberJoinDto.password))
@@ -63,7 +57,7 @@ public class MemberJoinDto {
                 .build();
     }
 
-    public UsernamePasswordAuthenticationToken toAuthentication(){
+    public UsernamePasswordAuthenticationToken toAuthentication() {
         return new UsernamePasswordAuthenticationToken(email, password);
     }
 }

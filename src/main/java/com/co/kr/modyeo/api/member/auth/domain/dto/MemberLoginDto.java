@@ -1,6 +1,5 @@
 package com.co.kr.modyeo.api.member.auth.domain.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,7 +22,7 @@ public class MemberLoginDto {
         this.password = password;
     }
 
-    public UsernamePasswordAuthenticationToken toAuthentication(){
+    public UsernamePasswordAuthenticationToken toAuthentication() {
         return new UsernamePasswordAuthenticationToken(email, password);
     }
 }

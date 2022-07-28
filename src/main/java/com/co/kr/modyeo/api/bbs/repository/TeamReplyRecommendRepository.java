@@ -5,6 +5,6 @@ import com.co.kr.modyeo.api.bbs.domain.entity.link.TeamReplyRecommend;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TeamReplyRecommendRepository extends JpaRepository<TeamReplyRecommend,Long> {
+public interface TeamReplyRecommendRepository extends JpaRepository<TeamReplyRecommend, Long> {
     TeamReplyRecommend findByMemberAndTeamReply(Member member, TeamReply teamReply);
 }

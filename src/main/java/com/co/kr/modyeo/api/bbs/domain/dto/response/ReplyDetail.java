@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.tomcat.jni.Local;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,7 +37,7 @@ public class ReplyDetail {
     private List<NestedReplyDetail> nestedReplyDetails;
 
     @Data
-    static class NestedReplyDetail{
+    static class NestedReplyDetail {
 
         private Long replyId;
 
@@ -60,7 +59,7 @@ public class ReplyDetail {
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
         private LocalDateTime updatedTime;
 
-        @Builder(builderClassName = "of",builderMethodName = "of")
+        @Builder(builderClassName = "of", builderMethodName = "of")
         public NestedReplyDetail(Long replyId,
                                  Long articleId,
                                  String content,
@@ -81,7 +80,7 @@ public class ReplyDetail {
             this.updatedTime = updatedTime;
         }
 
-        public static NestedReplyDetail toDto(Reply reply){
+        public static NestedReplyDetail toDto(Reply reply) {
             return of()
                     .replyId(reply.getId())
                     .articleId(reply.getArticle().getId())
@@ -96,7 +95,7 @@ public class ReplyDetail {
         }
     }
 
-    @Builder(builderClassName = "of",builderMethodName = "of")
+    @Builder(builderClassName = "of", builderMethodName = "of")
     public ReplyDetail(Long replyId,
                        Long articleId,
                        String content,
@@ -119,7 +118,7 @@ public class ReplyDetail {
         this.nestedReplyDetails = nestedReplyDetails;
     }
 
-    public static ReplyDetail toDto(Reply reply, List<Reply> nestedReply){
+    public static ReplyDetail toDto(Reply reply, List<Reply> nestedReply) {
         return of()
                 .replyId(reply.getId())
                 .articleId(reply.getArticle().getId())

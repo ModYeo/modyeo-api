@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface TeamReplyRepository extends JpaRepository<TeamReply,Long> {
+public interface TeamReplyRepository extends JpaRepository<TeamReply, Long> {
     List<TeamReply> findByReplyGroup(Long ReplyGroup);
 }

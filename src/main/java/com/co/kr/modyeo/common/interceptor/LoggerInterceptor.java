@@ -1,23 +1,17 @@
 package com.co.kr.modyeo.common.interceptor;
 
-import com.co.kr.modyeo.api.member.auth.provider.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
-import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 @Slf4j
 @Component
@@ -33,8 +27,8 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         log.info("====================== START ======================");
-        log.info("Request URL : {}",request.getRequestURI());
-        if (authentication != null){
+        log.info("Request URL : {}", request.getRequestURI());
+        if (authentication != null) {
             log.info("Request User : {}", authentication.getName());
         }
 

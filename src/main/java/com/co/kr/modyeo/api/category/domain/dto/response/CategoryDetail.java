@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -30,7 +29,7 @@ public class CategoryDetail {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime updatedTime;
 
-    @Builder(builderMethodName = "of",builderClassName = "of")
+    @Builder(builderMethodName = "of", builderClassName = "of")
     public CategoryDetail(Long categoryId, String categoryName, Yn useYn, String createdBy, LocalDateTime createdTime, String updatedBy, LocalDateTime updatedTime) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
@@ -41,7 +40,7 @@ public class CategoryDetail {
         this.updatedTime = updatedTime;
     }
 
-    public static CategoryDetail toDto(Category category){
+    public static CategoryDetail toDto(Category category) {
         return of()
                 .categoryId(category.getId())
                 .categoryName(category.getName())

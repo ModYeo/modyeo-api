@@ -1,14 +1,14 @@
 package com.co.kr.modyeo.api.bbs.service;
 
-import com.co.kr.modyeo.api.bbs.domain.dto.request.*;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyDetail;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamReplyDetail;
-import com.co.kr.modyeo.api.bbs.domain.dto.search.TeamArticleSearch;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamArticleRecommendRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamArticleRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamReplyRecommendRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleResponse;
+import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamReplyDetail;
+import com.co.kr.modyeo.api.bbs.domain.dto.search.TeamArticleSearch;
 import org.springframework.data.domain.Slice;
-
-import java.util.List;
 
 public interface TeamBoardService {
     void createTeamArticle(TeamArticleRequest teamArticleRequest);

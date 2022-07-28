@@ -1,6 +1,5 @@
 package com.co.kr.modyeo.api.member.auth.handler;
 
-import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.AuthErrorCode;
 import com.co.kr.modyeo.common.result.JsonResultData;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,8 +12,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 @Slf4j
@@ -23,22 +20,21 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         String exception = (String) request.getAttribute("exception");
 
-        if(exception == null) {
+        if (exception == null) {
             setResponse(response, AuthErrorCode.UNKNOWN_ERROR);
         }
         //잘못된 타입의 토큰인 경우
-        else if(exception.equals(AuthErrorCode.WRONG_TYPE_TOKEN.getCode())) {
+        else if (exception.equals(AuthErrorCode.WRONG_TYPE_TOKEN.getCode())) {
             setResponse(response, AuthErrorCode.WRONG_TYPE_TOKEN);
         }
         //토큰 만료된 경우
-        else if(exception.equals(AuthErrorCode.EXPIRED_TOKEN.getCode())) {
+        else if (exception.equals(AuthErrorCode.EXPIRED_TOKEN.getCode())) {
             setResponse(response, AuthErrorCode.EXPIRED_TOKEN);
         }
         //지원되지 않는 토큰인 경우
-        else if(exception.equals(AuthErrorCode.UNSUPPORTED_TOKEN.getCode())) {
+        else if (exception.equals(AuthErrorCode.UNSUPPORTED_TOKEN.getCode())) {
             setResponse(response, AuthErrorCode.UNSUPPORTED_TOKEN);
-        }
-        else {
+        } else {
             setResponse(response, AuthErrorCode.ACCESS_DENIED);
         }
     }

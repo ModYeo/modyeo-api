@@ -1,7 +1,7 @@
 package com.co.kr.modyeo.api.bbs.service;
 
-import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRecommendRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyRecommendRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
