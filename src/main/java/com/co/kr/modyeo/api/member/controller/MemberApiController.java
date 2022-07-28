@@ -21,7 +21,7 @@ public class MemberApiController {
 
     @ApiOperation(value = "회원 카테고리 정보 생성 API")
     @PostMapping("")
-    public ResponseEntity<?> createMemberInfo(@RequestBody MemberCategoryRequest memberCategoryRequest){
+    public ResponseEntity<?> createMemberInfo(@RequestBody MemberCategoryRequest memberCategoryRequest) {
         memberService.createMemberInfo(memberCategoryRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(JsonResultData.successResultBuilder()
@@ -32,7 +32,7 @@ public class MemberApiController {
     @ApiOperation(value = "회원 상세 조회 API")
     @GetMapping("/{member_id}")
     public ResponseEntity<?> getMember(
-            @PathVariable(value = "member_id")Long memberId){
+            @PathVariable(value = "member_id") Long memberId) {
         MemberDetail memberDetail = memberService.getMember(memberId);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(memberDetail)
@@ -43,10 +43,10 @@ public class MemberApiController {
     @PatchMapping("/nickname")
     public ResponseEntity<?> updateNickname(
             @RequestBody NicknameUpdateRequest nicknameUpdateRequest
-    ){
+    ) {
         memberService.updateNickname(nicknameUpdateRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                        .data(null)
-                        .build());
+                .data(null)
+                .build());
     }
 }

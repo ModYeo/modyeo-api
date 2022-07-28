@@ -1,6 +1,5 @@
 package com.co.kr.modyeo.api.bbs.domain.entity.link;
 
-import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.api.bbs.domain.entity.Reply;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.common.entity.BaseEntity;
@@ -35,7 +34,7 @@ public class ReplyRecommend extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private Yn recommendYn;
 
-    @Builder(builderClassName = "of",builderMethodName = "of")
+    @Builder(builderClassName = "of", builderMethodName = "of")
     public ReplyRecommend(Long id, Member member, Reply reply, Yn recommendYn) {
         this.id = id;
         this.member = member;
@@ -43,15 +42,15 @@ public class ReplyRecommend extends BaseEntity {
         this.recommendYn = recommendYn;
     }
 
-    @Builder(builderClassName = "createReplyRecommendBuilder",builderMethodName = "createReplyRecommendBuilder")
-    public static ReplyRecommend createReplyRecommend(Member member, Reply reply){
+    @Builder(builderClassName = "createReplyRecommendBuilder", builderMethodName = "createReplyRecommendBuilder")
+    public static ReplyRecommend createReplyRecommend(Member member, Reply reply) {
         return of()
                 .member(member)
                 .reply(reply)
                 .build();
     }
 
-    public void changeRecommend(Yn recommendYn){
+    public void changeRecommend(Yn recommendYn) {
         this.recommendYn = recommendYn;
     }
 }

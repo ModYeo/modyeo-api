@@ -13,9 +13,7 @@ import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,7 +22,7 @@ import java.util.Set;
 @EnableWebMvc
 public class SwaggerConfig {
 
-    private ApiInfo swaggerInfo(){
+    private ApiInfo swaggerInfo() {
         return new ApiInfoBuilder()
                 .title("ModYeo API")
                 .description("ModYeo Backend API")
@@ -32,7 +30,7 @@ public class SwaggerConfig {
     }
 
     @Bean
-    public Docket swaggerApi(){
+    public Docket swaggerApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .consumes(getConsumeContentTypes())
                 .produces(getProduceContentTypes())
@@ -59,11 +57,11 @@ public class SwaggerConfig {
         return consumes;
     }
 
-    private ApiKey apiKey(){
-        return new ApiKey("Authorization","authorization","header");
+    private ApiKey apiKey() {
+        return new ApiKey("Authorization", "authorization", "header");
     }
 
-    private SecurityContext securityContext(){
+    private SecurityContext securityContext() {
         return springfox
                 .documentation
                 .spi

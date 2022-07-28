@@ -1,9 +1,8 @@
 package com.co.kr.modyeo.api.member.domain.dto.response;
 
 import com.co.kr.modyeo.api.category.domain.dto.response.CategoryResponse;
-import com.co.kr.modyeo.api.member.domain.entity.embed.Address;
-import com.co.kr.modyeo.api.member.domain.enumerate.Sex;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
+import com.co.kr.modyeo.api.member.domain.enumerate.Sex;
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamResponse;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -28,7 +27,7 @@ public class MemberResponse {
     private List<CategoryResponse> categoryResponses = new ArrayList<>();
 
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public MemberResponse(Long id,String nickname, String email, String username, Sex sex, List<TeamResponse> teamResponseList, List<CategoryResponse> categoryResponses) {
+    public MemberResponse(Long id, String nickname, String email, String username, Sex sex, List<TeamResponse> teamResponseList, List<CategoryResponse> categoryResponses) {
         this.id = id;
         this.nickname = nickname;
         this.email = email;
@@ -38,7 +37,7 @@ public class MemberResponse {
         this.categoryResponses = categoryResponses;
     }
 
-    public static MemberResponse toRes(Member member){
+    public static MemberResponse toRes(Member member) {
         return MemberResponse.of()
                 .id(member.getId())
                 .email(member.getEmail())

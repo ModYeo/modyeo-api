@@ -19,7 +19,7 @@ public class AuthController {
 
     @ApiOperation(value = "회원가입 API")
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@Valid @RequestBody MemberJoinDto memberJoinDto){
+    public ResponseEntity<?> signup(@Valid @RequestBody MemberJoinDto memberJoinDto) {
         MemberResponseDto memberResponseDto = authService.signup(memberJoinDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(JsonResultData.successResultBuilder()
@@ -29,25 +29,25 @@ public class AuthController {
 
     @ApiOperation(value = "로그인 API")
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody MemberLoginDto memberLoginDto){
+    public ResponseEntity<?> login(@Valid @RequestBody MemberLoginDto memberLoginDto) {
         TokenDto tokenDto = authService.login(memberLoginDto);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                        .data(tokenDto)
-                        .build());
+                .data(tokenDto)
+                .build());
     }
 
     @ApiOperation(value = "토큰 재발급 API")
     @PostMapping("/reissue")
-    public ResponseEntity<?> reissue(@Valid @RequestBody TokenRequestDto tokenRequestDto){
+    public ResponseEntity<?> reissue(@Valid @RequestBody TokenRequestDto tokenRequestDto) {
         TokenDto tokenDto = authService.reissue(tokenRequestDto);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                        .data(tokenDto)
-                        .build());
+                .data(tokenDto)
+                .build());
     }
 
     @ApiOperation(value = "로그아웃 API")
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@Valid @RequestBody TokenRequestDto tokenRequestDto){
+    public ResponseEntity<?> logout(@Valid @RequestBody TokenRequestDto tokenRequestDto) {
         authService.logout(tokenRequestDto);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)
@@ -55,7 +55,7 @@ public class AuthController {
     }
 
     @PatchMapping("/password")
-    public ResponseEntity<?> updatePassword(PasswordUpdateRequest passwordUpdateRequest){
+    public ResponseEntity<?> updatePassword(PasswordUpdateRequest passwordUpdateRequest) {
         authService.updatePassword(passwordUpdateRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)

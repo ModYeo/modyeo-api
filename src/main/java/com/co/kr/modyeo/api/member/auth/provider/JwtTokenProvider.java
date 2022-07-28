@@ -1,9 +1,9 @@
 package com.co.kr.modyeo.api.member.auth.provider;
 
+import com.co.kr.modyeo.api.member.auth.domain.dto.TokenDto;
 import com.co.kr.modyeo.common.exception.CustomAuthException;
 import com.co.kr.modyeo.common.exception.code.AuthErrorCode;
 import com.co.kr.modyeo.common.result.JsonResultData;
-import com.co.kr.modyeo.api.member.auth.domain.dto.TokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -37,7 +37,7 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public TokenDto generateTokenDto(Authentication authentication){
+    public TokenDto generateTokenDto(Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
@@ -65,10 +65,10 @@ public class JwtTokenProvider {
                 .build();
     }
 
-    public Authentication getAuthentication(String token){
+    public Authentication getAuthentication(String token) {
         Claims claims = parseClaims(token);
 
-        if (claims.get(AUTHORITIES_KEY) == null){
+        if (claims.get(AUTHORITIES_KEY) == null) {
             throw new CustomAuthException(JsonResultData
                     .failResultBuilder()
                     .errorCode(AuthErrorCode.NOT_AUTH_TOKEN.getCode())
@@ -81,18 +81,18 @@ public class JwtTokenProvider {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        UserDetails principal = new User(claims.getSubject(),"",authorities);
+        UserDetails principal = new User(claims.getSubject(), "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
-    public boolean validateToken(String token){
+    public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
-        }catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e){
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.error("잘못된 JWT 서명입니다.");
-        }catch (ExpiredJwtException e) {
+        } catch (ExpiredJwtException e) {
             log.info("만료된 JWT 토큰입니다.");
         } catch (UnsupportedJwtException e) {
             log.info("지원되지 않는 JWT 토큰입니다.");
@@ -102,15 +102,15 @@ public class JwtTokenProvider {
         return false;
     }
 
-    public boolean validateTokenFilter(String token){
+    public boolean validateTokenFilter(String token) {
         Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
         return true;
     }
 
     private Claims parseClaims(String token) {
-        try{
+        try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-        }catch (ExpiredJwtException e){
+        } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
     }

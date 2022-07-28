@@ -20,7 +20,7 @@ public class TeamArticleRecommendRequest {
     @NotNull
     private Yn recommendYn;
 
-    @Builder(builderClassName = "of",builderMethodName = "of")
+    @Builder(builderClassName = "of", builderMethodName = "of")
     public TeamArticleRecommendRequest(Long memberId, Long teamArticleId, Yn recommendYn) {
         this.memberId = memberId;
         this.teamArticleId = teamArticleId;

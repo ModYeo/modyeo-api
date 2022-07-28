@@ -56,7 +56,7 @@ public class TeamArticleResponse {
         this.createdTime = createdTime;
     }
 
-    public static TeamArticleResponse toDto(TeamArticle teamArticle){
+    public static TeamArticleResponse toDto(TeamArticle teamArticle) {
         return of()
                 .articleId(teamArticle.getId())
                 .filePath(teamArticle.getFilePath())

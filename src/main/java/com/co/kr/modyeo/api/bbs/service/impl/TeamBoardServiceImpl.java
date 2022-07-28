@@ -4,15 +4,12 @@ import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamArticleRecommendRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamArticleRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamReplyRecommendRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamReplyRequest;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamReplyDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.TeamArticleSearch;
-import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamArticle;
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamReply;
-import com.co.kr.modyeo.api.bbs.domain.entity.link.ArticleRecommend;
 import com.co.kr.modyeo.api.bbs.domain.entity.link.TeamArticleRecommend;
 import com.co.kr.modyeo.api.bbs.domain.entity.link.TeamReplyRecommend;
 import com.co.kr.modyeo.api.bbs.repository.TeamArticleRecommendRepository;
@@ -83,8 +80,8 @@ public class TeamBoardServiceImpl implements TeamBoardService {
 
     @Override
     public Slice<TeamArticleResponse> getTeamArticles(TeamArticleSearch teamArticleSearch) {
-        PageRequest pageRequest = PageRequest.of(teamArticleSearch.getOffset(),teamArticleSearch.getLimit(),teamArticleSearch.getDirection(),teamArticleSearch.getOrderBy());
-        return teamArticleRepository.searchTeamArticle(teamArticleSearch,pageRequest).map(TeamArticleResponse::toDto);
+        PageRequest pageRequest = PageRequest.of(teamArticleSearch.getOffset(), teamArticleSearch.getLimit(), teamArticleSearch.getDirection(), teamArticleSearch.getOrderBy());
+        return teamArticleRepository.searchTeamArticle(teamArticleSearch, pageRequest).map(TeamArticleResponse::toDto);
     }
 
     @Override
@@ -128,8 +125,8 @@ public class TeamBoardServiceImpl implements TeamBoardService {
                         .errorMessage("찾을 수 없는 게시글 입니다.")
                         .build());
 
-        TeamReply teamReply = teamReplyRequest.getReplyDepth() == 0?
-                TeamReplyRequest.toTeamReply(teamArticle, teamReplyRequest.getContent()) : TeamReplyRequest.toTeamNestedReply(teamArticle,teamReplyRequest.getContent(),teamReplyRequest.getReplyGroup());
+        TeamReply teamReply = teamReplyRequest.getReplyDepth() == 0 ?
+                TeamReplyRequest.toTeamReply(teamArticle, teamReplyRequest.getContent()) : TeamReplyRequest.toTeamNestedReply(teamArticle, teamReplyRequest.getContent(), teamReplyRequest.getReplyGroup());
         teamReplyRepository.save(teamReply);
     }
 
@@ -169,7 +166,7 @@ public class TeamBoardServiceImpl implements TeamBoardService {
                         .build());
 
         List<TeamReply> nestedTeamReplyList = teamReplyRepository.findByReplyGroup(teamReply.getReplyGroup());
-        return TeamReplyDetail.toDto(teamReply,nestedTeamReplyList);
+        return TeamReplyDetail.toDto(teamReply, nestedTeamReplyList);
     }
 
     @Override
@@ -188,16 +185,16 @@ public class TeamBoardServiceImpl implements TeamBoardService {
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
-        TeamArticleRecommend findTeamArticleRecommend = teamArticleRecommendRepository.findByMemberAndTeamArticle(member,teamArticle);
+        TeamArticleRecommend findTeamArticleRecommend = teamArticleRecommendRepository.findByMemberAndTeamArticle(member, teamArticle);
 
-        if (findTeamArticleRecommend == null){
+        if (findTeamArticleRecommend == null) {
             TeamArticleRecommend teamArticleRecommend = TeamArticleRecommend.createRecommendBuilder()
                     .member(member)
                     .teamArticle(teamArticle)
                     .build();
 
             teamArticleRecommendRepository.save(teamArticleRecommend);
-        } else{
+        } else {
             findTeamArticleRecommend.changeRecommendYn(articleRecommendRequest.getRecommendYn());
         }
     }
@@ -218,16 +215,16 @@ public class TeamBoardServiceImpl implements TeamBoardService {
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
-        TeamReplyRecommend findTeamReplyRecommend = teamReplyRecommendRepository.findByMemberAndTeamReply(member,teamReply);
+        TeamReplyRecommend findTeamReplyRecommend = teamReplyRecommendRepository.findByMemberAndTeamReply(member, teamReply);
 
-        if (findTeamReplyRecommend == null){
+        if (findTeamReplyRecommend == null) {
             TeamReplyRecommend teamReplyRecommend = TeamReplyRecommend.createRecommendBuilder()
                     .member(member)
                     .teamReply(teamReply)
                     .build();
 
             teamReplyRecommendRepository.save(teamReplyRecommend);
-        } else{
+        } else {
             findTeamReplyRecommend.changeRecommendYn(replyRecommendRequest.getRecommendYn());
         }
     }

@@ -6,13 +6,13 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class ApiException extends RuntimeException{
+public class ApiException extends RuntimeException {
     private JsonResultData errorEntity;
 
     private HttpStatus status;
 
     @Builder
-    public ApiException(String errorMessage,String errorCode,HttpStatus status){
+    public ApiException(String errorMessage, String errorCode, HttpStatus status) {
         super(errorMessage);
         this.errorEntity = JsonResultData.failResultBuilder()
                 .errorMessage(errorMessage)

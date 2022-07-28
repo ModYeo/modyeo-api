@@ -1,6 +1,5 @@
 package com.co.kr.modyeo.api.bbs.domain.entity.link;
 
-import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamArticle;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.common.entity.BaseEntity;
@@ -17,6 +16,7 @@ import javax.persistence.*;
 @Table(name = "TEAM_ARTICLE_RECOMMEND")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TeamArticleRecommend extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "team_article_recommend_id")
@@ -34,7 +34,7 @@ public class TeamArticleRecommend extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private Yn recommendYn;
 
-    @Builder(builderClassName = "of",builderMethodName = "of")
+    @Builder(builderClassName = "of", builderMethodName = "of")
     public TeamArticleRecommend(Long id, Member member, TeamArticle teamArticle, Yn recommendYn) {
         this.id = id;
         this.member = member;
@@ -42,8 +42,8 @@ public class TeamArticleRecommend extends BaseEntity {
         this.recommendYn = recommendYn;
     }
 
-    @Builder(builderClassName = "createRecommendBuilder",builderMethodName = "createRecommendBuilder")
-    public static TeamArticleRecommend createRecommend(Member member, TeamArticle teamArticle){
+    @Builder(builderClassName = "createRecommendBuilder", builderMethodName = "createRecommendBuilder")
+    public static TeamArticleRecommend createRecommend(Member member, TeamArticle teamArticle) {
         return of()
                 .member(member)
                 .teamArticle(teamArticle)

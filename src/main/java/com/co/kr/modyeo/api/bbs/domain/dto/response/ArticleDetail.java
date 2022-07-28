@@ -36,7 +36,7 @@ public class ArticleDetail {
     private List<ReplyResponse> replyResponses = new ArrayList<>();
 
 
-    @Builder(builderMethodName = "of",builderClassName = "of")
+    @Builder(builderMethodName = "of", builderClassName = "of")
     public ArticleDetail(Long articleId,
                          String title,
                          String content,
@@ -57,7 +57,7 @@ public class ArticleDetail {
         this.replyResponses = replyResponses;
     }
 
-    public static ArticleDetail toDto(Article article){
+    public static ArticleDetail toDto(Article article) {
         return ArticleDetail.of()
                 .articleId(article.getId())
                 .title(article.getTitle())

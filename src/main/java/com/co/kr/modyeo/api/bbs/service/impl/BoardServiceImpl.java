@@ -1,7 +1,7 @@
 package com.co.kr.modyeo.api.bbs.service.impl;
 
-import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRecommendRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyRecommendRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
@@ -52,8 +52,8 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Slice<ArticleResponse> getArticles(ArticleSearch articleSearch) {
-        PageRequest pageRequest = PageRequest.of(articleSearch.getOffset(),articleSearch.getLimit(),articleSearch.getDirection(),articleSearch.getOrderBy());
-        return articleRepository.searchArticle(articleSearch,pageRequest).map(ArticleResponse::toDto);
+        PageRequest pageRequest = PageRequest.of(articleSearch.getOffset(), articleSearch.getLimit(), articleSearch.getDirection(), articleSearch.getOrderBy());
+        return articleRepository.searchArticle(articleSearch, pageRequest).map(ArticleResponse::toDto);
     }
 
     @Transactional
@@ -66,7 +66,7 @@ public class BoardServiceImpl implements BoardService {
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
-        return articleRepository.save(ArticleRequest.createArticle(articleRequest,category));
+        return articleRepository.save(ArticleRequest.createArticle(articleRequest, category));
     }
 
     @Transactional
@@ -195,16 +195,16 @@ public class BoardServiceImpl implements BoardService {
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
-        ArticleRecommend findArticleRecommend = articleRecommendRepository.findByMemberAndArticle(member,article);
+        ArticleRecommend findArticleRecommend = articleRecommendRepository.findByMemberAndArticle(member, article);
 
-        if (findArticleRecommend == null){
+        if (findArticleRecommend == null) {
             ArticleRecommend articleRecommend = ArticleRecommend.createArticleRecommendBuilder()
                     .member(member)
                     .article(article)
                     .build();
 
             articleRecommendRepository.save(articleRecommend);
-        } else{
+        } else {
             findArticleRecommend.changeRecommendYn(articleRecommendRequest.getRecommendYn());
         }
     }
@@ -227,14 +227,14 @@ public class BoardServiceImpl implements BoardService {
 
         ReplyRecommend findReplyRecommend = replyRecommendRepository.findByMemberAndReply(member, reply);
 
-        if (findReplyRecommend == null){
+        if (findReplyRecommend == null) {
             ReplyRecommend replyRecommend = ReplyRecommend.createReplyRecommendBuilder()
                     .reply(reply)
                     .member(member)
                     .build();
 
             replyRecommendRepository.save(replyRecommend);
-        }else {
+        } else {
             findReplyRecommend.changeRecommend(replyRecommendRequest.getRecommendYn());
         }
     }

@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Data
@@ -36,7 +35,7 @@ public class TeamArticleDetail {
 
     private List<TeamReplyResponse> replyResponses = new ArrayList<>();
 
-    @Builder(builderClassName = "of",builderMethodName = "of")
+    @Builder(builderClassName = "of", builderMethodName = "of")
     public TeamArticleDetail(Long articleId,
                              String title,
                              String content,

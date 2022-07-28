@@ -28,9 +28,7 @@ public class TeamBoardApiController {
 
     @ApiOperation(value = "팀 게시글 조회 API")
     @GetMapping("/article/{article_id}")
-    public ResponseEntity<?> getArticle(
-            @PathVariable(value = "article_id")Long id
-    ){
+    public ResponseEntity<?> getArticle(@PathVariable(value = "article_id") Long id) {
         TeamArticleDetail articleDetail = teamBoardService.getTeamArticle(id);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(articleDetail)
@@ -39,7 +37,7 @@ public class TeamBoardApiController {
 
     @ApiOperation(value = "팀 게시글 슬라이스 조회 API")
     @GetMapping("/article")
-    public ResponseEntity<?> getArticles(TeamArticleSearch teamArticleSearch){
+    public ResponseEntity<?> getArticles(TeamArticleSearch teamArticleSearch) {
         Slice<TeamArticleResponse> teamArticles = teamBoardService.getTeamArticles(teamArticleSearch);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(teamArticles)
@@ -48,7 +46,7 @@ public class TeamBoardApiController {
 
     @ApiOperation(value = "팀 게시글 생성 API")
     @PostMapping("/article")
-    public ResponseEntity<?> createArticle(@RequestBody TeamArticleRequest articleRequest){
+    public ResponseEntity<?> createArticle(@RequestBody TeamArticleRequest articleRequest) {
         teamBoardService.createTeamArticle(articleRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(JsonResultData.successResultBuilder()
@@ -58,7 +56,7 @@ public class TeamBoardApiController {
 
     @ApiOperation(value = "팀 게시글 수정 API")
     @PatchMapping("/article")
-    public ResponseEntity<?> updateArticle(@RequestBody TeamArticleRequest articleRequest){
+    public ResponseEntity<?> updateArticle(@RequestBody TeamArticleRequest articleRequest) {
         teamBoardService.updateTeamArticle(articleRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)
@@ -67,7 +65,7 @@ public class TeamBoardApiController {
 
     @ApiOperation(value = "팀 게시글 삭제 API")
     @DeleteMapping("/article/{article_id}")
-    public ResponseEntity<?> deleteArticle(@PathVariable(value = "article_id")Long articleId){
+    public ResponseEntity<?> deleteArticle(@PathVariable(value = "article_id") Long articleId) {
         teamBoardService.deleteTeamArticle(articleId);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)
@@ -76,7 +74,7 @@ public class TeamBoardApiController {
 
     @ApiOperation(value = "팀 댓글 생성 API")
     @PostMapping("/reply")
-    public ResponseEntity<?> createReply(@RequestBody TeamReplyRequest teamReplyRequest){
+    public ResponseEntity<?> createReply(@RequestBody TeamReplyRequest teamReplyRequest) {
         teamBoardService.createTeamReply(teamReplyRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(JsonResultData.successResultBuilder()
@@ -86,7 +84,7 @@ public class TeamBoardApiController {
 
     @ApiOperation(value = "팀 댓글 수정 API")
     @PatchMapping("/reply")
-    public ResponseEntity<?> updateReply(@RequestBody TeamReplyRequest teamReplyRequest){
+    public ResponseEntity<?> updateReply(@RequestBody TeamReplyRequest teamReplyRequest) {
         teamBoardService.updateTeamReply(teamReplyRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)
@@ -96,7 +94,7 @@ public class TeamBoardApiController {
     @ApiOperation(value = "팀 댓글 삭제 API")
     @DeleteMapping("/reply/{team_reply_id}")
     public ResponseEntity<?> deleteReply(
-            @PathVariable(value = "team_reply_id")Long teamReplyId){
+            @PathVariable(value = "team_reply_id") Long teamReplyId) {
         teamBoardService.deleteTeamReply(teamReplyId);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)
@@ -106,7 +104,7 @@ public class TeamBoardApiController {
     @ApiOperation(value = "팀 댓글 상세 조회 API")
     @GetMapping("/reply/{team_reply_id}")
     public ResponseEntity<?> getReply(
-            @PathVariable(value = "team_reply_id")Long teamReplyId){
+            @PathVariable(value = "team_reply_id") Long teamReplyId) {
         TeamReplyDetail teamReplyDetail = teamBoardService.getTeamReply(teamReplyId);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(teamReplyDetail)
@@ -115,7 +113,7 @@ public class TeamBoardApiController {
 
     @ApiOperation(value = "팀 게시글 추천 API")
     @PutMapping("/article/recommend")
-    public ResponseEntity<?> updateTeamArticleRecommend(TeamArticleRecommendRequest teamArticleRecommendRequest){
+    public ResponseEntity<?> updateTeamArticleRecommend(TeamArticleRecommendRequest teamArticleRecommendRequest) {
         teamBoardService.updateTeamArticleRecommend(teamArticleRecommendRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)
@@ -124,7 +122,7 @@ public class TeamBoardApiController {
 
     @ApiOperation(value = "팀 댓글 추천 API")
     @PutMapping("/reply/recommend")
-    public ResponseEntity<?> updateTeamReplyRecommend(TeamReplyRecommendRequest teamReplyRecommendRequest){
+    public ResponseEntity<?> updateTeamReplyRecommend(TeamReplyRecommendRequest teamReplyRecommendRequest) {
         teamBoardService.updateTeamReplyRecommend(teamReplyRecommendRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)

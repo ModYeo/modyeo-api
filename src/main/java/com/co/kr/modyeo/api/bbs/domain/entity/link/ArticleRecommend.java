@@ -4,7 +4,6 @@ import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.common.entity.BaseEntity;
 import com.co.kr.modyeo.common.enumerate.Yn;
-import io.lettuce.core.dynamic.annotation.CommandNaming;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +17,8 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ArticleRecommend extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "article_recommend_id")
     private Long id;
 
@@ -34,7 +34,7 @@ public class ArticleRecommend extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private Yn recommendYn;
 
-    @Builder(builderClassName = "of",builderMethodName = "of")
+    @Builder(builderClassName = "of", builderMethodName = "of")
     public ArticleRecommend(Long id, Member member, Article article, Yn recommendYn) {
         this.id = id;
         this.member = member;
@@ -42,8 +42,8 @@ public class ArticleRecommend extends BaseEntity {
         this.recommendYn = recommendYn;
     }
 
-    @Builder(builderClassName = "createArticleRecommendBuilder",builderMethodName = "createArticleRecommendBuilder")
-    public static ArticleRecommend createArticleRecommend(Member member, Article article){
+    @Builder(builderClassName = "createArticleRecommendBuilder", builderMethodName = "createArticleRecommendBuilder")
+    public static ArticleRecommend createArticleRecommend(Member member, Article article) {
         return of()
                 .member(member)
                 .article(article)

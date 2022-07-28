@@ -9,12 +9,12 @@ public class MemberResponseDto {
 
     private String email;
 
-    @Builder(builderClassName = "of",builderMethodName = "of")
+    @Builder(builderClassName = "of", builderMethodName = "of")
     public MemberResponseDto(String email) {
         this.email = email;
     }
 
-    public static MemberResponseDto toResponse(Member member){
+    public static MemberResponseDto toResponse(Member member) {
         return MemberResponseDto.of()
                 .email(member.getEmail())
                 .build();

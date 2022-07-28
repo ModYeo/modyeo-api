@@ -14,7 +14,8 @@ import javax.persistence.*;
 @Table(name = "CATEGORY")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Category extends BaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
     private Long id;
 
@@ -25,21 +26,21 @@ public class Category extends BaseEntity {
     @Column(name = "use_yn")
     private Yn useYn;
 
-    @Builder(builderClassName = "of",builderMethodName = "of")
+    @Builder(builderClassName = "of", builderMethodName = "of")
     public Category(Long id, String name, Yn useYn) {
         this.id = id;
         this.name = name;
         this.useYn = useYn;
     }
 
-    @Builder(builderClassName = "createCategoryBuilder",builderMethodName = "createCategoryBuilder")
+    @Builder(builderClassName = "createCategoryBuilder", builderMethodName = "createCategoryBuilder")
     public Category(String name) {
         this.name = name;
         this.useYn = Yn.Y;
     }
 
 
-    public void changeCategory(String name,Yn useYn){
+    public void changeCategory(String name, Yn useYn) {
         this.name = name;
         this.useYn = useYn;
     }

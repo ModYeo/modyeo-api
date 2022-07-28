@@ -1,6 +1,5 @@
 package com.co.kr.modyeo.api.bbs.domain.entity;
 
-import com.co.kr.modyeo.api.bbs.domain.entity.link.ArticleRecommend;
 import com.co.kr.modyeo.api.bbs.domain.entity.link.ReplyRecommend;
 import com.co.kr.modyeo.common.entity.BaseEntity;
 import lombok.AccessLevel;
@@ -18,7 +17,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reply extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reply_id")
     private Long id;
 
@@ -34,10 +34,10 @@ public class Reply extends BaseEntity {
     @Column(name = "reply_group")
     private Long replyGroup;
 
-    @OneToMany(mappedBy = "reply",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "reply", cascade = CascadeType.ALL)
     private List<ReplyRecommend> replyRecommendList = new ArrayList<>();
 
-    @Builder(builderClassName = "of",builderMethodName = "of")
+    @Builder(builderClassName = "of", builderMethodName = "of")
     public Reply(Long id, Article article, String content, Integer replyDepth, Long replyGroup, List<ReplyRecommend> replyRecommendList) {
         this.id = id;
         this.article = article;
@@ -47,8 +47,8 @@ public class Reply extends BaseEntity {
         this.replyRecommendList = replyRecommendList;
     }
 
-    @Builder(builderClassName = "createReplyBuilder",builderMethodName = "createReplyBuilder")
-    public static Reply createReply(Article article,String content){
+    @Builder(builderClassName = "createReplyBuilder", builderMethodName = "createReplyBuilder")
+    public static Reply createReply(Article article, String content) {
         return of()
                 .article(article)
                 .content(content)
@@ -56,8 +56,8 @@ public class Reply extends BaseEntity {
                 .build();
     }
 
-    @Builder(builderClassName = "createNestedReplyBuilder",builderMethodName = "createNestedReplyBuilder")
-    public static Reply createNestedReply(Article article, String content, Long replyGroup){
+    @Builder(builderClassName = "createNestedReplyBuilder", builderMethodName = "createNestedReplyBuilder")
+    public static Reply createNestedReply(Article article, String content, Long replyGroup) {
         return of()
                 .article(article)
                 .content(content)
@@ -66,8 +66,8 @@ public class Reply extends BaseEntity {
                 .build();
     }
 
-    @Builder(builderClassName = "changeReplyBuilder",builderMethodName = "changeReplyBuilder")
-    public void changeReply(String content){
+    @Builder(builderClassName = "changeReplyBuilder", builderMethodName = "changeReplyBuilder")
+    public void changeReply(String content) {
         this.content = content;
     }
 }
