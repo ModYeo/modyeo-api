@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/team-board")
+@Api("팀 게시판 API Controller")
 @RequiredArgsConstructor
 public class TeamBoardApiController {
 

@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.team.controller;
 import com.co.kr.modyeo.api.team.domain.entity.link.TeamCategory;
 import com.co.kr.modyeo.api.team.service.TeamCategoryService;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@Api("팀 카테고리 api controller")
 @RequestMapping("/api")
 public class TeamCategoryApiController {
     private final TeamCategoryService teamCategoryService;

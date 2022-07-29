@@ -9,6 +9,7 @@ import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.category.service.CategoryService;
 import com.co.kr.modyeo.common.exception.code.CategoryErrorCode;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@Api("카테고리 API Controller")
 @RequestMapping("/api/category")
 @RequiredArgsConstructor
 public class CategoryApiController {

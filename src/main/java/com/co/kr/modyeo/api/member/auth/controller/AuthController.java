@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.member.auth.controller;
 import com.co.kr.modyeo.api.member.auth.domain.dto.*;
 import com.co.kr.modyeo.api.member.auth.service.AuthService;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/auth")
+@Api("인증 관련 API Controller")
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
@@ -55,7 +57,7 @@ public class AuthController {
     }
 
     @PatchMapping("/password")
-    public ResponseEntity<?> updatePassword(PasswordUpdateRequest passwordUpdateRequest) {
+    public ResponseEntity<?> updatePassword(@RequestBody PasswordUpdateRequest passwordUpdateRequest) {
         authService.updatePassword(passwordUpdateRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)

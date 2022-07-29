@@ -4,6 +4,7 @@ import com.co.kr.modyeo.api.team.domain.entity.enumerate.JoinStatus;
 import com.co.kr.modyeo.api.team.domain.entity.link.MemberTeam;
 import com.co.kr.modyeo.api.team.service.TeamApplicationService;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/member-team")
+@Api("팀 신청 api controller")
 @RequiredArgsConstructor
 public class TeamApplicationApiController {
     private final TeamApplicationService teamApplicationService;

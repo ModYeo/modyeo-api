@@ -5,6 +5,7 @@ import com.co.kr.modyeo.api.member.domain.dto.request.NicknameUpdateRequest;
 import com.co.kr.modyeo.api.member.domain.dto.response.MemberDetail;
 import com.co.kr.modyeo.api.member.service.MemberService;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/api/member")
+@Api("회원 API Controller")
 @RequiredArgsConstructor
 public class MemberApiController {
     private final MemberService memberService;

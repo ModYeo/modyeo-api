@@ -7,6 +7,7 @@ import com.co.kr.modyeo.api.team.domain.dto.search.TeamSearch;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.api.team.service.TeamService;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/team")
+@Api("팀 api controller")
 @RequiredArgsConstructor
 public class TeamApiController {
     private final TeamService teamService;

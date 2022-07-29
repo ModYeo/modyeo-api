@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/board")
+@Api("게시판 API Controller")
 @RequiredArgsConstructor
 public class BoardApiController {
 
