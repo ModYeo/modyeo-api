@@ -3,7 +3,11 @@ package com.co.kr.modyeo.api.member.auth.service.impl;
 import com.co.kr.modyeo.api.member.auth.domain.dto.*;
 import com.co.kr.modyeo.api.member.auth.provider.JwtTokenProvider;
 import com.co.kr.modyeo.api.member.auth.service.AuthService;
+import com.co.kr.modyeo.api.member.collection.domain.entity.CollectionInfo;
+import com.co.kr.modyeo.api.member.collection.repository.CollectionInfoRepository;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
+import com.co.kr.modyeo.api.member.domain.entity.link.MemberCollectionInfo;
+import com.co.kr.modyeo.api.member.repository.MemberCollectionInfoRepository;
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.CustomAuthException;
@@ -19,7 +23,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +36,10 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
 
     private final MemberRepository memberRepository;
+
+    private final CollectionInfoRepository collectionInfoRepository;
+
+    private final MemberCollectionInfoRepository memberCollectionInfoRepository;
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -48,6 +58,18 @@ public class AuthServiceImpl implements AuthService {
         Member member = MemberJoinDto.toMember(memberJoinDto, passwordEncoder);
         member = memberRepository.save(member);
 
+        List<Long> collectionIdList = MemberJoinDto.CollectionInfoDto.getIdList(memberJoinDto.getCollectionInfoDtoList());
+
+        List<CollectionInfo> collectionInfoList = collectionInfoRepository.findByIdList(collectionIdList);
+
+        Member finalMember = member;
+        List<MemberCollectionInfo> memberCollectionInfoList = collectionInfoList.stream().map(collectionInfo -> MemberCollectionInfo.createMemberCollectionInfoBuilder()
+                .member(finalMember)
+                .collectionInfo(collectionInfo)
+                .build())
+                .collect(Collectors.toList());
+
+        memberCollectionInfoRepository.saveAll(memberCollectionInfoList);
         return MemberResponseDto.toResponse(member);
     }
 

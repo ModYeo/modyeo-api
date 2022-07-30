@@ -39,4 +39,11 @@ public class MemberCollectionInfo extends BaseEntity {
         this.collectionInfo = collectionInfo;
         this.agreeYn = agreeYn;
     }
+
+    @Builder(builderClassName = "createMemberCollectionInfoBuilder",builderMethodName = "createMemberCollectionInfoBuilder")
+    public MemberCollectionInfo(Member member, CollectionInfo collectionInfo, Yn agreeYn) {
+        this.member = member;
+        this.collectionInfo = collectionInfo;
+        this.agreeYn = agreeYn;
+    }
 }

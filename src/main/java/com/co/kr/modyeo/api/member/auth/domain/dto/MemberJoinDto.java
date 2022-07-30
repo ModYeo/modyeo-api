@@ -4,6 +4,7 @@ import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.domain.entity.embed.Address;
 import com.co.kr.modyeo.api.member.domain.enumerate.Authority;
 import com.co.kr.modyeo.api.member.domain.enumerate.Sex;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -33,6 +36,8 @@ public class MemberJoinDto {
 
     @ApiModelProperty(value = "성별", dataType = "string", required = true)
     private Sex sex;
+
+    private List<CollectionInfoDto> collectionInfoDtoList;
 
     public MemberJoinDto(String email, String password) {
         this.email = email;
@@ -59,5 +64,19 @@ public class MemberJoinDto {
 
     public UsernamePasswordAuthenticationToken toAuthentication() {
         return new UsernamePasswordAuthenticationToken(email, password);
+    }
+
+    @Getter
+    public static class CollectionInfoDto{
+
+        private Long id;
+
+        private Yn agreeYn;
+
+        public static List<Long> getIdList(List<CollectionInfoDto> collectionInfoDtoList){
+            return collectionInfoDtoList.stream()
+                    .map(MemberJoinDto.CollectionInfoDto::getId)
+                    .collect(Collectors.toList());
+        }
     }
 }
