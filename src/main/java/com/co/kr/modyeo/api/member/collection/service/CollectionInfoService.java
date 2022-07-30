@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CollectionInfoService {
 
-    List<CollectionInfoResponse> getCollectionInfos(CollectionInfoSearch collectionInfoSearch);
+    List<CollectionInfoResponse> getCollectionInfos();
 
     CollectionInfoResponse getCollectionInfo(Long collectionInfoId);
 

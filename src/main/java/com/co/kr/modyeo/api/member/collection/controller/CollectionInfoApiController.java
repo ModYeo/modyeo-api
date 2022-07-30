@@ -1,16 +1,14 @@
 package com.co.kr.modyeo.api.member.collection.controller;
 
+import com.co.kr.modyeo.api.member.collection.domain.dto.request.CollectionInfoRequest;
 import com.co.kr.modyeo.api.member.collection.domain.dto.response.CollectionInfoResponse;
-import com.co.kr.modyeo.api.member.collection.domain.dto.search.CollectionInfoSearch;
 import com.co.kr.modyeo.api.member.collection.service.CollectionInfoService;
 import com.co.kr.modyeo.common.result.JsonResultData;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/collection-info")
@@ -20,9 +18,10 @@ public class CollectionInfoApiController {
     private final CollectionInfoService collectionInfoService;
 
     @GetMapping("")
-    public ResponseEntity<?> getCollectionInfos(CollectionInfoSearch collectionInfoSearch){
+    public ResponseEntity<?> getCollectionInfos(){
+        List<CollectionInfoResponse> collectionInfoResponseList = collectionInfoService.getCollectionInfos();
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
+                .data(collectionInfoResponseList)
                 .build());
     }
 
@@ -34,4 +33,27 @@ public class CollectionInfoApiController {
                 .build());
     }
 
+    @PostMapping("")
+    public ResponseEntity<?> createCollectionInfo(@RequestBody CollectionInfoRequest collectionInfoRequest){
+        collectionInfoService.createCollectionInfo(collectionInfoRequest);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
+                .build());
+    }
+
+    @PatchMapping("")
+    public ResponseEntity<?> updateCollectionInfo(@RequestBody CollectionInfoRequest collectionInfoRequest){
+        collectionInfoService.updateCollectionInfo(collectionInfoRequest);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
+                .build());
+    }
+
+    @DeleteMapping("/{collection_info_id}")
+    public ResponseEntity<?> deleteCollectionInfo(@PathVariable(value = "collection_info_id")Long collectionInfoId){
+        collectionInfoService.deleteCollectionInfo(collectionInfoId);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
+                .build());
+    }
 }
