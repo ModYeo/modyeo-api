@@ -63,10 +63,14 @@ public class AuthServiceImpl implements AuthService {
         List<CollectionInfo> collectionInfoList = collectionInfoRepository.findByIdList(collectionIdList);
 
         Member finalMember = member;
-        List<MemberCollectionInfo> memberCollectionInfoList = collectionInfoList.stream().map(collectionInfo -> MemberCollectionInfo.createMemberCollectionInfoBuilder()
-                .member(finalMember)
-                .collectionInfo(collectionInfo)
-                .build())
+        List<MemberCollectionInfo> memberCollectionInfoList = collectionInfoList.stream().map(collectionInfo ->{
+                    MemberJoinDto.CollectionInfoDto collectionInfoDto = memberJoinDto.getCollectionInfo(collectionInfo.getId());
+                    return MemberCollectionInfo.createMemberCollectionInfoBuilder()
+                            .member(finalMember)
+                            .collectionInfo(collectionInfo)
+                            .agreeYn(collectionInfoDto.getAgreeYn())
+                            .build();
+                })
                 .collect(Collectors.toList());
 
         memberCollectionInfoRepository.saveAll(memberCollectionInfoList);

@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Getter
@@ -64,6 +65,13 @@ public class MemberJoinDto {
 
     public UsernamePasswordAuthenticationToken toAuthentication() {
         return new UsernamePasswordAuthenticationToken(email, password);
+    }
+
+    public CollectionInfoDto getCollectionInfo(Long collectionId){
+        return this.collectionInfoDtoList.stream()
+                .filter(collectionInfoDto -> collectionInfoDto.getId().equals(collectionId))
+                .findFirst()
+                .orElseThrow();
     }
 
     @Getter
