@@ -1,6 +1,8 @@
 package com.co.kr.modyeo.api.member.domain.entity;
 
+import com.co.kr.modyeo.api.member.collection.domain.entity.CollectionInfo;
 import com.co.kr.modyeo.api.member.domain.entity.link.MemberCategory;
+import com.co.kr.modyeo.api.member.domain.entity.link.MemberCollectionInfo;
 import com.co.kr.modyeo.api.member.domain.enumerate.Authority;
 import com.co.kr.modyeo.api.member.domain.enumerate.Sex;
 import com.co.kr.modyeo.api.team.domain.entity.link.Crew;
@@ -45,6 +47,9 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<MemberCategory> interestCategoryList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
+    private List<MemberCollectionInfo> memberCollectionInfoList = new ArrayList<>();
+
     @Builder(buildMethodName = "createMemberBuilder", builderClassName = "createMemberBuilder")
     public Member(Long id, String email, String password, Authority authority, String nickname, Sex sex) {
         this.id = id;
@@ -64,7 +69,8 @@ public class Member extends BaseEntity {
                   Sex sex,
                   Authority authority,
                   List<Crew> teamList,
-                  List<MemberCategory> interestCategoryList) {
+                  List<MemberCategory> interestCategoryList,
+                  List<MemberCollectionInfo> memberCollectionInfoList ) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -74,6 +80,7 @@ public class Member extends BaseEntity {
         this.authority = authority;
         this.teamList = teamList;
         this.interestCategoryList = interestCategoryList;
+        this.memberCollectionInfoList = memberCollectionInfoList;
     }
 
     public void changePassword(String password, PasswordEncoder passwordEncoder) {

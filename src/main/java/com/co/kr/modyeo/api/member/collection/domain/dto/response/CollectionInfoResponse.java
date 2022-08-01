@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.member.collection.domain.dto.response;
 
 import com.co.kr.modyeo.api.member.collection.domain.entity.CollectionInfo;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +19,8 @@ public class CollectionInfoResponse {
 
     private String description;
 
+    private Yn agreeYn;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
 
@@ -29,10 +32,11 @@ public class CollectionInfoResponse {
     private String updatedBy;
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public CollectionInfoResponse(Long collectionInfoId, String collectionInfoName, String description, LocalDateTime createdTime, String createdBy, LocalDateTime updatedTime, String updatedBy) {
+    public CollectionInfoResponse(Long collectionInfoId, String collectionInfoName, String description, Yn agreeYn,LocalDateTime createdTime, String createdBy, LocalDateTime updatedTime, String updatedBy) {
         this.collectionInfoId = collectionInfoId;
         this.collectionInfoName = collectionInfoName;
         this.description = description;
+        this.agreeYn = agreeYn;
         this.createdTime = createdTime;
         this.createdBy = createdBy;
         this.updatedTime = updatedTime;

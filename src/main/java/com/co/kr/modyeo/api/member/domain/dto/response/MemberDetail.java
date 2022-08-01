@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.member.domain.dto.response;
 
 import com.co.kr.modyeo.api.category.domain.dto.response.CategoryResponse;
+import com.co.kr.modyeo.api.member.collection.domain.dto.response.CollectionInfoResponse;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.domain.enumerate.Sex;
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamResponse;
@@ -32,15 +33,18 @@ public class MemberDetail {
 
     private List<CategoryResponse> categoryResponseList;
 
+    private List<CollectionInfoResponse> collectionInfoResponseList;
+
     @QueryProjection
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public MemberDetail(Long memberId, String username, Sex sex, List<TeamResponse> teamResponseList, List<CategoryResponse> categoryResponseList, LocalDateTime createdTime) {
+    public MemberDetail(Long memberId, String username, Sex sex, List<TeamResponse> teamResponseList, List<CategoryResponse> categoryResponseList, LocalDateTime createdTime, List<CollectionInfoResponse> collectionInfoResponseList) {
         this.memberId = memberId;
         this.username = username;
         this.sex = sex;
         this.createdTime = createdTime;
         this.teamResponseList = teamResponseList;
         this.categoryResponseList = categoryResponseList;
+        this.collectionInfoResponseList = collectionInfoResponseList;
     }
 
     public static MemberDetail createMemberDetail(Member member) {
@@ -63,6 +67,16 @@ public class MemberDetail {
                                 .id(memberCategory.getCategory().getId())
                                 .name(memberCategory.getCategory().getName())
                                 .build()).collect(Collectors.toList()))
+                .collectionInfoResponseList(member.getMemberCollectionInfoList()
+                        .stream()
+                        .filter(Objects::nonNull)
+                        .map(memberCollectionInfo -> CollectionInfoResponse.of()
+                                .collectionInfoId(memberCollectionInfo.getCollectionInfo().getId())
+                                .collectionInfoName(memberCollectionInfo.getCollectionInfo().getName())
+                                .description(memberCollectionInfo.getCollectionInfo().getDescription())
+                                .agreeYn(memberCollectionInfo.getAgreeYn())
+                                .build())
+                        .collect(Collectors.toList()))
                 .build();
     }
 }
