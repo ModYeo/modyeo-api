@@ -33,11 +33,11 @@ public class MemberDetail {
 
     private List<CategoryResponse> categoryResponseList;
 
-    private List<CollectionInfoResponse> collectionInfoResponseList;
+    private List<MemberCollectionInfoResponse> collectionInfoResponseList;
 
     @QueryProjection
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public MemberDetail(Long memberId, String username, Sex sex, List<TeamResponse> teamResponseList, List<CategoryResponse> categoryResponseList, LocalDateTime createdTime, List<CollectionInfoResponse> collectionInfoResponseList) {
+    public MemberDetail(Long memberId, String username, Sex sex, List<TeamResponse> teamResponseList, List<CategoryResponse> categoryResponseList, LocalDateTime createdTime, List<MemberCollectionInfoResponse> collectionInfoResponseList) {
         this.memberId = memberId;
         this.username = username;
         this.sex = sex;
@@ -70,7 +70,7 @@ public class MemberDetail {
                 .collectionInfoResponseList(member.getMemberCollectionInfoList()
                         .stream()
                         .filter(Objects::nonNull)
-                        .map(memberCollectionInfo -> CollectionInfoResponse.of()
+                        .map(memberCollectionInfo -> MemberCollectionInfoResponse.of()
                                 .collectionInfoId(memberCollectionInfo.getCollectionInfo().getId())
                                 .collectionInfoName(memberCollectionInfo.getCollectionInfo().getName())
                                 .description(memberCollectionInfo.getCollectionInfo().getDescription())

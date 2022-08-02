@@ -19,8 +19,6 @@ public class CollectionInfoResponse {
 
     private String description;
 
-    private Yn agreeYn;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
 
@@ -32,11 +30,10 @@ public class CollectionInfoResponse {
     private String updatedBy;
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public CollectionInfoResponse(Long collectionInfoId, String collectionInfoName, String description, Yn agreeYn,LocalDateTime createdTime, String createdBy, LocalDateTime updatedTime, String updatedBy) {
+    public CollectionInfoResponse(Long collectionInfoId, String collectionInfoName, String description,LocalDateTime createdTime, String createdBy, LocalDateTime updatedTime, String updatedBy) {
         this.collectionInfoId = collectionInfoId;
         this.collectionInfoName = collectionInfoName;
         this.description = description;
-        this.agreeYn = agreeYn;
         this.createdTime = createdTime;
         this.createdBy = createdBy;
         this.updatedTime = updatedTime;
