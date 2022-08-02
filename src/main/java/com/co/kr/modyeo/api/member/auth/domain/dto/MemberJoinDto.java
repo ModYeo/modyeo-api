@@ -23,19 +23,15 @@ public class MemberJoinDto {
 
     @Email
     @NotNull
-    @ApiModelProperty(value = "가입 이메일", dataType = "email", required = true)
     private String email;
 
     @NotNull
-    @ApiModelProperty(value = "비밀번호", dataType = "string", required = true)
     private String password;
 
-    @ApiModelProperty(value = "회원명", dataType = "string", required = true)
     private String username;
 
     private String nickname;
 
-    @ApiModelProperty(value = "성별", dataType = "string", required = true)
     private Sex sex;
 
     private List<CollectionInfoDto> collectionInfoDtoList;
