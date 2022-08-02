@@ -41,12 +41,14 @@ public class CollectionInfoServiceImpl implements CollectionInfoService {
     }
 
     @Override
+    @Transactional
     public void createCollectionInfo(CollectionInfoRequest collectionInfoRequest) {
         CollectionInfo collectionInfo = CollectionInfoRequest.toEntity(collectionInfoRequest);
         collectionInfoRepository.save(collectionInfo);
     }
 
     @Override
+    @Transactional
     public void updateCollectionInfo(CollectionInfoRequest collectionInfoRequest) {
         CollectionInfo collectionInfo = collectionInfoRepository.findById(collectionInfoRequest.getCollectionInfoId()).orElseThrow(
                 () -> ApiException.builder()
@@ -63,6 +65,7 @@ public class CollectionInfoServiceImpl implements CollectionInfoService {
     }
 
     @Override
+    @Transactional
     public void deleteCollectionInfo(Long collectionInfoId) {
         CollectionInfo collectionInfo = collectionInfoRepository.findById(collectionInfoId).orElseThrow(
                 () -> ApiException.builder()

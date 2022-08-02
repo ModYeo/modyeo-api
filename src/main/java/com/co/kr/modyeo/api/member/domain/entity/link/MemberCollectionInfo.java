@@ -29,6 +29,7 @@ public class MemberCollectionInfo extends BaseEntity {
     @JoinColumn(name = "collection_info_id")
     private CollectionInfo collectionInfo;
 
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "agree_yn")
     private Yn agreeYn;
 

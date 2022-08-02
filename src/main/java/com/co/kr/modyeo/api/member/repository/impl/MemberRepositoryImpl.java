@@ -7,8 +7,10 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 
 import java.util.Optional;
 
+import static com.co.kr.modyeo.api.member.collection.domain.entity.QCollectionInfo.collectionInfo;
 import static com.co.kr.modyeo.api.member.domain.entity.QMember.member;
 import static com.co.kr.modyeo.api.member.domain.entity.link.QMemberCategory.memberCategory;
+import static com.co.kr.modyeo.api.member.domain.entity.link.QMemberCollectionInfo.memberCollectionInfo;
 import static com.co.kr.modyeo.api.team.domain.entity.link.QCrew.crew;
 
 public class MemberRepositoryImpl extends Querydsl4RepositorySupport implements MemberCustomRepository {
@@ -23,6 +25,7 @@ public class MemberRepositoryImpl extends Querydsl4RepositorySupport implements 
                 .from(member)
                 .leftJoin(member.teamList, crew)
                 .leftJoin(member.interestCategoryList, memberCategory)
+                .leftJoin(member.memberCollectionInfoList, memberCollectionInfo)
                 .fetchJoin()
                 .where(memberIdEq(memberId))
                 .fetchOne());
