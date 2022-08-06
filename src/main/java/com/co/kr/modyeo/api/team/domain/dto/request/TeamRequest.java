@@ -22,19 +22,23 @@ public class TeamRequest {
 
     private ScaleLevel scaleLevel;
 
+    private String description;
+
     private List<CategoryDto> categoryDtoList = new ArrayList<>();
 
     @Builder
-    public TeamRequest(Long team_id, String name,ScaleLevel scaleLevel, List<CategoryDto> categoryDtoList) {
+    public TeamRequest(Long team_id, String name,ScaleLevel scaleLevel, String description, List<CategoryDto> categoryDtoList) {
         this.team_id = team_id;
         this.name = name;
         this.scaleLevel = scaleLevel;
+        this.description = description;
         this.categoryDtoList = categoryDtoList;
     }
 
     public static Team toEntity(TeamRequest teamRequest){
         return Team.createTeamBuilder()
                 .name(teamRequest.name)
+                .description(teamRequest.getDescription())
                 .build();
     }
 

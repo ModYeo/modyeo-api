@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.team.domain.dto.response;
 
 import com.co.kr.modyeo.api.category.domain.dto.response.CategoryResponse;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
+import com.co.kr.modyeo.api.team.domain.entity.enumerate.ScaleLevel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +21,10 @@ public class TeamDetail {
 
     private String name;
 
+    private String description;
+
+    private ScaleLevel scaleLevel;
+
     private String createdBy;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
@@ -28,9 +33,11 @@ public class TeamDetail {
     private List<CategoryResponse> categoryResponseList = new ArrayList<>();
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public TeamDetail(Long id, String name, String createdBy, LocalDateTime createdTime, List<CategoryResponse> categoryResponseList) {
+    public TeamDetail(Long id, String name, ScaleLevel scaleLevel, String description, String createdBy, LocalDateTime createdTime, List<CategoryResponse> categoryResponseList) {
         this.id = id;
         this.name = name;
+        this.scaleLevel = scaleLevel;
+        this.description = description;
         this.createdBy = createdBy;
         this.createdTime = createdTime;
         this.categoryResponseList = categoryResponseList;
@@ -40,6 +47,8 @@ public class TeamDetail {
         return of()
                 .id(team.getId())
                 .name(team.getName())
+                .scaleLevel(team.getScaleLevel())
+                .description(team.getDescription())
                 .createdBy(team.getCreatedBy())
                 .createdTime(team.getCreatedDate())
                 .categoryResponseList(team.getCategoryList().stream().map(crewCategory -> CategoryResponse.of()

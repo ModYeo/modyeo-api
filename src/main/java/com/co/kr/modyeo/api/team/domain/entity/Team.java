@@ -19,7 +19,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Team extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "team_id")
     private Long id;
 
@@ -30,35 +31,40 @@ public class Team extends BaseEntity {
     @Column(name = "scale_level")
     private ScaleLevel scaleLevel;
 
-    @OneToMany(mappedBy = "team",cascade = CascadeType.ALL)
+    @Column(name = "team_description")
+    private String description;
+
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private List<TeamCategory> categoryList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "team",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private List<Crew> crewList = new ArrayList<>();
 
-    @Builder(builderMethodName = "of",builderClassName = "of")
-    public Team(Long id, String name,ScaleLevel scaleLevel, List<TeamCategory> categoryList, List<Crew> crewList) {
+    @Builder(builderMethodName = "of", builderClassName = "of")
+    public Team(Long id, String name, ScaleLevel scaleLevel, String description, List<TeamCategory> categoryList, List<Crew> crewList) {
         this.id = id;
         this.name = name;
-        this.scaleLevel =scaleLevel;
+        this.scaleLevel = scaleLevel;
+        this.description = description;
         this.categoryList = categoryList;
         this.crewList = crewList;
     }
 
     @Builder(builderClassName = "createTeamBuilder", builderMethodName = "createTeamBuilder")
-    public static Team createTeam(String name){
+    public static Team createTeam(String name, String description) {
         return Team.of()
                 .name(name)
+                .description(description)
                 .scaleLevel(ScaleLevel.TEMP)
                 .build();
     }
 
-    public void changeTeamInfo(String name){
+    public void changeTeamInfo(String name) {
         this.name = name;
     }
 
-    public void upScaleLevel(Integer teamSize){
-        if (teamSize >= 3){
+    public void upScaleLevel(Integer teamSize) {
+        if (teamSize >= 3) {
             this.scaleLevel = ScaleLevel.SMALL;
         } else if (teamSize >= 20) {
             this.scaleLevel = ScaleLevel.MEDIUM;

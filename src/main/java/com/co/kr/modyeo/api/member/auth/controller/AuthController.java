@@ -56,6 +56,7 @@ public class AuthController {
                 .build());
     }
 
+    @ApiOperation(value = "비밀번호 변경 API")
     @PatchMapping("/password")
     public ResponseEntity<?> updatePassword(@RequestBody PasswordUpdateRequest passwordUpdateRequest) {
         authService.updatePassword(passwordUpdateRequest);
