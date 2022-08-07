@@ -24,6 +24,14 @@ public class MemberDetail {
 
     private String username;
 
+    private String nickname;
+
+    private Integer birthYear;
+
+    private Integer birthMonth;
+
+    private Integer birthDay;
+
     private Sex sex;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
@@ -37,10 +45,14 @@ public class MemberDetail {
 
     @QueryProjection
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public MemberDetail(Long memberId, String username, Sex sex, List<TeamResponse> teamResponseList, List<CategoryResponse> categoryResponseList, LocalDateTime createdTime, List<MemberCollectionInfoResponse> collectionInfoResponseList) {
+    public MemberDetail(Long memberId, String username, Sex sex, String nickname, Integer birthYear, Integer birthMonth, Integer birthDay, List<TeamResponse> teamResponseList, List<CategoryResponse> categoryResponseList, LocalDateTime createdTime, List<MemberCollectionInfoResponse> collectionInfoResponseList) {
         this.memberId = memberId;
         this.username = username;
         this.sex = sex;
+        this.nickname = nickname;
+        this.birthYear = birthYear;
+        this.birthMonth = birthMonth;
+        this.birthDay = birthDay;
         this.createdTime = createdTime;
         this.teamResponseList = teamResponseList;
         this.categoryResponseList = categoryResponseList;
@@ -52,6 +64,10 @@ public class MemberDetail {
                 .memberId(member.getId())
                 .username(member.getUsername())
                 .sex(member.getSex())
+                .nickname(member.getNickname())
+                .birthYear(member.getBirthYear())
+                .birthMonth(member.getBirthMonth())
+                .birthDay(member.getBirthDay())
                 .createdTime(member.getCreatedDate())
                 .teamResponseList(member.getTeamList()
                         .stream()

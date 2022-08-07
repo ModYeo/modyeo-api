@@ -35,6 +35,14 @@ public class Member extends BaseEntity {
 
     private String nickname;
 
+    @Column(name = "birth_year")
+    private Integer birthYear;
+
+    @Column(name = "birth_month")
+    private Integer birthMonth;
+
+    @Column(name = "birth_day")
+    private Integer birthDay;
     @Enumerated(EnumType.STRING)
     private Sex sex;
 
@@ -51,13 +59,16 @@ public class Member extends BaseEntity {
     private List<MemberCollectionInfo> memberCollectionInfoList = new ArrayList<>();
 
     @Builder(buildMethodName = "createMemberBuilder", builderClassName = "createMemberBuilder")
-    public Member(Long id, String email, String password, Authority authority, String nickname, Sex sex) {
+    public Member(Long id, String email, String password, Authority authority, String nickname, Sex sex, Integer birthYear, Integer birthMonth, Integer birthDay) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.authority = authority;
         this.nickname = nickname;
         this.sex = sex;
+        this.birthYear = birthYear;
+        this.birthMonth = birthMonth;
+        this.birthDay = birthDay;
     }
 
     @Builder(builderClassName = "of", builderMethodName = "of")
@@ -66,6 +77,9 @@ public class Member extends BaseEntity {
                   String password,
                   String username,
                   String nickname,
+                  Integer birthYear,
+                  Integer birthMonth,
+                  Integer birthDay,
                   Sex sex,
                   Authority authority,
                   List<Crew> teamList,
@@ -76,6 +90,9 @@ public class Member extends BaseEntity {
         this.password = password;
         this.username = username;
         this.nickname = nickname;
+        this.birthYear = birthYear;
+        this.birthMonth = birthMonth;
+        this.birthDay = birthDay;
         this.sex = sex;
         this.authority = authority;
         this.teamList = teamList;

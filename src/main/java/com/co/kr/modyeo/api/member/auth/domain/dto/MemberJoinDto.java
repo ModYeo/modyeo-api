@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -34,6 +35,12 @@ public class MemberJoinDto {
 
     private Sex sex;
 
+    private Integer birthYear;
+
+    private Integer birthMonth;
+
+    private Integer birthDay;
+
     private List<CollectionInfoDto> collectionInfoDtoList;
 
     public MemberJoinDto(String email, String password) {
@@ -41,11 +48,15 @@ public class MemberJoinDto {
         this.password = password;
     }
 
-    public MemberJoinDto(String email, String password, String username, Sex sex) {
+    public MemberJoinDto(String email, String password, String username, Sex sex, String nickname, Integer birthYear, Integer birthMonth, Integer birthDay) {
         this.email = email;
         this.password = password;
         this.username = username;
         this.sex = sex;
+        this.nickname = nickname;
+        this.birthYear = birthYear;
+        this.birthMonth = birthMonth;
+        this.birthDay = birthDay;
     }
 
     public static Member toMember(MemberJoinDto memberJoinDto, PasswordEncoder passwordEncoder) {
@@ -55,6 +66,9 @@ public class MemberJoinDto {
                 .authority(Authority.ROLE_USER)
                 .username(memberJoinDto.username)
                 .nickname(memberJoinDto.nickname)
+                .birthYear(memberJoinDto.getBirthYear())
+                .birthMonth(memberJoinDto.getBirthMonth())
+                .birthDay(memberJoinDto.getBirthDay())
                 .sex(memberJoinDto.sex)
                 .build();
     }
@@ -63,7 +77,7 @@ public class MemberJoinDto {
         return new UsernamePasswordAuthenticationToken(email, password);
     }
 
-    public CollectionInfoDto getCollectionInfo(Long collectionId){
+    public CollectionInfoDto getCollectionInfo(Long collectionId) {
         return this.collectionInfoDtoList.stream()
                 .filter(collectionInfoDto -> collectionInfoDto.getId().equals(collectionId))
                 .findFirst()
@@ -71,13 +85,13 @@ public class MemberJoinDto {
     }
 
     @Getter
-    public static class CollectionInfoDto{
+    public static class CollectionInfoDto {
 
         private Long id;
 
         private Yn agreeYn;
 
-        public static List<Long> getIdList(List<CollectionInfoDto> collectionInfoDtoList){
+        public static List<Long> getIdList(List<CollectionInfoDto> collectionInfoDtoList) {
             return collectionInfoDtoList.stream()
                     .map(MemberJoinDto.CollectionInfoDto::getId)
                     .collect(Collectors.toList());
