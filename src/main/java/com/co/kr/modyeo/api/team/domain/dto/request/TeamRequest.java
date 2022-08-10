@@ -16,8 +16,6 @@ public class TeamRequest {
 
     private Long team_id;
 
-    private Long member_id;
-
     private String name;
 
     private ScaleLevel scaleLevel;

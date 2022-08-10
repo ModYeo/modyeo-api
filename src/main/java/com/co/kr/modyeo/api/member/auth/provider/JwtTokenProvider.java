@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 public class JwtTokenProvider {
-    private static final Long ACCESS_TOKEN_EXPIRE_TIME = 1000L * 60;
+    private static final Long ACCESS_TOKEN_EXPIRE_TIME = 1000L * 60 * 60;
     private static final Long REFRESH_TOKEN_EXPIRE_TIME = 1000L * 60 * 60 * 24 * 7;
     private static final String BEARER_TYPE = "bearer";
     private static final String AUTHORITIES_KEY = "auth";

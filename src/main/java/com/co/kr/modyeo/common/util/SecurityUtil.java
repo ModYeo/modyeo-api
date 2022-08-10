@@ -10,7 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SecurityUtil {
-    public static Long getCurrentMemberId() {
+    public static String getCurrentMemberId() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || authentication.getName() == null) {
@@ -21,6 +21,6 @@ public class SecurityUtil {
                     .build());
         }
 
-        return Long.parseLong(authentication.getName());
+        return authentication.getName();
     }
 }

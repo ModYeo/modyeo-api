@@ -16,10 +16,12 @@ import com.co.kr.modyeo.common.exception.code.TeamErrorCode;
 import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
+import com.co.kr.modyeo.common.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +42,9 @@ public class TeamServiceImpl implements TeamService {
     public Team createTeam(TeamRequest teamRequest) {
         overlapTeamCheck(teamRequest);
 
-        Member member = memberRepository.findById(teamRequest.getMember_id())
+        String memberEmail = SecurityUtil.getCurrentMemberId();
+
+        Member member = memberRepository.findByEmail(memberEmail)
                 .orElseThrow(()->ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
                         .errorCode("")
