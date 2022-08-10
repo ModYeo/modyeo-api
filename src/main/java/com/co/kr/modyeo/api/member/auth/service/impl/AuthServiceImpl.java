@@ -107,8 +107,7 @@ public class AuthServiceImpl implements AuthService {
         Authentication authentication = jwtTokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
 
         String refreshToken = redisTemplate.opsForValue().get("RT:" + authentication.getName());
-        assert refreshToken != null;
-        if (!refreshToken.equals(tokenRequestDto.getRefreshToken())) {
+        if (refreshToken == null || !refreshToken.equals(tokenRequestDto.getRefreshToken())) {
             throw new CustomAuthException(JsonResultData
                     .failResultBuilder()
                     .errorCode(AuthErrorCode.NOT_MATCH_TOKEN_INFO.getCode())
