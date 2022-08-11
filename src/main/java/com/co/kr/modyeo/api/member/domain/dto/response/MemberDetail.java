@@ -26,6 +26,8 @@ public class MemberDetail {
 
     private String nickname;
 
+    private String profilePath;
+
     private Integer birthYear;
 
     private Integer birthMonth;
@@ -45,11 +47,12 @@ public class MemberDetail {
 
     @QueryProjection
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public MemberDetail(Long memberId, String username, Sex sex, String nickname, Integer birthYear, Integer birthMonth, Integer birthDay, List<TeamResponse> teamResponseList, List<CategoryResponse> categoryResponseList, LocalDateTime createdTime, List<MemberCollectionInfoResponse> collectionInfoResponseList) {
+    public MemberDetail(Long memberId, String username, Sex sex, String nickname, String profilePath, Integer birthYear, Integer birthMonth, Integer birthDay, List<TeamResponse> teamResponseList, List<CategoryResponse> categoryResponseList, LocalDateTime createdTime, List<MemberCollectionInfoResponse> collectionInfoResponseList) {
         this.memberId = memberId;
         this.username = username;
         this.sex = sex;
         this.nickname = nickname;
+        this.profilePath = profilePath;
         this.birthYear = birthYear;
         this.birthMonth = birthMonth;
         this.birthDay = birthDay;
@@ -65,6 +68,7 @@ public class MemberDetail {
                 .username(member.getUsername())
                 .sex(member.getSex())
                 .nickname(member.getNickname())
+                .profilePath(member.getProfilePath())
                 .birthYear(member.getBirthYear())
                 .birthMonth(member.getBirthMonth())
                 .birthDay(member.getBirthDay())
