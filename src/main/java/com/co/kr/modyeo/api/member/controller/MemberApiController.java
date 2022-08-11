@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.member.controller;
 
 import com.co.kr.modyeo.api.member.domain.dto.request.MemberCategoryRequest;
+import com.co.kr.modyeo.api.member.domain.dto.request.MemberProfilePathRequest;
 import com.co.kr.modyeo.api.member.domain.dto.request.NicknameUpdateRequest;
 import com.co.kr.modyeo.api.member.domain.dto.response.MemberDetail;
 import com.co.kr.modyeo.api.member.service.MemberService;
@@ -47,6 +48,15 @@ public class MemberApiController {
             @RequestBody NicknameUpdateRequest nicknameUpdateRequest
     ) {
         memberService.updateNickname(nicknameUpdateRequest);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
+                .build());
+    }
+
+    @ApiOperation(value = "프로필 등록/변경 API")
+    @PutMapping("/profile-path")
+    public ResponseEntity<?> putProfilePath(@RequestBody MemberProfilePathRequest memberProfilePathRequest){
+        memberService.putProfilePath(memberProfilePathRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)
                 .build());

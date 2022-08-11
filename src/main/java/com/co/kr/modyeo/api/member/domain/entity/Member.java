@@ -35,6 +35,9 @@ public class Member extends BaseEntity {
 
     private String nickname;
 
+    @Column(name = "profile_path")
+    private String profilePath;
+
     @Column(name = "birth_year")
     private Integer birthYear;
 
@@ -77,6 +80,7 @@ public class Member extends BaseEntity {
                   String password,
                   String username,
                   String nickname,
+                  String profilePath,
                   Integer birthYear,
                   Integer birthMonth,
                   Integer birthDay,
@@ -90,6 +94,7 @@ public class Member extends BaseEntity {
         this.password = password;
         this.username = username;
         this.nickname = nickname;
+        this.profilePath = profilePath;
         this.birthYear = birthYear;
         this.birthMonth = birthMonth;
         this.birthDay = birthDay;
@@ -107,4 +112,6 @@ public class Member extends BaseEntity {
     public void changeNickname(String nickname) {
         this.nickname = nickname;
     }
+
+    public void changeProfilePath(String profilePath) {this.profilePath = profilePath;}
 }
