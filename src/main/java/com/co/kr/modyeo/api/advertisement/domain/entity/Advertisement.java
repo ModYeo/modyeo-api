@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.api.advertisement.domain.entity;
 
+import com.co.kr.modyeo.api.advertisement.domain.enumerate.AdvertisementType;
 import com.co.kr.modyeo.common.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -27,11 +28,17 @@ public class Advertisement extends BaseEntity {
     @Column(name = "image_path")
     private String imagePath;
 
+    @Column(name = "advertisement_type")
+    @Enumerated(value = EnumType.STRING)
+    private AdvertisementType type;
+
+
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public Advertisement(Long id, String name, String urlLink, String imagePath) {
+    public Advertisement(Long id, String name, String urlLink, String imagePath, AdvertisementType type) {
         this.id = id;
         this.name = name;
         this.urlLink = urlLink;
         this.imagePath = imagePath;
+        this.type = type;
     }
 }
