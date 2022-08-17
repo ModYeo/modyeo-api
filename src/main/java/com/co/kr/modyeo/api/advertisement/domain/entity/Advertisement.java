@@ -33,6 +33,7 @@ public class Advertisement extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private AdvertisementType type;
 
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "use_yn")
     private Yn useYn;
 
