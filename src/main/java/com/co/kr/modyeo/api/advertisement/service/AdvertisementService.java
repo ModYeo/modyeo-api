@@ -1,7 +1,13 @@
 package com.co.kr.modyeo.api.advertisement.service;
 
-import com.co.kr.modyeo.api.advertisement.domain.dto.request.AdvertisementCreateRequest;
+import com.co.kr.modyeo.api.advertisement.domain.enumerate.AdvertisementType;
+import com.co.kr.modyeo.api.advertisement.domain.request.AdvertisementCreateRequest;
+import com.co.kr.modyeo.api.advertisement.domain.response.AdvertisementResponse;
+
+import java.util.List;
 
 public interface AdvertisementService {
     void createAdvertisement(AdvertisementCreateRequest advertisementCreateRequest);
+
+    List<AdvertisementResponse> getAdvertisement(AdvertisementType advertisementType);
 }
