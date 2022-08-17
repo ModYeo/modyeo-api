@@ -53,5 +53,6 @@ public class Advertisement extends BaseEntity {
         this.urlLink = urlLink;
         this.imagePath = imagePath;
         this.type = type;
+        this.useYn = Yn.Y;
     }
 }
