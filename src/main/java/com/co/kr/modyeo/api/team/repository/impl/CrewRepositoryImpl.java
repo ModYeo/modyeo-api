@@ -3,9 +3,7 @@ package com.co.kr.modyeo.api.team.repository.impl;
 import com.co.kr.modyeo.api.team.domain.entity.link.Crew;
 import com.co.kr.modyeo.api.team.repository.custom.CrewCustomRepository;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import org.springframework.data.domain.Slice;
 
 import java.util.List;
 

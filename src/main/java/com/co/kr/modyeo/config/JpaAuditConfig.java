@@ -1,6 +1,6 @@
 package com.co.kr.modyeo.config;
 
-import com.co.kr.modyeo.common.Auditor.AuditorAwareImpl;
+import com.co.kr.modyeo.common.auditor.AuditorAwareImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
