@@ -3,11 +3,14 @@ package com.co.kr.modyeo.api.advertisement.service.impl;
 import com.co.kr.modyeo.api.advertisement.domain.enumerate.AdvertisementType;
 import com.co.kr.modyeo.api.advertisement.domain.request.AdvertisementCreateRequest;
 import com.co.kr.modyeo.api.advertisement.domain.entity.Advertisement;
+import com.co.kr.modyeo.api.advertisement.domain.response.AdvertisementDetail;
 import com.co.kr.modyeo.api.advertisement.domain.response.AdvertisementResponse;
 import com.co.kr.modyeo.api.advertisement.repository.AdvertisementRepository;
 import com.co.kr.modyeo.api.advertisement.service.AdvertisementService;
 import com.co.kr.modyeo.common.enumerate.Yn;
+import com.co.kr.modyeo.common.exception.ApiException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,9 +32,19 @@ public class AdvertisementServiceImpl implements AdvertisementService {
     }
 
     @Override
-    public List<AdvertisementResponse> getAdvertisement(AdvertisementType advertisementType) {
+    public List<AdvertisementResponse> getAdvertisements(AdvertisementType advertisementType) {
         return advertisementRepository.findByUseYnAndType(Yn.Y,advertisementType)
                 .stream().map(AdvertisementResponse::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public AdvertisementDetail getAdvertisement(Long id) {
+        return AdvertisementDetail.toDto( advertisementRepository.findById(id).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode("NOT_FOUND_AD")
+                        .errorMessage("광고를 찾지 못했습니다.")
+                        .build()));
     }
 }
