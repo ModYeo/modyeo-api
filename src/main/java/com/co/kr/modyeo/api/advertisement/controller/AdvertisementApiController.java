@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.advertisement.controller;
 
 import com.co.kr.modyeo.api.advertisement.domain.enumerate.AdvertisementType;
 import com.co.kr.modyeo.api.advertisement.domain.request.AdvertisementCreateRequest;
+import com.co.kr.modyeo.api.advertisement.domain.request.AdvertisementUpdateRequest;
 import com.co.kr.modyeo.api.advertisement.domain.response.AdvertisementDetail;
 import com.co.kr.modyeo.api.advertisement.domain.response.AdvertisementResponse;
 import com.co.kr.modyeo.api.advertisement.service.AdvertisementService;
@@ -34,6 +35,18 @@ public class AdvertisementApiController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getAdvertisement(@PathVariable(value = "id") Long id){
         AdvertisementDetail advertisementDetail = advertisementService.getAdvertisement(id);
+        return ResponseEntity.ok(advertisementDetail);
+    }
+
+    @PatchMapping("")
+    public ResponseEntity<?> updateAdvertisement(@RequestBody AdvertisementUpdateRequest advertisementUpdateRequest){
+        advertisementService.updateAdvertisement(advertisementUpdateRequest);
+        return ResponseEntity.ok(null);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteAdvertisement(@PathVariable(value = "id") Long id){
+        advertisementService.deleteAdvertisement(id);
         return ResponseEntity.ok(null);
     }
 }

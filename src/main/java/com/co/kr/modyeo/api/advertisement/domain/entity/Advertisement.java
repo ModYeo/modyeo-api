@@ -56,4 +56,16 @@ public class Advertisement extends BaseEntity {
         this.type = type;
         this.useYn = Yn.Y;
     }
+
+    @Builder(builderClassName = "updateBuilder", builderMethodName = "updateBuilder")
+    public void updateAdvertisement(String advertisementName, AdvertisementType advertisementType, String urlLink, String imagePath) {
+        this.name = advertisementName;
+        this.type = advertisementType;
+        this.urlLink = urlLink;
+        this.imagePath = imagePath;
+    }
+
+    public void deleteAdvertisement() {
+        this.useYn = Yn.Y;
+    }
 }
