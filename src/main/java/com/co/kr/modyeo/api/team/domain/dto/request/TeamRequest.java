@@ -22,20 +22,24 @@ public class TeamRequest {
 
     private String description;
 
+    private String profilePath;
+
     private List<CategoryDto> categoryDtoList = new ArrayList<>();
 
     @Builder
-    public TeamRequest(Long team_id, String name,ScaleLevel scaleLevel, String description, List<CategoryDto> categoryDtoList) {
+    public TeamRequest(Long team_id, String name,ScaleLevel scaleLevel, String description, String profilePath, List<CategoryDto> categoryDtoList) {
         this.team_id = team_id;
         this.name = name;
         this.scaleLevel = scaleLevel;
         this.description = description;
+        this.profilePath = profilePath;
         this.categoryDtoList = categoryDtoList;
     }
 
     public static Team toEntity(TeamRequest teamRequest){
         return Team.createTeamBuilder()
                 .name(teamRequest.name)
+                .profilePath(teamRequest.getProfilePath())
                 .description(teamRequest.getDescription())
                 .build();
     }

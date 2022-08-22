@@ -96,7 +96,7 @@ public class TeamServiceImpl implements TeamService {
                 .errorCode(TeamErrorCode.NOT_FOUND_TEAM.getCode())
                 .build());
 
-        findTeam.changeTeamInfo(teamRequest.getName());
+        findTeam.changeTeamInfo(teamRequest.getName(), teamRequest.getProfilePath());
         return findTeam;
     }
 

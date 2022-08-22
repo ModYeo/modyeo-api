@@ -27,6 +27,9 @@ public class Team extends BaseEntity {
     @Column(name = "team_name")
     private String name;
 
+    @Column(name = "profile_path")
+    private String profilePath;
+
     @Enumerated(value = EnumType.STRING)
     @Column(name = "scale_level")
     private ScaleLevel scaleLevel;
@@ -41,26 +44,29 @@ public class Team extends BaseEntity {
     private List<Crew> crewList = new ArrayList<>();
 
     @Builder(builderMethodName = "of", builderClassName = "of")
-    public Team(Long id, String name, ScaleLevel scaleLevel, String description, List<TeamCategory> categoryList, List<Crew> crewList) {
+    public Team(Long id, String name, ScaleLevel scaleLevel, String description, String profilePath, List<TeamCategory> categoryList, List<Crew> crewList) {
         this.id = id;
         this.name = name;
         this.scaleLevel = scaleLevel;
         this.description = description;
+        this.profilePath = profilePath;
         this.categoryList = categoryList;
         this.crewList = crewList;
     }
 
     @Builder(builderClassName = "createTeamBuilder", builderMethodName = "createTeamBuilder")
-    public static Team createTeam(String name, String description) {
+    public static Team createTeam(String name, String description, String profilePath) {
         return Team.of()
                 .name(name)
                 .description(description)
+                .profilePath(profilePath)
                 .scaleLevel(ScaleLevel.TEMP)
                 .build();
     }
 
-    public void changeTeamInfo(String name) {
+    public void changeTeamInfo(String name, String profilePath) {
         this.name = name;
+        this.profilePath = profilePath;
     }
 
     public void upScaleLevel(Integer teamSize) {
