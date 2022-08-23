@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -86,6 +87,14 @@ public class TeamApiController {
                 .body(JsonResultData.successResultBuilder()
                         .data(null)
                         .build());
+    }
+
+    @ApiOperation(value = "자신이 속한 팀 조회 API")
+    @GetMapping("/my")
+    public ResponseEntity<?> getMyTeam(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        TeamResponse teamResponse = teamService.getMyTeam(email);
+        return ResponseEntity.ok(teamResponse);
     }
 
 }

@@ -35,6 +35,11 @@ public class TeamResponse {
         this.categoryResponseList = categoryResponses;
     }
 
+    public TeamResponse(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public static TeamResponse toRes(Team team) {
         return of()
                 .id(team.getId())
