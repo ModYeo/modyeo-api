@@ -16,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/team")
 @Api("팀 api controller")
@@ -93,8 +95,8 @@ public class TeamApiController {
     @GetMapping("/my")
     public ResponseEntity<?> getMyTeam(){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        TeamResponse teamResponse = teamService.getMyTeam(email);
-        return ResponseEntity.ok(teamResponse);
+        List<TeamResponse> teamResponseList = teamService.getMyTeam(email);
+        return ResponseEntity.ok(teamResponseList);
     }
 
 }

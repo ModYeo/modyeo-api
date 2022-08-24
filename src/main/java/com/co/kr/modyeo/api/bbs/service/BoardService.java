@@ -12,6 +12,8 @@ import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.api.bbs.domain.entity.Reply;
 import org.springframework.data.domain.Slice;
 
+import java.util.List;
+
 public interface BoardService {
     Slice<ArticleResponse> getArticles(ArticleSearch articleSearch);
 
@@ -34,4 +36,6 @@ public interface BoardService {
     void updateArticleRecommend(ArticleRecommendRequest articleRecommendRequest);
 
     void updateReplyRecommend(ReplyRecommendRequest replyRecommendRequest);
+
+    List<ArticleResponse> getArticlesMy(String email);
 }

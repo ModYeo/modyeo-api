@@ -6,8 +6,10 @@ import com.co.kr.modyeo.api.team.domain.entity.Team;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
+import java.util.List;
+
 public interface TeamCustomRepository {
     Slice<Team> searchTeam(TeamSearch teamSearch, Pageable pageable);
 
-    TeamResponse findMyTeam(String email);
+    List<TeamResponse> findMyTeam(String email);
 }

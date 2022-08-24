@@ -7,6 +7,8 @@ import com.co.kr.modyeo.api.team.domain.dto.request.TeamRequest;
 import com.co.kr.modyeo.api.team.domain.dto.search.TeamSearch;
 import org.springframework.data.domain.Slice;
 
+import java.util.List;
+
 public interface TeamService {
     Team createTeam(TeamRequest teamRequest);
 
@@ -18,5 +20,5 @@ public interface TeamService {
 
     TeamDetail getTeam(Long teamId);
 
-    TeamResponse getMyTeam(String email);
+    List<TeamResponse> getMyTeam(String email);
 }

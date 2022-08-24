@@ -16,7 +16,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/board")
@@ -130,5 +133,13 @@ public class BoardApiController {
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)
                 .build());
+    }
+
+    @ApiOperation("내가 쓴 게시글 조회 API")
+    @GetMapping("/article/my")
+    public ResponseEntity<?> getArticleMy(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<ArticleResponse> articleResponseList = boardService.getArticlesMy(email);
+        return ResponseEntity.ok(articleResponseList);
     }
 }

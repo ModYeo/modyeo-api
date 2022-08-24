@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -237,5 +238,12 @@ public class BoardServiceImpl implements BoardService {
         } else {
             findReplyRecommend.changeRecommend(replyRecommendRequest.getRecommendYn());
         }
+    }
+
+    @Override
+    public List<ArticleResponse> getArticlesMy(String email) {
+        return articleRepository.findArticleByEmail(email).stream()
+                .map(ArticleResponse::toDto)
+                .collect(Collectors.toList());
     }
 }

@@ -8,6 +8,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 
+import java.util.List;
+
 import static com.co.kr.modyeo.api.bbs.domain.entity.QArticle.article;
 import static com.co.kr.modyeo.api.category.domain.entity.QCategory.category;
 
@@ -27,6 +29,17 @@ public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements
                         .where(articleTitleLike(articleSearch.getTitle()),
                                 articleContentLike(articleSearch.getContent()),
                                 categoryIdEq(articleSearch.getCategoryId())));
+    }
+
+    @Override
+    public List<Article> findArticleByEmail(String email) {
+        return selectFrom(article)
+                .where(createdByEq(email))
+                .fetch();
+    }
+
+    private BooleanExpression createdByEq(String email){
+        return email != null && !email.equals("") ? article.createdBy.eq(email) : null;
     }
 
     private BooleanExpression categoryIdEq(Long categoryId) {

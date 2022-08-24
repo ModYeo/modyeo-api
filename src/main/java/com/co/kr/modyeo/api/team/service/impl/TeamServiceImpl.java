@@ -122,7 +122,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public TeamResponse getMyTeam(String email) {
+    public List<TeamResponse> getMyTeam(String email) {
         return teamRepository.findMyTeam(email);
     }
 

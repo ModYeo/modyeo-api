@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 import static com.co.kr.modyeo.api.member.domain.entity.QMember.member;
 import static com.co.kr.modyeo.api.team.domain.entity.QTeam.team;
 import static com.co.kr.modyeo.api.team.domain.entity.link.QCrew.crew;
@@ -35,14 +37,14 @@ public class TeamRepositoryImpl extends Querydsl4RepositorySupport implements Te
     }
 
     @Override
-    public TeamResponse findMyTeam(String email) {
+    public List<TeamResponse> findMyTeam(String email) {
         return select(Projections.constructor(TeamResponse.class,
                 team.id, team.name))
                 .from(team)
                 .innerJoin(team.crewList, crew)
                 .innerJoin(crew.member, member)
                 .where(member.email.eq(email))
-                .fetchOne();
+                .fetch();
     }
 
     private BooleanExpression crewIdEq(Long id) {
