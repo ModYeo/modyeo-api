@@ -7,6 +7,7 @@ import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyDetail;
+import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.api.bbs.domain.entity.Reply;
@@ -244,6 +245,13 @@ public class BoardServiceImpl implements BoardService {
     public List<ArticleResponse> getArticlesMy(String email) {
         return articleRepository.findArticleByEmail(email).stream()
                 .map(ArticleResponse::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ReplyResponse> getReplyMy(String email) {
+        return replyRepository.findReplyByEmail(email).stream()
+                .map(ReplyResponse::toDto)
                 .collect(Collectors.toList());
     }
 }

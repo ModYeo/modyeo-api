@@ -7,6 +7,7 @@ import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyDetail;
+import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.api.bbs.domain.entity.Reply;
@@ -38,4 +39,6 @@ public interface BoardService {
     void updateReplyRecommend(ReplyRecommendRequest replyRecommendRequest);
 
     List<ArticleResponse> getArticlesMy(String email);
+
+    List<ReplyResponse> getReplyMy(String email);
 }

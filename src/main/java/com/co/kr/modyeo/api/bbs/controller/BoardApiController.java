@@ -7,6 +7,7 @@ import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyDetail;
+import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.service.BoardService;
 import com.co.kr.modyeo.common.result.JsonResultData;
@@ -141,5 +142,13 @@ public class BoardApiController {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         List<ArticleResponse> articleResponseList = boardService.getArticlesMy(email);
         return ResponseEntity.ok(articleResponseList);
+    }
+
+    @ApiOperation("내가 쓴 댓글 조회 API")
+    @GetMapping("/reply/my")
+    public ResponseEntity<?> getReplyMy(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<ReplyResponse> replyResponseList = boardService.getReplyMy(email);
+        return ResponseEntity.ok(replyResponseList);
     }
 }
