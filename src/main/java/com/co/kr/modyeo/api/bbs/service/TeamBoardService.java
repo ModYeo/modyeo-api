@@ -10,6 +10,8 @@ import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamReplyDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.TeamArticleSearch;
 import org.springframework.data.domain.Slice;
 
+import java.util.List;
+
 public interface TeamBoardService {
     void createTeamArticle(TeamArticleRequest teamArticleRequest);
 
@@ -32,4 +34,6 @@ public interface TeamBoardService {
     void updateTeamArticleRecommend(TeamArticleRecommendRequest articleRecommendRequest);
 
     void updateTeamReplyRecommend(TeamReplyRecommendRequest replyRecommendRequest);
+
+    List<TeamArticleResponse> getArticlesMy(String email);
 }

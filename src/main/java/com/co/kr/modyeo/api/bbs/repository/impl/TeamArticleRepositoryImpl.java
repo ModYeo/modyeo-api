@@ -8,6 +8,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 
+import java.util.List;
+
 import static com.co.kr.modyeo.api.bbs.domain.entity.QArticle.article;
 import static com.co.kr.modyeo.api.bbs.domain.entity.QTeamArticle.teamArticle;
 import static com.co.kr.modyeo.api.team.domain.entity.QTeam.team;
@@ -27,6 +29,13 @@ public class TeamArticleRepositoryImpl extends Querydsl4RepositorySupport implem
                         .where(articleTitleLike(teamArticleSearch.getTitle()),
                                 articleContentLike(teamArticleSearch.getContent()),
                                 categoryIdEq(teamArticleSearch.getTeamId())));
+    }
+
+    @Override
+    public List<TeamArticle> findArticleByEmail(String email) {
+        return selectFrom(teamArticle)
+                .where(teamArticle.createdBy.eq(email))
+                .fetch();
     }
 
     private BooleanExpression categoryIdEq(Long categoryId) {

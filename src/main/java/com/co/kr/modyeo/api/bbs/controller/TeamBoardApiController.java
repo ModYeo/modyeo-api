@@ -4,10 +4,7 @@ import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamArticleRecommendRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamArticleRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamReplyRecommendRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamReplyRequest;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyDetail;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleDetail;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleResponse;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamReplyDetail;
+import com.co.kr.modyeo.api.bbs.domain.dto.response.*;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.TeamArticleSearch;
 import com.co.kr.modyeo.api.bbs.service.TeamBoardService;
 import com.co.kr.modyeo.common.result.JsonResultData;
@@ -17,7 +14,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/team-board")
@@ -128,5 +128,13 @@ public class TeamBoardApiController {
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)
                 .build());
+    }
+
+    @ApiOperation(value = "내가 쓴 게시글 조회 API")
+    @GetMapping("/article/my")
+    public ResponseEntity<?> getTeamArticleMy(){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<TeamArticleResponse> articleResponseList = teamBoardService.getArticlesMy(email);
+        return ResponseEntity.ok(articleResponseList);
     }
 }
