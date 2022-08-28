@@ -7,6 +7,7 @@ import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamReplyDetail;
+import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamReplyResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.TeamArticleSearch;
 import org.springframework.data.domain.Slice;
 
@@ -36,4 +37,6 @@ public interface TeamBoardService {
     void updateTeamReplyRecommend(TeamReplyRecommendRequest replyRecommendRequest);
 
     List<TeamArticleResponse> getArticlesMy(String email);
+
+    List<TeamReplyResponse> getReplyMy(String email);
 }

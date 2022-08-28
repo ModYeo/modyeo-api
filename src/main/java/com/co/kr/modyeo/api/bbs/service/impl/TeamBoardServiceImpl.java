@@ -7,6 +7,7 @@ import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamReplyDetail;
+import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamReplyResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.TeamArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamArticle;
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamReply;
@@ -235,5 +236,12 @@ public class TeamBoardServiceImpl implements TeamBoardService {
         return teamArticleRepository.findArticleByEmail(email)
                 .stream().map(TeamArticleResponse::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TeamReplyResponse> getReplyMy(String email) {
+        return teamArticleRepository.findReplyByEmail(email)
+                .stream().map(TeamReplyResponse::toDto)
+                .collect(Collectors.toList());;
     }
 }
