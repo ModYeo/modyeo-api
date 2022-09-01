@@ -23,6 +23,7 @@ import com.co.kr.modyeo.api.category.repository.CategoryRepository;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.common.exception.ApiException;
+import com.co.kr.modyeo.common.exception.code.BoardErrorCode;
 import com.co.kr.modyeo.common.exception.code.CategoryErrorCode;
 import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -76,8 +77,8 @@ public class BoardServiceImpl implements BoardService {
     public ArticleDetail getArticle(Long id) {
         Article article = articleRepository.findById(id).orElseThrow(
                 () -> ApiException.builder()
-                        .errorMessage("찾을 수 없는 게시글 입니다.")
-                        .errorCode("NOT_FOUND_ARTICLE")
+                        .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
+                        .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
@@ -89,8 +90,8 @@ public class BoardServiceImpl implements BoardService {
     public Article updateArticle(ArticleRequest articleRequest) {
         Article article = articleRepository.findById(articleRequest.getArticleId()).orElseThrow(
                 () -> ApiException.builder()
-                        .errorMessage("찾을 수 없는 게시글 입니다.")
-                        .errorCode("NOT_FOUND_ARTICLE")
+                        .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
+                        .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
@@ -116,8 +117,8 @@ public class BoardServiceImpl implements BoardService {
     public void deleteArticle(Long articleId) {
         Article article = articleRepository.findById(articleId).orElseThrow(
                 () -> ApiException.builder()
-                        .errorMessage("찾을 수 없는 게시글 입니다.")
-                        .errorCode("NOT_FOUND_ARTICLE")
+                        .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
+                        .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
@@ -128,8 +129,8 @@ public class BoardServiceImpl implements BoardService {
     public Reply createReply(ReplyRequest replyRequest) {
         Article article = articleRepository.findById(replyRequest.getArticleId()).orElseThrow(
                 () -> ApiException.builder()
-                        .errorMessage("찾을 수 없는 게시글 입니다.")
-                        .errorCode("NOT_FOUND_ARTICLE")
+                        .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
+                        .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
@@ -144,8 +145,8 @@ public class BoardServiceImpl implements BoardService {
     public Reply updateReply(ReplyRequest replyRequest) {
         Reply reply = replyRepository.findById(replyRequest.getId()).orElseThrow(
                 () -> ApiException.builder()
-                        .errorMessage("찾을 수 없는 댓글 입니다.")
-                        .errorCode("NOT_FOUND_REPLY")
+                        .errorMessage(BoardErrorCode.NOT_FOUND_REPLY.getMessage())
+                        .errorCode(BoardErrorCode.NOT_FOUND_REPLY.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
@@ -160,8 +161,8 @@ public class BoardServiceImpl implements BoardService {
     public void deleteReply(Long replyId) {
         Reply reply = replyRepository.findById(replyId).orElseThrow(
                 () -> ApiException.builder()
-                        .errorMessage("찾을 수 없는 댓글 입니다.")
-                        .errorCode("NOT_FOUND_REPLY")
+                        .errorMessage(BoardErrorCode.NOT_FOUND_REPLY.getMessage())
+                        .errorCode(BoardErrorCode.NOT_FOUND_REPLY.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
@@ -172,8 +173,8 @@ public class BoardServiceImpl implements BoardService {
     public ReplyDetail getReply(Long replyId) {
         Reply reply = replyRepository.findById(replyId).orElseThrow(
                 () -> ApiException.builder()
-                        .errorMessage("찾을 수 없는 댓글 입니다.")
-                        .errorCode("NOT_FOUND_REPLY")
+                        .errorMessage(BoardErrorCode.NOT_FOUND_REPLY.getMessage())
+                        .errorCode(BoardErrorCode.NOT_FOUND_REPLY.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
@@ -192,8 +193,8 @@ public class BoardServiceImpl implements BoardService {
 
         Article article = articleRepository.findById(articleRecommendRequest.getArticleId()).orElseThrow(
                 () -> ApiException.builder()
-                        .errorMessage("찾을 수 없는 게시글 입니다.")
-                        .errorCode("NOT_FOUND_ARTICLE")
+                        .errorMessage(BoardErrorCode.NOT_FOUND_REPLY.getMessage())
+                        .errorCode(BoardErrorCode.NOT_FOUND_REPLY.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
@@ -222,8 +223,8 @@ public class BoardServiceImpl implements BoardService {
 
         Reply reply = replyRepository.findById(replyRecommendRequest.getReplyId()).orElseThrow(
                 () -> ApiException.builder()
-                        .errorMessage("찾을 수 없는 댓글 입니다.")
-                        .errorCode("NOT_FOUND_REPLY")
+                        .errorMessage(BoardErrorCode.NOT_FOUND_REPLY.getMessage())
+                        .errorCode(BoardErrorCode.NOT_FOUND_REPLY.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 

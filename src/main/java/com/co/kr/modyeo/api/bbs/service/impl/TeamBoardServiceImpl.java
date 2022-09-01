@@ -23,6 +23,7 @@ import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.api.team.repository.TeamRepository;
 import com.co.kr.modyeo.common.exception.ApiException;
+import com.co.kr.modyeo.common.exception.code.BoardErrorCode;
 import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
 import com.co.kr.modyeo.common.exception.code.TeamErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -70,8 +71,8 @@ public class TeamBoardServiceImpl implements TeamBoardService {
     public TeamArticleDetail getTeamArticle(Long teamArticleId) {
         TeamArticle teamArticle = teamArticleRepository.findById(teamArticleId)
                 .orElseThrow(() -> ApiException.builder()
-                        .errorMessage("찾을 수 없는 게시글 입니다.")
-                        .errorCode("NOT_FOUND_ARTICLE")
+                        .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
+                        .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
@@ -92,8 +93,8 @@ public class TeamBoardServiceImpl implements TeamBoardService {
         TeamArticle teamArticle = teamArticleRepository.findById(teamArticleRequest.getArticleId()).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
-                        .errorCode("NOT_FOUND_ARTICLE")
-                        .errorMessage("찾을 수 없는 게시글 입니다.")
+                        .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
+                        .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
                         .build());
 
         teamArticle.updateTeamArticleBuilder()
@@ -110,8 +111,8 @@ public class TeamBoardServiceImpl implements TeamBoardService {
         TeamArticle teamArticle = teamArticleRepository.findById(teamArticleId).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
-                        .errorCode("NOT_FOUND_ARTICLE")
-                        .errorMessage("찾을 수 없는 게시글 입니다.")
+                        .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
+                        .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
                         .build());
 
         teamArticleRepository.delete(teamArticle);
@@ -123,8 +124,8 @@ public class TeamBoardServiceImpl implements TeamBoardService {
         TeamArticle teamArticle = teamArticleRepository.findById(teamReplyRequest.getArticleId()).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
-                        .errorCode("NOT_FOUND_ARTICLE")
-                        .errorMessage("찾을 수 없는 게시글 입니다.")
+                        .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
+                        .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
                         .build());
 
         TeamReply teamReply = teamReplyRequest.getReplyDepth() == 0 ?
@@ -138,8 +139,8 @@ public class TeamBoardServiceImpl implements TeamBoardService {
         TeamReply teamReply = teamReplyRepository.findById(teamReplyRequest.getReplyId()).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
-                        .errorCode("NOT_FOUND_REPLY")
-                        .errorMessage("찾을 수 없는 댓글 입니다.")
+                        .errorMessage(BoardErrorCode.NOT_FOUND_REPLY.getMessage())
+                        .errorCode(BoardErrorCode.NOT_FOUND_REPLY.getCode())
                         .build());
 
         teamReply.changeTeamReply(teamReplyRequest.getContent());
@@ -151,8 +152,8 @@ public class TeamBoardServiceImpl implements TeamBoardService {
         TeamReply teamReply = teamReplyRepository.findById(teamReplyId).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
-                        .errorCode("NOT_FOUND_REPLY")
-                        .errorMessage("찾을 수 없는 댓글 입니다.")
+                        .errorMessage(BoardErrorCode.NOT_FOUND_REPLY.getMessage())
+                        .errorCode(BoardErrorCode.NOT_FOUND_REPLY.getCode())
                         .build());
 
         teamReplyRepository.delete(teamReply);
@@ -163,8 +164,8 @@ public class TeamBoardServiceImpl implements TeamBoardService {
         TeamReply teamReply = teamReplyRepository.findById(teamReplyId).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
-                        .errorCode("NOT_FOUND_REPLY")
-                        .errorMessage("찾을 수 없는 댓글 입니다.")
+                        .errorMessage(BoardErrorCode.NOT_FOUND_REPLY.getMessage())
+                        .errorCode(BoardErrorCode.NOT_FOUND_REPLY.getCode())
                         .build());
 
         List<TeamReply> nestedTeamReplyList = teamReplyRepository.findByReplyGroup(teamReply.getReplyGroup());
@@ -182,8 +183,8 @@ public class TeamBoardServiceImpl implements TeamBoardService {
 
         TeamArticle teamArticle = teamArticleRepository.findById(articleRecommendRequest.getTeamArticleId()).orElseThrow(
                 () -> ApiException.builder()
-                        .errorMessage("찾을 수 없는 게시글 입니다.")
-                        .errorCode("NOT_FOUND_ARTICLE")
+                        .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
+                        .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
@@ -212,8 +213,8 @@ public class TeamBoardServiceImpl implements TeamBoardService {
 
         TeamReply teamReply = teamReplyRepository.findById(replyRecommendRequest.getTeamReplyId()).orElseThrow(
                 () -> ApiException.builder()
-                        .errorMessage("찾을 수 없는 게시글 입니다.")
-                        .errorCode("NOT_FOUND_ARTICLE")
+                        .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
+                        .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
@@ -242,6 +243,6 @@ public class TeamBoardServiceImpl implements TeamBoardService {
     public List<TeamReplyResponse> getReplyMy(String email) {
         return teamArticleRepository.findReplyByEmail(email)
                 .stream().map(TeamReplyResponse::toDto)
-                .collect(Collectors.toList());;
+                .collect(Collectors.toList());
     }
 }
