@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.api.member.auth.domain.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,13 +11,12 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 public class MemberLoginDto {
-    @Email
-    @NotNull
+
     private String email;
 
-    @NotNull
     private String password;
 
+    @Builder(builderClassName = "of",builderMethodName = "of")
     public MemberLoginDto(String email, String password) {
         this.email = email;
         this.password = password;

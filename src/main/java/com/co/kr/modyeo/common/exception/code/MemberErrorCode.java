@@ -10,7 +10,9 @@ public enum MemberErrorCode {
 
     OVERLAP_MEMBER("OVERLAP_MEMBER", "멤버 이름 중복으로 등록 실패했습니다."),
 
-    NOT_FOUND_MEMBER("NOT_FOUND_MEMBER", "멤버 찾지 못했습니다.");
+    NOT_FOUND_MEMBER("NOT_FOUND_MEMBER", "멤버 찾지 못했습니다."),
+
+    ENTERED_EMAIL_AND_PASSWORD("ENTERED_EMAIL_AND_PASSWORD", "이메일과 패스워드를 입력해주세요");
     private final String code;
     private final String message;
 

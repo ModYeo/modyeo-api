@@ -8,6 +8,7 @@ import com.co.kr.modyeo.common.enumerate.Yn;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -22,11 +23,10 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class MemberJoinDto {
 
-    @Email
-    @NotNull
+    @Setter
     private String email;
 
-    @NotNull
+    @Setter
     private String password;
 
     private String username;
