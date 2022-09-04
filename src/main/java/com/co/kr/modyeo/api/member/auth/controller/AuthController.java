@@ -107,10 +107,31 @@ public class AuthController {
 
     @ApiOperation(value = "비밀번호 변경 API")
     @PatchMapping("/password")
-    public ResponseEntity<?> updatePassword(@RequestBody PasswordUpdateRequest passwordUpdateRequest) {
-        authService.updatePassword(passwordUpdateRequest);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
-                .build());
+    public ResponseEntity<?> updatePassword(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
+            @RequestBody PasswordUpdateRequest passwordUpdateRequest) {
+        if (authorization != null) {
+            String authBasic = authorization.substring(BASIC_PREFIX.length());
+
+            String decodedAuthBasic = new String(Base64.getDecoder().decode(authBasic), StandardCharsets.UTF_8);
+            String[] authUserInfo = decodedAuthBasic.split(":");
+
+            Long memberId = Long.valueOf(authUserInfo[0]);
+            String password = authUserInfo[1];
+
+            passwordUpdateRequest.setMemberId(memberId);
+            passwordUpdateRequest.setPassword(password);
+
+            authService.updatePassword(passwordUpdateRequest);
+            return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                    .data(null)
+                    .build());
+        }else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(JsonResultData.failResultBuilder()
+                            .errorMessage(MemberErrorCode.ENTERED_EMAIL_AND_PASSWORD.getMessage())
+                            .errorCode(MemberErrorCode.ENTERED_EMAIL_AND_PASSWORD.getCode())
+                            .build());
+        }
     }
 }
