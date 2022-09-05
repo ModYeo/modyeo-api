@@ -47,7 +47,7 @@ public class TeamDetail {
         return of()
                 .id(team.getId())
                 .name(team.getName())
-                .scaleLevel(team.getScaleLevel())
+//                .scaleLevel(team.getScaleLevel())
                 .description(team.getDescription())
                 .createdBy(team.getCreatedBy())
                 .createdTime(team.getCreatedDate())

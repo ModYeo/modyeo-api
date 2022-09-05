@@ -44,7 +44,7 @@ public class TeamResponse {
         return of()
                 .id(team.getId())
                 .name(team.getName())
-                .scaleLevel(team.getScaleLevel())
+//                .scaleLevel(team.getScaleLevel())
                 .description(team.getDescription())
                 .profilePath(team.getProfilePath())
                 .categoryResponses(team.getCategoryList().stream().map(crewCategory -> CategoryResponse.of()

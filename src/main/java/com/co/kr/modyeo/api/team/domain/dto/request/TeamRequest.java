@@ -18,8 +18,6 @@ public class TeamRequest {
 
     private String name;
 
-    private ScaleLevel scaleLevel;
-
     private String description;
 
     private String profilePath;
@@ -27,10 +25,9 @@ public class TeamRequest {
     private List<CategoryDto> categoryDtoList = new ArrayList<>();
 
     @Builder
-    public TeamRequest(Long team_id, String name,ScaleLevel scaleLevel, String description, String profilePath, List<CategoryDto> categoryDtoList) {
+    public TeamRequest(Long team_id, String name, String description, String profilePath, List<CategoryDto> categoryDtoList) {
         this.team_id = team_id;
         this.name = name;
-        this.scaleLevel = scaleLevel;
         this.description = description;
         this.profilePath = profilePath;
         this.categoryDtoList = categoryDtoList;

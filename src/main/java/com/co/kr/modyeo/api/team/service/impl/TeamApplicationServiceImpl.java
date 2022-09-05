@@ -73,7 +73,6 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
                     .team(team)
                     .build();
 
-            team.upScaleLevel(team.getCrewList().size());
             crewRepository.save(crew);
             memberTeamRepository.delete(memberTeam);
         }
