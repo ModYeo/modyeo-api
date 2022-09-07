@@ -108,18 +108,18 @@ public class AuthController {
     @ApiOperation(value = "비밀번호 변경 API")
     @PatchMapping("/password")
     public ResponseEntity<?> updatePassword(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
-            @RequestBody PasswordUpdateRequest passwordUpdateRequest) {
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) {
         if (authorization != null) {
             String authBasic = authorization.substring(BASIC_PREFIX.length());
 
             String decodedAuthBasic = new String(Base64.getDecoder().decode(authBasic), StandardCharsets.UTF_8);
             String[] authUserInfo = decodedAuthBasic.split(":");
 
-            Long memberId = Long.valueOf(authUserInfo[0]);
+            String email = authUserInfo[0];
             String password = authUserInfo[1];
 
-            passwordUpdateRequest.setMemberId(memberId);
+            PasswordUpdateRequest passwordUpdateRequest = new PasswordUpdateRequest();
+            passwordUpdateRequest.setEmail(email);
             passwordUpdateRequest.setPassword(password);
 
             authService.updatePassword(passwordUpdateRequest);

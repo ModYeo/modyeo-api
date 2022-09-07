@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PasswordUpdateRequest {
 
-    private Long memberId;
+    private String email;
 
     private String password;
 }

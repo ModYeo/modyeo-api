@@ -148,7 +148,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void updatePassword(PasswordUpdateRequest passwordUpdateRequest) {
-        Member member = memberRepository.findById(passwordUpdateRequest.getMemberId())
+        Member member = memberRepository.findByEmail(passwordUpdateRequest.getEmail())
                 .orElseThrow(() -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
                         .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
