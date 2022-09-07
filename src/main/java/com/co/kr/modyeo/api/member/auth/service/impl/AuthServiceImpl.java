@@ -1,7 +1,7 @@
 package com.co.kr.modyeo.api.member.auth.service.impl;
 
 import com.co.kr.modyeo.api.member.auth.domain.dto.*;
-import com.co.kr.modyeo.api.member.auth.provider.JwtTokenProvider;
+import com.co.kr.modyeo.common.provider.JwtTokenProvider;
 import com.co.kr.modyeo.api.member.auth.service.AuthService;
 import com.co.kr.modyeo.api.member.collection.domain.entity.CollectionInfo;
 import com.co.kr.modyeo.api.member.collection.repository.CollectionInfoRepository;

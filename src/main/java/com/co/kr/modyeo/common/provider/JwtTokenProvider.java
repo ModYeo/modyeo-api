@@ -1,4 +1,4 @@
-package com.co.kr.modyeo.api.member.auth.provider;
+package com.co.kr.modyeo.common.provider;
 
 import com.co.kr.modyeo.api.member.auth.domain.dto.TokenDto;
 import com.co.kr.modyeo.common.exception.CustomAuthException;

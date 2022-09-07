@@ -1,21 +1,27 @@
 package com.co.kr.modyeo.config;
 
-import com.co.kr.modyeo.api.member.auth.handler.JwtAccessDeniedHandler;
-import com.co.kr.modyeo.api.member.auth.handler.JwtAuthenticationEntryPoint;
-import com.co.kr.modyeo.api.member.auth.provider.JwtTokenProvider;
+import com.co.kr.modyeo.common.handler.JwtAccessDeniedHandler;
+import com.co.kr.modyeo.common.handler.JwtAuthenticationEntryPoint;
+import com.co.kr.modyeo.common.provider.CustomAuthenticationProvider;
+import com.co.kr.modyeo.common.provider.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Slf4j
 @Configuration
+@EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 

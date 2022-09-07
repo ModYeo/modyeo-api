@@ -1,4 +1,4 @@
-package com.co.kr.modyeo.api.member.auth.handler;
+package com.co.kr.modyeo.common.handler;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;

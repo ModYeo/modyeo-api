@@ -1,6 +1,6 @@
-package com.co.kr.modyeo.api.member.auth.filter;
+package com.co.kr.modyeo.common.filter;
 
-import com.co.kr.modyeo.api.member.auth.provider.JwtTokenProvider;
+import com.co.kr.modyeo.common.provider.JwtTokenProvider;
 import com.co.kr.modyeo.common.exception.code.AuthErrorCode;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;

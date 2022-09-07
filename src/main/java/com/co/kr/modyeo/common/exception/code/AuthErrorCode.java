@@ -25,7 +25,9 @@ public enum AuthErrorCode {
     LOG_OUT_USER("LOG_OUT_USER", "로그아웃된 사용자 입니다."),
 
     NOT_MATCH_TOKEN_INFO("NOT_MATCH_TOKEN_INFO", "토큰의 유저 정보가 일치하지 않습니다."),
-    BAD_REQUEST_BODY("BAD_REQUEST_BODY", "");
+    BAD_REQUEST_BODY("BAD_REQUEST_BODY", ""),
+
+    NOT_MATCH_PASSWORD("NOT_MATCH_PASSWORD", "패스워드가 일치하지 않습니다.");
 
     private final String code;
     private final String message;
