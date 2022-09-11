@@ -29,8 +29,8 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
 
     @Override
     @Transactional
-    public MemberTeam applicantCrew(Long memberId, Long crewId) {
-        Member member = findMember(memberId);
+    public MemberTeam applicantCrew(String email, Long crewId) {
+        Member member = findMember(email);
         Team team = findTeam(crewId);
         MemberTeam memberTeam = memberTeamRepository.findByTeamAndMember(team,member);
         if (memberTeam != null){
@@ -80,8 +80,8 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
         return memberTeam;
     }
 
-    private Member findMember(Long memberId){
-        return memberRepository.findById(memberId)
+    private Member findMember(String email){
+        return memberRepository.findByEmail(email)
                 .orElseThrow(() -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
                         .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())

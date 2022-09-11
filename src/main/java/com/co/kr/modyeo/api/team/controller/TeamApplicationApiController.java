@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,10 +22,11 @@ public class TeamApplicationApiController {
     @ApiOperation(value = "팀 가입신청 API")
     @PostMapping("")
     public ResponseEntity<?> applicantCrew(
-            @RequestParam(value = "memberId",name = "memberId",required = true)Long memberId,
+//            @RequestParam(value = "memberId",name = "memberId",required = true)Long memberId,
             @RequestParam(value = "teamId",name = "teamId",required = true)Long teamId
     ){
-        MemberTeam memberTeam = teamApplicationService.applicantCrew(memberId,teamId);
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        MemberTeam memberTeam = teamApplicationService.applicantCrew(email,teamId);
 
         if (memberTeam.getId() != null){
             return ResponseEntity.status(HttpStatus.CREATED)
