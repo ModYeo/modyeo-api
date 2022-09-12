@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.api.team.service.impl;
 
+import com.co.kr.modyeo.api.team.domain.dto.request.ApplicationFormCreateRequest;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.api.team.domain.entity.enumerate.JoinStatus;
 import com.co.kr.modyeo.api.team.domain.entity.link.Crew;
@@ -78,6 +79,11 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
         }
 
         return memberTeam;
+    }
+
+    @Override
+    public void createApplicationForm(ApplicationFormCreateRequest applicationFormCreateRequest) {
+
     }
 
     private Member findMember(String email){

@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.api.team.controller;
 
+import com.co.kr.modyeo.api.team.domain.dto.request.ApplicationFormCreateRequest;
 import com.co.kr.modyeo.api.team.domain.entity.enumerate.JoinStatus;
 import com.co.kr.modyeo.api.team.domain.entity.link.MemberTeam;
 import com.co.kr.modyeo.api.team.service.TeamApplicationService;
@@ -19,21 +20,30 @@ import org.springframework.web.bind.annotation.*;
 public class TeamApplicationApiController {
     private final TeamApplicationService teamApplicationService;
 
+    @ApiOperation(value = "팀 가입신청 폼 API")
+    @PostMapping("/form")
+    public ResponseEntity<?> createApplicationForm(@RequestBody ApplicationFormCreateRequest applicationFormCreateRequest) {
+        teamApplicationService.createApplicationForm(applicationFormCreateRequest);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
+                .build());
+    }
+
     @ApiOperation(value = "팀 가입신청 API")
     @PostMapping("")
     public ResponseEntity<?> applicantCrew(
 //            @RequestParam(value = "memberId",name = "memberId",required = true)Long memberId,
-            @RequestParam(value = "teamId",name = "teamId",required = true)Long teamId
-    ){
+            @RequestParam(value = "teamId", name = "teamId", required = true) Long teamId
+    ) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        MemberTeam memberTeam = teamApplicationService.applicantCrew(email,teamId);
+        MemberTeam memberTeam = teamApplicationService.applicantCrew(email, teamId);
 
-        if (memberTeam.getId() != null){
+        if (memberTeam.getId() != null) {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(JsonResultData.successResultBuilder()
                             .data(null)
                             .build());
-        }else{
+        } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(JsonResultData.failResultBuilder()
                             .errorMessage(null)
@@ -45,17 +55,17 @@ public class TeamApplicationApiController {
     @ApiOperation(value = "팀 가입신청 변경 API")
     @PatchMapping("")
     public ResponseEntity<?> updateJoinState(
-            @RequestParam(value = "memberTeamId",name = "memberTeamId",required = true) Long memberTeamId,
-            @RequestParam(value = "joinStatus",name = "joinStatus",required = true) JoinStatus joinStatus
-            ){
-        MemberTeam memberTeam = teamApplicationService.updateJoinStatus(memberTeamId,joinStatus);
+            @RequestParam(value = "memberTeamId", name = "memberTeamId", required = true) Long memberTeamId,
+            @RequestParam(value = "joinStatus", name = "joinStatus", required = true) JoinStatus joinStatus
+    ) {
+        MemberTeam memberTeam = teamApplicationService.updateJoinStatus(memberTeamId, joinStatus);
 
-        if (memberTeam.getId() != null){
+        if (memberTeam.getId() != null) {
             return ResponseEntity.status(HttpStatus.OK)
                     .body(JsonResultData.successResultBuilder()
                             .data(null)
                             .build());
-        }else{
+        } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(JsonResultData.failResultBuilder()
                             .errorMessage(null)
