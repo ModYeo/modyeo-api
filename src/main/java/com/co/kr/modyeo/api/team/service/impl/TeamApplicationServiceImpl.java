@@ -1,10 +1,12 @@
 package com.co.kr.modyeo.api.team.service.impl;
 
-import com.co.kr.modyeo.api.team.domain.dto.request.ApplicationFormCreateRequest;
+import com.co.kr.modyeo.api.team.domain.dto.request.ApplicationFormRequest;
+import com.co.kr.modyeo.api.team.domain.entity.ApplicationForm;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.api.team.domain.entity.enumerate.JoinStatus;
 import com.co.kr.modyeo.api.team.domain.entity.link.Crew;
 import com.co.kr.modyeo.api.team.domain.entity.link.MemberTeam;
+import com.co.kr.modyeo.api.team.repository.ApplicationFormRepository;
 import com.co.kr.modyeo.api.team.repository.CrewRepository;
 import com.co.kr.modyeo.api.team.repository.MemberTeamRepository;
 import com.co.kr.modyeo.api.team.service.TeamApplicationService;
@@ -14,6 +16,7 @@ import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.team.repository.TeamRepository;
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
+import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,6 +30,7 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
     private final TeamRepository teamRepository;
     private final MemberTeamRepository memberTeamRepository;
     private final CrewRepository crewRepository;
+    private final ApplicationFormRepository applicationFormRepository;
 
     @Override
     @Transactional
@@ -82,8 +86,16 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
     }
 
     @Override
-    public void createApplicationForm(ApplicationFormCreateRequest applicationFormCreateRequest) {
+    public void createApplicationForm(ApplicationFormRequest applicationFormRequest) {
+        Team team = teamRepository.findById(applicationFormRequest.getTeamId())
+                .orElseThrow(() -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorMessage(TeamErrorCode.NOT_FOUND_TEAM.getMessage())
+                        .errorCode(TeamErrorCode.NOT_FOUND_TEAM.getCode())
+                        .build());
 
+        ApplicationForm applicationForm = ApplicationFormRequest.toEntity(applicationFormRequest, team);
+        applicationFormRepository.save(applicationForm);
     }
 
     private Member findMember(String email){
