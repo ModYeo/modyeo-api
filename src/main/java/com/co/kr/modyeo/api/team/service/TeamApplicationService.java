@@ -1,6 +1,6 @@
 package com.co.kr.modyeo.api.team.service;
 
-import com.co.kr.modyeo.api.team.domain.dto.request.ApplicationFormCreateRequest;
+import com.co.kr.modyeo.api.team.domain.dto.request.ApplicationFormRequest;
 import com.co.kr.modyeo.api.team.domain.entity.enumerate.JoinStatus;
 import com.co.kr.modyeo.api.team.domain.entity.link.MemberTeam;
 
@@ -10,5 +10,5 @@ public interface TeamApplicationService {
 
     MemberTeam updateJoinStatus(Long memberCrewId, JoinStatus joinStatus);
 
-    void createApplicationForm(ApplicationFormCreateRequest applicationFormCreateRequest);
+    void createApplicationForm(ApplicationFormRequest applicationFormRequest);
 }
