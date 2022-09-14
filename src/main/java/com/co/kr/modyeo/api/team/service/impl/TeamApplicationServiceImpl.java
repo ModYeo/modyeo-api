@@ -87,6 +87,7 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
     }
 
     @Override
+    @Transactional
     public void createApplicationForm(ApplicationFormRequest applicationFormRequest) {
         Team team = teamRepository.findById(applicationFormRequest.getTeamId())
                 .orElseThrow(() -> ApiException.builder()
@@ -103,6 +104,26 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
     public ApplicationFormDetail getApplicationForm(Long teamId) {
         ApplicationForm applicationForm = applicationFormRepository.findApplicationFormByTeamId(teamId);
         return ApplicationFormDetail.toDto(applicationForm);
+    }
+
+    @Override
+    @Transactional
+    public void updateApplicationForm(Long applicationFromId, ApplicationFormRequest applicationFormRequest) {
+        ApplicationForm applicationForm = applicationFormRepository.findById(applicationFromId).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode(TeamErrorCode.NOT_FOUND_APPLICATION_FORM.getCode())
+                        .errorMessage(TeamErrorCode.NOT_FOUND_APPLICATION_FORM.getMessage())
+                        .build());
+
+        ApplicationForm.updateBuilder()
+                .applicationForm(applicationForm)
+                .content(applicationFormRequest.getContent())
+                .dutyNote(applicationFormRequest.getDutyNote())
+                .birthdayAgree(applicationFormRequest.getBirthdayAgree())
+                .geoAgree(applicationFormRequest.getGeoAgree())
+                .sexAgree(applicationFormRequest.getSexAgree())
+                .build();
     }
 
     private Member findMember(String email){

@@ -59,4 +59,13 @@ public class ApplicationForm extends BaseEntity {
         this.sexAgree = sexAgree;
         this.geoAgree = geoAgree;
     }
+
+    @Builder(builderClassName = "updateBuilder",builderMethodName = "updateBuilder")
+    public static void changeApplicationForm(ApplicationForm applicationForm, String content, String dutyNote, Yn birthdayAgree, Yn sexAgree, Yn geoAgree){
+        if (content != null) applicationForm.content = content;
+        if (dutyNote != null) applicationForm.dutyNote = dutyNote;
+        if (birthdayAgree != null) applicationForm.birthdayAgree = birthdayAgree;
+        if (sexAgree != null) applicationForm.sexAgree = sexAgree;
+        if (geoAgree != null) applicationForm.geoAgree = geoAgree;
+    }
 }

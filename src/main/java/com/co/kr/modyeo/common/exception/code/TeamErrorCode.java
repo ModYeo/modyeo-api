@@ -16,6 +16,8 @@ public enum TeamErrorCode {
 
     ALREADY_APPLICANT_TEAM("ALREADY_APPLICANT_TEAM", "이미 가입 신청했습니다."),
 
+    NOT_FOUND_APPLICATION_FORM("NOT_FOUND_APPLICATION_FORM","가입신청 폼을 찾지 못했습니다."),
+
     NOT_FOUND_APPLICANT("NOT_FOUND_APPLICANT", "찾을 수 없는 가입신청입니다.");
 
     private final String code;

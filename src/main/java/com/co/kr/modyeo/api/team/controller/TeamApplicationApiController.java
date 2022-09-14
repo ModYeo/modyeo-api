@@ -32,10 +32,21 @@ public class TeamApplicationApiController {
 
     @ApiOperation(value = "팀 가입신청 폼 상세 조회 API")
     @GetMapping("/form/{teamId}")
-    public ResponseEntity<?> getApplicationForm(@PathVariable(value = "teamId")Long teamId){
+    public ResponseEntity<?> getApplicationForm(@PathVariable(value = "teamId") Long teamId) {
         ApplicationFormDetail applicationFormDetail = teamApplicationService.getApplicationForm(teamId);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(applicationFormDetail)
+                .build());
+    }
+
+    @ApiOperation(value = "팀 가입신청폼 수정 API")
+    @PatchMapping("/form/{applicationFromId}")
+    public ResponseEntity<?> updateApplicationForm(
+            @PathVariable(value = "applicationFromId") Long applicationFromId,
+            @RequestBody ApplicationFormRequest applicationFormRequest) {
+        teamApplicationService.updateApplicationForm(applicationFromId,applicationFormRequest);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
                 .build());
     }
 
