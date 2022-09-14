@@ -14,4 +14,6 @@ public interface TeamApplicationService {
     void createApplicationForm(ApplicationFormRequest applicationFormRequest);
 
     ApplicationFormDetail getApplicationForm(Long teamId);
+
+    void updateApplicationForm(Long applicationFromId, ApplicationFormRequest applicationFormRequest);
 }
