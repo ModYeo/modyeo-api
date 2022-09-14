@@ -9,12 +9,14 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.Column;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -35,11 +37,8 @@ public class MemberJoinDto {
 
     private Sex sex;
 
-    private Integer birthYear;
-
-    private Integer birthMonth;
-
-    private Integer birthDay;
+    @DateTimeFormat(pattern = "yyyyMMdd")
+    private LocalDate birthDay;
 
     private List<CollectionInfoDto> collectionInfoDtoList;
 
@@ -48,14 +47,12 @@ public class MemberJoinDto {
         this.password = password;
     }
 
-    public MemberJoinDto(String email, String password, String username, Sex sex, String nickname, Integer birthYear, Integer birthMonth, Integer birthDay) {
+    public MemberJoinDto(String email, String password, String username, Sex sex, String nickname, LocalDate birthDay) {
         this.email = email;
         this.password = password;
         this.username = username;
         this.sex = sex;
         this.nickname = nickname;
-        this.birthYear = birthYear;
-        this.birthMonth = birthMonth;
         this.birthDay = birthDay;
     }
 
@@ -66,8 +63,6 @@ public class MemberJoinDto {
                 .authority(Authority.ROLE_USER)
                 .username(memberJoinDto.username)
                 .nickname(memberJoinDto.nickname)
-                .birthYear(memberJoinDto.getBirthYear())
-                .birthMonth(memberJoinDto.getBirthMonth())
                 .birthDay(memberJoinDto.getBirthDay())
                 .sex(memberJoinDto.sex)
                 .build();

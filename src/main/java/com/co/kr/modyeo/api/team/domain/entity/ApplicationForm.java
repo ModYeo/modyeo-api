@@ -19,12 +19,14 @@ public class ApplicationForm extends BaseEntity {
     @Column(name = "application_form_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
 
+    @Lob
     private String content;
 
+    @Lob
     @Column(name = "duty_note")
     private String dutyNote;
 

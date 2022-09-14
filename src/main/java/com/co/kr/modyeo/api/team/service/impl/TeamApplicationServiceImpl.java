@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.team.service.impl;
 
 import com.co.kr.modyeo.api.team.domain.dto.request.ApplicationFormRequest;
+import com.co.kr.modyeo.api.team.domain.dto.response.ApplicationFormDetail;
 import com.co.kr.modyeo.api.team.domain.entity.ApplicationForm;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.api.team.domain.entity.enumerate.JoinStatus;
@@ -96,6 +97,12 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
 
         ApplicationForm applicationForm = ApplicationFormRequest.toEntity(applicationFormRequest, team);
         applicationFormRepository.save(applicationForm);
+    }
+
+    @Override
+    public ApplicationFormDetail getApplicationForm(Long teamId) {
+        ApplicationForm applicationForm = applicationFormRepository.findApplicationFormByTeamId(teamId);
+        return ApplicationFormDetail.toDto(applicationForm);
     }
 
     private Member findMember(String email){

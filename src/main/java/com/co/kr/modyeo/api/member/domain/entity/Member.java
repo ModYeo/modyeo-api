@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,14 +39,8 @@ public class Member extends BaseEntity {
     @Column(name = "profile_path")
     private String profilePath;
 
-    @Column(name = "birth_year")
-    private Integer birthYear;
-
-    @Column(name = "birth_month")
-    private Integer birthMonth;
-
     @Column(name = "birth_day")
-    private Integer birthDay;
+    private LocalDate birthDay;
     @Enumerated(EnumType.STRING)
     private Sex sex;
 
@@ -62,15 +57,13 @@ public class Member extends BaseEntity {
     private List<MemberCollectionInfo> memberCollectionInfoList = new ArrayList<>();
 
     @Builder(buildMethodName = "createMemberBuilder", builderClassName = "createMemberBuilder")
-    public Member(Long id, String email, String password, Authority authority, String nickname, Sex sex, Integer birthYear, Integer birthMonth, Integer birthDay) {
+    public Member(Long id, String email, String password, Authority authority, String nickname, Sex sex, LocalDate birthDay) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.authority = authority;
         this.nickname = nickname;
         this.sex = sex;
-        this.birthYear = birthYear;
-        this.birthMonth = birthMonth;
         this.birthDay = birthDay;
     }
 
@@ -81,9 +74,7 @@ public class Member extends BaseEntity {
                   String username,
                   String nickname,
                   String profilePath,
-                  Integer birthYear,
-                  Integer birthMonth,
-                  Integer birthDay,
+                  LocalDate birthDay,
                   Sex sex,
                   Authority authority,
                   List<Crew> teamList,
@@ -95,8 +86,6 @@ public class Member extends BaseEntity {
         this.username = username;
         this.nickname = nickname;
         this.profilePath = profilePath;
-        this.birthYear = birthYear;
-        this.birthMonth = birthMonth;
         this.birthDay = birthDay;
         this.sex = sex;
         this.authority = authority;

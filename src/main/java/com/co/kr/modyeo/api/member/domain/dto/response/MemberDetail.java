@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -28,11 +29,8 @@ public class MemberDetail {
 
     private String profilePath;
 
-    private Integer birthYear;
-
-    private Integer birthMonth;
-
-    private Integer birthDay;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+    private LocalDate birthDay;
 
     private Sex sex;
 
@@ -47,14 +45,12 @@ public class MemberDetail {
 
     @QueryProjection
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public MemberDetail(Long memberId, String username, Sex sex, String nickname, String profilePath, Integer birthYear, Integer birthMonth, Integer birthDay, List<TeamResponse> teamResponseList, List<CategoryResponse> categoryResponseList, LocalDateTime createdTime, List<MemberCollectionInfoResponse> collectionInfoResponseList) {
+    public MemberDetail(Long memberId, String username, Sex sex, String nickname, String profilePath, LocalDate birthDay, List<TeamResponse> teamResponseList, List<CategoryResponse> categoryResponseList, LocalDateTime createdTime, List<MemberCollectionInfoResponse> collectionInfoResponseList) {
         this.memberId = memberId;
         this.username = username;
         this.sex = sex;
         this.nickname = nickname;
         this.profilePath = profilePath;
-        this.birthYear = birthYear;
-        this.birthMonth = birthMonth;
         this.birthDay = birthDay;
         this.createdTime = createdTime;
         this.teamResponseList = teamResponseList;
@@ -69,8 +65,6 @@ public class MemberDetail {
                 .sex(member.getSex())
                 .nickname(member.getNickname())
                 .profilePath(member.getProfilePath())
-                .birthYear(member.getBirthYear())
-                .birthMonth(member.getBirthMonth())
                 .birthDay(member.getBirthDay())
                 .createdTime(member.getCreatedDate())
                 .teamResponseList(member.getTeamList()

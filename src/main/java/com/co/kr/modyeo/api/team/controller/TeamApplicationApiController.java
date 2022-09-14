@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.team.controller;
 
 import com.co.kr.modyeo.api.team.domain.dto.request.ApplicationFormRequest;
+import com.co.kr.modyeo.api.team.domain.dto.response.ApplicationFormDetail;
 import com.co.kr.modyeo.api.team.domain.entity.enumerate.JoinStatus;
 import com.co.kr.modyeo.api.team.domain.entity.link.MemberTeam;
 import com.co.kr.modyeo.api.team.service.TeamApplicationService;
@@ -26,6 +27,15 @@ public class TeamApplicationApiController {
         teamApplicationService.createApplicationForm(applicationFormRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)
+                .build());
+    }
+
+    @ApiOperation(value = "팀 가입신청 폼 상세 조회 API")
+    @GetMapping("/form/{teamId}")
+    public ResponseEntity<?> getApplicationForm(@PathVariable(value = "teamId")Long teamId){
+        ApplicationFormDetail applicationFormDetail = teamApplicationService.getApplicationForm(teamId);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(applicationFormDetail)
                 .build());
     }
 
