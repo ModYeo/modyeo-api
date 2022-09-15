@@ -40,11 +40,21 @@ public class TeamApplicationApiController {
     }
 
     @ApiOperation(value = "팀 가입신청폼 수정 API")
-    @PatchMapping("/form/{applicationFromId}")
+    @PatchMapping("/form/{applicationFormId}")
     public ResponseEntity<?> updateApplicationForm(
-            @PathVariable(value = "applicationFromId") Long applicationFromId,
+            @PathVariable(value = "applicationFormId") Long applicationFromId,
             @RequestBody ApplicationFormRequest applicationFormRequest) {
         teamApplicationService.updateApplicationForm(applicationFromId,applicationFormRequest);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
+                .build());
+    }
+
+    @ApiOperation(value = "팀 가입신청폼 삭제 API")
+    @DeleteMapping("/form/{applicationFormId}")
+    public ResponseEntity<?> deleteApplicationForm(
+            @PathVariable(value = "applicationFormId") Long applicationFromId) {
+        teamApplicationService.deleteApplicationForm(applicationFromId);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)
                 .build());

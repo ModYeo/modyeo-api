@@ -126,6 +126,19 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
                 .build();
     }
 
+    @Override
+    @Transactional
+    public void deleteApplicationForm(Long applicationFromId) {
+        ApplicationForm applicationForm = applicationFormRepository.findById(applicationFromId).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode(TeamErrorCode.NOT_FOUND_APPLICATION_FORM.getCode())
+                        .errorMessage(TeamErrorCode.NOT_FOUND_APPLICATION_FORM.getMessage())
+                        .build());
+
+        applicationFormRepository.delete(applicationForm);
+    }
+
     private Member findMember(String email){
         return memberRepository.findByEmail(email)
                 .orElseThrow(() -> ApiException.builder()

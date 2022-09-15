@@ -16,4 +16,6 @@ public interface TeamApplicationService {
     ApplicationFormDetail getApplicationForm(Long teamId);
 
     void updateApplicationForm(Long applicationFromId, ApplicationFormRequest applicationFormRequest);
+
+    void deleteApplicationForm(Long applicationFromId);
 }
