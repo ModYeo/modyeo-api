@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.team.service.impl;
 
 import com.co.kr.modyeo.api.team.domain.dto.request.ApplicationFormRequest;
+import com.co.kr.modyeo.api.team.domain.dto.request.TeamApplicationRequest;
 import com.co.kr.modyeo.api.team.domain.dto.response.ApplicationFormDetail;
 import com.co.kr.modyeo.api.team.domain.entity.ApplicationForm;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
@@ -35,9 +36,9 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
 
     @Override
     @Transactional
-    public MemberTeam applicantCrew(String email, Long crewId) {
-        Member member = findMember(email);
-        Team team = findTeam(crewId);
+    public MemberTeam applicantCrew(TeamApplicationRequest teamApplicationRequest) {
+        Member member = findMember(teamApplicationRequest.getEmail());
+        Team team = findTeam(teamApplicationRequest.getTeamId());
         MemberTeam memberTeam = memberTeamRepository.findByTeamAndMember(team,member);
         if (memberTeam != null){
             if (memberTeam.getJoinStatus() != JoinStatus.APPROVAL){
@@ -53,6 +54,7 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
         MemberTeam newMemberTeam = MemberTeam.joinApplicationBuilder()
                 .team(team)
                 .member(member)
+                .introduce(teamApplicationRequest.getIntroduce())
                 .build();
 
         return memberTeamRepository.save(newMemberTeam);

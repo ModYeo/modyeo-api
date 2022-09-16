@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.team.controller;
 
 import com.co.kr.modyeo.api.team.domain.dto.request.ApplicationFormRequest;
+import com.co.kr.modyeo.api.team.domain.dto.request.TeamApplicationRequest;
 import com.co.kr.modyeo.api.team.domain.dto.response.ApplicationFormDetail;
 import com.co.kr.modyeo.api.team.domain.entity.enumerate.JoinStatus;
 import com.co.kr.modyeo.api.team.domain.entity.link.MemberTeam;
@@ -53,11 +54,12 @@ public class TeamApplicationApiController {
     @ApiOperation(value = "팀 가입신청 API")
     @PostMapping("")
     public ResponseEntity<?> applicantCrew(
-//            @RequestParam(value = "memberId",name = "memberId",required = true)Long memberId,
-            @RequestParam(value = "teamId", name = "teamId", required = true) Long teamId
+            @RequestBody TeamApplicationRequest teamApplicationRequest
     ) {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        MemberTeam memberTeam = teamApplicationService.applicantCrew(email, teamId);
+        teamApplicationRequest.setEmail(email);
+
+        MemberTeam memberTeam = teamApplicationService.applicantCrew(teamApplicationRequest);
 
         if (memberTeam.getId() != null) {
             return ResponseEntity.status(HttpStatus.CREATED)
