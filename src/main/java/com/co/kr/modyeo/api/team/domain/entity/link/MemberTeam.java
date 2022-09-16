@@ -28,23 +28,28 @@ public class MemberTeam extends BaseEntity {
     @JoinColumn(name = "team_id")
     private Team team;
 
+    @Lob
+    private String introduce;
+
     @Column(name = "join_status")
     @Enumerated(EnumType.STRING)
     private JoinStatus joinStatus;
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public MemberTeam(Long id, Member member, Team team, JoinStatus joinStatus) {
+    public MemberTeam(Long id, Member member, Team team,String introduce, JoinStatus joinStatus) {
         this.id = id;
         this.member = member;
         this.team = team;
+        this.introduce = introduce;
         this.joinStatus = joinStatus;
     }
 
     @Builder(builderClassName = "joinApplicationBuilder",builderMethodName = "joinApplicationBuilder")
-    public static MemberTeam MemberCrew(Member member, Team team) {
+    public static MemberTeam MemberCrew(Member member, Team team, String introduce) {
         return MemberTeam.of()
                 .team(team)
                 .member(member)
+                .introduce(introduce)
                 .joinStatus(JoinStatus.APPLICATION)
                 .build();
     }
