@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.team.service.impl;
 import com.co.kr.modyeo.api.team.domain.dto.request.ApplicationFormRequest;
 import com.co.kr.modyeo.api.team.domain.dto.request.TeamApplicationRequest;
 import com.co.kr.modyeo.api.team.domain.dto.response.ApplicationFormDetail;
+import com.co.kr.modyeo.api.team.domain.dto.response.MemberTeamResponse;
 import com.co.kr.modyeo.api.team.domain.entity.ApplicationForm;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.api.team.domain.entity.enumerate.JoinStatus;
@@ -23,6 +24,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -139,6 +143,13 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
                         .build());
 
         applicationFormRepository.delete(applicationForm);
+    }
+
+    @Override
+    public List<MemberTeamResponse> getTeamApplication(Long teamId) {
+        return memberTeamRepository.findByTeamId(teamId).stream()
+                .map(MemberTeamResponse::toDto)
+                .collect(Collectors.toList());
     }
 
     private Member findMember(String email){

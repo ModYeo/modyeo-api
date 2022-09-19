@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.team.controller;
 import com.co.kr.modyeo.api.team.domain.dto.request.ApplicationFormRequest;
 import com.co.kr.modyeo.api.team.domain.dto.request.TeamApplicationRequest;
 import com.co.kr.modyeo.api.team.domain.dto.response.ApplicationFormDetail;
+import com.co.kr.modyeo.api.team.domain.dto.response.MemberTeamResponse;
 import com.co.kr.modyeo.api.team.domain.entity.enumerate.JoinStatus;
 import com.co.kr.modyeo.api.team.domain.entity.link.MemberTeam;
 import com.co.kr.modyeo.api.team.service.TeamApplicationService;
@@ -14,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/member-team")
@@ -83,6 +86,17 @@ public class TeamApplicationApiController {
                             .errorCode(null)
                             .build());
         }
+    }
+
+    @ApiOperation(value = "팀 가입신청 리스트 API")
+    @GetMapping("")
+    public ResponseEntity<?> getTeamApplication(
+            @RequestParam(value = "teamId",name = "teamId",required = true)Long teamId){
+        List<MemberTeamResponse> memberTeamResponseList = teamApplicationService.getTeamApplication(teamId);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(JsonResultData.successResultBuilder()
+                        .data(null)
+                        .build());
     }
 
     @ApiOperation(value = "팀 가입신청 변경 API")
