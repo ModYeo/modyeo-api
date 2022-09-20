@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.member.controller;
 import com.co.kr.modyeo.api.member.domain.dto.request.MemberCategoryRequest;
 import com.co.kr.modyeo.api.member.domain.dto.request.MemberProfilePathRequest;
 import com.co.kr.modyeo.api.member.domain.dto.request.NicknameUpdateRequest;
+import com.co.kr.modyeo.api.member.domain.dto.response.ApplicationMemberDetail;
 import com.co.kr.modyeo.api.member.domain.dto.response.MemberDetail;
 import com.co.kr.modyeo.api.member.service.MemberService;
 import com.co.kr.modyeo.common.result.JsonResultData;
@@ -55,10 +56,21 @@ public class MemberApiController {
 
     @ApiOperation(value = "프로필 등록/변경 API")
     @PutMapping("/profile-path")
-    public ResponseEntity<?> putProfilePath(@RequestBody MemberProfilePathRequest memberProfilePathRequest){
+    public ResponseEntity<?> putProfilePath(@RequestBody MemberProfilePathRequest memberProfilePathRequest) {
         memberService.putProfilePath(memberProfilePathRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)
+                .build());
+    }
+
+    @ApiOperation(value = "팀 가입 신청자 정보 보기")
+    @GetMapping("/{memberId}/team-application/{teamId}")
+    public ResponseEntity<?> getTeamApplicationMember(
+            @PathVariable Long memberId,
+            @PathVariable Long teamId) {
+        ApplicationMemberDetail applicationMemberDetail = memberService.getTeamApplicationMember(memberId,teamId);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(applicationMemberDetail)
                 .build());
     }
 }

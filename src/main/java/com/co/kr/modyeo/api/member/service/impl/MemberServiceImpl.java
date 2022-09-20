@@ -4,12 +4,15 @@ import com.co.kr.modyeo.api.category.repository.CategoryRepository;
 import com.co.kr.modyeo.api.member.domain.dto.request.MemberCategoryRequest;
 import com.co.kr.modyeo.api.member.domain.dto.request.MemberProfilePathRequest;
 import com.co.kr.modyeo.api.member.domain.dto.request.NicknameUpdateRequest;
+import com.co.kr.modyeo.api.member.domain.dto.response.ApplicationMemberDetail;
 import com.co.kr.modyeo.api.member.domain.dto.response.MemberDetail;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.domain.entity.link.MemberCategory;
 import com.co.kr.modyeo.api.member.repository.MemberCategoryRepository;
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.api.member.service.MemberService;
+import com.co.kr.modyeo.api.team.domain.entity.ApplicationForm;
+import com.co.kr.modyeo.api.team.repository.ApplicationFormRepository;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +33,8 @@ public class MemberServiceImpl implements MemberService {
     private final CategoryRepository categoryRepository;
 
     private final MemberCategoryRepository memberCategoryRepository;
+
+    private final ApplicationFormRepository applicationFormRepository;
 
     @Override
     @Transactional
@@ -86,5 +91,19 @@ public class MemberServiceImpl implements MemberService {
                         .build());
 
         member.changeProfilePath(member.getProfilePath());
+    }
+
+    @Override
+    public ApplicationMemberDetail getTeamApplicationMember(Long memberId, Long teamId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
+                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
+                        .build());
+
+        ApplicationForm applicationForm = applicationFormRepository.findApplicationFormByMemberIdAndTeamId(member.getEmail(), teamId);
+
+        return null;
     }
 }
