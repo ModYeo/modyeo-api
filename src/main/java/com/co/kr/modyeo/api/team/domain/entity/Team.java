@@ -58,8 +58,9 @@ public class Team extends BaseEntity {
                 .build();
     }
 
-    public void changeTeamInfo(String name, String profilePath) {
+    public void changeTeamInfo(String name, String profilePath, String description) {
         this.name = name;
         this.profilePath = profilePath;
+        this.description = description;
     }
 }
