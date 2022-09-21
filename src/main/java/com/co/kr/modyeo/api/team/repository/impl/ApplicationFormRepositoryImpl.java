@@ -22,13 +22,4 @@ public class ApplicationFormRepositoryImpl extends Querydsl4RepositorySupport im
                 .where(team.id.eq(teamId))
                 .fetchOne();
     }
-
-    @Override
-    public ApplicationForm findApplicationFormByMemberIdAndTeamId(String email, Long teamId) {
-        return selectFrom(applicationForm)
-                .innerJoin(applicationForm.team,team)
-                .where(team.id.eq(teamId),
-                        applicationForm.createdBy.eq(email))
-                .fetchOne();
-    }
 }

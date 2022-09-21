@@ -13,6 +13,8 @@ import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.api.member.service.MemberService;
 import com.co.kr.modyeo.api.team.domain.entity.ApplicationForm;
 import com.co.kr.modyeo.api.team.repository.ApplicationFormRepository;
+import com.co.kr.modyeo.api.team.repository.MemberTeamRepository;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +37,8 @@ public class MemberServiceImpl implements MemberService {
     private final MemberCategoryRepository memberCategoryRepository;
 
     private final ApplicationFormRepository applicationFormRepository;
+
+    private final MemberTeamRepository memberTeamRepository;
 
     @Override
     @Transactional
@@ -95,15 +99,17 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public ApplicationMemberDetail getTeamApplicationMember(Long memberId, Long teamId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(
-                () -> ApiException.builder()
-                        .status(HttpStatus.BAD_REQUEST)
-                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
-                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
-                        .build());
+        ApplicationMemberDetail detail = memberTeamRepository.findApplicationMemberByMemberId(memberId);
+        if (detail == null) throw ApiException.builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .errorCode("NOT_FOUND_APPLICATION_MEMBER")
+                .errorMessage("신청자 정보를 찾을 수 없습니다.")
+                .build();
 
-        ApplicationForm applicationForm = applicationFormRepository.findApplicationFormByMemberIdAndTeamId(member.getEmail(), teamId);
+        ApplicationForm applicationForm = applicationFormRepository.findApplicationFormByTeamId(teamId);
+        if (Yn.N.equals(applicationForm.getBirthdayAgree())) detail.birthDayHide();
+        if (Yn.N.equals(applicationForm.getSexAgree())) detail.sexHide();
 
-        return null;
+        return detail;
     }
 }

@@ -1,8 +1,10 @@
 package com.co.kr.modyeo.api.team.repository.impl;
 
+import com.co.kr.modyeo.api.member.domain.dto.response.ApplicationMemberDetail;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
 import com.co.kr.modyeo.api.team.domain.entity.link.MemberTeam;
 import com.co.kr.modyeo.api.team.repository.custom.MemberTeamCustomRepository;
+import com.querydsl.core.types.Projections;
 
 import java.util.List;
 
@@ -25,5 +27,19 @@ public class MemberTeamRepositoryImpl extends Querydsl4RepositorySupport impleme
                 .where(memberTeam.team.id.eq(teamId))
                 .fetchJoin()
                 .fetch();
+    }
+
+    @Override
+    public ApplicationMemberDetail findApplicationMemberByMemberId(Long memberId) {
+        return select(Projections.constructor(ApplicationMemberDetail.class,
+                member.id,
+                memberTeam.id,
+                member.nickname,
+                member.sex,
+                member.birthDay,
+                memberTeam.createdDate))
+                .from(memberTeam)
+                .innerJoin(memberTeam.member, member)
+                .fetchOne();
     }
 }
