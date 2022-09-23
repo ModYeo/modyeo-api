@@ -121,4 +121,14 @@ public class TeamApplicationApiController {
         }
     }
 
+    @ApiOperation(value = "팀 가입신청 취소")
+    @DeleteMapping("/{memberTeamId}")
+    public ResponseEntity<?> deleteTeamApplication(
+            @PathVariable Long memberTeamId){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(JsonResultData.successResultBuilder()
+                        .data(null)
+                        .build());
+    }
+
 }
