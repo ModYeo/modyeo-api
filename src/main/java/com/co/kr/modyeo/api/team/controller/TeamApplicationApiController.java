@@ -125,6 +125,7 @@ public class TeamApplicationApiController {
     @DeleteMapping("/{memberTeamId}")
     public ResponseEntity<?> deleteTeamApplication(
             @PathVariable Long memberTeamId){
+        teamApplicationService.deleteTeamApplication(memberTeamId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(JsonResultData.successResultBuilder()
                         .data(null)

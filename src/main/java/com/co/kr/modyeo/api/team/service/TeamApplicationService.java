@@ -24,4 +24,6 @@ public interface TeamApplicationService {
     void deleteApplicationForm(Long applicationFromId);
 
     List<MemberTeamResponse> getTeamApplication(Long teamId);
+
+    void deleteTeamApplication(Long memberTeamId);
 }

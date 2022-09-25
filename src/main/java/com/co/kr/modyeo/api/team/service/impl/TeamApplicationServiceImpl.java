@@ -152,6 +152,18 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void deleteTeamApplication(Long memberTeamId) {
+        MemberTeam memberTeam = memberTeamRepository.findById(memberTeamId).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorMessage(TeamErrorCode.NOT_FOUND_APPLICANT.getMessage())
+                        .errorCode(TeamErrorCode.NOT_FOUND_APPLICANT.getCode())
+                        .build());
+
+        memberTeamRepository.delete(memberTeam);
+    }
+
     private Member findMember(String email){
         return memberRepository.findByEmail(email)
                 .orElseThrow(() -> ApiException.builder()
