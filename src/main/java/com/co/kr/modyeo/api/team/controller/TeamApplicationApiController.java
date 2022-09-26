@@ -121,7 +121,7 @@ public class TeamApplicationApiController {
         }
     }
 
-    @ApiOperation(value = "팀 가입신청 취소")
+    @ApiOperation(value = "팀 가입신청 취소 API")
     @DeleteMapping("/{memberTeamId}")
     public ResponseEntity<?> deleteTeamApplication(
             @PathVariable Long memberTeamId){
