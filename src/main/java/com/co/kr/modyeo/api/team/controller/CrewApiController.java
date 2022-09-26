@@ -33,4 +33,12 @@ public class CrewApiController {
                 .data(null)
                 .build());
     }
+
+    @DeleteMapping("/{crewId}")
+    public ResponseEntity<?> deleteCrew(@PathVariable Long crewId){
+        crewService.deleteCrew(crewId);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
+                .build());
+    }
 }

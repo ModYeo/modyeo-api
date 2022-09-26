@@ -41,4 +41,16 @@ public class CrewServiceImpl implements CrewService {
 
         crew.changeLevel(crewUpdateRequest.getCrewLevel());
     }
+
+    @Override
+    public void deleteCrew(Long crewId) {
+        Crew crew = crewRepository.findById(crewId).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode("NOT_FOUND_CREW_MEMBER")
+                        .errorMessage("찾을 수 없는 크루원입니다.")
+                        .build());
+
+        crew.inactiveCrew();
+    }
 }

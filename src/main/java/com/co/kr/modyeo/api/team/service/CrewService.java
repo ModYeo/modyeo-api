@@ -9,4 +9,6 @@ public interface CrewService {
     List<CrewResponse> getCrew(Long teamId);
 
     void updateCrewLevel(CrewUpdateRequest crewUpdateRequest);
+
+    void deleteCrew(Long crewId);
 }
