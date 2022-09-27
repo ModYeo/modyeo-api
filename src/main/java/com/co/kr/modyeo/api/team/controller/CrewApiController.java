@@ -4,6 +4,7 @@ import com.co.kr.modyeo.api.team.domain.dto.request.CrewUpdateRequest;
 import com.co.kr.modyeo.api.team.domain.dto.response.CrewResponse;
 import com.co.kr.modyeo.api.team.service.CrewService;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ public class CrewApiController {
 
     private final CrewService crewService;
 
+    @ApiOperation("크루원 정보 조회 API")
     @GetMapping("")
     public ResponseEntity<?> getCrew(
             @RequestParam(value = "teamId", name = "teamId", required = true) Long teamId) {
@@ -26,6 +28,7 @@ public class CrewApiController {
                 .build());
     }
 
+    @ApiOperation("크루원 정보 LELVEL 변경 API")
     @PatchMapping("/level")
     public ResponseEntity<?> updateCrewLevel(CrewUpdateRequest crewUpdateRequest){
         crewService.updateCrewLevel(crewUpdateRequest);
@@ -34,6 +37,7 @@ public class CrewApiController {
                 .build());
     }
 
+    @ApiOperation("크루원 비황성화 API")
     @DeleteMapping("/{crewId}")
     public ResponseEntity<?> deleteCrew(@PathVariable Long crewId){
         crewService.deleteCrew(crewId);
