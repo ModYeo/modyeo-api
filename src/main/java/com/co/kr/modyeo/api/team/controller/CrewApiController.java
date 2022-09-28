@@ -28,7 +28,7 @@ public class CrewApiController {
                 .build());
     }
 
-    @ApiOperation("크루원 정보 LELVEL 변경 API")
+    @ApiOperation("크루원 정보 LEVEL 변경 API")
     @PatchMapping("/level")
     public ResponseEntity<?> updateCrewLevel(CrewUpdateRequest crewUpdateRequest){
         crewService.updateCrewLevel(crewUpdateRequest);
