@@ -118,7 +118,7 @@ class CategoryServiceImplTest {
         Optional<Category> findCategory = categoryRepository.findById(1004L);
 
         category = findCategory.get();
-        category.changeCategory("update test",Yn.Y);
+        category.changeCategory("update test",Yn.Y,"");
         given(categoryRepository.save(any())).willReturn(category);
         category = categoryRepository.save(category);
 

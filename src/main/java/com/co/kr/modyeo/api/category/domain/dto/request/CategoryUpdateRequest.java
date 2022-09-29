@@ -15,10 +15,13 @@ public class CategoryUpdateRequest {
 
     private Yn useYn;
 
+    private String imagePath;
+
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public CategoryUpdateRequest(Long categoryId, String name, Yn useYn) {
+    public CategoryUpdateRequest(Long categoryId, String name, Yn useYn, String imagePath) {
         this.categoryId = categoryId;
         this.name = name;
         this.useYn = useYn;
+        this.imagePath = imagePath;
     }
 }
