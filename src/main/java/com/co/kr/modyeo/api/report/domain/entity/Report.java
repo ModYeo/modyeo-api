@@ -23,7 +23,7 @@ public class Report extends BaseEntity {
     @Column(name = "report_type")
     private ReportType reportType;
 
-    @Column(name = "targetId")
+    @Column(name = "target_id")
     private Long targetId;
 
     private String title;
@@ -33,6 +33,7 @@ public class Report extends BaseEntity {
 
     private String contents;
 
+    @Column(name = "report_status")
     private ReportStatus reportStatus;
 
     @Builder(builderClassName = "of",builderMethodName = "of")
