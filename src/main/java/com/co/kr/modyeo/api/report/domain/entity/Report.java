@@ -56,4 +56,8 @@ public class Report extends BaseEntity {
         this.contents = contents;
         this.reportStatus = ReportStatus.RCPT;
     }
+
+    public void changeStatus(ReportStatus status) {
+        this.reportStatus = status;
+    }
 }

@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.report.controller;
 
 import com.co.kr.modyeo.api.report.domain.dto.ReportCreateRequest;
 import com.co.kr.modyeo.api.report.domain.dto.ReportDetail;
+import com.co.kr.modyeo.api.report.domain.enumuerate.ReportStatus;
 import com.co.kr.modyeo.api.report.service.ReportService;
 import com.co.kr.modyeo.common.result.JsonResultData;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,16 @@ public class ReportController {
         ReportDetail report = reportService.getReport(reportId);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(report)
+                .build());
+    }
+
+    @PatchMapping("/{reportId}/{status}")
+    public ResponseEntity<?> updateReportStatus(
+            @PathVariable Long reportId,
+            @PathVariable ReportStatus status){
+        reportService.updateReportStatus(reportId,status);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
                 .build());
     }
 }
