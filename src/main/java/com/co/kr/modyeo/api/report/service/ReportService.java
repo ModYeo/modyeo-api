@@ -10,4 +10,6 @@ public interface ReportService {
     ReportDetail getReport(Long reportId);
 
     void updateReportStatus(Long reportId, ReportStatus status);
+
+    void deleteReport(Long reportId);
 }

@@ -41,4 +41,14 @@ public class ReportController {
                 .data(null)
                 .build());
     }
+
+    @DeleteMapping("/{reportId}")
+    public ResponseEntity<?> deleteReport(
+            @PathVariable Long reportId
+    ){
+        reportService.deleteReport(reportId);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
+                .build());
+    }
 }

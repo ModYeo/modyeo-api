@@ -48,4 +48,16 @@ public class ReportServiceImpl implements ReportService {
 
         report.changeStatus(status);
     }
+
+    @Override
+    public void deleteReport(Long reportId) {
+        Report report = reportRepository.findById(reportId).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode("NOT_FOUND_REPORT")
+                        .errorMessage("찾을 수 없는 신고입니다.")
+                        .build());
+
+        reportRepository.delete(report);
+    }
 }
