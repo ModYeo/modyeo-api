@@ -2,8 +2,10 @@ package com.co.kr.modyeo.api.report.service.impl;
 
 import com.co.kr.modyeo.api.report.domain.dto.ReportCreateRequest;
 import com.co.kr.modyeo.api.report.domain.dto.ReportDetail;
+import com.co.kr.modyeo.api.report.domain.dto.ReportResponse;
 import com.co.kr.modyeo.api.report.domain.entity.Report;
 import com.co.kr.modyeo.api.report.domain.enumuerate.ReportStatus;
+import com.co.kr.modyeo.api.report.domain.enumuerate.ReportType;
 import com.co.kr.modyeo.api.report.repository.ReportRepository;
 import com.co.kr.modyeo.api.report.service.ReportService;
 import com.co.kr.modyeo.common.exception.ApiException;
@@ -11,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -59,5 +64,12 @@ public class ReportServiceImpl implements ReportService {
                         .build());
 
         reportRepository.delete(report);
+    }
+
+    @Override
+    public List<ReportResponse> getReports(ReportType type) {
+        return reportRepository.findByReportType(type).stream()
+                .map(ReportResponse::toDto)
+                .collect(Collectors.toList());
     }
 }

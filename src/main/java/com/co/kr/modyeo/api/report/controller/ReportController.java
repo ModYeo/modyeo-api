@@ -2,12 +2,16 @@ package com.co.kr.modyeo.api.report.controller;
 
 import com.co.kr.modyeo.api.report.domain.dto.ReportCreateRequest;
 import com.co.kr.modyeo.api.report.domain.dto.ReportDetail;
+import com.co.kr.modyeo.api.report.domain.dto.ReportResponse;
 import com.co.kr.modyeo.api.report.domain.enumuerate.ReportStatus;
+import com.co.kr.modyeo.api.report.domain.enumuerate.ReportType;
 import com.co.kr.modyeo.api.report.service.ReportService;
 import com.co.kr.modyeo.common.result.JsonResultData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/report")
@@ -29,6 +33,14 @@ public class ReportController {
         ReportDetail report = reportService.getReport(reportId);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(report)
+                .build());
+    }
+
+    @GetMapping("/{type}")
+    public ResponseEntity<?> getReports(@PathVariable ReportType type){
+        List<ReportResponse> responseList = reportService.getReports(type);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
                 .build());
     }
 
