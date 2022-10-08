@@ -40,7 +40,7 @@ public class ReportController {
     public ResponseEntity<?> getReports(@PathVariable ReportType type){
         List<ReportResponse> responseList = reportService.getReports(type);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
+                .data(responseList)
                 .build());
     }
 
