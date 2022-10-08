@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.report.service.impl;
 import com.co.kr.modyeo.api.report.domain.dto.ReportCreateRequest;
 import com.co.kr.modyeo.api.report.domain.dto.ReportDetail;
 import com.co.kr.modyeo.api.report.domain.dto.ReportResponse;
+import com.co.kr.modyeo.api.report.domain.dto.ReportUpdateRequest;
 import com.co.kr.modyeo.api.report.domain.entity.Report;
 import com.co.kr.modyeo.api.report.domain.enumuerate.ReportStatus;
 import com.co.kr.modyeo.api.report.domain.enumuerate.ReportType;
@@ -27,7 +28,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     @Transactional
     public void createReport(ReportCreateRequest reportCreateRequest) {
-        Report report = ReportCreateRequest.toDto(reportCreateRequest);
+        Report report = ReportCreateRequest.toEntity(reportCreateRequest);
         reportRepository.save(report);
     }
 
@@ -71,5 +72,17 @@ public class ReportServiceImpl implements ReportService {
         return reportRepository.findByReportType(type).stream()
                 .map(ReportResponse::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateReport(ReportUpdateRequest reportUpdateRequest) {
+        Report report = reportRepository.findById(reportUpdateRequest.getReportId()).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode("NOT_FOUND_REPORT")
+                        .errorMessage("찾을 수 없는 신고입니다.")
+                        .build());
+
+        report.changeReport(reportUpdateRequest.getTitle(),reportUpdateRequest.getReportReason(),reportUpdateRequest.getContents());
     }
 }

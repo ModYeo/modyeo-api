@@ -60,4 +60,10 @@ public class Report extends BaseEntity {
     public void changeStatus(ReportStatus status) {
         this.reportStatus = status;
     }
+
+    public void changeReport(String title, ReportReason reportReason, String contents) {
+        if (title != null) this.title = title;
+        if (reportReason != null) this.reportReason = reportReason;
+        this.contents = contents;
+    }
 }

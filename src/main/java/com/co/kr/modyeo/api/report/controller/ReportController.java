@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.report.controller;
 import com.co.kr.modyeo.api.report.domain.dto.ReportCreateRequest;
 import com.co.kr.modyeo.api.report.domain.dto.ReportDetail;
 import com.co.kr.modyeo.api.report.domain.dto.ReportResponse;
+import com.co.kr.modyeo.api.report.domain.dto.ReportUpdateRequest;
 import com.co.kr.modyeo.api.report.domain.enumuerate.ReportStatus;
 import com.co.kr.modyeo.api.report.domain.enumuerate.ReportType;
 import com.co.kr.modyeo.api.report.service.ReportService;
@@ -49,6 +50,14 @@ public class ReportController {
             @PathVariable Long reportId,
             @PathVariable ReportStatus status){
         reportService.updateReportStatus(reportId,status);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
+                .build());
+    }
+
+    @PatchMapping("")
+    public ResponseEntity<?> updateReport(ReportUpdateRequest reportUpdateRequest){
+        reportService.updateReport(reportUpdateRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)
                 .build());

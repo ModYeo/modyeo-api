@@ -7,8 +7,6 @@ import com.co.kr.modyeo.api.report.domain.enumuerate.ReportType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-
 @Data
 @NoArgsConstructor
 public class ReportCreateRequest {
@@ -34,7 +32,7 @@ public class ReportCreateRequest {
         this.reportStatus = reportStatus;
     }
 
-    public static Report toDto(ReportCreateRequest reportCreateRequest){
+    public static Report toEntity(ReportCreateRequest reportCreateRequest){
         return Report.createBuilder()
                 .reportType(reportCreateRequest.getReportType())
                 .targetId(reportCreateRequest.getTargetId())
