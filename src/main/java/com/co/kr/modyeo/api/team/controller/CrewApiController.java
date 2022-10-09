@@ -37,10 +37,19 @@ public class CrewApiController {
                 .build());
     }
 
-    @ApiOperation("크루원 비황성화 API")
+    @ApiOperation("크루원 강퇴 API")
     @DeleteMapping("/{crewId}")
     public ResponseEntity<?> deleteCrew(@PathVariable Long crewId){
         crewService.deleteCrew(crewId);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
+                .build());
+    }
+
+    @ApiOperation("차단한 크루원 조회 API")
+    @GetMapping("/deleted/{teamId}")
+    public  ResponseEntity<?> getInactiveCrew(@PathVariable Long teamId){
+        List<CrewResponse> crewResponseList = crewService.getInactiveCrew(teamId);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)
                 .build());

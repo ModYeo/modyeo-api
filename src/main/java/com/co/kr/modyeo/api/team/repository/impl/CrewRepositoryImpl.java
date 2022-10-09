@@ -1,11 +1,15 @@
 package com.co.kr.modyeo.api.team.repository.impl;
 
+import com.co.kr.modyeo.api.team.domain.entity.enumerate.CrewLevel;
 import com.co.kr.modyeo.api.team.domain.entity.link.Crew;
 import com.co.kr.modyeo.api.team.repository.custom.CrewCustomRepository;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.co.kr.modyeo.api.member.domain.entity.QMember.member;
 import static com.co.kr.modyeo.api.team.domain.entity.QTeam.team;
@@ -26,6 +30,31 @@ public class CrewRepositoryImpl extends Querydsl4RepositorySupport implements Cr
                 .where(eqTeamId(teamId))
                 .fetchJoin()
                 .fetch();
+    }
+
+    @Override
+    public CrewLevel findCrewLevelByEmail(String email) {
+        return select(crew.crewLevel)
+                .from(crew)
+                .innerJoin(crew.member, member)
+                .where(eqEmail(email))
+                .fetchOne();
+    }
+
+    @Override
+    public List<Crew> findInactiveCrew(Long teamId) {
+        return select(crew)
+                .from(crew)
+                .innerJoin(crew.team, team)
+                .innerJoin(crew.member, member)
+                .where(eqTeamId(teamId),
+                        crew.isActivated.eq(Yn.N))
+                .fetchJoin()
+                .fetch();
+    }
+
+    private BooleanExpression eqEmail(String email) {
+        return email != null && !Objects.equals(email, "") ? member.email.eq(email) : null;
     }
 
     private BooleanExpression eqTeamId(Long teamId) {
