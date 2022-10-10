@@ -30,19 +30,37 @@ public class CrewApiController {
 
     @ApiOperation("크루원 정보 LEVEL 변경 API")
     @PatchMapping("/level")
-    public ResponseEntity<?> updateCrewLevel(CrewUpdateRequest crewUpdateRequest){
+    public ResponseEntity<?> updateCrewLevel(CrewUpdateRequest crewUpdateRequest) {
         crewService.updateCrewLevel(crewUpdateRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)
                 .build());
     }
 
-    @ApiOperation("크루원 비황성화 API")
+    @ApiOperation("크루원 강퇴 API")
     @DeleteMapping("/{crewId}")
-    public ResponseEntity<?> deleteCrew(@PathVariable Long crewId){
+    public ResponseEntity<?> deleteCrew(@PathVariable Long crewId) {
         crewService.deleteCrew(crewId);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)
+                .build());
+    }
+
+    @ApiOperation("차단한 크루원 조회 API")
+    @GetMapping("/deleted/{teamId}")
+    public ResponseEntity<?> getInactiveCrew(@PathVariable Long teamId) {
+        List<CrewResponse> crewResponseList = crewService.getInactiveCrew(teamId);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(crewResponseList)
+                .build());
+    }
+
+    @ApiOperation("차단 해제 API")
+    @PatchMapping("/{crewId}/active")
+    public ResponseEntity<?> updateCrewActive(@PathVariable Long crewId){
+        crewService.updateCrewActive(crewId);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data()
                 .build());
     }
 }

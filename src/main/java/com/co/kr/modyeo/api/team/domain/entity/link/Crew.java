@@ -68,11 +68,18 @@ public class Crew extends BaseEntity {
                 .build();
     }
 
+    public static boolean checkAuth(CrewLevel crewLevel) {
+        return crewLevel != CrewLevel.NORMAL;
+    }
+
     public void changeLevel(CrewLevel crewLevel){
         this.crewLevel = crewLevel;
     }
 
-    public void inactiveCrew() {
-        this.isActivated = Yn.N;
+    public static void inactiveCrew(Crew crew) {
+        crew.isActivated = Yn.N;
+    }
+
+    public static void activeCrew(Crew crew) { crew.isActivated = Yn.Y;
     }
 }
