@@ -76,7 +76,7 @@ public class CrewServiceImpl implements CrewService {
                         .errorMessage("찾을 수 없는 크루원입니다.")
                         .build());
 
-        crew.inactiveCrew();
+        Crew.inactiveCrew(crew);
     }
 
     @Override
@@ -95,5 +95,28 @@ public class CrewServiceImpl implements CrewService {
         return crewRepository.findInactiveCrew(teamId).stream()
                 .map(CrewResponse::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateCrewActive(Long crewId) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        CrewLevel crewLevel = crewRepository.findCrewLevelByEmail(email);
+
+        if (Crew.checkAuth(crewLevel)){
+            throw ApiException.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .errorCode("NOT_AUTHORIZED")
+                    .errorMessage("권한이 없습니다.")
+                    .build();
+        }
+
+        Crew crew = crewRepository.findById(crewId).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode("NOT_FOUND_CREW_MEMBER")
+                        .errorMessage("찾을 수 없는 크루원입니다.")
+                        .build());
+
+        Crew.activeCrew(crew);
     }
 }

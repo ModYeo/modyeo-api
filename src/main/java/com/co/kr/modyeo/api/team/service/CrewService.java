@@ -13,4 +13,6 @@ public interface CrewService {
     void deleteCrew(Long crewId);
 
     List<CrewResponse> getInactiveCrew(Long teamId);
+
+    void updateCrewActive(Long crewId);
 }
