@@ -60,7 +60,7 @@ public class CrewApiController {
     public ResponseEntity<?> updateCrewActive(@PathVariable Long crewId){
         crewService.updateCrewActive(crewId);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data()
+                .data(null)
                 .build());
     }
 }
