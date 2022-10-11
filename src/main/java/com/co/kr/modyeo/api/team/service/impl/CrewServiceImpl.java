@@ -1,6 +1,5 @@
 package com.co.kr.modyeo.api.team.service.impl;
 
-import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.api.team.domain.dto.request.CrewUpdateRequest;
 import com.co.kr.modyeo.api.team.domain.dto.response.CrewResponse;
 import com.co.kr.modyeo.api.team.domain.entity.enumerate.CrewLevel;
@@ -8,6 +7,7 @@ import com.co.kr.modyeo.api.team.domain.entity.link.Crew;
 import com.co.kr.modyeo.api.team.repository.CrewRepository;
 import com.co.kr.modyeo.api.team.service.CrewService;
 import com.co.kr.modyeo.common.exception.ApiException;
+import com.co.kr.modyeo.common.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -58,9 +58,7 @@ public class CrewServiceImpl implements CrewService {
 
     @Override
     public void deleteCrew(Long crewId) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        CrewLevel crewLevel = crewRepository.findCrewLevelByEmail(email);
-
+        CrewLevel crewLevel = getCrewLevel();
         if (Crew.checkAuth(crewLevel)){
             throw ApiException.builder()
                     .status(HttpStatus.BAD_REQUEST)
@@ -81,8 +79,14 @@ public class CrewServiceImpl implements CrewService {
 
     @Override
     public List<CrewResponse> getInactiveCrew(Long teamId) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        CrewLevel crewLevel = crewRepository.findCrewLevelByEmail(email);
+        CrewLevel crewLevel = getCrewLevel();
+        if (Crew.checkAuth(crewLevel)){
+            throw ApiException.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .errorCode("NOT_AUTHORIZED")
+                    .errorMessage("권한이 없습니다.")
+                    .build();
+        }
 
         if (Crew.checkAuth(crewLevel)){
             throw ApiException.builder()
@@ -99,9 +103,7 @@ public class CrewServiceImpl implements CrewService {
 
     @Override
     public void updateCrewActive(Long crewId) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        CrewLevel crewLevel = crewRepository.findCrewLevelByEmail(email);
-
+        CrewLevel crewLevel = getCrewLevel();
         if (Crew.checkAuth(crewLevel)){
             throw ApiException.builder()
                     .status(HttpStatus.BAD_REQUEST)
@@ -118,5 +120,10 @@ public class CrewServiceImpl implements CrewService {
                         .build());
 
         Crew.activeCrew(crew);
+    }
+
+    private CrewLevel getCrewLevel() {
+        String email = SecurityUtil.getCurrentMemberId();
+        return crewRepository.findCrewLevelByEmail(email);
     }
 }
