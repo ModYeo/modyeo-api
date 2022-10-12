@@ -21,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +41,7 @@ public class TeamServiceImpl implements TeamService {
     public Team createTeam(TeamRequest teamRequest) {
         overlapTeamCheck(teamRequest);
 
-        String memberEmail = SecurityUtil.getCurrentMemberId();
+        String memberEmail = SecurityUtil.getCurrentEmail();
 
         Member member = memberRepository.findByEmail(memberEmail)
                 .orElseThrow(()->ApiException.builder()

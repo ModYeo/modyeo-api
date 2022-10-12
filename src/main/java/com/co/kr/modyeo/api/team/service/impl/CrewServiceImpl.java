@@ -48,7 +48,7 @@ public class CrewServiceImpl implements CrewService {
     @Override
     @Transactional
     public void updateCrewLevel(CrewUpdateRequest crewUpdateRequest) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = SecurityUtil.getCurrentEmail();
         CrewLevel crewLevel = crewRepository.findCrewLevelByEmail(email);
 
         if (Crew.checkAuth(crewLevel)){
@@ -112,7 +112,7 @@ public class CrewServiceImpl implements CrewService {
     }
 
     private CrewLevel getCrewLevel() {
-        String email = SecurityUtil.getCurrentMemberId();
+        String email = SecurityUtil.getCurrentEmail();
         return crewRepository.findCrewLevelByEmail(email);
     }
 }

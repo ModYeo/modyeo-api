@@ -8,6 +8,7 @@ import com.co.kr.modyeo.api.team.domain.entity.enumerate.JoinStatus;
 import com.co.kr.modyeo.api.team.domain.entity.link.MemberTeam;
 import com.co.kr.modyeo.api.team.service.TeamApplicationService;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import com.co.kr.modyeo.common.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -69,7 +70,7 @@ public class TeamApplicationApiController {
     public ResponseEntity<?> applicantCrew(
             @RequestBody TeamApplicationRequest teamApplicationRequest
     ) {
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email =  SecurityUtil.getCurrentEmail();
         teamApplicationRequest.setEmail(email);
 
         MemberTeam memberTeam = teamApplicationService.applicantCrew(teamApplicationRequest);
