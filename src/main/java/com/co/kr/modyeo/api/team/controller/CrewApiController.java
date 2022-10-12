@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.team.controller;
 
 import com.co.kr.modyeo.api.team.domain.dto.request.CrewUpdateRequest;
 import com.co.kr.modyeo.api.team.domain.dto.response.CrewResponse;
+import com.co.kr.modyeo.api.team.domain.dto.search.SearchCrew;
 import com.co.kr.modyeo.api.team.service.CrewService;
 import com.co.kr.modyeo.common.result.JsonResultData;
 import io.swagger.annotations.ApiOperation;
@@ -21,8 +22,8 @@ public class CrewApiController {
     @ApiOperation("크루원 정보 조회 API")
     @GetMapping("")
     public ResponseEntity<?> getCrew(
-            @RequestParam(value = "teamId", name = "teamId", required = true) Long teamId) {
-        List<CrewResponse> crewResponseList = crewService.getCrew(teamId);
+            SearchCrew searchCrew) {
+        List<CrewResponse> crewResponseList = crewService.getCrew(searchCrew);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(crewResponseList)
                 .build());
@@ -43,15 +44,6 @@ public class CrewApiController {
         crewService.deleteCrew(crewId);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)
-                .build());
-    }
-
-    @ApiOperation("차단한 크루원 조회 API")
-    @GetMapping("/deleted/{teamId}")
-    public ResponseEntity<?> getInactiveCrew(@PathVariable Long teamId) {
-        List<CrewResponse> crewResponseList = crewService.getInactiveCrew(teamId);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(crewResponseList)
                 .build());
     }
 
