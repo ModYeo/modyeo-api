@@ -1,11 +1,11 @@
 package com.co.kr.modyeo.api.team.repository.impl;
 
+import com.co.kr.modyeo.api.team.domain.dto.search.SearchCrew;
 import com.co.kr.modyeo.api.team.domain.entity.enumerate.CrewLevel;
 import com.co.kr.modyeo.api.team.domain.entity.link.Crew;
 import com.co.kr.modyeo.api.team.repository.custom.CrewCustomRepository;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
 import java.util.List;
@@ -22,12 +22,14 @@ public class CrewRepositoryImpl extends Querydsl4RepositorySupport implements Cr
     }
 
     @Override
-    public List<Crew> searchCrew(Long teamId) {
+    public List<Crew> searchCrew(SearchCrew searchCrew) {
         return select(crew)
                 .from(crew)
                 .innerJoin(crew.team, team)
                 .innerJoin(crew.member, member)
-                .where(eqTeamId(teamId))
+                .where(eqTeamId(searchCrew.getTeamId())
+                        , eqIsActivated(searchCrew.getIsActivated())
+                        , eqCrewLevel(searchCrew.getLevel()))
                 .fetchJoin()
                 .fetch();
     }
@@ -41,23 +43,19 @@ public class CrewRepositoryImpl extends Querydsl4RepositorySupport implements Cr
                 .fetchOne();
     }
 
-    @Override
-    public List<Crew> findInactiveCrew(Long teamId) {
-        return select(crew)
-                .from(crew)
-                .innerJoin(crew.team, team)
-                .innerJoin(crew.member, member)
-                .where(eqTeamId(teamId),
-                        crew.isActivated.eq(Yn.N))
-                .fetchJoin()
-                .fetch();
-    }
-
     private BooleanExpression eqEmail(String email) {
         return email != null && !Objects.equals(email, "") ? member.email.eq(email) : null;
     }
 
     private BooleanExpression eqTeamId(Long teamId) {
-        return teamId != null? team.id.eq(teamId) : null;
+        return teamId != null ? team.id.eq(teamId) : null;
+    }
+
+    private BooleanExpression eqIsActivated(Yn isActivated) {
+        return isActivated != null ? crew.isActivated.eq(isActivated) : null;
+    }
+
+    private BooleanExpression eqCrewLevel(CrewLevel level) {
+        return level != null ? crew.crewLevel.eq(level) : null;
     }
 }
