@@ -11,6 +11,7 @@ import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.service.BoardService;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import com.co.kr.modyeo.common.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -139,7 +140,7 @@ public class BoardApiController {
     @ApiOperation("내가 쓴 게시글 조회 API")
     @GetMapping("/article/my")
     public ResponseEntity<?> getArticleMy(){
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = SecurityUtil.getCurrentEmail();
         List<ArticleResponse> articleResponseList = boardService.getArticlesMy(email);
         return ResponseEntity.ok(articleResponseList);
     }
@@ -147,7 +148,7 @@ public class BoardApiController {
     @ApiOperation("내가 쓴 댓글 조회 API")
     @GetMapping("/reply/my")
     public ResponseEntity<?> getReplyMy(){
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email = SecurityUtil.getCurrentEmail();
         List<ReplyResponse> replyResponseList = boardService.getReplyMy(email);
         return ResponseEntity.ok(replyResponseList);
     }
