@@ -41,8 +41,7 @@ public class TeamArticle extends BaseEntity {
 
     @Column(name = "hit_count")
     private Long hitCount;
-
-
+    
     @OneToMany(mappedBy = "teamArticle", cascade = CascadeType.ALL)
     private List<TeamReply> teamReplyList = new ArrayList<>();
 
