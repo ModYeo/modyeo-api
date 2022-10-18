@@ -1,4 +1,16 @@
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username:
+    password:
+    properties:
+       mail:
+         smtp:
+          auth: true
+          starttls:
+             enable: true
+
   datasource:
     url: jdbc:mysql://skysrd.iptime.org:3306/modyeo
     hikari:

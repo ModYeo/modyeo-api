@@ -134,4 +134,12 @@ public class AuthController {
                             .build());
         }
     }
+
+    @ApiOperation(value = "메일 인증 API")
+    @GetMapping("/mail")
+    public ResponseEntity<?> authMail(){
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
+                .build());
+    }
 }
