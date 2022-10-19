@@ -17,6 +17,7 @@ import com.co.kr.modyeo.common.result.JsonResultData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -156,5 +157,17 @@ public class AuthServiceImpl implements AuthService {
                         .build());
 
         member.changePassword(passwordUpdateRequest.getPassword(), passwordEncoder);
+    }
+
+    @Override
+    public void authMail(String email,String authNumber) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
+                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
+                        .build());
+
+        MailSender mailSender = MailSender.makeAuthSender(member, authNumber);
     }
 }
