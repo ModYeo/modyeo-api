@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class MailSender {
-
     private JavaMailSender javaMailSender;
 
     private static final String FROM_ADDRESS = "";
