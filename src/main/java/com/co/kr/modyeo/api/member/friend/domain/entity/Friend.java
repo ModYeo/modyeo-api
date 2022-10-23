@@ -5,6 +5,7 @@ import com.co.kr.modyeo.api.member.friend.enumerate.FriendStatus;
 import com.co.kr.modyeo.common.entity.BaseEntity;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -29,4 +30,11 @@ public class Friend extends BaseEntity {
     @Column(name = "friend_status")
     @Enumerated(value = EnumType.STRING)
     private FriendStatus friendStatus;
+
+    @Builder
+    public Friend(Member sendMember, Member receiveMember, FriendStatus friendStatus) {
+        this.sendMember = sendMember;
+        this.receiveMember = receiveMember;
+        this.friendStatus = friendStatus;
+    }
 }
