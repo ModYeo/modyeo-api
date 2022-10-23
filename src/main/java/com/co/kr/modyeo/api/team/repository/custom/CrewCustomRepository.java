@@ -9,6 +9,6 @@ import java.util.List;
 public interface CrewCustomRepository {
     List<Crew> searchCrew(SearchCrew searchCrew);
 
-    CrewLevel findCrewLevelByEmail(String email);
+    CrewLevel findCrewLevelByTeamIdAndEmail(Long teamId, String email);
 
 }

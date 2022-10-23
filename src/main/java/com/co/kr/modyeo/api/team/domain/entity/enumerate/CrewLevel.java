@@ -1,5 +1,5 @@
 package com.co.kr.modyeo.api.team.domain.entity.enumerate;
 
 public enum CrewLevel {
-    ADMIN,OWNER,NORMAL
+    ADMIN,OWNER,NORMAL,LEAVE,EXIT
 }

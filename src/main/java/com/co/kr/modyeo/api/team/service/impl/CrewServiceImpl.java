@@ -31,7 +31,7 @@ public class CrewServiceImpl implements CrewService {
     @Override
     public List<CrewResponse> getCrew(SearchCrew searchCrew) {
         if (Yn.N.equals(searchCrew.getIsActivated())){
-            CrewLevel crewLevel = getCrewLevel();
+            CrewLevel crewLevel = getCrewLevel(searchCrew.getTeamId());
             if (Crew.checkAuth(crewLevel)){
                 throw ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -50,17 +50,6 @@ public class CrewServiceImpl implements CrewService {
     @Override
     @Transactional
     public void updateCrewLevel(CrewUpdateRequest crewUpdateRequest) {
-        String email = SecurityUtil.getCurrentEmail();
-        CrewLevel crewLevel = crewRepository.findCrewLevelByEmail(email);
-
-        if (Crew.checkAuth(crewLevel)){
-            throw ApiException.builder()
-                    .status(HttpStatus.BAD_REQUEST)
-                    .errorCode("NOT_AUTHORIZED")
-                    .errorMessage("권한이 없습니다.")
-                    .build();
-        }
-
         Crew crew = crewRepository.findById(crewUpdateRequest.getCrewId()).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -68,12 +57,7 @@ public class CrewServiceImpl implements CrewService {
                         .errorMessage("찾을 수 없는 크루원입니다.")
                         .build());
 
-        crew.changeLevel(crewUpdateRequest.getCrewLevel());
-    }
-
-    @Override
-    public void deleteCrew(Long crewId) {
-        CrewLevel crewLevel = getCrewLevel();
+        CrewLevel crewLevel = getCrewLevel(crew.getTeam().getId());
         if (Crew.checkAuth(crewLevel)){
             throw ApiException.builder()
                     .status(HttpStatus.BAD_REQUEST)
@@ -82,19 +66,40 @@ public class CrewServiceImpl implements CrewService {
                     .build();
         }
 
+        crew.changeLevel(crewUpdateRequest.getCrewLevel());
+    }
+
+    @Override
+    public void deleteCrew(Long crewId) {
         Crew crew = crewRepository.findById(crewId).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
                         .errorCode("NOT_FOUND_CREW_MEMBER")
                         .errorMessage("찾을 수 없는 크루원입니다.")
                         .build());
+
+        CrewLevel crewLevel = getCrewLevel(crew.getTeam().getId());
+        if (Crew.checkAuth(crewLevel)){
+            throw ApiException.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .errorCode("NOT_AUTHORIZED")
+                    .errorMessage("권한이 없습니다.")
+                    .build();
+        }
 
         Crew.inactiveCrew(crew);
     }
 
     @Override
     public void updateCrewActive(Long crewId) {
-        CrewLevel crewLevel = getCrewLevel();
+        Crew crew = crewRepository.findById(crewId).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode("NOT_FOUND_CREW_MEMBER")
+                        .errorMessage("찾을 수 없는 크루원입니다.")
+                        .build());
+
+        CrewLevel crewLevel = getCrewLevel(crew.getTeam().getId());
         if (Crew.checkAuth(crewLevel)){
             throw ApiException.builder()
                     .status(HttpStatus.BAD_REQUEST)
@@ -103,18 +108,11 @@ public class CrewServiceImpl implements CrewService {
                     .build();
         }
 
-        Crew crew = crewRepository.findById(crewId).orElseThrow(
-                () -> ApiException.builder()
-                        .status(HttpStatus.BAD_REQUEST)
-                        .errorCode("NOT_FOUND_CREW_MEMBER")
-                        .errorMessage("찾을 수 없는 크루원입니다.")
-                        .build());
-
         Crew.activeCrew(crew);
     }
 
-    private CrewLevel getCrewLevel() {
+    private CrewLevel getCrewLevel(Long teamId) {
         String email = SecurityUtil.getCurrentEmail();
-        return crewRepository.findCrewLevelByEmail(email);
+        return crewRepository.findCrewLevelByTeamIdAndEmail(teamId,email);
     }
 }

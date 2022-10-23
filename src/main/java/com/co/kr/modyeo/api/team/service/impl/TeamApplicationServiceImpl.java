@@ -6,6 +6,7 @@ import com.co.kr.modyeo.api.team.domain.dto.response.ApplicationFormDetail;
 import com.co.kr.modyeo.api.team.domain.dto.response.MemberTeamResponse;
 import com.co.kr.modyeo.api.team.domain.entity.ApplicationForm;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
+import com.co.kr.modyeo.api.team.domain.entity.enumerate.CrewLevel;
 import com.co.kr.modyeo.api.team.domain.entity.enumerate.JoinStatus;
 import com.co.kr.modyeo.api.team.domain.entity.link.Crew;
 import com.co.kr.modyeo.api.team.domain.entity.link.MemberTeam;
@@ -19,6 +20,7 @@ import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.team.repository.TeamRepository;
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
+import com.co.kr.modyeo.common.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,9 +45,9 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
     public MemberTeam applicantCrew(TeamApplicationRequest teamApplicationRequest) {
         Member member = findMember(teamApplicationRequest.getEmail());
         Team team = findTeam(teamApplicationRequest.getTeamId());
-        MemberTeam memberTeam = memberTeamRepository.findByTeamAndMember(team,member);
-        if (memberTeam != null){
-            if (memberTeam.getJoinStatus() != JoinStatus.APPROVAL){
+        MemberTeam memberTeam = memberTeamRepository.findByTeamAndMember(team, member);
+        if (memberTeam != null) {
+            if (memberTeam.getJoinStatus() != JoinStatus.APPROVAL) {
                 throw ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
                         .errorCode(TeamErrorCode.ALREADY_JOINED_TEAM.getCode())
@@ -74,9 +76,9 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
                         .errorMessage(TeamErrorCode.NOT_FOUND_APPLICANT.getMessage())
                         .build());
 
-        if (JoinStatus.DENIAL.equals(joinStatus)){
+        if (JoinStatus.DENIAL.equals(joinStatus)) {
             memberTeam.changeDenial();
-        }else{
+        } else {
             Team team = memberTeam.getTeam();
             Member member = memberTeam.getMember();
 
@@ -101,6 +103,26 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
                         .errorMessage(TeamErrorCode.NOT_FOUND_TEAM.getMessage())
                         .errorCode(TeamErrorCode.NOT_FOUND_TEAM.getCode())
                         .build());
+
+        String email = SecurityUtil.getCurrentEmail();
+
+        CrewLevel crewLevel = crewRepository.findCrewLevelByTeamIdAndEmail(team.getId(), email);
+
+        if (crewLevel != null) {
+            if (CrewLevel.EXIT.equals(crewLevel)) {
+                throw ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorMessage(TeamErrorCode.EXIT_TEAM.getMessage())
+                        .errorCode(TeamErrorCode.EXIT_TEAM.getCode())
+                        .build();
+            } else if (!CrewLevel.LEAVE.equals(crewLevel)) {
+                throw ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorMessage(TeamErrorCode.ALREADY_JOINED_TEAM.getMessage())
+                        .errorCode(TeamErrorCode.ALREADY_JOINED_TEAM.getCode())
+                        .build();
+            }
+        }
 
         ApplicationForm applicationForm = ApplicationFormRequest.toEntity(applicationFormRequest, team);
         applicationFormRepository.save(applicationForm);
@@ -164,7 +186,7 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
         memberTeamRepository.delete(memberTeam);
     }
 
-    private Member findMember(String email){
+    private Member findMember(String email) {
         return memberRepository.findByEmail(email)
                 .orElseThrow(() -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -173,7 +195,7 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
                         .build());
     }
 
-    private Team findTeam(Long teamId){
+    private Team findTeam(Long teamId) {
         return teamRepository.findById(teamId)
                 .orElseThrow(() -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
