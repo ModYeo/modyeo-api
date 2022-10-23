@@ -37,4 +37,16 @@ public class Friend extends BaseEntity {
         this.receiveMember = receiveMember;
         this.friendStatus = friendStatus;
     }
+
+    public void approveFriend() {
+        this.friendStatus = FriendStatus.APPROVED;
+    }
+
+    public void denyFriend() {
+        this.friendStatus = FriendStatus.DENIED;
+    }
+
+    public void deleteFriend() {
+        this.friendStatus = FriendStatus.DELETED;
+    }
 }

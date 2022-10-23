@@ -47,4 +47,42 @@ public class FriendServiceImpl implements FriendService {
 
         friendRepository.save(friend);
     }
+
+    @Override
+    public void approveFriendRequest(Long requestId) {
+        Friend friend = friendRepository.findById(requestId)
+                .orElseThrow(() -> ApiException.builder()
+                        .errorMessage(FriendErrorCode.FRIEND_NOT_FOUND.getMessage())
+                        .errorCode(FriendErrorCode.FRIEND_NOT_FOUND.getCode())
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
+        friend.approveFriend();
+    }
+
+    @Override
+    public void denyFriendRequest(Long requestId) {
+        Friend friend = friendRepository.findById(requestId)
+                .orElseThrow(() -> ApiException.builder()
+                        .errorMessage(FriendErrorCode.FRIEND_NOT_FOUND.getMessage())
+                        .errorCode(FriendErrorCode.FRIEND_NOT_FOUND.getCode())
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
+        friend.denyFriend();
+    }
+
+    @Override
+    public void deleteFriend(Long friendId) {
+        Friend friend = friendRepository.findById(friendId)
+                .orElseThrow(() -> ApiException.builder()
+                        .errorMessage(FriendErrorCode.FRIEND_NOT_FOUND.getMessage())
+                        .errorCode(FriendErrorCode.FRIEND_NOT_FOUND.getCode())
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
+        friend.deleteFriend();
+    }
+
+
 }
