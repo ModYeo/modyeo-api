@@ -44,6 +44,16 @@ public class CrewRepositoryImpl extends Querydsl4RepositorySupport implements Cr
                 .fetchOne();
     }
 
+    @Override
+    public Crew findCrewByTeamIdAndEmail(String email, Long teamId) {
+        return select(crew)
+                .from(crew)
+                .innerJoin(crew.member, member)
+                .where(eqEmail(email),
+                        eqTeamId(teamId))
+                .fetchOne();
+    }
+
     private BooleanExpression eqEmail(String email) {
         return email != null && !Objects.equals(email, "") ? member.email.eq(email) : null;
     }

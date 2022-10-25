@@ -12,12 +12,9 @@ import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -87,7 +84,7 @@ public class CrewServiceImpl implements CrewService {
                     .build();
         }
 
-        Crew.inactiveCrew(crew);
+        Crew.exit(crew);
     }
 
     @Override
@@ -109,6 +106,13 @@ public class CrewServiceImpl implements CrewService {
         }
 
         Crew.activeCrew(crew);
+    }
+
+    @Override
+    public void updateCrewInActive(Long teamId) {
+        String email = SecurityUtil.getCurrentEmail();
+        Crew crew = crewRepository.findCrewByTeamIdAndEmail(email, teamId);
+        Crew.leave(crew);
     }
 
     private CrewLevel getCrewLevel(Long teamId) {

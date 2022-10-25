@@ -76,7 +76,11 @@ public class Crew extends BaseEntity {
         this.crewLevel = crewLevel;
     }
 
-    public static void inactiveCrew(Crew crew) {
+    public static void leave(Crew crew){
+        crew.isActivated = Yn.N;
+        crew.crewLevel = CrewLevel.LEAVE;
+    }
+    public static void exit (Crew crew) {
         crew.isActivated = Yn.N;
         crew.crewLevel = CrewLevel.EXIT;
     }

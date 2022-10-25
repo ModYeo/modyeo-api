@@ -11,4 +11,5 @@ public interface CrewCustomRepository {
 
     CrewLevel findCrewLevelByTeamIdAndEmail(Long teamId, String email);
 
+    Crew findCrewByTeamIdAndEmail(String email, Long teamId);
 }

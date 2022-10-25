@@ -14,4 +14,6 @@ public interface CrewService {
     void deleteCrew(Long crewId);
 
     void updateCrewActive(Long crewId);
+
+    void updateCrewInActive(Long teamId);
 }

@@ -55,4 +55,13 @@ public class CrewApiController {
                 .data(null)
                 .build());
     }
+
+    @ApiOperation("크루 탈퇴 API")
+    @PatchMapping("/{teamId}/inactive")
+    public ResponseEntity<?> updateCrewInActive(@PathVariable Long teamId){
+        crewService.updateCrewInActive(teamId);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
+                .build());
+    }
 }
