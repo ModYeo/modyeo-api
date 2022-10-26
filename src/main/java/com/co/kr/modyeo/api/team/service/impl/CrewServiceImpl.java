@@ -67,6 +67,7 @@ public class CrewServiceImpl implements CrewService {
     }
 
     @Override
+    @Transactional
     public void deleteCrew(Long crewId) {
         Crew crew = crewRepository.findById(crewId).orElseThrow(
                 () -> ApiException.builder()
@@ -88,6 +89,7 @@ public class CrewServiceImpl implements CrewService {
     }
 
     @Override
+    @Transactional
     public void updateCrewActive(Long crewId) {
         Crew crew = crewRepository.findById(crewId).orElseThrow(
                 () -> ApiException.builder()
@@ -109,6 +111,7 @@ public class CrewServiceImpl implements CrewService {
     }
 
     @Override
+    @Transactional
     public void updateCrewInActive(Long teamId) {
         String email = SecurityUtil.getCurrentEmail();
         Crew crew = crewRepository.findCrewByTeamIdAndEmail(email, teamId);
