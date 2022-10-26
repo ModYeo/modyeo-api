@@ -54,19 +54,19 @@ public class BoardApiController {
     @ApiOperation(value = "게시글 생성 API")
     @PostMapping("/article")
     public ResponseEntity<?> createArticle(@RequestBody ArticleRequest articleRequest) {
-        boardService.createArticle(articleRequest);
+        Long articleId = boardService.createArticle(articleRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(JsonResultData.successResultBuilder()
-                        .data(null)
+                        .data(articleId)
                         .build());
     }
 
     @ApiOperation(value = "게시글 수정 API")
     @PatchMapping("/article")
     public ResponseEntity<?> updateArticle(@RequestBody ArticleRequest articleRequest) {
-        boardService.updateArticle(articleRequest);
+        Long articleId = boardService.updateArticle(articleRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
+                .data(articleId)
                 .build());
     }
 
@@ -83,19 +83,19 @@ public class BoardApiController {
     @ApiOperation(value = "댓글 생성 API")
     @PostMapping("/reply")
     public ResponseEntity<?> createReply(@RequestBody ReplyRequest replyRequest) {
-        boardService.createReply(replyRequest);
+        Long replyId = boardService.createReply(replyRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(JsonResultData.successResultBuilder()
-                        .data(null)
+                        .data(replyId)
                         .build());
     }
 
     @ApiOperation(value = "댓글 수정 API")
     @PatchMapping("/reply")
     public ResponseEntity<?> updateReply(@RequestBody ReplyRequest replyRequest) {
-        boardService.updateReply(replyRequest);
+        Long replyId = boardService.updateReply(replyRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
+                .data(replyId)
                 .build());
     }
 

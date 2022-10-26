@@ -61,7 +61,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Transactional
     @Override
-    public Article createArticle(ArticleRequest articleRequest) {
+    public Long createArticle(ArticleRequest articleRequest) {
         Category category = categoryRepository.findById(articleRequest.getCategoryId()).orElseThrow(
                 () -> ApiException.builder()
                         .errorMessage(CategoryErrorCode.NOT_FOUND_CATEGORY.getMessage())
@@ -69,7 +69,7 @@ public class BoardServiceImpl implements BoardService {
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
-        return articleRepository.save(ArticleRequest.createArticle(articleRequest, category));
+        return articleRepository.save(ArticleRequest.createArticle(articleRequest, category)).getId();
     }
 
     @Transactional
@@ -87,7 +87,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Article updateArticle(ArticleRequest articleRequest) {
+    public Long updateArticle(ArticleRequest articleRequest) {
         Article article = articleRepository.findById(articleRequest.getArticleId()).orElseThrow(
                 () -> ApiException.builder()
                         .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
@@ -110,7 +110,7 @@ public class BoardServiceImpl implements BoardService {
                 .isHidden(articleRequest.getIsHidden())
                 .build();
 
-        return article;
+        return article.getId();
     }
 
     @Override
@@ -126,7 +126,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Reply createReply(ReplyRequest replyRequest) {
+    public Long createReply(ReplyRequest replyRequest) {
         Article article = articleRepository.findById(replyRequest.getArticleId()).orElseThrow(
                 () -> ApiException.builder()
                         .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
@@ -138,11 +138,11 @@ public class BoardServiceImpl implements BoardService {
                 ReplyRequest.toReply(replyRequest, article) : ReplyRequest.toNestedReply(replyRequest, article);
 
         replyRepository.save(reply);
-        return reply;
+        return reply.getId();
     }
 
     @Override
-    public Reply updateReply(ReplyRequest replyRequest) {
+    public Long updateReply(ReplyRequest replyRequest) {
         Reply reply = replyRepository.findById(replyRequest.getId()).orElseThrow(
                 () -> ApiException.builder()
                         .errorMessage(BoardErrorCode.NOT_FOUND_REPLY.getMessage())
@@ -154,7 +154,7 @@ public class BoardServiceImpl implements BoardService {
                 .content(reply.getContent())
                 .build();
 
-        return reply;
+        return reply.getId();
     }
 
     @Override

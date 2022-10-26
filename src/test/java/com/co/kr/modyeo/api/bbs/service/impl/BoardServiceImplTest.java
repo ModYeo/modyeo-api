@@ -107,11 +107,9 @@ class BoardServiceImplTest {
 
         given(articleRepository.findById(any())).willReturn(Optional.of(article));
 
-        Article updateArticle = boardService.updateArticle(articleRequest);
+        Long id = boardService.updateArticle(articleRequest);
 
         then(articleRepository).should().findById(any());
-        assertThat(updateArticle.getTitle()).isEqualTo(articleRequest.getTitle());
-        assertThat(updateArticle.getContent()).isEqualTo(articleRequest.getContent());
     }
 
     @Test
