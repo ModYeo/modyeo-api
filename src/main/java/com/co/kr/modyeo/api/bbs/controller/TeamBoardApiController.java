@@ -49,19 +49,19 @@ public class TeamBoardApiController {
     @ApiOperation(value = "팀 게시글 생성 API")
     @PostMapping("/article")
     public ResponseEntity<?> createArticle(@RequestBody TeamArticleRequest articleRequest) {
-        teamBoardService.createTeamArticle(articleRequest);
+        Long articleId = teamBoardService.createTeamArticle(articleRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(JsonResultData.successResultBuilder()
-                        .data(null)
+                        .data(articleId)
                         .build());
     }
 
     @ApiOperation(value = "팀 게시글 수정 API")
     @PatchMapping("/article")
     public ResponseEntity<?> updateArticle(@RequestBody TeamArticleRequest articleRequest) {
-        teamBoardService.updateTeamArticle(articleRequest);
+        Long articleId = teamBoardService.updateTeamArticle(articleRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
+                .data(articleId)
                 .build());
     }
 

@@ -14,19 +14,19 @@ import org.springframework.data.domain.Slice;
 import java.util.List;
 
 public interface TeamBoardService {
-    void createTeamArticle(TeamArticleRequest teamArticleRequest);
+    Long createTeamArticle(TeamArticleRequest teamArticleRequest);
 
     TeamArticleDetail getTeamArticle(Long teamArticleId);
 
     Slice<TeamArticleResponse> getTeamArticles(TeamArticleSearch teamArticleSearch);
 
-    void updateTeamArticle(TeamArticleRequest teamArticleRequest);
+    Long updateTeamArticle(TeamArticleRequest teamArticleRequest);
 
     void deleteTeamArticle(Long teamArticleId);
 
-    void createTeamReply(TeamReplyRequest teamReplyRequest);
+    Long createTeamReply(TeamReplyRequest teamReplyRequest);
 
-    void updateTeamReply(TeamReplyRequest teamReplyRequest);
+    Long updateTeamReply(TeamReplyRequest teamReplyRequest);
 
     void deleteTeamReply(Long teamReplyId);
 
