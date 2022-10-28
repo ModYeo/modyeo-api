@@ -2,8 +2,10 @@ package com.co.kr.modyeo.api.team.controller;
 
 import com.co.kr.modyeo.api.team.domain.dto.request.CrewUpdateRequest;
 import com.co.kr.modyeo.api.team.domain.dto.response.CrewResponse;
+import com.co.kr.modyeo.api.team.domain.dto.search.SearchCrew;
 import com.co.kr.modyeo.api.team.service.CrewService;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,18 +19,47 @@ public class CrewApiController {
 
     private final CrewService crewService;
 
+    @ApiOperation("크루원 정보 조회 API")
     @GetMapping("")
     public ResponseEntity<?> getCrew(
-            @RequestParam(value = "teamId", name = "teamId", required = true) Long teamId) {
-        List<CrewResponse> crewResponseList = crewService.getCrew(teamId);
+            SearchCrew searchCrew) {
+        List<CrewResponse> crewResponseList = crewService.getCrew(searchCrew);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(crewResponseList)
                 .build());
     }
 
+    @ApiOperation("크루원 정보 LEVEL 변경 API")
     @PatchMapping("/level")
-    public ResponseEntity<?> updateCrewLevel(CrewUpdateRequest crewUpdateRequest){
+    public ResponseEntity<?> updateCrewLevel(CrewUpdateRequest crewUpdateRequest) {
         crewService.updateCrewLevel(crewUpdateRequest);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
+                .build());
+    }
+
+    @ApiOperation("크루원 강퇴 API")
+    @DeleteMapping("/{crewId}")
+    public ResponseEntity<?> deleteCrew(@PathVariable Long crewId) {
+        crewService.deleteCrew(crewId);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
+                .build());
+    }
+
+    @ApiOperation("차단 해제 API")
+    @PatchMapping("/{crewId}/active")
+    public ResponseEntity<?> updateCrewActive(@PathVariable Long crewId){
+        crewService.updateCrewActive(crewId);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(null)
+                .build());
+    }
+
+    @ApiOperation("크루 탈퇴 API")
+    @PatchMapping("/{teamId}/inactive")
+    public ResponseEntity<?> updateCrewInActive(@PathVariable Long teamId){
+        crewService.updateCrewInActive(teamId);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(null)
                 .build());

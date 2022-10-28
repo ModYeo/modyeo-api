@@ -4,12 +4,17 @@ import com.co.kr.modyeo.api.category.repository.CategoryRepository;
 import com.co.kr.modyeo.api.member.domain.dto.request.MemberCategoryRequest;
 import com.co.kr.modyeo.api.member.domain.dto.request.MemberProfilePathRequest;
 import com.co.kr.modyeo.api.member.domain.dto.request.NicknameUpdateRequest;
+import com.co.kr.modyeo.api.member.domain.dto.response.ApplicationMemberDetail;
 import com.co.kr.modyeo.api.member.domain.dto.response.MemberDetail;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.domain.entity.link.MemberCategory;
 import com.co.kr.modyeo.api.member.repository.MemberCategoryRepository;
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.api.member.service.MemberService;
+import com.co.kr.modyeo.api.team.domain.entity.ApplicationForm;
+import com.co.kr.modyeo.api.team.repository.ApplicationFormRepository;
+import com.co.kr.modyeo.api.team.repository.MemberTeamRepository;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +35,10 @@ public class MemberServiceImpl implements MemberService {
     private final CategoryRepository categoryRepository;
 
     private final MemberCategoryRepository memberCategoryRepository;
+
+    private final ApplicationFormRepository applicationFormRepository;
+
+    private final MemberTeamRepository memberTeamRepository;
 
     @Override
     @Transactional
@@ -86,5 +95,21 @@ public class MemberServiceImpl implements MemberService {
                         .build());
 
         member.changeProfilePath(member.getProfilePath());
+    }
+
+    @Override
+    public ApplicationMemberDetail getTeamApplicationMember(Long memberId, Long teamId) {
+        ApplicationMemberDetail detail = memberTeamRepository.findApplicationMemberByMemberId(memberId);
+        if (detail == null) throw ApiException.builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .errorCode("NOT_FOUND_APPLICATION_MEMBER")
+                .errorMessage("신청자 정보를 찾을 수 없습니다.")
+                .build();
+
+        ApplicationForm applicationForm = applicationFormRepository.findApplicationFormByTeamId(teamId);
+        if (Yn.N.equals(applicationForm.getBirthdayAgree())) detail.birthDayHide();
+        if (Yn.N.equals(applicationForm.getSexAgree())) detail.sexHide();
+
+        return detail;
     }
 }

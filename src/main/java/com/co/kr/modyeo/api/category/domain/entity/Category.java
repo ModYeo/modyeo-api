@@ -22,26 +22,31 @@ public class Category extends BaseEntity {
     @Column(name = "category_name")
     private String name;
 
+    @Column(name = "image_path")
+    private String imagePath;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "use_yn")
     private Yn useYn;
-
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public Category(Long id, String name, Yn useYn) {
+    public Category(Long id, String name, String imagePath, Yn useYn) {
         this.id = id;
         this.name = name;
+        this.imagePath = imagePath;
         this.useYn = useYn;
     }
 
     @Builder(builderClassName = "createCategoryBuilder", builderMethodName = "createCategoryBuilder")
-    public Category(String name) {
+    public Category(String name, String imagePath) {
         this.name = name;
+        this.imagePath = imagePath;
         this.useYn = Yn.Y;
     }
 
 
-    public void changeCategory(String name, Yn useYn) {
+    public void changeCategory(String name, Yn useYn, String imagePath) {
         this.name = name;
+        this.imagePath = imagePath;
         this.useYn = useYn;
     }
 }

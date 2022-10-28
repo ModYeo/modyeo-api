@@ -14,9 +14,11 @@ import com.co.kr.modyeo.common.exception.CustomAuthException;
 import com.co.kr.modyeo.common.exception.code.AuthErrorCode;
 import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import com.co.kr.modyeo.common.util.MailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -44,6 +46,8 @@ public class AuthServiceImpl implements AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     private final StringRedisTemplate redisTemplate;
+
+    private final MailSender mailSender;
 
     @Override
     public MemberResponseDto signup(MemberJoinDto memberJoinDto) {
@@ -156,5 +160,18 @@ public class AuthServiceImpl implements AuthService {
                         .build());
 
         member.changePassword(passwordUpdateRequest.getPassword(), passwordEncoder);
+    }
+
+    @Override
+    public void authMail(String email,String authNumber) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
+                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
+                        .build());
+
+        MailDto mailDto = MailDto.makeAuthSender(member, authNumber);
+        mailSender.send(mailDto);
     }
 }

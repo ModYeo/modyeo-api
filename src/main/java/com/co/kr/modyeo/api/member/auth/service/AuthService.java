@@ -12,4 +12,6 @@ public interface AuthService {
     void logout(TokenRequestDto tokenRequestDto);
 
     void updatePassword(PasswordUpdateRequest passwordUpdateRequest);
+
+    void authMail(String email, String authNumber);
 }

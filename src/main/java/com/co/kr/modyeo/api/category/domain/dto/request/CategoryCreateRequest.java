@@ -12,18 +12,22 @@ public class CategoryCreateRequest {
 
     private String name;
 
+    private String imagePath;
+
     private Yn useYn;
 
 
     @Builder(builderMethodName = "of", builderClassName = "of")
-    public CategoryCreateRequest(String name, Yn useYn) {
+    public CategoryCreateRequest(String name, Yn useYn, String imagePath) {
         this.name = name;
+        this.imagePath = imagePath;
         this.useYn = useYn;
     }
 
     public static Category createCategory(CategoryCreateRequest categoryCreateRequest) {
         return Category.createCategoryBuilder()
                 .name(categoryCreateRequest.getName())
+                .imagePath(categoryCreateRequest.getImagePath())
                 .build();
     }
 }

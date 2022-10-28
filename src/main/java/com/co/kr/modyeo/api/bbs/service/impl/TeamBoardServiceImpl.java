@@ -55,7 +55,7 @@ public class TeamBoardServiceImpl implements TeamBoardService {
 
     @Override
     @Transactional
-    public void createTeamArticle(TeamArticleRequest teamArticleRequest) {
+    public Long createTeamArticle(TeamArticleRequest teamArticleRequest) {
         Team team = teamRepository.findById(teamArticleRequest.getTeamId())
                 .orElseThrow(() -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -64,7 +64,7 @@ public class TeamBoardServiceImpl implements TeamBoardService {
                         .build());
 
         TeamArticle article = TeamArticleRequest.createArticle(teamArticleRequest, team);
-        teamArticleRepository.save(article);
+        return teamArticleRepository.save(article).getId();
     }
 
     @Override
@@ -89,7 +89,7 @@ public class TeamBoardServiceImpl implements TeamBoardService {
 
     @Override
     @Transactional
-    public void updateTeamArticle(TeamArticleRequest teamArticleRequest) {
+    public Long updateTeamArticle(TeamArticleRequest teamArticleRequest) {
         TeamArticle teamArticle = teamArticleRepository.findById(teamArticleRequest.getArticleId()).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -103,6 +103,8 @@ public class TeamBoardServiceImpl implements TeamBoardService {
                 .isHidden(teamArticleRequest.getIsHidden())
                 .title(teamArticleRequest.getTitle())
                 .build();
+
+        return teamArticle.getId();
     }
 
     @Override
@@ -120,7 +122,7 @@ public class TeamBoardServiceImpl implements TeamBoardService {
 
     @Override
     @Transactional
-    public void createTeamReply(TeamReplyRequest teamReplyRequest) {
+    public Long createTeamReply(TeamReplyRequest teamReplyRequest) {
         TeamArticle teamArticle = teamArticleRepository.findById(teamReplyRequest.getArticleId()).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -130,12 +132,12 @@ public class TeamBoardServiceImpl implements TeamBoardService {
 
         TeamReply teamReply = teamReplyRequest.getReplyDepth() == 0 ?
                 TeamReplyRequest.toTeamReply(teamArticle, teamReplyRequest.getContent()) : TeamReplyRequest.toTeamNestedReply(teamArticle, teamReplyRequest.getContent(), teamReplyRequest.getReplyGroup());
-        teamReplyRepository.save(teamReply);
+        return teamReplyRepository.save(teamReply).getId();
     }
 
     @Override
     @Transactional
-    public void updateTeamReply(TeamReplyRequest teamReplyRequest) {
+    public Long updateTeamReply(TeamReplyRequest teamReplyRequest) {
         TeamReply teamReply = teamReplyRepository.findById(teamReplyRequest.getReplyId()).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -144,6 +146,8 @@ public class TeamBoardServiceImpl implements TeamBoardService {
                         .build());
 
         teamReply.changeTeamReply(teamReplyRequest.getContent());
+
+        return teamReply.getId();
     }
 
     @Override

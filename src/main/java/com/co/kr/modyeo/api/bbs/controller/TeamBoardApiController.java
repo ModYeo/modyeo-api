@@ -8,6 +8,7 @@ import com.co.kr.modyeo.api.bbs.domain.dto.response.*;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.TeamArticleSearch;
 import com.co.kr.modyeo.api.bbs.service.TeamBoardService;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import com.co.kr.modyeo.common.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -48,19 +49,19 @@ public class TeamBoardApiController {
     @ApiOperation(value = "팀 게시글 생성 API")
     @PostMapping("/article")
     public ResponseEntity<?> createArticle(@RequestBody TeamArticleRequest articleRequest) {
-        teamBoardService.createTeamArticle(articleRequest);
+        Long articleId = teamBoardService.createTeamArticle(articleRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(JsonResultData.successResultBuilder()
-                        .data(null)
+                        .data(articleId)
                         .build());
     }
 
     @ApiOperation(value = "팀 게시글 수정 API")
     @PatchMapping("/article")
     public ResponseEntity<?> updateArticle(@RequestBody TeamArticleRequest articleRequest) {
-        teamBoardService.updateTeamArticle(articleRequest);
+        Long articleId = teamBoardService.updateTeamArticle(articleRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
+                .data(articleId)
                 .build());
     }
 
@@ -133,7 +134,7 @@ public class TeamBoardApiController {
     @ApiOperation(value = "내가 쓴 게시글 조회 API")
     @GetMapping("/article/my")
     public ResponseEntity<?> getTeamArticleMy(){
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email =  SecurityUtil.getCurrentEmail();
         List<TeamArticleResponse> articleResponseList = teamBoardService.getArticlesMy(email);
         return ResponseEntity.ok(articleResponseList);
     }
@@ -141,7 +142,7 @@ public class TeamBoardApiController {
     @ApiOperation(value = "내가 쓴 게시글 조회 API")
     @GetMapping("/reply/my")
     public ResponseEntity<?> getTeamReplyMy(){
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email =  SecurityUtil.getCurrentEmail();
         List<TeamReplyResponse> teamReplyResponseList = teamBoardService.getReplyMy(email);
         return ResponseEntity.ok(teamReplyResponseList);
     }

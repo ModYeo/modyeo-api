@@ -7,6 +7,7 @@ import com.co.kr.modyeo.api.team.domain.dto.search.TeamSearch;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.api.team.service.TeamService;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import com.co.kr.modyeo.common.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -94,7 +95,7 @@ public class TeamApiController {
     @ApiOperation(value = "자신이 속한 팀 조회 API")
     @GetMapping("/my")
     public ResponseEntity<?> getMyTeam(){
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        String email =  SecurityUtil.getCurrentEmail();
         List<TeamResponse> teamResponseList = teamService.getMyTeam(email);
         return ResponseEntity.ok(teamResponseList);
     }

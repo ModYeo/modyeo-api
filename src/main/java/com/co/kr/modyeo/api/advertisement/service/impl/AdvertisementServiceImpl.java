@@ -27,7 +27,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 
     @Override
     @Transactional
-    public void createAdvertisement(AdvertisementCreateRequest advertisementCreateRequest) {
+    public void createAdvertisement(AdvertisementCreateRequest advertisementCreateRequest) {  
         Advertisement advertisement = AdvertisementCreateRequest.toEntity(advertisementCreateRequest);
         advertisementRepository.save(advertisement);
     }

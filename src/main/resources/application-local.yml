@@ -1,0 +1,34 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jwt:
+    secret: Z2VvLWdhdGhlcmluZy1zeXN0ZW0tbW9keWVvLWFwaS1zZXJ2ZXItc3ByaW5nLWJvb3QtanBhLWp3dC1zcHJpbmctc2VjdXJpdHktd2lydHRlci1hbmpvbmdnaWwtamFuZ21pbnNlb2stMjAyMi0wNi0wOQo=
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        show_sql: true
+        default_batch_fetch_size: 1000
+    open-in-view: false
+
+  redis:
+    host: localhost
+    port: 6379
+
+logging:
+  level:
+    org.hibernate.sql: debug
+
+
+profiles:
+  active: local

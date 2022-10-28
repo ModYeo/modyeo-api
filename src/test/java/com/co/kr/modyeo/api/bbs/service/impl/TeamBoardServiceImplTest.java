@@ -33,7 +33,7 @@ class TeamBoardServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        teamBoardService = new TeamBoardServiceImpl(teamArticleRepository,teamReplyRepository,teamRepository);
+        //teamBoardService = new TeamBoardServiceImpl(teamArticleRepository,teamReplyRepository,teamRepository);
     }
 
 

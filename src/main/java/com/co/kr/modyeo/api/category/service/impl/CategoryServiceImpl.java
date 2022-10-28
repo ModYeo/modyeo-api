@@ -50,7 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
                         .errorCode(CategoryErrorCode.NOT_FOUND_CATEGORY.getCode())
                         .build());
 
-        category.changeCategory(categoryUpdateRequest.getName(), categoryUpdateRequest.getUseYn());
+        category.changeCategory(categoryUpdateRequest.getName(), categoryUpdateRequest.getUseYn(), categoryUpdateRequest.getImagePath());
     }
 
     @Override
