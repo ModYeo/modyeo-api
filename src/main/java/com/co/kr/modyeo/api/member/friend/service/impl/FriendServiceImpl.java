@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.member.friend.service.impl;
 
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.friend.domain.entity.Friend;
+import com.co.kr.modyeo.api.member.friend.domain.response.FriendResponse;
 import com.co.kr.modyeo.api.member.friend.enumerate.FriendStatus;
 import com.co.kr.modyeo.api.member.friend.repository.FriendRepository;
 import com.co.kr.modyeo.api.member.friend.service.FriendService;
@@ -15,6 +16,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -23,9 +26,8 @@ public class FriendServiceImpl implements FriendService {
     private final FriendRepository friendRepository;
 
     @Override
-    public void sendFriendRequest(Long receiverId) {
-        String sendMemberUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-        Member sendMember = memberRepository.findByEmail(sendMemberUsername)
+    public void sendFriendRequest(String username, Long receiverId) {
+        Member sendMember = memberRepository.findByEmail(username)
                 .orElseThrow(() -> ApiException.builder()
                         .errorMessage(FriendErrorCode.SENDER_NOT_FOUND.getMessage())
                         .errorCode(FriendErrorCode.SENDER_NOT_FOUND.getCode())
@@ -84,5 +86,17 @@ public class FriendServiceImpl implements FriendService {
         friend.deleteFriend();
     }
 
+    @Override
+    public List<FriendResponse> getFriends() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
+        Member member = memberRepository.findByEmail(username)
+                .orElseThrow(() -> ApiException.builder()
+                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
+                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
+        return null;
+    }
 }
