@@ -9,13 +9,13 @@ import com.co.kr.modyeo.api.advertisement.domain.response.AdvertisementResponse;
 import java.util.List;
 
 public interface AdvertisementService {
-    void createAdvertisement(AdvertisementCreateRequest advertisementCreateRequest);
+    Long createAdvertisement(AdvertisementCreateRequest advertisementCreateRequest);
 
     List<AdvertisementResponse> getAdvertisements(AdvertisementType advertisementType);
 
     AdvertisementDetail getAdvertisement(Long id);
 
-    void updateAdvertisement(AdvertisementUpdateRequest advertisementUpdateRequest);
+    Long updateAdvertisement(AdvertisementUpdateRequest advertisementUpdateRequest);
 
     void deleteAdvertisement(Long id);
 }

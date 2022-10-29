@@ -27,9 +27,9 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 
     @Override
     @Transactional
-    public void createAdvertisement(AdvertisementCreateRequest advertisementCreateRequest) {  
+    public Long createAdvertisement(AdvertisementCreateRequest advertisementCreateRequest) {
         Advertisement advertisement = AdvertisementCreateRequest.toEntity(advertisementCreateRequest);
-        advertisementRepository.save(advertisement);
+        return advertisementRepository.save(advertisement).getId();
     }
 
     @Override
@@ -51,7 +51,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 
     @Override
     @Transactional
-    public void updateAdvertisement(AdvertisementUpdateRequest advertisementUpdateRequest) {
+    public Long updateAdvertisement(AdvertisementUpdateRequest advertisementUpdateRequest) {
         Advertisement advertisement = advertisementRepository.findById(advertisementUpdateRequest.getId()).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -65,6 +65,8 @@ public class AdvertisementServiceImpl implements AdvertisementService {
                 .urlLink(advertisementUpdateRequest.getUrlLink())
                 .imagePath(advertisement.getImagePath())
                 .build();
+
+        return advertisement.getId();
     }
 
     @Override
