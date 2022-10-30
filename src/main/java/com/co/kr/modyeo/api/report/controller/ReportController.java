@@ -23,9 +23,9 @@ public class ReportController {
 
     @PostMapping("")
     public ResponseEntity<?> createReport(ReportCreateRequest reportCreateRequest) {
-        reportService.createReport(reportCreateRequest);
+        Long reportId = reportService.createReport(reportCreateRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
+                .data(reportId)
                 .build());
     }
 
@@ -49,17 +49,17 @@ public class ReportController {
     public ResponseEntity<?> updateReportStatus(
             @PathVariable Long reportId,
             @PathVariable ReportStatus status){
-        reportService.updateReportStatus(reportId,status);
+        reportId = reportService.updateReportStatus(reportId,status);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
+                .data(reportId)
                 .build());
     }
 
     @PatchMapping("")
     public ResponseEntity<?> updateReport(ReportUpdateRequest reportUpdateRequest){
-        reportService.updateReport(reportUpdateRequest);
+        Long reportId = reportService.updateReport(reportUpdateRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
+                .data(reportId)
                 .build());
     }
 

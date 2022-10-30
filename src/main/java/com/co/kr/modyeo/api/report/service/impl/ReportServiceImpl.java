@@ -27,9 +27,9 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     @Transactional
-    public void createReport(ReportCreateRequest reportCreateRequest) {
+    public Long createReport(ReportCreateRequest reportCreateRequest) {
         Report report = ReportCreateRequest.toEntity(reportCreateRequest);
-        reportRepository.save(report);
+        return reportRepository.save(report).getId();
     }
 
     @Override
@@ -44,7 +44,7 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     @Transactional
-    public void updateReportStatus(Long reportId, ReportStatus status) {
+    public Long updateReportStatus(Long reportId, ReportStatus status) {
         Report report = reportRepository.findById(reportId).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -53,6 +53,7 @@ public class ReportServiceImpl implements ReportService {
                         .build());
 
         report.changeStatus(status);
+        return report.getId();
     }
 
     @Override
@@ -75,7 +76,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public void updateReport(ReportUpdateRequest reportUpdateRequest) {
+    public Long updateReport(ReportUpdateRequest reportUpdateRequest) {
         Report report = reportRepository.findById(reportUpdateRequest.getReportId()).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -84,5 +85,6 @@ public class ReportServiceImpl implements ReportService {
                         .build());
 
         report.changeReport(reportUpdateRequest.getTitle(),reportUpdateRequest.getReportReason(),reportUpdateRequest.getContents());
+        return report.getId();
     }
 }
