@@ -14,11 +14,10 @@ import com.co.kr.modyeo.common.exception.CustomAuthException;
 import com.co.kr.modyeo.common.exception.code.AuthErrorCode;
 import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
 import com.co.kr.modyeo.common.result.JsonResultData;
-import com.co.kr.modyeo.common.util.MailSender;
+import com.co.kr.modyeo.common.util.ModyeoMailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -47,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final StringRedisTemplate redisTemplate;
 
-    private final MailSender mailSender;
+    private final ModyeoMailSender modyeoMailSender;
 
     @Override
     public MemberResponseDto signup(MemberJoinDto memberJoinDto) {
@@ -172,6 +171,6 @@ public class AuthServiceImpl implements AuthService {
                         .build());
 
         MailDto mailDto = MailDto.makeAuthSender(member, authNumber);
-        mailSender.send(mailDto);
+        modyeoMailSender.send(mailDto);
     }
 }

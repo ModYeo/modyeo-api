@@ -21,8 +21,8 @@ public class AdvertisementApiController {
 
     @PostMapping("")
     public ResponseEntity<?> createAdvertisement(@RequestBody AdvertisementCreateRequest advertisementCreateRequest){
-        advertisementService.createAdvertisement(advertisementCreateRequest);
-        return ResponseEntity.ok(null);
+        Long advertisementId = advertisementService.createAdvertisement(advertisementCreateRequest);
+        return ResponseEntity.ok(advertisementId);
     }
 
     @GetMapping("")
@@ -40,8 +40,8 @@ public class AdvertisementApiController {
 
     @PatchMapping("")
     public ResponseEntity<?> updateAdvertisement(@RequestBody AdvertisementUpdateRequest advertisementUpdateRequest){
-        advertisementService.updateAdvertisement(advertisementUpdateRequest);
-        return ResponseEntity.ok(null);
+        Long advertisementId = advertisementService.updateAdvertisement(advertisementUpdateRequest);
+        return ResponseEntity.ok(advertisementId);
     }
 
     @DeleteMapping("/{id}")
