@@ -72,8 +72,8 @@ class CategoryServiceImplTest {
         given(categoryRepository.save(any()))
                 .willReturn(category);
 
-        category = categoryService.createCategory(categoryCreateRequest);
-        assertThat(category.getId()).isEqualTo(1L);
+        Long id = categoryService.createCategory(categoryCreateRequest);
+        assertThat(id).isEqualTo(1L);
     }
 
     /*@Test

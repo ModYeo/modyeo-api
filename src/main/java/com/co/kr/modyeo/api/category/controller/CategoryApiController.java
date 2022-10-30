@@ -32,20 +32,12 @@ public class CategoryApiController {
     @ApiOperation(value = "카테고리 생성 API")
     @PostMapping("")
     public ResponseEntity<?> createCategory(@Valid @RequestBody CategoryCreateRequest categoryCreateRequest) {
-        Category category = categoryService.createCategory(categoryCreateRequest);
-        if (category != null) {
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(JsonResultData.successResultBuilder()
-                            .data(null)
-                            .build());
-        } else {
-            return ResponseEntity
-                    .badRequest()
-                    .body(JsonResultData.failResultBuilder()
-                            .errorCode(CategoryErrorCode.FAIL_CREATE_CATEGORY.getCode())
-                            .errorMessage(CategoryErrorCode.FAIL_CREATE_CATEGORY.getMessage()));
-        }
+        Long categoryId = categoryService.createCategory(categoryCreateRequest);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(JsonResultData.successResultBuilder()
+                        .data(categoryId)
+                        .build());
     }
 
     @ApiOperation(value = "카테고리 상세 조회 API")
@@ -74,11 +66,11 @@ public class CategoryApiController {
     @ApiOperation(value = "카테고리 수정 API")
     @PatchMapping("")
     public ResponseEntity<?> updateCategory(@Valid @RequestBody CategoryUpdateRequest categoryUpdateRequest) {
-        categoryService.updateCategory(categoryUpdateRequest);
+        Long categoryId = categoryService.updateCategory(categoryUpdateRequest);
         return ResponseEntity
                 .ok(JsonResultData
                         .successResultBuilder()
-                        .data(null)
+                        .data(categoryId)
                         .build());
     }
 

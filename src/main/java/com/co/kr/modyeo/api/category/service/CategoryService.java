@@ -10,11 +10,11 @@ import com.co.kr.modyeo.api.category.domain.entity.Category;
 import java.util.List;
 
 public interface CategoryService {
-    Category createCategory(CategoryCreateRequest categoryCreateRequest);
+    Long createCategory(CategoryCreateRequest categoryCreateRequest);
 
     List<CategoryResponse> getCategories(CategorySearch categorySearch);
 
-    void updateCategory(CategoryUpdateRequest categoryUpdateRequest);
+    Long updateCategory(CategoryUpdateRequest categoryUpdateRequest);
 
     void deleteCategory(Long categoryId);
 

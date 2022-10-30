@@ -64,11 +64,11 @@ class CategoryApiControllerTest {
 
         String request = objectMapper.writeValueAsString(categoryCreateRequest);
 
-        given(categoryService.createCategory(any()))
-                .willReturn(Category.of()
-                        .id(1L)
-                        .name("test category")
-                        .build());
+//        given(categoryService.createCategory(any()))
+//                .willReturn(Category.of()
+//                        .id(1L)
+//                        .name("test category")
+//                        .build());
 
         mockMvc.perform(
                 post("/api/category")
