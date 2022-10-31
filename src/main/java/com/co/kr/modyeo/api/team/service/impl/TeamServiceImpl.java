@@ -38,7 +38,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     @Transactional
-    public Team createTeam(TeamRequest teamRequest) {
+    public Long createTeam(TeamRequest teamRequest) {
         overlapTeamCheck(teamRequest);
 
         String memberEmail = SecurityUtil.getCurrentEmail();
@@ -75,7 +75,7 @@ public class TeamServiceImpl implements TeamService {
 
         crewRepository.save(crew);
 
-        return team;
+        return team.getId();
     }
 
     @Override
@@ -87,7 +87,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     @Transactional
-    public Team updateTeam(TeamRequest teamRequest) {
+    public Long updateTeam(TeamRequest teamRequest) {
         overlapTeamCheck(teamRequest);
         Team findTeam = teamRepository.findTeamById(teamRequest.getTeam_id()).orElseThrow(() -> ApiException.builder()
                 .status(HttpStatus.BAD_REQUEST)
@@ -96,7 +96,7 @@ public class TeamServiceImpl implements TeamService {
                 .build());
 
         findTeam.changeTeamInfo(teamRequest.getName(), teamRequest.getProfilePath(), teamRequest.getDescription());
-        return findTeam;
+        return findTeam.getId();
     }
 
     @Override

@@ -29,18 +29,11 @@ public class TeamApiController {
     @ApiOperation(value = "팀 생성 API")
     @PostMapping("")
     public ResponseEntity<?> createTeam(@RequestBody TeamRequest teamRequest){
-        Team team = teamService.createTeam(teamRequest);
-        if (team != null){
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(JsonResultData.successResultBuilder()
-                            .data(null)
-                            .build());
-        }else{
-            return ResponseEntity
-                    .badRequest()
-                    .body(JsonResultData.failResultBuilder()
-                            .build());
-        }
+        Long teamId = teamService.createTeam(teamRequest);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(JsonResultData.successResultBuilder()
+                        .data(teamId)
+                        .build());
     }
 
     @ApiOperation(value = "팀 슬라이스 조회 API")
@@ -65,19 +58,11 @@ public class TeamApiController {
     @ApiOperation(value = "팀 수정 API")
     @PatchMapping("")
     public ResponseEntity<?> updateTeam(@RequestBody TeamRequest teamRequest){
-        Team team = teamService.updateTeam(teamRequest);
-
-        if (team.getId() != null){
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(JsonResultData.successResultBuilder()
-                            .data(null)
-                            .build());
-        }else{
-            return ResponseEntity
-                    .badRequest()
-                    .body(JsonResultData.failResultBuilder()
-                            .build());
-        }
+        Long teamId = teamService.updateTeam(teamRequest);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(JsonResultData.successResultBuilder()
+                        .data(teamId)
+                        .build());
     }
 
     @ApiOperation(value = "팀 삭제 API")

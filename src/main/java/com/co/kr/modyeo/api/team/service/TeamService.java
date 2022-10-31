@@ -10,11 +10,11 @@ import org.springframework.data.domain.Slice;
 import java.util.List;
 
 public interface TeamService {
-    Team createTeam(TeamRequest teamRequest);
+    Long createTeam(TeamRequest teamRequest);
 
     Slice<TeamResponse> getTeams(TeamSearch teamSearch);
 
-    Team updateTeam(TeamRequest teamRequest);
+    Long updateTeam(TeamRequest teamRequest);
 
     void deleteTeam(Long crewId);
 

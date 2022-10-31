@@ -97,7 +97,7 @@ class TeamServiceImplTest {
 
         given(teamRepository.save(any())).willReturn(team);
         given(teamCategoryRepository.save(any())).willReturn(teamCategory);
-        team = teamService.createTeam(crewCreateRequest);
+        Long teamId = teamService.createTeam(crewCreateRequest);
 
         then(teamRepository).should().save(any());
         then(teamCategoryRepository).should().save(any());
