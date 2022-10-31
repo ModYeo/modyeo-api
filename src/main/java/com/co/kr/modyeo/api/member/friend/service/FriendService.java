@@ -10,5 +10,9 @@ public interface FriendService {
     void denyFriendRequest(Long requestId);
     void deleteFriend(Long friendId);
 
-    List<FriendResponse> getFriends();
+    List<FriendResponse> getApprovedFriends(String email);
+    List<FriendResponse> getReceiveFriendRequests(String email);
+    List<FriendResponse> getSendFriendRequests(String email);
+
+    void blockFriendRequest(Long friendId);
 }

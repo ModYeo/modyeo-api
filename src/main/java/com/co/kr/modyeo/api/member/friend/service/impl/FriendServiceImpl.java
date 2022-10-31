@@ -10,13 +10,14 @@ import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.FriendErrorCode;
 import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
+import com.co.kr.modyeo.common.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,6 +26,7 @@ public class FriendServiceImpl implements FriendService {
     private final MemberRepository memberRepository;
     private final FriendRepository friendRepository;
 
+    @Transactional
     @Override
     public void sendFriendRequest(String username, Long receiverId) {
         Member sendMember = memberRepository.findByEmail(username)
@@ -50,6 +52,7 @@ public class FriendServiceImpl implements FriendService {
         friendRepository.save(friend);
     }
 
+    @Transactional
     @Override
     public void approveFriendRequest(Long requestId) {
         Friend friend = friendRepository.findById(requestId)
@@ -62,6 +65,7 @@ public class FriendServiceImpl implements FriendService {
         friend.approveFriend();
     }
 
+    @Transactional
     @Override
     public void denyFriendRequest(Long requestId) {
         Friend friend = friendRepository.findById(requestId)
@@ -74,6 +78,7 @@ public class FriendServiceImpl implements FriendService {
         friend.denyFriend();
     }
 
+    @Transactional
     @Override
     public void deleteFriend(Long friendId) {
         Friend friend = friendRepository.findById(friendId)
@@ -87,16 +92,46 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public List<FriendResponse> getFriends() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    public List<FriendResponse> getApprovedFriends(String email) {
+        List<Friend> friendList = friendRepository.findApprovedByEmail(email);
 
-        Member member = memberRepository.findByEmail(username)
+        List<FriendResponse> friendResponseList = friendList.stream()
+                .map(FriendResponse::toResponse)
+                .collect(Collectors.toList());
+
+        return friendResponseList;
+    }
+
+    @Override
+    public List<FriendResponse> getReceiveFriendRequests(String email) {
+        List<Friend> friendList = friendRepository.findReceivedByEmail(email);
+
+        List<FriendResponse> friendResponseList = friendList.stream()
+                .map(FriendResponse::toResponse)
+                .collect(Collectors.toList());
+
+        return friendResponseList;
+    }
+
+    @Override
+    public List<FriendResponse> getSendFriendRequests(String email) {
+        List<Friend> friendList = friendRepository.findSendByEmail(email);
+
+        List<FriendResponse> friendResponseList = friendList.stream()
+                .map(FriendResponse::toResponse)
+                .collect(Collectors.toList());
+
+        return friendResponseList;
+    }
+
+    @Override
+    public void blockFriendRequest(Long friendId) {
+        Friend friend = friendRepository.findById(friendId)
                 .orElseThrow(() -> ApiException.builder()
-                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
-                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
+                        .errorMessage(FriendErrorCode.FRIEND_NOT_FOUND.getMessage())
+                        .errorCode(FriendErrorCode.FRIEND_NOT_FOUND.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
-
-        return null;
+        friend.blockFriend();
     }
 }
