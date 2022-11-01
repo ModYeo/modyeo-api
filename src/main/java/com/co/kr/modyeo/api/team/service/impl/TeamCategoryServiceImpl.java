@@ -25,7 +25,7 @@ public class TeamCategoryServiceImpl implements TeamCategoryService {
 
     @Override
     @Transactional
-    public TeamCategory createTeamCategory(Long teamId, Long categoryId) {
+    public Long createTeamCategory(Long teamId, Long categoryId) {
         Team team = findTeam(teamId);
         Category category = findCategory(categoryId);
 
@@ -35,7 +35,7 @@ public class TeamCategoryServiceImpl implements TeamCategoryService {
                 .build();
 
         teamCategoryRepository.save(teamCategory);
-        return teamCategory;
+        return teamCategory.getId();
     }
 
     @Override

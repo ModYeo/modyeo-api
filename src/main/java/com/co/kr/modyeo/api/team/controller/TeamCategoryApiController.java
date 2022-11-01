@@ -23,17 +23,11 @@ public class TeamCategoryApiController {
             @PathVariable("team_id") Long crewId,
             @PathVariable("category_id") Long categoryId
     ){
-        TeamCategory teamCategory = teamCategoryService.createTeamCategory(crewId, categoryId);
-        if (teamCategory.getId() != null){
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(JsonResultData.successResultBuilder()
-                            .data(null)
-                            .build());
-        }else{
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(JsonResultData.failResultBuilder()
-                            .build());
-        }
+        Long teamCategoryId = teamCategoryService.createTeamCategory(crewId, categoryId);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(JsonResultData.successResultBuilder()
+                        .data(teamCategoryId)
+                        .build());
     }
 
     @ApiOperation(value = "팀_카테고리 삭제 API")

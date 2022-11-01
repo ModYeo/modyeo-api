@@ -11,9 +11,9 @@ import java.util.List;
 
 
 public interface TeamApplicationService {
-    MemberTeam applicantCrew(TeamApplicationRequest teamApplicationRequest);
+    Long applicantCrew(TeamApplicationRequest teamApplicationRequest);
 
-    MemberTeam updateJoinStatus(Long memberCrewId, JoinStatus joinStatus);
+    Long updateJoinStatus(Long memberCrewId, JoinStatus joinStatus);
 
     void createApplicationForm(ApplicationFormRequest applicationFormRequest);
 

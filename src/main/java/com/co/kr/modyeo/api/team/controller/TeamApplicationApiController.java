@@ -73,20 +73,11 @@ public class TeamApplicationApiController {
         String email =  SecurityUtil.getCurrentEmail();
         teamApplicationRequest.setEmail(email);
 
-        MemberTeam memberTeam = teamApplicationService.applicantCrew(teamApplicationRequest);
-
-        if (memberTeam.getId() != null) {
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(JsonResultData.successResultBuilder()
-                            .data(null)
-                            .build());
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(JsonResultData.failResultBuilder()
-                            .errorMessage(null)
-                            .errorCode(null)
-                            .build());
-        }
+        Long teamApplicationId = teamApplicationService.applicantCrew(teamApplicationRequest);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(JsonResultData.successResultBuilder()
+                        .data(teamApplicationId)
+                        .build());
     }
 
     @ApiOperation(value = "팀 가입신청 리스트 API")
@@ -106,20 +97,11 @@ public class TeamApplicationApiController {
             @RequestParam(value = "memberTeamId", name = "memberTeamId", required = true) Long memberTeamId,
             @RequestParam(value = "joinStatus", name = "joinStatus", required = true) JoinStatus joinStatus
     ) {
-        MemberTeam memberTeam = teamApplicationService.updateJoinStatus(memberTeamId, joinStatus);
-
-        if (memberTeam.getId() != null) {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(JsonResultData.successResultBuilder()
-                            .data(null)
-                            .build());
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(JsonResultData.failResultBuilder()
-                            .errorMessage(null)
-                            .errorCode(null)
-                            .build());
-        }
+        Long teamApplicationId = teamApplicationService.updateJoinStatus(memberTeamId, joinStatus);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(JsonResultData.successResultBuilder()
+                        .data(teamApplicationId)
+                        .build());
     }
 
     @ApiOperation(value = "팀 가입신청 취소 API")

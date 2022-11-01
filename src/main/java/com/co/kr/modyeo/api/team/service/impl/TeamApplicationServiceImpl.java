@@ -42,7 +42,7 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
 
     @Override
     @Transactional
-    public MemberTeam applicantCrew(TeamApplicationRequest teamApplicationRequest) {
+    public Long applicantCrew(TeamApplicationRequest teamApplicationRequest) {
         Member member = findMember(teamApplicationRequest.getEmail());
         Team team = findTeam(teamApplicationRequest.getTeamId());
         MemberTeam memberTeam = memberTeamRepository.findByTeamAndMember(team, member);
@@ -63,12 +63,12 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
                 .introduce(teamApplicationRequest.getIntroduce())
                 .build();
 
-        return memberTeamRepository.save(newMemberTeam);
+        return memberTeamRepository.save(newMemberTeam).getId();
     }
 
     @Override
     @Transactional
-    public MemberTeam updateJoinStatus(Long memberCrewId, JoinStatus joinStatus) {
+    public Long updateJoinStatus(Long memberCrewId, JoinStatus joinStatus) {
         MemberTeam memberTeam = memberTeamRepository.findMemberTeamById(memberCrewId)
                 .orElseThrow(() -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -91,7 +91,7 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
             memberTeamRepository.delete(memberTeam);
         }
 
-        return memberTeam;
+        return memberTeam.getId();
     }
 
     @Override
