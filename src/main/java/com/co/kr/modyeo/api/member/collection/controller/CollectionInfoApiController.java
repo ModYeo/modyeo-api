@@ -35,17 +35,17 @@ public class CollectionInfoApiController {
 
     @PostMapping("")
     public ResponseEntity<?> createCollectionInfo(@RequestBody CollectionInfoRequest collectionInfoRequest){
-        collectionInfoService.createCollectionInfo(collectionInfoRequest);
+        Long collectionInfoId = collectionInfoService.createCollectionInfo(collectionInfoRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
+                .data(collectionInfoId)
                 .build());
     }
 
     @PatchMapping("")
     public ResponseEntity<?> updateCollectionInfo(@RequestBody CollectionInfoRequest collectionInfoRequest){
-        collectionInfoService.updateCollectionInfo(collectionInfoRequest);
+        Long collectionInfoId = collectionInfoService.updateCollectionInfo(collectionInfoRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
+                .data(collectionInfoId)
                 .build());
     }
 

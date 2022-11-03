@@ -12,9 +12,9 @@ public interface CollectionInfoService {
 
     CollectionInfoResponse getCollectionInfo(Long collectionInfoId);
 
-    void createCollectionInfo(CollectionInfoRequest collectionInfoRequest);
+    Long createCollectionInfo(CollectionInfoRequest collectionInfoRequest);
 
-    void updateCollectionInfo(CollectionInfoRequest collectionInfoRequest);
+    Long updateCollectionInfo(CollectionInfoRequest collectionInfoRequest);
 
     void deleteCollectionInfo(Long collectionInfoId);
 }
