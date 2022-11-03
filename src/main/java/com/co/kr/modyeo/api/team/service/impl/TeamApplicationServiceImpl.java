@@ -96,7 +96,7 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
 
     @Override
     @Transactional
-    public void createApplicationForm(ApplicationFormRequest applicationFormRequest) {
+    public Long createApplicationForm(ApplicationFormRequest applicationFormRequest) {
         Team team = teamRepository.findById(applicationFormRequest.getTeamId())
                 .orElseThrow(() -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -125,7 +125,7 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
         }
 
         ApplicationForm applicationForm = ApplicationFormRequest.toEntity(applicationFormRequest, team);
-        applicationFormRepository.save(applicationForm);
+        return applicationFormRepository.save(applicationForm).getId();
     }
 
     @Override
@@ -136,7 +136,7 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
 
     @Override
     @Transactional
-    public void updateApplicationForm(Long applicationFromId, ApplicationFormRequest applicationFormRequest) {
+    public Long updateApplicationForm(Long applicationFromId, ApplicationFormRequest applicationFormRequest) {
         ApplicationForm applicationForm = applicationFormRepository.findById(applicationFromId).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -152,6 +152,8 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
                 .geoAgree(applicationFormRequest.getGeoAgree())
                 .sexAgree(applicationFormRequest.getSexAgree())
                 .build();
+
+        return applicationForm.getId();
     }
 
     @Override

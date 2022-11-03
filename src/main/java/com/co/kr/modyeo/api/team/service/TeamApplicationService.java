@@ -15,11 +15,11 @@ public interface TeamApplicationService {
 
     Long updateJoinStatus(Long memberCrewId, JoinStatus joinStatus);
 
-    void createApplicationForm(ApplicationFormRequest applicationFormRequest);
+    Long createApplicationForm(ApplicationFormRequest applicationFormRequest);
 
     ApplicationFormDetail getApplicationForm(Long teamId);
 
-    void updateApplicationForm(Long applicationFromId, ApplicationFormRequest applicationFormRequest);
+    Long updateApplicationForm(Long applicationFromId, ApplicationFormRequest applicationFormRequest);
 
     void deleteApplicationForm(Long applicationFromId);
 

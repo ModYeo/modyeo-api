@@ -29,9 +29,9 @@ public class TeamApplicationApiController {
     @ApiOperation(value = "팀 가입신청 폼 API")
     @PostMapping("/form")
     public ResponseEntity<?> createApplicationForm(@RequestBody ApplicationFormRequest applicationFormRequest) {
-        teamApplicationService.createApplicationForm(applicationFormRequest);
+        Long applicationFormId = teamApplicationService.createApplicationForm(applicationFormRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
+                .data(applicationFormId)
                 .build());
     }
 
@@ -49,9 +49,9 @@ public class TeamApplicationApiController {
     public ResponseEntity<?> updateApplicationForm(
             @PathVariable(value = "applicationFormId") Long applicationFromId,
             @RequestBody ApplicationFormRequest applicationFormRequest) {
-        teamApplicationService.updateApplicationForm(applicationFromId,applicationFormRequest);
+        Long applicationFormId = teamApplicationService.updateApplicationForm(applicationFromId, applicationFormRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
+                .data(applicationFormId)
                 .build());
     }
 
