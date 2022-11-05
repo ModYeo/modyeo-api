@@ -26,10 +26,10 @@ public class MemberApiController {
     @ApiOperation(value = "회원 카테고리 정보 생성 API")
     @PostMapping("")
     public ResponseEntity<?> createMemberInfo(@RequestBody MemberCategoryRequest memberCategoryRequest) {
-        memberService.createMemberInfo(memberCategoryRequest);
+        Long memberId = memberService.createMemberInfo(memberCategoryRequest);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(JsonResultData.successResultBuilder()
-                        .data(null)
+                        .data(memberId)
                         .build());
     }
 
@@ -48,18 +48,18 @@ public class MemberApiController {
     public ResponseEntity<?> updateNickname(
             @RequestBody NicknameUpdateRequest nicknameUpdateRequest
     ) {
-        memberService.updateNickname(nicknameUpdateRequest);
+        Long memberId = memberService.updateNickname(nicknameUpdateRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
+                .data(memberId)
                 .build());
     }
 
     @ApiOperation(value = "프로필 등록/변경 API")
     @PutMapping("/profile-path")
     public ResponseEntity<?> putProfilePath(@RequestBody MemberProfilePathRequest memberProfilePathRequest) {
-        memberService.putProfilePath(memberProfilePathRequest);
+        Long memberId = memberService.putProfilePath(memberProfilePathRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
+                .data(memberId)
                 .build());
     }
 
