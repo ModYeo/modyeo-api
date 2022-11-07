@@ -41,4 +41,6 @@ public interface BoardService {
     List<ArticleResponse> getArticlesMy(String email);
 
     List<ReplyResponse> getReplyMy(String email);
+
+    List<ArticleResponse> getArticleMyLike(String email);
 }

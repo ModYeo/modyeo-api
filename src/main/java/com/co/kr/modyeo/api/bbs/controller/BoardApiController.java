@@ -152,4 +152,12 @@ public class BoardApiController {
         List<ReplyResponse> replyResponseList = boardService.getReplyMy(email);
         return ResponseEntity.ok(replyResponseList);
     }
+
+    @ApiOperation("내가 좋아요한 글 조회 API")
+    @GetMapping("/article/my-like")
+    public ResponseEntity<?> getArticleMyLike(){
+        String email = SecurityUtil.getCurrentEmail();
+        List<ArticleResponse> articleResponseList = boardService.getArticleMyLike(email);
+        return ResponseEntity.ok(articleResponseList);
+    }
 }

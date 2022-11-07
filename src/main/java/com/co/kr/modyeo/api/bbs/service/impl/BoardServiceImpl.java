@@ -255,4 +255,11 @@ public class BoardServiceImpl implements BoardService {
                 .map(ReplyResponse::toDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<ArticleResponse> getArticleMyLike(String email) {
+        return articleRepository.findArticleByEmailAndRecommendY(email).stream()
+                .map(ArticleResponse::toDto)
+                .collect(Collectors.toList());
+    }
 }

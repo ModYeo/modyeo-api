@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.bbs.repository.impl;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.api.bbs.repository.custom.ArticleCustomRepository;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.domain.PageRequest;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Slice;
 import java.util.List;
 
 import static com.co.kr.modyeo.api.bbs.domain.entity.QArticle.article;
+import static com.co.kr.modyeo.api.bbs.domain.entity.link.QArticleRecommend.articleRecommend;
 import static com.co.kr.modyeo.api.category.domain.entity.QCategory.category;
 
 public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements ArticleCustomRepository {
@@ -35,6 +37,16 @@ public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements
     public List<Article> findArticleByEmail(String email) {
         return selectFrom(article)
                 .where(createdByEq(email))
+                .fetch();
+    }
+
+    @Override
+    public List<Article> findArticleByEmailAndRecommendY(String email) {
+        return select(article)
+                .from(articleRecommend)
+                .innerJoin(articleRecommend.article, article)
+                .where(createdByEq(email),
+                        articleRecommend.recommendYn.eq(Yn.Y))
                 .fetch();
     }
 
