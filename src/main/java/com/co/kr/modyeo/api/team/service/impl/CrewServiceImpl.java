@@ -46,7 +46,7 @@ public class CrewServiceImpl implements CrewService {
 
     @Override
     @Transactional
-    public void updateCrewLevel(CrewUpdateRequest crewUpdateRequest) {
+    public Long updateCrewLevel(CrewUpdateRequest crewUpdateRequest) {
         Crew crew = crewRepository.findById(crewUpdateRequest.getCrewId()).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -64,6 +64,7 @@ public class CrewServiceImpl implements CrewService {
         }
 
         crew.changeLevel(crewUpdateRequest.getCrewLevel());
+        return crew.getId();
     }
 
     @Override
@@ -90,7 +91,7 @@ public class CrewServiceImpl implements CrewService {
 
     @Override
     @Transactional
-    public void updateCrewActive(Long crewId) {
+    public Long updateCrewActive(Long crewId) {
         Crew crew = crewRepository.findById(crewId).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -108,14 +109,16 @@ public class CrewServiceImpl implements CrewService {
         }
 
         Crew.activeCrew(crew);
+        return crew.getId();
     }
 
     @Override
     @Transactional
-    public void updateCrewInActive(Long teamId) {
+    public Long updateCrewInActive(Long teamId) {
         String email = SecurityUtil.getCurrentEmail();
         Crew crew = crewRepository.findCrewByTeamIdAndEmail(email, teamId);
         Crew.leave(crew);
+        return crew.getId();
     }
 
     private CrewLevel getCrewLevel(Long teamId) {

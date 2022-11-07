@@ -9,11 +9,11 @@ import java.util.List;
 public interface CrewService {
     List<CrewResponse> getCrew(SearchCrew searchCrew);
 
-    void updateCrewLevel(CrewUpdateRequest crewUpdateRequest);
+    Long updateCrewLevel(CrewUpdateRequest crewUpdateRequest);
 
     void deleteCrew(Long crewId);
 
-    void updateCrewActive(Long crewId);
+    Long updateCrewActive(Long crewId);
 
-    void updateCrewInActive(Long teamId);
+    Long updateCrewInActive(Long teamId);
 }

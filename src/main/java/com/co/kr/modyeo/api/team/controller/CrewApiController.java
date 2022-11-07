@@ -32,9 +32,9 @@ public class CrewApiController {
     @ApiOperation("크루원 정보 LEVEL 변경 API")
     @PatchMapping("/level")
     public ResponseEntity<?> updateCrewLevel(CrewUpdateRequest crewUpdateRequest) {
-        crewService.updateCrewLevel(crewUpdateRequest);
+        Long crewId = crewService.updateCrewLevel(crewUpdateRequest);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
+                .data(crewId)
                 .build());
     }
 
@@ -50,18 +50,18 @@ public class CrewApiController {
     @ApiOperation("차단 해제 API")
     @PatchMapping("/{crewId}/active")
     public ResponseEntity<?> updateCrewActive(@PathVariable Long crewId){
-        crewService.updateCrewActive(crewId);
+        crewId = crewService.updateCrewActive(crewId);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
+                .data(crewId)
                 .build());
     }
 
     @ApiOperation("크루 탈퇴 API")
     @PatchMapping("/{teamId}/inactive")
     public ResponseEntity<?> updateCrewInActive(@PathVariable Long teamId){
-        crewService.updateCrewInActive(teamId);
+        Long crewId = crewService.updateCrewInActive(teamId);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
+                .data(crewId)
                 .build());
     }
 }
