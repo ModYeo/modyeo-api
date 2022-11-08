@@ -142,7 +142,9 @@ public class BoardApiController {
     public ResponseEntity<?> getArticleMy(){
         String email = SecurityUtil.getCurrentEmail();
         List<ArticleResponse> articleResponseList = boardService.getArticlesMy(email);
-        return ResponseEntity.ok(articleResponseList);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(articleResponseList)
+                .build());
     }
 
     @ApiOperation("내가 쓴 댓글 조회 API")
@@ -150,7 +152,9 @@ public class BoardApiController {
     public ResponseEntity<?> getReplyMy(){
         String email = SecurityUtil.getCurrentEmail();
         List<ReplyResponse> replyResponseList = boardService.getReplyMy(email);
-        return ResponseEntity.ok(replyResponseList);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(replyResponseList)
+                .build());
     }
 
     @ApiOperation("내가 좋아요한 글 조회 API")
@@ -158,6 +162,8 @@ public class BoardApiController {
     public ResponseEntity<?> getArticleMyLike(){
         String email = SecurityUtil.getCurrentEmail();
         List<ArticleResponse> articleResponseList = boardService.getArticleMyLike(email);
-        return ResponseEntity.ok(articleResponseList);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(articleResponseList)
+                .build());
     }
 }
