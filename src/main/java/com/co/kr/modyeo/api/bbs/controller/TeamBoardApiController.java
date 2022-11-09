@@ -146,4 +146,14 @@ public class TeamBoardApiController {
         List<TeamReplyResponse> teamReplyResponseList = teamBoardService.getReplyMy(email);
         return ResponseEntity.ok(teamReplyResponseList);
     }
+
+    @ApiOperation("내가 좋아요한 글 조회 API")
+    @GetMapping("/article/my-like")
+    public ResponseEntity<?> getTeamArticleMyLike(){
+        String email = SecurityUtil.getCurrentEmail();
+        List<ArticleResponse> articleResponseList = teamBoardService.getArticleMyLike(email);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(articleResponseList)
+                .build());
+    }
 }

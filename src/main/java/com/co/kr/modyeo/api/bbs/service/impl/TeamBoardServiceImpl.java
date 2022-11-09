@@ -4,10 +4,7 @@ import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamArticleRecommendRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamArticleRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamReplyRecommendRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamReplyRequest;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleDetail;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleResponse;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamReplyDetail;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamReplyResponse;
+import com.co.kr.modyeo.api.bbs.domain.dto.response.*;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.TeamArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamArticle;
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamReply;
@@ -247,6 +244,13 @@ public class TeamBoardServiceImpl implements TeamBoardService {
     public List<TeamReplyResponse> getReplyMy(String email) {
         return teamArticleRepository.findReplyByEmail(email)
                 .stream().map(TeamReplyResponse::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ArticleResponse> getArticleMyLike(String email) {
+        return teamArticleRepository.findArticleByEmailAndRecommendY(email)
+                .stream().map(TeamArticleResponse::toDto)
                 .collect(Collectors.toList());
     }
 }

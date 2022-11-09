@@ -4,7 +4,9 @@ import com.co.kr.modyeo.api.bbs.domain.dto.search.TeamArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamArticle;
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamReply;
 import com.co.kr.modyeo.api.bbs.repository.custom.TeamArticleCustomRepository;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -14,6 +16,8 @@ import java.util.List;
 import static com.co.kr.modyeo.api.bbs.domain.entity.QArticle.article;
 import static com.co.kr.modyeo.api.bbs.domain.entity.QTeamArticle.teamArticle;
 import static com.co.kr.modyeo.api.bbs.domain.entity.QTeamReply.teamReply;
+import static com.co.kr.modyeo.api.bbs.domain.entity.link.QArticleRecommend.articleRecommend;
+import static com.co.kr.modyeo.api.bbs.domain.entity.link.QTeamArticleRecommend.teamArticleRecommend;
 import static com.co.kr.modyeo.api.team.domain.entity.QTeam.team;
 
 public class TeamArticleRepositoryImpl extends Querydsl4RepositorySupport implements TeamArticleCustomRepository {
@@ -45,6 +49,20 @@ public class TeamArticleRepositoryImpl extends Querydsl4RepositorySupport implem
         return selectFrom(teamReply)
                 .where(teamReply.createdBy.eq(email))
                 .fetch();
+    }
+
+    @Override
+    public List<TeamArticle> findArticleByEmailAndRecommendY(String email) {
+        return select(teamArticle)
+                .from(teamArticleRecommend)
+                .innerJoin(teamArticleRecommend.teamArticle, teamArticle)
+                .where(createdByEq(email),
+                        teamArticleRecommend.recommendYn.eq(Yn.Y))
+                .fetch();
+    }
+
+    private BooleanExpression createdByEq(String email) {
+        return email != null ? teamArticle.createdBy.eq(email) : null;
     }
 
     private BooleanExpression categoryIdEq(Long categoryId) {
