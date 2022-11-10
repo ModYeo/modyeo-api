@@ -136,7 +136,9 @@ public class TeamBoardApiController {
     public ResponseEntity<?> getTeamArticleMy(){
         String email =  SecurityUtil.getCurrentEmail();
         List<TeamArticleResponse> articleResponseList = teamBoardService.getArticlesMy(email);
-        return ResponseEntity.ok(articleResponseList);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(articleResponseList)
+                .build());
     }
 
     @ApiOperation(value = "내가 쓴 게시글 조회 API")
@@ -144,7 +146,9 @@ public class TeamBoardApiController {
     public ResponseEntity<?> getTeamReplyMy(){
         String email =  SecurityUtil.getCurrentEmail();
         List<TeamReplyResponse> teamReplyResponseList = teamBoardService.getReplyMy(email);
-        return ResponseEntity.ok(teamReplyResponseList);
+        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+                .data(teamReplyResponseList)
+                .build());
     }
 
     @ApiOperation("내가 좋아요한 글 조회 API")
