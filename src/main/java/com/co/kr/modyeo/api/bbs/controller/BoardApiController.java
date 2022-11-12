@@ -11,6 +11,7 @@ import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.service.BoardService;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import com.co.kr.modyeo.common.result.ResponseHandler;
 import com.co.kr.modyeo.common.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,37 +38,40 @@ public class BoardApiController {
             @PathVariable(value = "article_id") Long id
     ) {
         ArticleDetail articleDetail = boardService.getArticle(id);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
                 .data(articleDetail)
-                .build());
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @ApiOperation(value = "게시글 슬라이스 조회 API")
     @GetMapping("/article")
     public ResponseEntity<?> getArticles(ArticleSearch articleSearch) {
         Slice<ArticleResponse> articleResponses = boardService.getArticles(articleSearch);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
                 .data(articleResponses)
-                .build());
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @ApiOperation(value = "게시글 생성 API")
     @PostMapping("/article")
     public ResponseEntity<?> createArticle(@RequestBody ArticleRequest articleRequest) {
         Long articleId = boardService.createArticle(articleRequest);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(JsonResultData.successResultBuilder()
-                        .data(articleId)
-                        .build());
+        return ResponseHandler.generate()
+                .data(articleId)
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @ApiOperation(value = "게시글 수정 API")
     @PatchMapping("/article")
     public ResponseEntity<?> updateArticle(@RequestBody ArticleRequest articleRequest) {
         Long articleId = boardService.updateArticle(articleRequest);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
                 .data(articleId)
-                .build());
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @ApiOperation(value = "게시글 삭제 API")
@@ -75,28 +79,30 @@ public class BoardApiController {
     public ResponseEntity<?> deleteArticle(
             @PathVariable(value = "article_id") Long articleId) {
         boardService.deleteArticle(articleId);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
                 .data(null)
-                .build());
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @ApiOperation(value = "댓글 생성 API")
     @PostMapping("/reply")
     public ResponseEntity<?> createReply(@RequestBody ReplyRequest replyRequest) {
         Long replyId = boardService.createReply(replyRequest);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(JsonResultData.successResultBuilder()
-                        .data(replyId)
-                        .build());
+        return ResponseHandler.generate()
+                .data(replyId)
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @ApiOperation(value = "댓글 수정 API")
     @PatchMapping("/reply")
     public ResponseEntity<?> updateReply(@RequestBody ReplyRequest replyRequest) {
         Long replyId = boardService.updateReply(replyRequest);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
                 .data(replyId)
-                .build());
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @ApiOperation(value = "댓글 삭제 API")
@@ -104,9 +110,10 @@ public class BoardApiController {
     public ResponseEntity<?> deleteReply(
             @PathVariable(value = "reply_id") Long replyId) {
         boardService.deleteReply(replyId);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
                 .data(null)
-                .build());
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @ApiOperation(value = "댓글 상세 조회 API")
@@ -114,27 +121,30 @@ public class BoardApiController {
     public ResponseEntity<?> getReply(
             @PathVariable(value = "reply_id") Long replyId) {
         ReplyDetail replyDetail = boardService.getReply(replyId);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
                 .data(replyDetail)
-                .build());
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @ApiOperation("게시글 추천 업데이트 API")
     @PutMapping("/article/recommend")
     public ResponseEntity<?> updateArticleRecommend(ArticleRecommendRequest articleRecommendRequest) {
         boardService.updateArticleRecommend(articleRecommendRequest);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
                 .data(null)
-                .build());
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @ApiOperation("댓글 추천 업데이트 API")
     @PutMapping("/Reply/recommend")
     public ResponseEntity<?> updateReplyRecommend(ReplyRecommendRequest replyRecommendRequest) {
         boardService.updateReplyRecommend(replyRecommendRequest);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
                 .data(null)
-                .build());
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @ApiOperation("내가 쓴 게시글 조회 API")
@@ -142,9 +152,10 @@ public class BoardApiController {
     public ResponseEntity<?> getArticleMy(){
         String email = SecurityUtil.getCurrentEmail();
         List<ArticleResponse> articleResponseList = boardService.getArticlesMy(email);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
                 .data(articleResponseList)
-                .build());
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @ApiOperation("내가 쓴 댓글 조회 API")
@@ -152,9 +163,10 @@ public class BoardApiController {
     public ResponseEntity<?> getReplyMy(){
         String email = SecurityUtil.getCurrentEmail();
         List<ReplyResponse> replyResponseList = boardService.getReplyMy(email);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
                 .data(replyResponseList)
-                .build());
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @ApiOperation("내가 좋아요한 글 조회 API")
@@ -162,8 +174,9 @@ public class BoardApiController {
     public ResponseEntity<?> getArticleMyLike(){
         String email = SecurityUtil.getCurrentEmail();
         List<ArticleResponse> articleResponseList = boardService.getArticleMyLike(email);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
                 .data(articleResponseList)
-                .build());
+                .status(HttpStatus.OK)
+                .build();
     }
 }
