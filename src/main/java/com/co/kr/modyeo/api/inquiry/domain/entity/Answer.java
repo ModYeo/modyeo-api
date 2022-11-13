@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class Answer extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "answer_id")
     private Long id;
 
@@ -25,7 +25,7 @@ public class Answer extends BaseEntity {
     @JoinColumn(name = "inquiry_id")
     private Inquiry inquiry;
 
-    @Column(name = "answer_content")
+    @Column(name = "answer_content") @Lob
     private String content;
 
     @Enumerated(value = EnumType.STRING)

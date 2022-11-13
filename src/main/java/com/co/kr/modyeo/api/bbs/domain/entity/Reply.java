@@ -26,6 +26,7 @@ public class Reply extends BaseEntity {
     @JoinColumn(name = "article_id")
     private Article article;
 
+    @Lob
     private String content;
 
     @Column(name = "reply_depth")

@@ -167,7 +167,7 @@ public class TeamBoardApiController {
     @GetMapping("/article/my-like")
     public ResponseEntity<?> getTeamArticleMyLike(){
         String email = SecurityUtil.getCurrentEmail();
-        List<ArticleResponse> articleResponseList = teamBoardService.getArticleMyLike(email);
+        List<TeamArticleResponse> articleResponseList = teamBoardService.getArticleMyLike(email);
         return ResponseHandler.generate()
                 .data(articleResponseList)
                 .status(HttpStatus.OK)

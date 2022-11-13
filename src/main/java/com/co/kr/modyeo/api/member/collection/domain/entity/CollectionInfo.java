@@ -23,6 +23,7 @@ public class CollectionInfo extends BaseEntity {
     @Column(name = "collection_info_name")
     private String name;
 
+    @Lob
     private String description;
 
     @Enumerated(value = EnumType.STRING)

@@ -31,6 +31,7 @@ public class Team extends BaseEntity {
     private String profilePath;
 
     @Column(name = "team_description")
+    @Lob
     private String description;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)

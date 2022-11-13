@@ -37,5 +37,5 @@ public interface TeamBoardService {
 
     List<TeamReplyResponse> getReplyMy(String email);
 
-    List<ArticleResponse> getArticleMyLike(String email);
+    List<TeamArticleResponse> getArticleMyLike(String email);
 }

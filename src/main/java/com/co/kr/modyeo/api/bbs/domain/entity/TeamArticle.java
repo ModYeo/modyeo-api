@@ -30,6 +30,7 @@ public class TeamArticle extends BaseEntity {
 
     private String title;
 
+    @Lob
     private String content;
 
     @Column(name = "file_path")

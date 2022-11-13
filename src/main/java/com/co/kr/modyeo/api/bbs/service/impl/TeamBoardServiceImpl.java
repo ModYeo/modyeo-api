@@ -248,7 +248,7 @@ public class TeamBoardServiceImpl implements TeamBoardService {
     }
 
     @Override
-    public List<ArticleResponse> getArticleMyLike(String email) {
+    public List<TeamArticleResponse> getArticleMyLike(String email) {
         return teamArticleRepository.findArticleByEmailAndRecommendY(email)
                 .stream().map(TeamArticleResponse::toDto)
                 .collect(Collectors.toList());
