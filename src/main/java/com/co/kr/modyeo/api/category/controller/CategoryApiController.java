@@ -9,6 +9,7 @@ import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.category.service.CategoryService;
 import com.co.kr.modyeo.common.exception.code.CategoryErrorCode;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import com.co.kr.modyeo.common.result.ResponseHandler;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -33,11 +34,10 @@ public class CategoryApiController {
     @PostMapping("")
     public ResponseEntity<?> createCategory(@Valid @RequestBody CategoryCreateRequest categoryCreateRequest) {
         Long categoryId = categoryService.createCategory(categoryCreateRequest);
-        return ResponseEntity
+        return ResponseHandler.generate()
+                .data(categoryId)
                 .status(HttpStatus.CREATED)
-                .body(JsonResultData.successResultBuilder()
-                        .data(categoryId)
-                        .build());
+                .build();
     }
 
     @ApiOperation(value = "카테고리 상세 조회 API")
@@ -45,43 +45,39 @@ public class CategoryApiController {
     public ResponseEntity<?> getCategory(
             @PathVariable(value = "category_id") Long categoryId) {
         CategoryDetail categoryDetail = categoryService.getCategory(categoryId);
-        return ResponseEntity
-                .ok(JsonResultData
-                        .successResultBuilder()
-                        .data(categoryDetail)
-                        .build());
+        return ResponseHandler.generate()
+                .data(categoryDetail)
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @ApiOperation(value = "카테고리 리스트 조회 API")
     @GetMapping("")
     public ResponseEntity<?> getCategories(@Valid CategorySearch categorySearch) {
         List<CategoryResponse> categoryList = categoryService.getCategories(categorySearch);
-        return ResponseEntity
-                .ok(JsonResultData
-                        .successResultBuilder()
-                        .data(categoryList)
-                        .build());
+        return ResponseHandler.generate()
+                .data(categoryList)
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @ApiOperation(value = "카테고리 수정 API")
     @PatchMapping("")
     public ResponseEntity<?> updateCategory(@Valid @RequestBody CategoryUpdateRequest categoryUpdateRequest) {
         Long categoryId = categoryService.updateCategory(categoryUpdateRequest);
-        return ResponseEntity
-                .ok(JsonResultData
-                        .successResultBuilder()
-                        .data(categoryId)
-                        .build());
+        return ResponseHandler.generate()
+                .data(categoryId)
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @ApiOperation(value = "카테고리 삭제 API")
     @DeleteMapping("/{category_id}")
     public ResponseEntity<?> deleteCategory(@PathVariable(value = "category_id") Long categoryId) {
         categoryService.deleteCategory(categoryId);
-        return ResponseEntity
-                .ok(JsonResultData
-                        .successResultBuilder()
-                        .data(null)
-                        .build());
+        return ResponseHandler.generate()
+                .data(null)
+                .status(HttpStatus.OK)
+                .build();
     }
 }
