@@ -76,8 +76,8 @@ public class CategoryApiController {
     public ResponseEntity<?> deleteCategory(@PathVariable(value = "category_id") Long categoryId) {
         categoryService.deleteCategory(categoryId);
         return ResponseHandler.generate()
+                .status(HttpStatus.NO_CONTENT)
                 .data(null)
-                .status(HttpStatus.OK)
                 .build();
     }
 }

@@ -8,6 +8,7 @@ import com.co.kr.modyeo.api.team.domain.entity.enumerate.JoinStatus;
 import com.co.kr.modyeo.api.team.domain.entity.link.MemberTeam;
 import com.co.kr.modyeo.api.team.service.TeamApplicationService;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import com.co.kr.modyeo.common.result.ResponseHandler;
 import com.co.kr.modyeo.common.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,22 +27,24 @@ import java.util.List;
 public class TeamApplicationApiController {
     private final TeamApplicationService teamApplicationService;
 
-    @ApiOperation(value = "팀 가입신청 폼 API")
+    @ApiOperation(value = "팀 가입신청 폼 생성 API")
     @PostMapping("/form")
     public ResponseEntity<?> createApplicationForm(@RequestBody ApplicationFormRequest applicationFormRequest) {
         Long applicationFormId = teamApplicationService.createApplicationForm(applicationFormRequest);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
+                .status(HttpStatus.CREATED)
                 .data(applicationFormId)
-                .build());
+                .build();
     }
 
     @ApiOperation(value = "팀 가입신청 폼 상세 조회 API")
     @GetMapping("/form/{teamId}")
     public ResponseEntity<?> getApplicationForm(@PathVariable(value = "teamId") Long teamId) {
         ApplicationFormDetail applicationFormDetail = teamApplicationService.getApplicationForm(teamId);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
                 .data(applicationFormDetail)
-                .build());
+                .build();
     }
 
     @ApiOperation(value = "팀 가입신청폼 수정 API")
@@ -50,9 +53,10 @@ public class TeamApplicationApiController {
             @PathVariable(value = "applicationFormId") Long applicationFromId,
             @RequestBody ApplicationFormRequest applicationFormRequest) {
         Long applicationFormId = teamApplicationService.updateApplicationForm(applicationFromId, applicationFormRequest);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
                 .data(applicationFormId)
-                .build());
+                .build();
     }
 
     @ApiOperation(value = "팀 가입신청폼 삭제 API")
@@ -60,9 +64,10 @@ public class TeamApplicationApiController {
     public ResponseEntity<?> deleteApplicationForm(
             @PathVariable(value = "applicationFormId") Long applicationFromId) {
         teamApplicationService.deleteApplicationForm(applicationFromId);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
+                .status(HttpStatus.NO_CONTENT)
                 .data(null)
-                .build());
+                .build();
     }
 
     @ApiOperation(value = "팀 가입신청 API")
@@ -74,10 +79,10 @@ public class TeamApplicationApiController {
         teamApplicationRequest.setEmail(email);
 
         Long teamApplicationId = teamApplicationService.applicantCrew(teamApplicationRequest);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(JsonResultData.successResultBuilder()
-                        .data(teamApplicationId)
-                        .build());
+        return ResponseHandler.generate()
+                .status(HttpStatus.CREATED)
+                .data(teamApplicationId)
+                .build();
     }
 
     @ApiOperation(value = "팀 가입신청 리스트 API")
@@ -85,10 +90,10 @@ public class TeamApplicationApiController {
     public ResponseEntity<?> getTeamApplication(
             @RequestParam(value = "teamId",name = "teamId",required = true)Long teamId){
         List<MemberTeamResponse> memberTeamResponseList = teamApplicationService.getTeamApplication(teamId);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(JsonResultData.successResultBuilder()
-                        .data(null)
-                        .build());
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
+                .data(memberTeamResponseList)
+                .build();
     }
 
     @ApiOperation(value = "팀 가입신청 변경 API")
@@ -98,10 +103,10 @@ public class TeamApplicationApiController {
             @RequestParam(value = "joinStatus", name = "joinStatus", required = true) JoinStatus joinStatus
     ) {
         Long teamApplicationId = teamApplicationService.updateJoinStatus(memberTeamId, joinStatus);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(JsonResultData.successResultBuilder()
-                        .data(teamApplicationId)
-                        .build());
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
+                .data(teamApplicationId)
+                .build();
     }
 
     @ApiOperation(value = "팀 가입신청 취소 API")
@@ -109,10 +114,10 @@ public class TeamApplicationApiController {
     public ResponseEntity<?> deleteTeamApplication(
             @PathVariable Long memberTeamId){
         teamApplicationService.deleteTeamApplication(memberTeamId);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(JsonResultData.successResultBuilder()
-                        .data(null)
-                        .build());
+        return ResponseHandler.generate()
+                .status(HttpStatus.NO_CONTENT)
+                .data(null)
+                .build();
     }
 
 }

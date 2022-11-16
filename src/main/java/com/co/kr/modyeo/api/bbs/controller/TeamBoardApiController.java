@@ -74,8 +74,8 @@ public class TeamBoardApiController {
     public ResponseEntity<?> deleteArticle(@PathVariable(value = "article_id") Long articleId) {
         teamBoardService.deleteTeamArticle(articleId);
         return ResponseHandler.generate()
+                .status(HttpStatus.NO_CONTENT)
                 .data(null)
-                .status(HttpStatus.OK)
                 .build();
     }
 
@@ -105,8 +105,8 @@ public class TeamBoardApiController {
             @PathVariable(value = "team_reply_id") Long teamReplyId) {
         teamBoardService.deleteTeamReply(teamReplyId);
         return ResponseHandler.generate()
+                .status(HttpStatus.NO_CONTENT)
                 .data(null)
-                .status(HttpStatus.OK)
                 .build();
     }
 

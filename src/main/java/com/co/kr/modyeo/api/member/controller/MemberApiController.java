@@ -7,6 +7,7 @@ import com.co.kr.modyeo.api.member.domain.dto.response.ApplicationMemberDetail;
 import com.co.kr.modyeo.api.member.domain.dto.response.MemberDetail;
 import com.co.kr.modyeo.api.member.service.MemberService;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import com.co.kr.modyeo.common.result.ResponseHandler;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +28,10 @@ public class MemberApiController {
     @PostMapping("")
     public ResponseEntity<?> createMemberInfo(@RequestBody MemberCategoryRequest memberCategoryRequest) {
         Long memberId = memberService.createMemberInfo(memberCategoryRequest);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(JsonResultData.successResultBuilder()
-                        .data(memberId)
-                        .build());
+        return ResponseHandler.generate()
+                .status(HttpStatus.CREATED)
+                .data(memberId)
+                .build();
     }
 
     @ApiOperation(value = "회원 상세 조회 API")
@@ -38,9 +39,10 @@ public class MemberApiController {
     public ResponseEntity<?> getMember(
             @PathVariable(value = "member_id") Long memberId) {
         MemberDetail memberDetail = memberService.getMember(memberId);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
                 .data(memberDetail)
-                .build());
+                .build();
     }
 
     @ApiOperation(value = "회원 닉네임 변경 API")
@@ -49,18 +51,20 @@ public class MemberApiController {
             @RequestBody NicknameUpdateRequest nicknameUpdateRequest
     ) {
         Long memberId = memberService.updateNickname(nicknameUpdateRequest);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
                 .data(memberId)
-                .build());
+                .build();
     }
 
     @ApiOperation(value = "프로필 등록/변경 API")
     @PutMapping("/profile-path")
     public ResponseEntity<?> putProfilePath(@RequestBody MemberProfilePathRequest memberProfilePathRequest) {
         Long memberId = memberService.putProfilePath(memberProfilePathRequest);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
                 .data(memberId)
-                .build());
+                .build();
     }
 
     @ApiOperation(value = "팀 가입 신청자 정보 보기")
@@ -69,8 +73,9 @@ public class MemberApiController {
             @PathVariable Long memberId,
             @PathVariable Long teamId) {
         ApplicationMemberDetail applicationMemberDetail = memberService.getTeamApplicationMember(memberId,teamId);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
                 .data(applicationMemberDetail)
-                .build());
+                .build();
     }
 }

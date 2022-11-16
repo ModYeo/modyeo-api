@@ -80,8 +80,8 @@ public class BoardApiController {
             @PathVariable(value = "article_id") Long articleId) {
         boardService.deleteArticle(articleId);
         return ResponseHandler.generate()
+                .status(HttpStatus.NO_CONTENT)
                 .data(null)
-                .status(HttpStatus.OK)
                 .build();
     }
 
@@ -111,8 +111,8 @@ public class BoardApiController {
             @PathVariable(value = "reply_id") Long replyId) {
         boardService.deleteReply(replyId);
         return ResponseHandler.generate()
+                .status(HttpStatus.NO_CONTENT)
                 .data(null)
-                .status(HttpStatus.OK)
                 .build();
     }
 

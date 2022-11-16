@@ -62,8 +62,8 @@ public class AdvertisementApiController {
     public ResponseEntity<?> deleteAdvertisement(@PathVariable(value = "id") Long id){
         advertisementService.deleteAdvertisement(id);
         return ResponseHandler.generate()
+                .status(HttpStatus.NO_CONTENT)
                 .data(null)
-                .status(HttpStatus.OK)
                 .build();
     }
 }
