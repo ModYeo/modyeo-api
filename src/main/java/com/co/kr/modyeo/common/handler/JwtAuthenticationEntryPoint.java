@@ -24,7 +24,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             setResponse(response, AuthErrorCode.UNKNOWN_ERROR);
         }
         //패스워드 불일치 시
-        if (exception.equals(AuthErrorCode.NOT_MATCH_PASSWORD.getCode())){
+        else if (exception.equals(AuthErrorCode.NOT_MATCH_PASSWORD.getCode())){
             setResponse(response, AuthErrorCode.NOT_MATCH_PASSWORD);
         }
         //잘못된 타입의 토큰인 경우
