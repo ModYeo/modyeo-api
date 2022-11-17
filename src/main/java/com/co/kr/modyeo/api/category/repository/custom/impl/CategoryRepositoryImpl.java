@@ -1,4 +1,4 @@
-package com.co.kr.modyeo.api.category.repository.impl;
+package com.co.kr.modyeo.api.category.repository.custom.impl;
 
 import com.co.kr.modyeo.api.category.domain.dto.search.CategorySearch;
 import com.co.kr.modyeo.api.category.domain.entity.Category;

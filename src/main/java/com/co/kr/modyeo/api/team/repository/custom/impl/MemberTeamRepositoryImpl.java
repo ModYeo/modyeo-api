@@ -1,4 +1,4 @@
-package com.co.kr.modyeo.api.team.repository.impl;
+package com.co.kr.modyeo.api.team.repository.custom.impl;
 
 import com.co.kr.modyeo.api.member.domain.dto.response.ApplicationMemberDetail;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;

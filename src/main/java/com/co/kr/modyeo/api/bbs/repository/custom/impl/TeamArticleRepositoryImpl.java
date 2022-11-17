@@ -1,4 +1,4 @@
-package com.co.kr.modyeo.api.bbs.repository.impl;
+package com.co.kr.modyeo.api.bbs.repository.custom.impl;
 
 import com.co.kr.modyeo.api.bbs.domain.dto.search.TeamArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamArticle;

@@ -1,4 +1,4 @@
-package com.co.kr.modyeo.api.team.repository.impl;
+package com.co.kr.modyeo.api.team.repository.custom.impl;
 
 import com.co.kr.modyeo.api.team.repository.custom.TeamCategoryCustomRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;

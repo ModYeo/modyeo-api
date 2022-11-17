@@ -1,4 +1,4 @@
-package com.co.kr.modyeo.api.bbs.repository.impl;
+package com.co.kr.modyeo.api.bbs.repository.custom.impl;
 
 import com.co.kr.modyeo.api.bbs.domain.entity.Reply;
 import com.co.kr.modyeo.api.bbs.repository.custom.ReplyCustomRepository;

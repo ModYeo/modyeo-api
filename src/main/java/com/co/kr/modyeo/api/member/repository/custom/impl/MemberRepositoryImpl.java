@@ -1,4 +1,4 @@
-package com.co.kr.modyeo.api.member.repository.impl;
+package com.co.kr.modyeo.api.member.repository.custom.impl;
 
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.repository.custom.MemberCustomRepository;
