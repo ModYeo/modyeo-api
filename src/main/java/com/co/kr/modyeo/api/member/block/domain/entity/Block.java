@@ -4,6 +4,7 @@ import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.common.entity.BaseEntity;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,15 +19,28 @@ public class Block extends BaseEntity {
     @Column(name = "block_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
-
     private Long targetId;
 
     @Column(name = "block_type")
     private BlockType type;
 
-    @Column(name = "block_status")
-    private Yn status;
+    @Column(name = "is_enable")
+    private Yn isEnable;
+
+    @Builder(builderClassName = "of", builderMethodName = "of")
+    public Block(Long id, Long targetId, BlockType type, Yn isEnable) {
+        this.id = id;
+        this.targetId = targetId;
+        this.type = type;
+        this.isEnable = isEnable;
+    }
+
+    @Builder(builderClassName = "create",builderMethodName = "create")
+    public static Block createBlock(Long targetId, BlockType type, Yn isEnable) {
+        return of()
+                .targetId(targetId)
+                .type(type)
+                .isEnable(isEnable)
+                .build();
+    }
 }
