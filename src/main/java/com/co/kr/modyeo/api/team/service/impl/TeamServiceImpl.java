@@ -82,7 +82,7 @@ public class TeamServiceImpl implements TeamService {
     public Slice<TeamResponse> getTeams(TeamSearch teamSearch) {
         PageRequest page = PageRequest.of(teamSearch.getOffset(), teamSearch.getLimit(), teamSearch.getDirection(), teamSearch.getOrderBy());
         Slice<Team> teams = teamRepository.searchTeam(teamSearch,page);
-        return teams.map(TeamResponse::toRes);
+        return teams.map(TeamResponse::toDto);
     }
 
     @Override

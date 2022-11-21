@@ -50,10 +50,10 @@ public class MemberResponse {
                 .nickname(member.getNickname())
                 .birthDay(member.getBirthDay())
                 .teamResponseList(member.getTeamList().stream()
-                        .map(memberCrew -> TeamResponse.toRes(memberCrew.getTeam()))
+                        .map(memberCrew -> TeamResponse.toDto(memberCrew.getTeam()))
                         .collect(Collectors.toList()))
                 .categoryResponses(member.getInterestCategoryList().stream()
-                        .map(memberCategory -> CategoryResponse.toRes(memberCategory.getCategory()))
+                        .map(memberCategory -> CategoryResponse.toDto(memberCategory.getCategory()))
                         .collect(Collectors.toList()))
                 .build();
     }

@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.bbs.domain.dto.response;
 
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
+import com.co.kr.modyeo.api.category.domain.dto.response.CategoryResponse;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
@@ -18,6 +19,8 @@ public class ArticleDetail {
 
     private Long articleId;
 
+    private String filePath;
+
     private String title;
 
     private String content;
@@ -30,30 +33,25 @@ public class ArticleDetail {
 
     private String createdBy;
 
+    private CategoryResponse category;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
 
     private List<ReplyResponse> replyResponses = new ArrayList<>();
 
-
     @Builder(builderMethodName = "of", builderClassName = "of")
-    public ArticleDetail(Long articleId,
-                         String title,
-                         String content,
-                         Yn isHidden,
-                         String createdBy,
-                         LocalDateTime createdTime,
-                         Long hitCount,
-                         Integer recommendCount,
-                         List<ReplyResponse> replyResponses) {
+    public ArticleDetail(Long articleId, String filePath, String title, String content, Yn isHidden, Long hitCount, Integer recommendCount, String createdBy, CategoryResponse category, LocalDateTime createdTime, List<ReplyResponse> replyResponses) {
         this.articleId = articleId;
+        this.filePath = filePath;
         this.title = title;
         this.content = content;
         this.isHidden = isHidden;
         this.hitCount = hitCount;
-        this.createdBy = createdBy;
-        this.createdTime = createdTime;
         this.recommendCount = recommendCount;
+        this.createdBy = createdBy;
+        this.category = category;
+        this.createdTime = createdTime;
         this.replyResponses = replyResponses;
     }
 
@@ -61,6 +59,8 @@ public class ArticleDetail {
         return ArticleDetail.of()
                 .articleId(article.getId())
                 .title(article.getTitle())
+                .category(CategoryResponse.toDto(article.getCategory()))
+                .filePath(article.getFilePath())
                 .content(article.getContent())
                 .isHidden(article.getIsHidden())
                 .hitCount(article.getHitCount())

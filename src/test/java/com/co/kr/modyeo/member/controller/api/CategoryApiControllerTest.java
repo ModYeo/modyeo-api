@@ -98,7 +98,7 @@ class CategoryApiControllerTest {
         }
 
         List<CategoryResponse> responses =
-                categoryList.stream().map(CategoryResponse::toRes)
+                categoryList.stream().map(CategoryResponse::toDto)
                         .collect(Collectors.toList());
 
         given(categoryService.getCategories(any()))
