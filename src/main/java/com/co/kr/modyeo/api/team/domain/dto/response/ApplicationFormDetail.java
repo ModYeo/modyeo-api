@@ -38,7 +38,7 @@ public class ApplicationFormDetail {
     public static ApplicationFormDetail toDto(ApplicationForm applicationForm) {
         return of()
                 .applicationFormId(applicationForm.getId())
-                .team(TeamResponse.toRes(applicationForm.getTeam()))
+                .team(TeamResponse.toDto(applicationForm.getTeam()))
                 .content(applicationForm.getContent())
                 .dutyNote(applicationForm.getDutyNote())
                 .birthdayAgree(applicationForm.getBirthdayAgree())
