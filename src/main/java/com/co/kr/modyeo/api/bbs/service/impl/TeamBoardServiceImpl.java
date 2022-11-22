@@ -65,6 +65,7 @@ public class TeamBoardServiceImpl implements TeamBoardService {
     }
 
     @Override
+    @Transactional
     public TeamArticleDetail getTeamArticle(Long teamArticleId) {
         TeamArticle teamArticle = teamArticleRepository.findById(teamArticleId)
                 .orElseThrow(() -> ApiException.builder()
@@ -174,6 +175,7 @@ public class TeamBoardServiceImpl implements TeamBoardService {
     }
 
     @Override
+    @Transactional
     public void updateTeamArticleRecommend(TeamArticleRecommendRequest articleRecommendRequest) {
         Member member = memberRepository.findById(articleRecommendRequest.getMemberId()).orElseThrow(
                 () -> ApiException.builder()
@@ -204,6 +206,7 @@ public class TeamBoardServiceImpl implements TeamBoardService {
     }
 
     @Override
+    @Transactional
     public void updateTeamReplyRecommend(TeamReplyRecommendRequest replyRecommendRequest) {
         Member member = memberRepository.findById(replyRecommendRequest.getMemberId()).orElseThrow(
                 () -> ApiException.builder()

@@ -36,7 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryResponse> getCategories(CategorySearch categorySearch) {
         List<Category> categoryList = categoryRepository.searchCategory(categorySearch);
-        return categoryList.stream().map(CategoryResponse::toRes).collect(Collectors.toList());
+        return categoryList.stream().map(CategoryResponse::toDto).collect(Collectors.toList());
     }
 
     @Override

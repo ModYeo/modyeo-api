@@ -40,7 +40,7 @@ public class TeamResponse {
         this.name = name;
     }
 
-    public static TeamResponse toRes(Team team) {
+    public static TeamResponse toDto(Team team) {
         return of()
                 .id(team.getId())
                 .name(team.getName())
