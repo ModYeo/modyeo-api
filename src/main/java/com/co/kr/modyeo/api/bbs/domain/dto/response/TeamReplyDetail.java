@@ -25,7 +25,7 @@ public class TeamReplyDetail {
 
     private Long replyGroup;
 
-    private String createBy;
+    private String createdBy;
 
     private String updatedBy;
 
@@ -50,7 +50,7 @@ public class TeamReplyDetail {
 
         private Long replyGroup;
 
-        private String createBy;
+        private String createdBy;
 
         private String updatedBy;
 
@@ -66,7 +66,7 @@ public class TeamReplyDetail {
                                      String content,
                                      Integer replyDepth,
                                      Long replyGroup,
-                                     String createBy,
+                                     String createdBy,
                                      String updatedBy,
                                      LocalDateTime createdTime,
                                      LocalDateTime updatedTime) {
@@ -75,7 +75,7 @@ public class TeamReplyDetail {
             this.content = content;
             this.replyDepth = replyDepth;
             this.replyGroup = replyGroup;
-            this.createBy = createBy;
+            this.createdBy = createdBy;
             this.updatedBy = updatedBy;
             this.createdTime = createdTime;
             this.updatedTime = updatedTime;
@@ -88,7 +88,7 @@ public class TeamReplyDetail {
                     .content(teamReply.getContent())
                     .replyDepth(teamReply.getReplyDepth())
                     .replyGroup(teamReply.getReplyGroup())
-                    .createBy(teamReply.getCreatedBy())
+                    .createdBy(teamReply.getCreatedBy())
                     .updatedBy(teamReply.getUpdatedBy())
                     .createdTime(teamReply.getCreatedDate())
                     .updatedTime(teamReply.getLastModifiedDate())
@@ -102,7 +102,7 @@ public class TeamReplyDetail {
                            String content,
                            Integer replyDepth,
                            Long replyGroup,
-                           String createBy,
+                           String createdBy,
                            String updatedBy,
                            LocalDateTime createdTime,
                            LocalDateTime updatedTime,
@@ -112,7 +112,7 @@ public class TeamReplyDetail {
         this.content = content;
         this.replyDepth = replyDepth;
         this.replyGroup = replyGroup;
-        this.createBy = createBy;
+        this.createdBy = createdBy;
         this.updatedBy = updatedBy;
         this.createdTime = createdTime;
         this.updatedTime = updatedTime;
@@ -126,7 +126,7 @@ public class TeamReplyDetail {
                 .content(teamReply.getContent())
                 .replyDepth(teamReply.getReplyDepth())
                 .replyGroup(teamReply.getReplyGroup())
-                .createBy(teamReply.getCreatedBy())
+                .createdBy(teamReply.getCreatedBy())
                 .updatedBy(teamReply.getUpdatedBy())
                 .createdTime(teamReply.getCreatedDate())
                 .updatedTime(teamReply.getLastModifiedDate())

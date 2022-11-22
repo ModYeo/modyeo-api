@@ -24,7 +24,7 @@ public class ReplyDetail {
 
     private Long replyGroup;
 
-    private String createBy;
+    private String createdBy;
 
     private String updatedBy;
 
@@ -49,7 +49,7 @@ public class ReplyDetail {
 
         private Long replyGroup;
 
-        private String createBy;
+        private String createdBy;
 
         private String updatedBy;
 
@@ -65,7 +65,7 @@ public class ReplyDetail {
                                  String content,
                                  Integer replyDepth,
                                  Long replyGroup,
-                                 String createBy,
+                                 String createdBy,
                                  String updatedBy,
                                  LocalDateTime createdTime,
                                  LocalDateTime updatedTime) {
@@ -74,7 +74,7 @@ public class ReplyDetail {
             this.content = content;
             this.replyDepth = replyDepth;
             this.replyGroup = replyGroup;
-            this.createBy = createBy;
+            this.createdBy = createdBy;
             this.updatedBy = updatedBy;
             this.createdTime = createdTime;
             this.updatedTime = updatedTime;
@@ -87,7 +87,7 @@ public class ReplyDetail {
                     .content(reply.getContent())
                     .replyDepth(reply.getReplyDepth())
                     .replyGroup(reply.getReplyGroup())
-                    .createBy(reply.getCreatedBy())
+                    .createdBy(reply.getCreatedBy())
                     .updatedBy(reply.getUpdatedBy())
                     .createdTime(reply.getCreatedDate())
                     .updatedTime(reply.getLastModifiedDate())
@@ -101,7 +101,7 @@ public class ReplyDetail {
                        String content,
                        Integer replyDepth,
                        Long replyGroup,
-                       String createBy,
+                       String createdBy,
                        String updatedBy,
                        LocalDateTime createdTime,
                        LocalDateTime updatedTime,
@@ -111,7 +111,7 @@ public class ReplyDetail {
         this.content = content;
         this.replyDepth = replyDepth;
         this.replyGroup = replyGroup;
-        this.createBy = createBy;
+        this.createdBy = createdBy;
         this.updatedBy = updatedBy;
         this.createdTime = createdTime;
         this.updatedTime = updatedTime;
@@ -125,7 +125,7 @@ public class ReplyDetail {
                 .content(reply.getContent())
                 .replyDepth(reply.getReplyDepth())
                 .replyGroup(reply.getReplyGroup())
-                .createBy(reply.getCreatedBy())
+                .createdBy(reply.getCreatedBy())
                 .updatedBy(reply.getUpdatedBy())
                 .createdTime(reply.getCreatedDate())
                 .updatedTime(reply.getLastModifiedDate())

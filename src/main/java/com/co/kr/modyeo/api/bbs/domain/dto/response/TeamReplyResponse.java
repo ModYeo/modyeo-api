@@ -21,19 +21,19 @@ public class TeamReplyResponse {
 
     private Long replyGroup;
 
-    private String createBy;
+    private String createdBy;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
 
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public TeamReplyResponse(Long replyId, Long teamArticleId, String content, Integer replyDepth, Long replyGroup, String createBy, LocalDateTime createdTime) {
+    public TeamReplyResponse(Long replyId, Long teamArticleId, String content, Integer replyDepth, Long replyGroup, String createdBy, LocalDateTime createdTime) {
         this.replyId = replyId;
         this.teamArticleId = teamArticleId;
         this.content = content;
         this.replyDepth = replyDepth;
         this.replyGroup = replyGroup;
-        this.createBy = createBy;
+        this.createdBy = createdBy;
         this.createdTime = createdTime;
     }
 
@@ -44,7 +44,7 @@ public class TeamReplyResponse {
                 .content(reply.getContent())
                 .replyDepth(reply.getReplyDepth())
                 .replyGroup(reply.getReplyGroup())
-                .createBy(reply.getCreatedBy())
+                .createdBy(reply.getCreatedBy())
                 .createdTime(reply.getCreatedDate())
                 .build();
     }
