@@ -87,6 +87,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public Long updateArticle(ArticleRequest articleRequest) {
         Article article = articleRepository.findById(articleRequest.getArticleId()).orElseThrow(
                 () -> ApiException.builder()
@@ -114,6 +115,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public void deleteArticle(Long articleId) {
         Article article = articleRepository.findById(articleId).orElseThrow(
                 () -> ApiException.builder()
@@ -126,6 +128,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public Long createReply(ReplyRequest replyRequest) {
         Article article = articleRepository.findById(replyRequest.getArticleId()).orElseThrow(
                 () -> ApiException.builder()
@@ -142,6 +145,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public Long updateReply(ReplyRequest replyRequest) {
         Reply reply = replyRepository.findById(replyRequest.getId()).orElseThrow(
                 () -> ApiException.builder()
@@ -183,6 +187,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public void updateArticleRecommend(ArticleRecommendRequest articleRecommendRequest) {
         Member member = memberRepository.findById(articleRecommendRequest.getMemberId()).orElseThrow(
                 () -> ApiException.builder()
@@ -213,6 +218,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public void updateReplyRecommend(ReplyRecommendRequest replyRecommendRequest) {
         Member member = memberRepository.findById(replyRecommendRequest.getMemberId()).orElseThrow(
                 () -> ApiException.builder()
