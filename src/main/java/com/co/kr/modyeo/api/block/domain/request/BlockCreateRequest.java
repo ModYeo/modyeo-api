@@ -1,13 +1,10 @@
-package com.co.kr.modyeo.api.member.block.domain.request;
+package com.co.kr.modyeo.api.block.domain.request;
 
-import com.co.kr.modyeo.api.member.block.domain.entity.Block;
-import com.co.kr.modyeo.api.member.block.domain.entity.BlockType;
-import com.co.kr.modyeo.api.member.domain.entity.Member;
+import com.co.kr.modyeo.api.block.domain.entity.Block;
+import com.co.kr.modyeo.api.block.domain.entity.BlockType;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 
 @Data
 @NoArgsConstructor

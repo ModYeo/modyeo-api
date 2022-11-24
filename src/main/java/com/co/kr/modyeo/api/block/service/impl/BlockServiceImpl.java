@@ -1,14 +1,18 @@
-package com.co.kr.modyeo.api.member.block.service.impl;
+package com.co.kr.modyeo.api.block.service.impl;
 
-import com.co.kr.modyeo.api.member.block.domain.entity.Block;
-import com.co.kr.modyeo.api.member.block.domain.request.BlockCreateRequest;
-import com.co.kr.modyeo.api.member.block.domain.response.BlockDetail;
-import com.co.kr.modyeo.api.member.block.repository.BlockRepository;
-import com.co.kr.modyeo.api.member.block.service.BlockService;
+import com.co.kr.modyeo.api.block.domain.request.BlockCreateRequest;
+import com.co.kr.modyeo.api.block.domain.request.BlockSearch;
+import com.co.kr.modyeo.api.block.domain.response.BlockDetail;
+import com.co.kr.modyeo.api.block.domain.entity.Block;
+import com.co.kr.modyeo.api.block.domain.response.BlockResponse;
+import com.co.kr.modyeo.api.block.repository.BlockRepository;
+import com.co.kr.modyeo.api.block.service.BlockService;
 import com.co.kr.modyeo.common.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -31,5 +35,10 @@ public class BlockServiceImpl implements BlockService {
                         .build());
 
         return BlockDetail.toDto(block);
+    }
+
+    @Override
+    public List<BlockResponse> getBlocks(BlockSearch blockSearch) {
+       return null;
     }
 }
