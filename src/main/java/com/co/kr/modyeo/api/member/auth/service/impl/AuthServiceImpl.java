@@ -25,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -85,16 +86,19 @@ public class AuthServiceImpl implements AuthService {
         UsernamePasswordAuthenticationToken authenticationToken = memberLoginDto.toAuthentication();
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        String refreshToken = redisTemplate.opsForValue().get("RT:" + authentication.getName());
+        if (refreshToken != null){
+            redisTemplate.delete("RT:" + authentication.getName());
 
-        TokenDto tokenDto = jwtTokenProvider.generateTokenDto(authentication);
+            Optional<Member> optionalMember = memberRepository.findByEmail(authentication.getName());
+            if (optionalMember.isPresent()){
+                Member member = optionalMember.get();
+                redisTemplate.opsForValue()
+                        .set(member.getLastAccessToken(), "logout", 1000 * 60 * 60, TimeUnit.MILLISECONDS);
+            }
+        }
 
-        redisTemplate.opsForValue()
-                .set("RT:" + authentication.getName(),
-                        tokenDto.getRefreshToken(),
-                        tokenDto.getAccessTokenExpiresIn(),
-                        TimeUnit.MILLISECONDS);
-
-        return tokenDto;
+        return getTokenDto(authentication);
     }
 
     @Override
@@ -118,14 +122,7 @@ public class AuthServiceImpl implements AuthService {
                     .build());
         }
 
-        TokenDto tokenDto = jwtTokenProvider.generateTokenDto(authentication);
-
-        redisTemplate.opsForValue()
-                .set("RT:" + authentication.getName(),
-                        tokenDto.getRefreshToken(),
-                        tokenDto.getAccessTokenExpiresIn(), TimeUnit.MILLISECONDS);
-
-        return tokenDto;
+        return getTokenDto(authentication);
     }
 
     @Override
@@ -172,5 +169,23 @@ public class AuthServiceImpl implements AuthService {
 
         MailDto mailDto = MailDto.makeAuthSender(member, authNumber);
         modyeoMailSender.send(mailDto);
+    }
+
+    private TokenDto getTokenDto(Authentication authentication) {
+        TokenDto tokenDto = jwtTokenProvider.generateTokenDto(authentication);
+
+        redisTemplate.opsForValue()
+                .set("RT:" + authentication.getName(),
+                        tokenDto.getRefreshToken(),
+                        tokenDto.getAccessTokenExpiresIn(),
+                        TimeUnit.MILLISECONDS);
+
+        Optional<Member> optionalMember = memberRepository.findByEmail(authentication.getName());
+        if (optionalMember.isPresent()){
+            Member member = optionalMember.get();
+            member.changeLastAccessToken(tokenDto.getAccessToken());
+        }
+
+        return tokenDto;
     }
 }
