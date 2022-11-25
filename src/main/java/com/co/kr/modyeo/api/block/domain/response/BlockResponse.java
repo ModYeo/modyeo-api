@@ -1,18 +1,17 @@
-package com.co.kr.modyeo.api.member.block.domain.response;
+package com.co.kr.modyeo.api.block.domain.response;
 
-import com.co.kr.modyeo.api.member.block.domain.entity.Block;
-import com.co.kr.modyeo.api.member.block.domain.entity.BlockType;
+import com.co.kr.modyeo.api.block.domain.entity.Block;
+import com.co.kr.modyeo.api.block.domain.entity.BlockType;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class BlockDetail {
+public class BlockResponse {
     private Long blockId;
 
     private Long targetId;
@@ -30,7 +29,7 @@ public class BlockDetail {
     private LocalDateTime updatedTime;
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public BlockDetail(Long blockId, Long targetId, BlockType type, Yn isEnable, String createdBy, String updatedBy, LocalDateTime createdTime, LocalDateTime updatedTime) {
+    public BlockResponse(Long blockId, Long targetId, BlockType type, Yn isEnable, String createdBy, String updatedBy, LocalDateTime createdTime, LocalDateTime updatedTime) {
         this.blockId = blockId;
         this.targetId = targetId;
         this.type = type;
@@ -41,7 +40,7 @@ public class BlockDetail {
         this.updatedTime = updatedTime;
     }
 
-    public static BlockDetail toDto(Block block){
+    public static BlockResponse toDto(Block block){
         return of()
                 .blockId(block.getId())
                 .targetId(block.getTargetId())
