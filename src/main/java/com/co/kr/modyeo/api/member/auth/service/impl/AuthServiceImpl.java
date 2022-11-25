@@ -23,6 +23,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -82,6 +83,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public TokenDto login(MemberLoginDto memberLoginDto) {
         UsernamePasswordAuthenticationToken authenticationToken = memberLoginDto.toAuthentication();
 
@@ -102,6 +104,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public TokenDto reissue(TokenRequestDto tokenRequestDto) {
         if (!jwtTokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
             throw new CustomAuthException(JsonResultData
