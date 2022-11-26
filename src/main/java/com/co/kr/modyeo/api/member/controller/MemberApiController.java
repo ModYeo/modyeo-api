@@ -58,7 +58,7 @@ public class MemberApiController {
     }
 
     @ApiOperation(value = "프로필 등록/변경 API")
-    @PutMapping("/profile-path")
+    @PatchMapping("/profile-path")
     public ResponseEntity<?> putProfilePath(@RequestBody MemberProfilePathRequest memberProfilePathRequest) {
         Long memberId = memberService.putProfilePath(memberProfilePathRequest);
         return ResponseHandler.generate()

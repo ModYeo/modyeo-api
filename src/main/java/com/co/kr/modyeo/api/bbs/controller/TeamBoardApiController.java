@@ -122,7 +122,7 @@ public class TeamBoardApiController {
     }
 
     @ApiOperation(value = "팀 게시글 추천 API")
-    @PutMapping("/article/recommend")
+    @PatchMapping("/article/recommend")
     public ResponseEntity<?> updateTeamArticleRecommend(TeamArticleRecommendRequest teamArticleRecommendRequest) {
         teamBoardService.updateTeamArticleRecommend(teamArticleRecommendRequest);
         return ResponseHandler.generate()
@@ -132,7 +132,7 @@ public class TeamBoardApiController {
     }
 
     @ApiOperation(value = "팀 댓글 추천 API")
-    @PutMapping("/reply/recommend")
+    @PatchMapping("/reply/recommend")
     public ResponseEntity<?> updateTeamReplyRecommend(TeamReplyRecommendRequest teamReplyRecommendRequest) {
         teamBoardService.updateTeamReplyRecommend(teamReplyRecommendRequest);
         return ResponseHandler.generate()
