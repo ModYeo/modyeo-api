@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.block.controller;
 
 import com.co.kr.modyeo.api.block.domain.request.BlockCreateRequest;
 import com.co.kr.modyeo.api.block.domain.request.BlockSearch;
+import com.co.kr.modyeo.api.block.domain.request.BlockUpdateRequest;
 import com.co.kr.modyeo.api.block.domain.response.BlockDetail;
 import com.co.kr.modyeo.api.block.domain.response.BlockResponse;
 import com.co.kr.modyeo.api.block.service.BlockService;
@@ -22,7 +23,7 @@ public class BlockController {
     private final BlockService blockService;
 
     @PostMapping("")
-    public ResponseEntity<?> createBlock(BlockCreateRequest blockCreateRequest){
+    public ResponseEntity<?> createBlock(@RequestBody BlockCreateRequest blockCreateRequest){
         Long blockId = blockService.createBlock(blockCreateRequest);
         return ResponseHandler.generate()
                 .data(blockId)
@@ -39,13 +40,22 @@ public class BlockController {
                 .build();
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<?> getBlocks(BlockSearch blockSearch){
         String email = SecurityUtil.getCurrentEmail();
         blockSearch.setEmail(email);
         List<BlockResponse> blocks = blockService.getBlocks(blockSearch);
         return ResponseHandler.generate()
                 .data(blocks)
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    @PatchMapping("")
+    public ResponseEntity<?> updateBlock(@RequestBody BlockUpdateRequest blockUpdateRequest){
+        Long blockId = blockService.updateBlock(blockUpdateRequest);
+        return ResponseHandler.generate()
+                .data(blockId)
                 .status(HttpStatus.OK)
                 .build();
     }
