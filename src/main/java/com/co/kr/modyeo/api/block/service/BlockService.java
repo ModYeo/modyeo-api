@@ -16,4 +16,6 @@ public interface BlockService {
     List<BlockResponse> getBlocks(BlockSearch blockSearch);
 
     Long updateBlock(BlockUpdateRequest blockUpdateRequest);
+
+    void deleteBlock(Long blockId);
 }
