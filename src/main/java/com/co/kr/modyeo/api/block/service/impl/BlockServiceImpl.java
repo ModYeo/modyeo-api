@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.block.service.impl;
 
 import com.co.kr.modyeo.api.block.domain.request.BlockCreateRequest;
 import com.co.kr.modyeo.api.block.domain.request.BlockSearch;
+import com.co.kr.modyeo.api.block.domain.request.BlockUpdateRequest;
 import com.co.kr.modyeo.api.block.domain.response.BlockDetail;
 import com.co.kr.modyeo.api.block.domain.entity.Block;
 import com.co.kr.modyeo.api.block.domain.response.BlockResponse;
@@ -40,5 +41,18 @@ public class BlockServiceImpl implements BlockService {
     @Override
     public List<BlockResponse> getBlocks(BlockSearch blockSearch) {
        return null;
+    }
+
+    @Override
+    public Long updateBlock(BlockUpdateRequest blockUpdateRequest) {
+        Block block = blockRepository.findById(blockUpdateRequest.getBlockId())
+                .orElseThrow(() -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode("NOT_FOUND_BLOCK")
+                        .errorMessage("차단된 컨텐츠를 찾지 못했습니다.")
+                        .build());
+
+        Block.changeBlock(block, blockUpdateRequest.getIsEnable());
+        return block.getId();
     }
 }

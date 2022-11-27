@@ -42,4 +42,8 @@ public class Block extends BaseEntity {
                 .isEnable(isEnable)
                 .build();
     }
+
+    public static void changeBlock(Block block, Yn isEnable) {
+        block.isEnable = isEnable;
+    }
 }
