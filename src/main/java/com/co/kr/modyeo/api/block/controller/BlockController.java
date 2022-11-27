@@ -59,4 +59,13 @@ public class BlockController {
                 .status(HttpStatus.OK)
                 .build();
     }
+
+    @DeleteMapping("/{block_id}")
+    public ResponseEntity<?> deleteBlock(@PathVariable(value = "block_id")Long blockId){
+        blockService.deleteBlock(blockId);
+        return ResponseHandler.generate()
+                .data(blockId)
+                .status(HttpStatus.OK)
+                .build();
+    }
 }

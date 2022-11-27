@@ -55,4 +55,15 @@ public class BlockServiceImpl implements BlockService {
         Block.changeBlock(block, blockUpdateRequest.getIsEnable());
         return block.getId();
     }
+
+    @Override
+    public void deleteBlock(Long blockId) {
+        Block block = blockRepository.findById(blockId)
+                .orElseThrow(() -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode("NOT_FOUND_BLOCK")
+                        .errorMessage("차단된 컨텐츠를 찾지 못했습니다.")
+                        .build());
+        blockRepository.delete(block);
+    }
 }
