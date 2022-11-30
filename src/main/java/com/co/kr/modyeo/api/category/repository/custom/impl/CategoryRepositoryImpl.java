@@ -5,6 +5,7 @@ import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.category.repository.custom.CategoryCustomRepository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -32,6 +33,6 @@ public class CategoryRepositoryImpl implements CategoryCustomRepository {
     }
 
     private BooleanExpression categoryNameEq(String name) {
-        return name != null ? category.name.eq(name) : null;
+        return StringUtils.hasText(name) ? category.name.eq(name) : null;
     }
 }

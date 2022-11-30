@@ -10,6 +10,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class TeamRepositoryImpl extends Querydsl4RepositorySupport implements Te
     }
 
     private BooleanExpression crewNameEq(String name) {
-        return name != null ? team.name.eq(name) : null;
+        return StringUtils.hasText(name)  ? team.name.eq(name) : null;
     }
 
     private BooleanExpression categoryIdEq(Long id) {

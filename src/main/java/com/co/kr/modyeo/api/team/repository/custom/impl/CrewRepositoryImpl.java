@@ -7,6 +7,7 @@ import com.co.kr.modyeo.api.team.repository.custom.CrewCustomRepository;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -55,7 +56,7 @@ public class CrewRepositoryImpl extends Querydsl4RepositorySupport implements Cr
     }
 
     private BooleanExpression eqEmail(String email) {
-        return email != null && !Objects.equals(email, "") ? member.email.eq(email) : null;
+        return StringUtils.hasText(email) ? member.email.eq(email) : null;
     }
 
     private BooleanExpression eqTeamId(Long teamId) {
