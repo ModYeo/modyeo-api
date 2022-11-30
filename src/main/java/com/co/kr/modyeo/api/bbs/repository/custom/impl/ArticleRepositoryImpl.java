@@ -8,6 +8,7 @@ import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements
     }
 
     private BooleanExpression createdByEq(String email){
-        return email != null && !email.equals("") ? article.createdBy.eq(email) : null;
+        return StringUtils.hasText(email) ? article.createdBy.eq(email) : null;
     }
 
     private BooleanExpression categoryIdEq(Long categoryId) {
@@ -59,10 +60,10 @@ public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements
     }
 
     private BooleanExpression articleContentLike(String content) {
-        return content != null ? article.content.contains(content) : null;
+        return StringUtils.hasText(content)  ? article.content.contains(content) : null;
     }
 
     private BooleanExpression articleTitleLike(String title) {
-        return title != null ? article.title.contains(title) : null;
+        return StringUtils.hasText(title)  ? article.title.contains(title) : null;
     }
 }

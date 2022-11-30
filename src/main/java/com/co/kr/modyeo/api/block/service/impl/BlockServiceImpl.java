@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +41,9 @@ public class BlockServiceImpl implements BlockService {
 
     @Override
     public List<BlockResponse> getBlocks(BlockSearch blockSearch) {
-       return null;
+       return blockRepository.searchBlocks(blockSearch).stream()
+               .map(BlockResponse::toDto)
+               .collect(Collectors.toList());
     }
 
     @Override
