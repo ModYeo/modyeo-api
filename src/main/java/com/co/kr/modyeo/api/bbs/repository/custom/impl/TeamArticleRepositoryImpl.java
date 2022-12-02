@@ -35,7 +35,8 @@ public class TeamArticleRepositoryImpl extends Querydsl4RepositorySupport implem
                         .fetchJoin()
                         .where(articleTitleLike(teamArticleSearch.getTitle()),
                                 articleContentLike(teamArticleSearch.getContent()),
-                                categoryIdEq(teamArticleSearch.getTeamId())));
+                                categoryIdEq(teamArticleSearch.getTeamId()),
+                                createdByEq(teamArticleSearch.getCreatedBy())));
     }
 
     @Override

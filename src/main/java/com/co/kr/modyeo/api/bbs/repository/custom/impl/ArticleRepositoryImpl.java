@@ -31,7 +31,8 @@ public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements
                         .fetchJoin()
                         .where(articleTitleLike(articleSearch.getTitle()),
                                 articleContentLike(articleSearch.getContent()),
-                                categoryIdEq(articleSearch.getCategoryId())));
+                                categoryIdEq(articleSearch.getCategoryId()),
+                                createdByEq(articleSearch.getCreatedBy())));
     }
 
     @Override

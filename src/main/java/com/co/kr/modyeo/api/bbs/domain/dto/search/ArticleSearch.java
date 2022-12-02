@@ -14,7 +14,9 @@ public class ArticleSearch {
 
     private String content;
 
-    private Long CategoryId;
+    private String createdBy;
+
+    private Long categoryId;
 
     private Integer limit;
 
@@ -25,8 +27,10 @@ public class ArticleSearch {
     private Sort.Direction direction;
 
     @Builder(builderMethodName = "of", builderClassName = "of")
-    public ArticleSearch(String title, String content, Integer limit, Integer offset, String orderBy, Sort.Direction direction) {
+    public ArticleSearch(String title, String content, Integer limit, Integer offset, String orderBy, Sort.Direction direction, Long categoryId, String createdBy) {
         this.title = title;
+        this.categoryId = categoryId;
+        this.createdBy = createdBy;
         this.content = content;
         this.limit = limit != null ? limit : 20;
         this.offset = offset != null ? offset : 0;
