@@ -50,4 +50,8 @@ public class Friend extends BaseEntity {
     public void deleteFriend() {
         this.friendStatus = FriendStatus.DELETED;
     }
+
+    public void blockFriend() {
+        this.friendStatus = FriendStatus.BLOCKED;
+    }
 }
