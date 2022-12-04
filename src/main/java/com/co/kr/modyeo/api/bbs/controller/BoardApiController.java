@@ -47,6 +47,12 @@ public class BoardApiController {
     @ApiOperation(value = "게시글 슬라이스 조회 API")
     @GetMapping("/article")
     public ResponseEntity<?> getArticles(ArticleSearch articleSearch) {
+        if (articleSearch.getIsMyArticle() == null) articleSearch.setIsMyArticle(false);
+
+        if (articleSearch.getIsMyArticle()){
+            articleSearch.setCreatedBy(SecurityUtil.getCurrentEmail());
+        }
+
         Slice<ArticleResponse> articleResponses = boardService.getArticles(articleSearch);
         return ResponseHandler.generate()
                 .data(articleResponses)
@@ -143,17 +149,6 @@ public class BoardApiController {
         boardService.updateReplyRecommend(replyRecommendRequest);
         return ResponseHandler.generate()
                 .data(null)
-                .status(HttpStatus.OK)
-                .build();
-    }
-
-    @ApiOperation("내가 쓴 게시글 조회 API")
-    @GetMapping("/article/my")
-    public ResponseEntity<?> getArticleMy(){
-        String email = SecurityUtil.getCurrentEmail();
-        List<ArticleResponse> articleResponseList = boardService.getArticlesMy(email);
-        return ResponseHandler.generate()
-                .data(articleResponseList)
                 .status(HttpStatus.OK)
                 .build();
     }

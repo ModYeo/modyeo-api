@@ -26,6 +26,8 @@ public class ArticleSearch {
 
     private Sort.Direction direction;
 
+    private Boolean isMyArticle;
+
     @Builder(builderMethodName = "of", builderClassName = "of")
     public ArticleSearch(String title, String content, Integer limit, Integer offset, String orderBy, Sort.Direction direction, Long categoryId, String createdBy) {
         this.title = title;
