@@ -249,13 +249,6 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<ArticleResponse> getArticlesMy(String email) {
-        return articleRepository.findArticleByEmail(email).stream()
-                .map(ArticleResponse::toDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public List<ReplyResponse> getReplyMy(String email) {
         return replyRepository.findReplyByEmail(email).stream()
                 .map(ReplyResponse::toDto)

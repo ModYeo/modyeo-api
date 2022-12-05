@@ -38,8 +38,6 @@ public interface BoardService {
 
     void updateReplyRecommend(ReplyRecommendRequest replyRecommendRequest);
 
-    List<ArticleResponse> getArticlesMy(String email);
-
     List<ReplyResponse> getReplyMy(String email);
 
     List<ArticleResponse> getArticleMyLike(String email);
