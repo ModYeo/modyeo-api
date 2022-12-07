@@ -17,6 +17,7 @@ import java.util.List;
 import static com.co.kr.modyeo.api.bbs.domain.entity.QArticle.article;
 import static com.co.kr.modyeo.api.bbs.domain.entity.QTeamArticle.teamArticle;
 import static com.co.kr.modyeo.api.bbs.domain.entity.QTeamReply.teamReply;
+import static com.co.kr.modyeo.api.member.domain.entity.QMember.member;
 import static com.co.kr.modyeo.api.bbs.domain.entity.link.QArticleRecommend.articleRecommend;
 import static com.co.kr.modyeo.api.bbs.domain.entity.link.QTeamArticleRecommend.teamArticleRecommend;
 import static com.co.kr.modyeo.api.team.domain.entity.QTeam.team;
@@ -32,11 +33,16 @@ public class TeamArticleRepositoryImpl extends Querydsl4RepositorySupport implem
                 contentQuery.select(teamArticle)
                         .from(teamArticle)
                         .innerJoin(teamArticle.team, team)
+                        .innerJoin(member).on(teamArticle.createdBy.eq(member.email))
                         .fetchJoin()
                         .where(articleTitleLike(teamArticleSearch.getTitle()),
                                 articleContentLike(teamArticleSearch.getContent()),
                                 categoryIdEq(teamArticleSearch.getTeamId()),
-                                createdByEq(teamArticleSearch.getCreatedBy())));
+                                memberIdEq(teamArticleSearch.getMemberId())));
+    }
+
+    private BooleanExpression memberIdEq(Long memberId) {
+        return memberId != null && memberId > 0 ? member.id.eq(memberId) : null;
     }
 
     @Override

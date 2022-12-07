@@ -15,7 +15,7 @@ public class TeamArticleSearch {
 
     private String content;
 
-    private String createdBy;
+    private Long memberId;
 
     private Integer limit;
 
@@ -26,11 +26,11 @@ public class TeamArticleSearch {
     private Sort.Direction direction;
 
     @Builder(builderMethodName = "of", builderClassName = "of")
-    public TeamArticleSearch(Long teamId, String title, String content, Integer limit, Integer offset, String orderBy, Sort.Direction direction, String createdBy) {
+    public TeamArticleSearch(Long teamId, String title, String content, Integer limit, Integer offset, String orderBy, Sort.Direction direction, Long memberId) {
         this.title = title;
         this.teamId = teamId;
         this.content = content;
-        this.createdBy = createdBy;
+        this.memberId = memberId;
         this.limit = limit != null ? limit : 20;
         this.offset = offset != null ? offset : 0;
         this.orderBy = orderBy != null ? orderBy : "id";

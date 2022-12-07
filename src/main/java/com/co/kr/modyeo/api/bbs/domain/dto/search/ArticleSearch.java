@@ -14,7 +14,7 @@ public class ArticleSearch {
 
     private String content;
 
-    private String createdBy;
+    private Long memberId;
 
     private Long categoryId;
 
@@ -29,10 +29,10 @@ public class ArticleSearch {
     private Boolean isMyArticle;
 
     @Builder(builderMethodName = "of", builderClassName = "of")
-    public ArticleSearch(String title, String content, Integer limit, Integer offset, String orderBy, Sort.Direction direction, Long categoryId, String createdBy) {
+    public ArticleSearch(String title, String content, Integer limit, Integer offset, String orderBy, Sort.Direction direction, Long categoryId, Long memberId) {
         this.title = title;
         this.categoryId = categoryId;
-        this.createdBy = createdBy;
+        this.memberId = memberId;
         this.content = content;
         this.limit = limit != null ? limit : 20;
         this.offset = offset != null ? offset : 0;

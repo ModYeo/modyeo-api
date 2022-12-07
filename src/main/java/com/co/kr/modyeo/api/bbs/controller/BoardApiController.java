@@ -47,12 +47,6 @@ public class BoardApiController {
     @ApiOperation(value = "게시글 슬라이스 조회 API")
     @GetMapping("/article")
     public ResponseEntity<?> getArticles(ArticleSearch articleSearch) {
-        if (articleSearch.getIsMyArticle() == null) articleSearch.setIsMyArticle(false);
-
-        if (articleSearch.getIsMyArticle()){
-            articleSearch.setCreatedBy(SecurityUtil.getCurrentEmail());
-        }
-
         Slice<ArticleResponse> articleResponses = boardService.getArticles(articleSearch);
         return ResponseHandler.generate()
                 .data(articleResponses)

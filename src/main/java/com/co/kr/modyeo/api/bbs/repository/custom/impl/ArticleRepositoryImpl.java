@@ -5,6 +5,7 @@ import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.api.bbs.repository.custom.ArticleCustomRepository;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -15,6 +16,7 @@ import java.util.List;
 import static com.co.kr.modyeo.api.bbs.domain.entity.QArticle.article;
 import static com.co.kr.modyeo.api.bbs.domain.entity.link.QArticleRecommend.articleRecommend;
 import static com.co.kr.modyeo.api.category.domain.entity.QCategory.category;
+import static com.co.kr.modyeo.api.member.domain.entity.QMember.member;
 
 public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements ArticleCustomRepository {
 
@@ -28,11 +30,16 @@ public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements
                 contentQuery.select(article)
                         .from(article)
                         .innerJoin(article.category, category)
+                        .innerJoin(member).on(article.createdBy.eq(member.email))
                         .fetchJoin()
                         .where(articleTitleLike(articleSearch.getTitle()),
                                 articleContentLike(articleSearch.getContent()),
                                 categoryIdEq(articleSearch.getCategoryId()),
-                                createdByEq(articleSearch.getCreatedBy())));
+                                memberIdEq(articleSearch.getMemberId())));
+    }
+
+    private BooleanExpression memberIdEq(Long memberId) {
+        return memberId != null && memberId > 0 ? member.id.eq(memberId) : null;
     }
 
     @Override
