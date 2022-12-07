@@ -237,13 +237,6 @@ public class TeamBoardServiceImpl implements TeamBoardService {
     }
 
     @Override
-    public List<TeamArticleResponse> getArticlesMy(String email) {
-        return teamArticleRepository.findArticleByEmail(email)
-                .stream().map(TeamArticleResponse::toDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public List<TeamReplyResponse> getReplyMy(String email) {
         return teamArticleRepository.findReplyByEmail(email)
                 .stream().map(TeamReplyResponse::toDto)

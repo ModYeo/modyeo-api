@@ -141,17 +141,6 @@ public class TeamBoardApiController {
                 .build();
     }
 
-    @ApiOperation(value = "내가 쓴 게시글 조회 API")
-    @GetMapping("/article/my")
-    public ResponseEntity<?> getTeamArticleMy(){
-        String email =  SecurityUtil.getCurrentEmail();
-        List<TeamArticleResponse> articleResponseList = teamBoardService.getArticlesMy(email);
-        return ResponseHandler.generate()
-                .data(articleResponseList)
-                .status(HttpStatus.OK)
-                .build();
-    }
-
     @ApiOperation(value = "내가 쓴 댓글 조회 API")
     @GetMapping("/reply/my")
     public ResponseEntity<?> getTeamReplyMy(){
