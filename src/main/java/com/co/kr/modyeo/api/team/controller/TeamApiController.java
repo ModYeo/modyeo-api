@@ -80,15 +80,4 @@ public class TeamApiController {
                 .build();
     }
 
-    @ApiOperation(value = "자신이 속한 팀 조회 API")
-    @GetMapping("/my")
-    public ResponseEntity<?> getMyTeam(){
-        String email =  SecurityUtil.getCurrentEmail();
-        List<TeamResponse> teamResponseList = teamService.getMyTeam(email);
-        return ResponseHandler.generate()
-                .status(HttpStatus.OK)
-                .data(teamResponseList)
-                .build();
-    }
-
 }

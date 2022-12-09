@@ -120,11 +120,6 @@ public class TeamServiceImpl implements TeamService {
                 .build()));
     }
 
-    @Override
-    public List<TeamResponse> getMyTeam(String email) {
-        return teamRepository.findMyTeam(email);
-    }
-
     private void overlapTeamCheck(TeamRequest teamRequest){
         Team findTeam = teamRepository.findByName(teamRequest.getName());
         if (findTeam != null){

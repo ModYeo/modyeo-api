@@ -19,6 +19,4 @@ public interface TeamService {
     void deleteTeam(Long crewId);
 
     TeamDetail getTeam(Long teamId);
-
-    List<TeamResponse> getMyTeam(String email);
 }

@@ -14,6 +14,8 @@ public class TeamSearch {
 
     private Long categoryId;
 
+    private Long memberId;
+
     private Integer limit;
 
     private Integer offset;
@@ -23,9 +25,10 @@ public class TeamSearch {
     private Sort.Direction direction;
 
     @Builder
-    public TeamSearch(String name, Long categoryId, Integer limit, Integer offset, String orderBy, Sort.Direction direction) {
+    public TeamSearch(String name, Long categoryId,Long memberId, Integer limit, Integer offset, String orderBy, Sort.Direction direction) {
         this.name = name;
         this.categoryId = categoryId;
+        this.memberId = memberId;
         this.limit = limit != null? limit : 20;
         this.offset = offset != null? offset : 0;
         this.orderBy = orderBy != null? orderBy : "id";
