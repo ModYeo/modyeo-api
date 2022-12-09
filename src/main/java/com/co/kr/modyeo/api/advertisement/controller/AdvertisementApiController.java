@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.advertisement.controller;
 
 import com.co.kr.modyeo.api.advertisement.domain.enumerate.AdvertisementType;
 import com.co.kr.modyeo.api.advertisement.domain.request.AdvertisementCreateRequest;
+import com.co.kr.modyeo.api.advertisement.domain.request.AdvertisementSearch;
 import com.co.kr.modyeo.api.advertisement.domain.request.AdvertisementUpdateRequest;
 import com.co.kr.modyeo.api.advertisement.domain.response.AdvertisementDetail;
 import com.co.kr.modyeo.api.advertisement.domain.response.AdvertisementResponse;
@@ -32,8 +33,8 @@ public class AdvertisementApiController {
 
     @GetMapping("")
     public ResponseEntity<?> getAdvertisements(
-            @RequestParam(value = "type",name = "type",required = true)AdvertisementType advertisementType){
-        List<AdvertisementResponse> advertisementResponseList = advertisementService.getAdvertisements(advertisementType);
+            AdvertisementSearch advertisementSearch){
+        List<AdvertisementResponse> advertisementResponseList = advertisementService.getAdvertisements(advertisementSearch);
         return ResponseHandler.generate()
                 .data(advertisementResponseList)
                 .status(HttpStatus.OK)
