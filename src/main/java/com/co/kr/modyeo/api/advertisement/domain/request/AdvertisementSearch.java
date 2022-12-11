@@ -1,20 +1,14 @@
 package com.co.kr.modyeo.api.advertisement.domain.request;
 
 import com.co.kr.modyeo.api.advertisement.domain.enumerate.AdvertisementType;
-import lombok.Data;
+import com.co.kr.modyeo.common.dto.SearchDto;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Sort;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-public class AdvertisementSearch {
+public class AdvertisementSearch extends SearchDto {
     private AdvertisementType advertisementType;
-
-    private Integer limit;
-
-    private Integer offset;
-
-    private String orderBy;
-
-    private Sort.Direction direction;
 }
