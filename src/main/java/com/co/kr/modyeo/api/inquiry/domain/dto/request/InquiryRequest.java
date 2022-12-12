@@ -1,9 +1,8 @@
-package com.co.kr.modyeo.api.inquiry.domain.dto.Request;
+package com.co.kr.modyeo.api.inquiry.domain.dto.request;
 
 import com.co.kr.modyeo.api.inquiry.domain.entity.Inquiry;
 import com.co.kr.modyeo.api.inquiry.domain.enumerate.InquiryStatus;
 import com.co.kr.modyeo.api.member.domain.enumerate.Authority;
-import com.co.kr.modyeo.common.util.SecurityUtil;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,19 +15,17 @@ public class InquiryRequest {
     private String content;
     private Authority authority;
     private InquiryStatus status;
-    private String flag;
     private String createdBy;
 
     @Builder(builderClassName = "of", builderMethodName = "of")
     public InquiryRequest(Long inquiryId, String title, String content,
-                          Authority type, InquiryStatus status, String flag,
+                          Authority authority, InquiryStatus status,
                           String createdBy) {
         this.id = inquiryId;
         this.title = title;
         this.content = content;
-        this.authority = type;
+        this.authority = authority;
         this.status = status;
-        this.flag = flag;
         this.createdBy = createdBy;
     }
 
@@ -46,7 +43,6 @@ public class InquiryRequest {
         return Inquiry.createBuilder()
                 .content(inquiryRequest.getContent())
                 .title(inquiryRequest.getTitle())
-                .authority(SecurityUtil.checkAuthority()) //TODO : SecurityUtil의 checkAuthority로 해결.
                 .build();
     }
 }

@@ -3,12 +3,14 @@ package com.co.kr.modyeo.api.inquiry.domain.entity;
 import com.co.kr.modyeo.api.inquiry.domain.enumerate.InquiryStatus;
 import com.co.kr.modyeo.api.member.domain.enumerate.Authority;
 import com.co.kr.modyeo.common.entity.BaseEntity;
+import com.co.kr.modyeo.common.util.SecurityUtil;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,14 +18,13 @@ import java.util.List;
 @Table(name = "INQUIRY")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Inquiry extends BaseEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "inquiry_id")
     private Long id;
 
     @OneToMany(mappedBy = "inquiry", cascade = CascadeType.ALL)
-    private List<Answer> answerList;
+    private List<Answer> answerList = new ArrayList<>();
 
     @Column(name = "inquiry_title")
     private String title;
@@ -56,14 +57,18 @@ public class Inquiry extends BaseEntity {
     public Inquiry(String title, String content, Authority authority) {
         this.title = title;
         this.content = content;
-        this.authority = authority; // TODO : SecurityUtil 의 checkAuthority 로 해결.
+        this.authority = SecurityUtil.checkAuthority();
         this.status = (authority == Authority.ROLE_USER) ? InquiryStatus.WAITING : InquiryStatus.FREQUENT;
-        //TODO : 유저와 관리자 구분을 위해 validate() 를 만들고 그 안에서 pathVariable 로 쏴주어 판단할 것. user만 튕겨내기.
     }
 
     @Builder(builderClassName = "updateInquiryBuilder", builderMethodName = "updateInquiryBuilder")
     public void updateInquiry(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    @Builder(builderClassName = "updateInquiryStatusBuilder", builderMethodName = "updateInquiryStatusBuilder")
+    public void updateInquiryStatus(InquiryStatus status) {
+        this.status = status;
     }
 }

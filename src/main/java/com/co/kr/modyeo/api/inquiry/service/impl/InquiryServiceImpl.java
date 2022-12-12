@@ -1,39 +1,57 @@
 package com.co.kr.modyeo.api.inquiry.service.impl;
 
-import com.co.kr.modyeo.api.inquiry.domain.dto.Request.AnswerRequest;
-import com.co.kr.modyeo.api.inquiry.domain.dto.Request.InquiryRequest;
+import com.co.kr.modyeo.api.inquiry.domain.dto.request.AnswerRequest;
+import com.co.kr.modyeo.api.inquiry.domain.dto.request.InquiryRequest;
+import com.co.kr.modyeo.api.inquiry.domain.dto.Response.AnswerDetail;
 import com.co.kr.modyeo.api.inquiry.domain.dto.Response.InquiryDetail;
 import com.co.kr.modyeo.api.inquiry.domain.dto.Response.InquiryResponse;
+import com.co.kr.modyeo.api.inquiry.domain.dto.search.InquirySearch;
 import com.co.kr.modyeo.api.inquiry.domain.entity.Answer;
 import com.co.kr.modyeo.api.inquiry.domain.entity.Inquiry;
+import com.co.kr.modyeo.api.inquiry.domain.enumerate.InquiryStatus;
 import com.co.kr.modyeo.api.inquiry.repository.AnswerRepository;
 import com.co.kr.modyeo.api.inquiry.repository.InquiryRepository;
 import com.co.kr.modyeo.api.inquiry.service.InquiryService;
+import com.co.kr.modyeo.api.member.domain.enumerate.Authority;
 import com.co.kr.modyeo.common.exception.ApiException;
-import com.co.kr.modyeo.common.exception.code.BoardErrorCode;
+import com.co.kr.modyeo.common.exception.code.InquiryErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @Transactional(readOnly = true)
-@RequiredArgsConstructor //TODO : 어노테이션, 무슨 의미인지 알아보기
+@RequiredArgsConstructor
 public class InquiryServiceImpl implements InquiryService {
 
-    private InquiryRepository inquiryRepository;
+    private final InquiryRepository inquiryRepository;
 
-    private AnswerRepository answerRepository;
+    private final AnswerRepository answerRepository;
+
+    @Override
+    public Slice<InquiryResponse> getInquiryIndexPage(InquirySearch inquirySearch) {
+        PageRequest pageRequest = PageRequest.of(inquirySearch.getOffset(), inquirySearch.getLimit(),
+                                                 inquirySearch.getDirection(), inquirySearch.getOrderBy());
+        return inquiryRepository.getInquiryIndexPage(inquirySearch, pageRequest).map(InquiryResponse::toDto);
+    }
 
     //질문 리스트 조회
     @Override
-    public List<InquiryResponse> getInquiries(InquiryRequest inquiryRequest) {
-        return inquiryRepository.getInquiries(inquiryRequest)
-                .stream().map(InquiryResponse::toDto)
-                .collect(Collectors.toList()); //TODO : 구문이해 필요
+    public Slice<InquiryResponse> getAllInquiries(InquirySearch inquirySearch, Authority auth) {
+        PageRequest pageRequest = PageRequest.of(inquirySearch.getOffset(), inquirySearch.getLimit(),
+                                                 inquirySearch.getDirection(), inquirySearch.getOrderBy());
+        return inquiryRepository.getAllInquiries(inquirySearch, pageRequest, auth).map(InquiryResponse::toDto);
+    }
+
+    @Override
+    public Slice<InquiryResponse> getMyInquiries(InquirySearch inquirySearch){
+        PageRequest pageRequest = PageRequest.of(inquirySearch.getOffset(), inquirySearch.getLimit(),
+                                                 inquirySearch.getDirection(), inquirySearch.getOrderBy());
+        inquiryRepository.getMyInquiries(inquirySearch.getCreatedBy(), pageRequest);
+        return null;
     }
 
     //상세조회
@@ -41,8 +59,8 @@ public class InquiryServiceImpl implements InquiryService {
     public InquiryDetail getInquiryDetail(Long id) {
         Inquiry inquiry = inquiryRepository.findById(id).orElseThrow(
                 () -> ApiException.builder()
-                        .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage()) // TODO : Article -> inquiry 변경 필
-                        .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
+                        .errorMessage(InquiryErrorCode.NOT_FOUND_INQUIRY.getMessage())
+                        .errorCode(InquiryErrorCode.NOT_FOUND_INQUIRY.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
@@ -59,25 +77,25 @@ public class InquiryServiceImpl implements InquiryService {
     public Inquiry updateInquiry(InquiryRequest inquiryRequest) {
         Inquiry inquiry = inquiryRepository.findById(inquiryRequest.getId()).orElseThrow(
                 () -> ApiException.builder()
-                        .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
-                        .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
+                        .errorMessage(InquiryErrorCode.NOT_FOUND_INQUIRY.getMessage())
+                        .errorCode(InquiryErrorCode.NOT_FOUND_INQUIRY.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
         inquiry.updateInquiryBuilder()
-                .title(inquiry.getTitle())
-                .content(inquiry.getContent())
+                .title(inquiryRequest.getTitle())
+                .content(inquiryRequest.getContent())
                 .build();
 
         return inquiry;
     }
 
     @Override
-    public void deleteInquiry(Long inquryId) {
-        Inquiry inquiry = inquiryRepository.findById(inquryId).orElseThrow(
+    public void deleteInquiry(Long inquiryId) {
+        Inquiry inquiry = inquiryRepository.findById(inquiryId).orElseThrow(
                 () -> ApiException.builder()
-                        .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
-                        .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
+                        .errorMessage(InquiryErrorCode.NOT_FOUND_INQUIRY.getMessage())
+                        .errorCode(InquiryErrorCode.NOT_FOUND_INQUIRY.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
@@ -85,24 +103,42 @@ public class InquiryServiceImpl implements InquiryService {
     }
 
     @Override
-    public Answer craeteAnswer(AnswerRequest answerRequest) {
+    public AnswerDetail getAnswer(Long id) {
+        Answer answer = answerRepository.findById(id).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage(InquiryErrorCode.NOT_FOUND_ANSWER.getMessage())
+                        .errorCode(InquiryErrorCode.NOT_FOUND_ANSWER.getCode())
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build()
+        );
+        return AnswerDetail.toDto(answer);
+    }
+
+    @Override
+    public Answer createAnswer(AnswerRequest answerRequest) {
         Inquiry inquiry = inquiryRepository.findById(answerRequest.getInquiryId()).orElseThrow(
                 () -> ApiException.builder()
-                        .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
-                        .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
+                        .errorMessage(InquiryErrorCode.NOT_FOUND_INQUIRY.getMessage())
+                        .errorCode(InquiryErrorCode.NOT_FOUND_INQUIRY.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build()
         );
 
-        return answerRepository.save(AnswerRequest.createAnswer(answerRequest, inquiry));
+        if (inquiry.getStatus()==InquiryStatus.WAITING) {
+            inquiry.updateInquiryStatusBuilder().status(InquiryStatus.COMPLETE).build();
+        }
+
+        Answer savedAnswer = answerRepository.save(AnswerRequest.createAnswer(answerRequest, inquiry));
+        inquiry.getAnswerList().add(savedAnswer);
+        return savedAnswer;
     }
 
     @Override
     public Answer updateAnswer(AnswerRequest answerRequest) {
         Answer answer = answerRepository.findById(answerRequest.getAnswerId()).orElseThrow(
                 () -> ApiException.builder()
-                        .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
-                        .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
+                        .errorMessage(InquiryErrorCode.NOT_FOUND_ANSWER.getMessage())
+                        .errorCode(InquiryErrorCode.NOT_FOUND_ANSWER.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build()
         );
@@ -116,12 +152,12 @@ public class InquiryServiceImpl implements InquiryService {
     public void deleteAnswer(Long id) {
         Answer answer = answerRepository.findById(id).orElseThrow(
                 () -> ApiException.builder()
-                        .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
-                        .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
+                        .errorMessage(InquiryErrorCode.NOT_FOUND_ANSWER.getMessage())
+                        .errorCode(InquiryErrorCode.NOT_FOUND_ANSWER.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build()
         );
 
-        answerRepository.deleteById(id);
+        answerRepository.delete(answer);
     }
 }

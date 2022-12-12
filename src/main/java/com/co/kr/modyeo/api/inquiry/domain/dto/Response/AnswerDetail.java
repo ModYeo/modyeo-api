@@ -11,34 +11,35 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class AnswerResponse {
+public class AnswerDetail {
     private Long answerId;
     private Long inquiryId;
     private String content;
-    private Authority authority;
     private String createdBy;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
+    private Authority authority;
 
-    @Builder(builderMethodName = "of", builderClassName = "of")
-    public AnswerResponse(Long answerId, Long inquiryId, String content,
-                          Authority authority, String createdBy, LocalDateTime createdTime){
+    @Builder(builderClassName = "of", builderMethodName = "of")
+    public AnswerDetail(Long answerId, Long inquiryId, String content,
+                        String createdBy, LocalDateTime createdTime, Authority authority){
         this.answerId = answerId;
         this.inquiryId = inquiryId;
         this.content = content;
-        this.authority = authority;
         this.createdBy = createdBy;
         this.createdTime = createdTime;
+        this.authority = authority;
     }
 
-    public static AnswerResponse toDto(Answer answer){
-        return   AnswerResponse.of()
+    @Builder
+    public static AnswerDetail toDto(Answer answer){
+        return   AnswerDetail.of()
                 .answerId(answer.getId())
                 .inquiryId(answer.getInquiry().getId())
                 .content(answer.getContent())
-                .authority(answer.getAuthority())
                 .createdBy(answer.getCreatedBy())
                 .createdTime(answer.getCreatedDate())
+                .authority(answer.getAuthority())
                 .build();
     }
 }

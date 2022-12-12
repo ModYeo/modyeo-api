@@ -37,14 +37,16 @@ public class Answer extends BaseEntity {
         this.id = id;
         this.inquiry = inquiry;
         this.content = content;
-        this.authority = SecurityUtil.checkAuthority();
+        this.authority = authority;
     }
 
     @Builder(builderClassName = "createAnswerBuilder", builderMethodName = "createAnswerBuilder")
-    public Answer(String content, Authority authority, Inquiry inquiry) {
-        this.content = content;
-        this.authority = authority;
-        this.inquiry = inquiry;
+    public static Answer createAnswer(String content, Inquiry inquiry) {
+        return of()
+                .content(content)
+                .authority(SecurityUtil.checkAuthority())
+                .inquiry(inquiry)
+                .build();
     }
 
     @Builder(builderClassName = "updateAnswerBuilder", builderMethodName = "updateAnswerBuilder")

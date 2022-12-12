@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 )
 @WithMockUser
 @MockBean(JpaMetamodelMappingContext.class)
-public class InquiryApiControllerTest {
+class InquiryApiControllerTest {
 
         @Autowired
         ObjectMapper objectMapper;
@@ -42,7 +42,7 @@ public class InquiryApiControllerTest {
 
         @Test
         @DisplayName("get url 테스트")
-        void getArticle() throws Exception {
+        void getInquiryIndexPage() throws Exception {
                 mockMvc.perform(
                         get("/api/inquiry")
                 ).andExpect(
