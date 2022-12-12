@@ -1,11 +1,14 @@
 package com.co.kr.modyeo.api.block.domain.request;
 
-import lombok.Data;
+import com.co.kr.modyeo.common.dto.SearchDto;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-public class BlockSearch {
+public class BlockSearch extends SearchDto {
 
     private String email;
 }

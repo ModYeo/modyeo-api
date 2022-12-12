@@ -2,9 +2,8 @@ package com.co.kr.modyeo.api.team.controller;
 
 import com.co.kr.modyeo.api.team.domain.dto.request.CrewUpdateRequest;
 import com.co.kr.modyeo.api.team.domain.dto.response.CrewResponse;
-import com.co.kr.modyeo.api.team.domain.dto.search.SearchCrew;
+import com.co.kr.modyeo.api.team.domain.dto.search.CrewSearch;
 import com.co.kr.modyeo.api.team.service.CrewService;
-import com.co.kr.modyeo.common.result.JsonResultData;
 import com.co.kr.modyeo.common.result.ResponseHandler;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +23,8 @@ public class CrewApiController {
     @ApiOperation("크루원 정보 조회 API")
     @GetMapping("")
     public ResponseEntity<?> getCrew(
-            SearchCrew searchCrew) {
-        List<CrewResponse> crewResponseList = crewService.getCrew(searchCrew);
+            CrewSearch crewSearch) {
+        List<CrewResponse> crewResponseList = crewService.getCrew(crewSearch);
         return ResponseHandler.generate()
                 .status(HttpStatus.OK)
                 .data(crewResponseList)

@@ -1,14 +1,13 @@
 package com.co.kr.modyeo.api.team.domain.dto.search;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.co.kr.modyeo.common.dto.SearchDto;
+import lombok.*;
 import org.springframework.data.domain.Sort;
 
-@Data
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class TeamSearch {
+@Getter
+@Setter
+@NoArgsConstructor
+public class TeamSearch extends SearchDto {
 
     private String name;
 
@@ -16,22 +15,10 @@ public class TeamSearch {
 
     private Long memberId;
 
-    private Integer limit;
-
-    private Integer offset;
-
-    private String orderBy;
-
-    private Sort.Direction direction;
-
     @Builder
-    public TeamSearch(String name, Long categoryId,Long memberId, Integer limit, Integer offset, String orderBy, Sort.Direction direction) {
+    public TeamSearch(String name, Long categoryId,Long memberId) {
         this.name = name;
         this.categoryId = categoryId;
         this.memberId = memberId;
-        this.limit = limit != null? limit : 20;
-        this.offset = offset != null? offset : 0;
-        this.orderBy = orderBy != null? orderBy : "id";
-        this.direction = direction != null? direction : Sort.Direction.DESC;
     }
 }

@@ -1,6 +1,6 @@
 package com.co.kr.modyeo.api.team.repository.custom.impl;
 
-import com.co.kr.modyeo.api.team.domain.dto.search.SearchCrew;
+import com.co.kr.modyeo.api.team.domain.dto.search.CrewSearch;
 import com.co.kr.modyeo.api.team.domain.entity.enumerate.CrewLevel;
 import com.co.kr.modyeo.api.team.domain.entity.link.Crew;
 import com.co.kr.modyeo.api.team.repository.custom.CrewCustomRepository;
@@ -10,7 +10,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.Objects;
 
 import static com.co.kr.modyeo.api.member.domain.entity.QMember.member;
 import static com.co.kr.modyeo.api.team.domain.entity.QTeam.team;
@@ -23,14 +22,14 @@ public class CrewRepositoryImpl extends Querydsl4RepositorySupport implements Cr
     }
 
     @Override
-    public List<Crew> searchCrew(SearchCrew searchCrew) {
+    public List<Crew> searchCrew(CrewSearch crewSearch) {
         return select(crew)
                 .from(crew)
                 .innerJoin(crew.team, team)
                 .innerJoin(crew.member, member)
-                .where(eqTeamId(searchCrew.getTeamId())
-                        , eqIsActivated(searchCrew.getIsActivated())
-                        , eqCrewLevel(searchCrew.getLevel()))
+                .where(eqTeamId(crewSearch.getTeamId())
+                        , eqIsActivated(crewSearch.getIsActivated())
+                        , eqCrewLevel(crewSearch.getLevel()))
                 .fetchJoin()
                 .fetch();
     }

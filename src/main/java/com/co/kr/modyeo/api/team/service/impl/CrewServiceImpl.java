@@ -2,7 +2,7 @@ package com.co.kr.modyeo.api.team.service.impl;
 
 import com.co.kr.modyeo.api.team.domain.dto.request.CrewUpdateRequest;
 import com.co.kr.modyeo.api.team.domain.dto.response.CrewResponse;
-import com.co.kr.modyeo.api.team.domain.dto.search.SearchCrew;
+import com.co.kr.modyeo.api.team.domain.dto.search.CrewSearch;
 import com.co.kr.modyeo.api.team.domain.entity.enumerate.CrewLevel;
 import com.co.kr.modyeo.api.team.domain.entity.link.Crew;
 import com.co.kr.modyeo.api.team.repository.CrewRepository;
@@ -26,9 +26,9 @@ public class CrewServiceImpl implements CrewService {
     private final CrewRepository crewRepository;
 
     @Override
-    public List<CrewResponse> getCrew(SearchCrew searchCrew) {
-        if (Yn.N.equals(searchCrew.getIsActivated())){
-            CrewLevel crewLevel = getCrewLevel(searchCrew.getTeamId());
+    public List<CrewResponse> getCrew(CrewSearch crewSearch) {
+        if (Yn.N.equals(crewSearch.getIsActivated())){
+            CrewLevel crewLevel = getCrewLevel(crewSearch.getTeamId());
             if (Crew.checkAuth(crewLevel)){
                 throw ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -38,7 +38,7 @@ public class CrewServiceImpl implements CrewService {
             }
         }
 
-        return crewRepository.searchCrew(searchCrew)
+        return crewRepository.searchCrew(crewSearch)
                 .stream()
                 .map(CrewResponse::toDto)
                 .collect(Collectors.toList());
