@@ -2,11 +2,14 @@ package com.co.kr.modyeo.api.advertisement.controller;
 
 import com.co.kr.modyeo.api.advertisement.domain.enumerate.AdvertisementType;
 import com.co.kr.modyeo.api.advertisement.domain.request.AdvertisementCreateRequest;
+import com.co.kr.modyeo.api.advertisement.domain.request.AdvertisementSearch;
 import com.co.kr.modyeo.api.advertisement.domain.request.AdvertisementUpdateRequest;
 import com.co.kr.modyeo.api.advertisement.domain.response.AdvertisementDetail;
 import com.co.kr.modyeo.api.advertisement.domain.response.AdvertisementResponse;
 import com.co.kr.modyeo.api.advertisement.service.AdvertisementService;
+import com.co.kr.modyeo.common.result.ResponseHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,32 +24,47 @@ public class AdvertisementApiController {
 
     @PostMapping("")
     public ResponseEntity<?> createAdvertisement(@RequestBody AdvertisementCreateRequest advertisementCreateRequest){
-        advertisementService.createAdvertisement(advertisementCreateRequest);
-        return ResponseEntity.ok(null);
+        Long advertisementId = advertisementService.createAdvertisement(advertisementCreateRequest);
+        return ResponseHandler.generate()
+                .data(advertisementId)
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @GetMapping("")
     public ResponseEntity<?> getAdvertisements(
-            @RequestParam(value = "type",name = "type",required = true)AdvertisementType advertisementType){
-        List<AdvertisementResponse> advertisementResponseList = advertisementService.getAdvertisements(advertisementType);
-        return ResponseEntity.ok(advertisementResponseList);
+            AdvertisementSearch advertisementSearch){
+        List<AdvertisementResponse> advertisementResponseList = advertisementService.getAdvertisements(advertisementSearch);
+        return ResponseHandler.generate()
+                .data(advertisementResponseList)
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getAdvertisement(@PathVariable(value = "id") Long id){
         AdvertisementDetail advertisementDetail = advertisementService.getAdvertisement(id);
-        return ResponseEntity.ok(advertisementDetail);
+        return ResponseHandler.generate()
+                .data(advertisementDetail)
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @PatchMapping("")
     public ResponseEntity<?> updateAdvertisement(@RequestBody AdvertisementUpdateRequest advertisementUpdateRequest){
-        advertisementService.updateAdvertisement(advertisementUpdateRequest);
-        return ResponseEntity.ok(null);
+        Long advertisementId = advertisementService.updateAdvertisement(advertisementUpdateRequest);
+        return ResponseHandler.generate()
+                .data(advertisementId)
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAdvertisement(@PathVariable(value = "id") Long id){
         advertisementService.deleteAdvertisement(id);
-        return ResponseEntity.ok(null);
+        return ResponseHandler.generate()
+                .status(HttpStatus.NO_CONTENT)
+                .data(null)
+                .build();
     }
 }

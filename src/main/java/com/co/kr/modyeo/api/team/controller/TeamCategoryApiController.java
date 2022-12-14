@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.team.controller;
 import com.co.kr.modyeo.api.team.domain.entity.link.TeamCategory;
 import com.co.kr.modyeo.api.team.service.TeamCategoryService;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import com.co.kr.modyeo.common.result.ResponseHandler;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -23,17 +24,11 @@ public class TeamCategoryApiController {
             @PathVariable("team_id") Long crewId,
             @PathVariable("category_id") Long categoryId
     ){
-        TeamCategory teamCategory = teamCategoryService.createTeamCategory(crewId, categoryId);
-        if (teamCategory.getId() != null){
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(JsonResultData.successResultBuilder()
-                            .data(null)
-                            .build());
-        }else{
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(JsonResultData.failResultBuilder()
-                            .build());
-        }
+        Long teamCategoryId = teamCategoryService.createTeamCategory(crewId, categoryId);
+        return ResponseHandler.generate()
+                .status(HttpStatus.CREATED)
+                .data(teamCategoryId)
+                .build();
     }
 
     @ApiOperation(value = "팀_카테고리 삭제 API")
@@ -42,10 +37,10 @@ public class TeamCategoryApiController {
             @PathVariable("team_category_id") Long teamCategoryId
     ){
         teamCategoryService.deleteTeamCategory(teamCategoryId);
-        return ResponseEntity.ok(JsonResultData
-                .successResultBuilder()
+        return ResponseHandler.generate()
+                .status(HttpStatus.NO_CONTENT)
                 .data(null)
-                .build());
+                .build();
     }
 
 }

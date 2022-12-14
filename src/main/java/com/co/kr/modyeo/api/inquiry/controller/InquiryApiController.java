@@ -9,6 +9,7 @@ import com.co.kr.modyeo.api.inquiry.domain.dto.search.InquirySearch;
 import com.co.kr.modyeo.api.inquiry.service.InquiryService;
 import com.co.kr.modyeo.api.member.domain.enumerate.Authority;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import com.co.kr.modyeo.common.result.ResponseHandler;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -103,10 +104,10 @@ public class InquiryApiController {
     @DeleteMapping(value = "/inquiry/{inquiry_id}")
     public ResponseEntity<?> deleteInquiry(@PathVariable(name = "inquiry_id") Long id) {
         inquiryService.deleteInquiry(id);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
+                .status(HttpStatus.NO_CONTENT)
                 .data(null)
-                //문의사항 초기화면으로 이동
-                .build());
+                .build();
     }
 
     @ApiOperation(value = "답변 조회 API")
@@ -146,9 +147,9 @@ public class InquiryApiController {
     @DeleteMapping(value = "/answer/{answer_id}")
     public ResponseEntity<?> deleteAnswer(@PathVariable(name = "answer_id") Long id) {
         inquiryService.deleteAnswer(id);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
+                .status(HttpStatus.NO_CONTENT)
                 .data(null)
-                .build()
-        );
+                .build();
     }
 }

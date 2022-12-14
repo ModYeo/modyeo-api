@@ -7,6 +7,8 @@ import com.co.kr.modyeo.api.team.domain.dto.search.TeamSearch;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.api.team.service.TeamService;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import com.co.kr.modyeo.common.result.ResponseHandler;
+import com.co.kr.modyeo.common.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -28,27 +30,21 @@ public class TeamApiController {
     @ApiOperation(value = "팀 생성 API")
     @PostMapping("")
     public ResponseEntity<?> createTeam(@RequestBody TeamRequest teamRequest){
-        Team team = teamService.createTeam(teamRequest);
-        if (team != null){
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(JsonResultData.successResultBuilder()
-                            .data(null)
-                            .build());
-        }else{
-            return ResponseEntity
-                    .badRequest()
-                    .body(JsonResultData.failResultBuilder()
-                            .build());
-        }
+        Long teamId = teamService.createTeam(teamRequest);
+        return ResponseHandler.generate()
+                .status(HttpStatus.CREATED)
+                .data(teamId)
+                .build();
     }
 
     @ApiOperation(value = "팀 슬라이스 조회 API")
     @GetMapping("")
     public ResponseEntity<?> getTeams(TeamSearch teamSearch){
         Slice<TeamResponse> teamResponses = teamService.getTeams(teamSearch);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
                 .data(teamResponses)
-                .build());
+                .build();
     }
 
     @ApiOperation(value = "팀 상세 조회 API")
@@ -56,27 +52,20 @@ public class TeamApiController {
     public ResponseEntity<?> getTeam(
             @PathVariable(value = "team_id") Long teamId){
         TeamDetail teamDetail = teamService.getTeam(teamId);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
                 .data(teamDetail)
-                .build());
+                .build();
     }
 
     @ApiOperation(value = "팀 수정 API")
     @PatchMapping("")
     public ResponseEntity<?> updateTeam(@RequestBody TeamRequest teamRequest){
-        Team team = teamService.updateTeam(teamRequest);
-
-        if (team.getId() != null){
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(JsonResultData.successResultBuilder()
-                            .data(null)
-                            .build());
-        }else{
-            return ResponseEntity
-                    .badRequest()
-                    .body(JsonResultData.failResultBuilder()
-                            .build());
-        }
+        Long teamId = teamService.updateTeam(teamRequest);
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
+                .data(teamId)
+                .build();
     }
 
     @ApiOperation(value = "팀 삭제 API")
@@ -85,18 +74,10 @@ public class TeamApiController {
             @PathVariable("team_id")Long teamId
     ){
         teamService.deleteTeam(teamId);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(JsonResultData.successResultBuilder()
-                        .data(null)
-                        .build());
-    }
-
-    @ApiOperation(value = "자신이 속한 팀 조회 API")
-    @GetMapping("/my")
-    public ResponseEntity<?> getMyTeam(){
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        List<TeamResponse> teamResponseList = teamService.getMyTeam(email);
-        return ResponseEntity.ok(teamResponseList);
+        return ResponseHandler.generate()
+                .status(HttpStatus.NO_CONTENT)
+                .data(null)
+                .build();
     }
 
 }

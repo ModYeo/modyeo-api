@@ -8,7 +8,9 @@ import com.co.kr.modyeo.api.report.domain.enumuerate.ReportStatus;
 import com.co.kr.modyeo.api.report.domain.enumuerate.ReportType;
 import com.co.kr.modyeo.api.report.service.ReportService;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import com.co.kr.modyeo.common.result.ResponseHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,44 +25,49 @@ public class ReportController {
 
     @PostMapping("")
     public ResponseEntity<?> createReport(ReportCreateRequest reportCreateRequest) {
-        reportService.createReport(reportCreateRequest);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
-                .build());
+        Long reportId = reportService.createReport(reportCreateRequest);
+        return ResponseHandler.generate()
+                .status(HttpStatus.CREATED)
+                .data(reportId)
+                .build();
     }
 
     @GetMapping("/{reportId}")
     public ResponseEntity<?> getReport(@PathVariable Long reportId){
         ReportDetail report = reportService.getReport(reportId);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
                 .data(report)
-                .build());
+                .build();
     }
 
     @GetMapping("/{type}")
     public ResponseEntity<?> getReports(@PathVariable ReportType type){
         List<ReportResponse> responseList = reportService.getReports(type);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
                 .data(responseList)
-                .build());
+                .build();
     }
 
     @PatchMapping("/{reportId}/{status}")
     public ResponseEntity<?> updateReportStatus(
             @PathVariable Long reportId,
             @PathVariable ReportStatus status){
-        reportService.updateReportStatus(reportId,status);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
-                .build());
+        reportId = reportService.updateReportStatus(reportId,status);
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
+                .data(reportId)
+                .build();
     }
 
     @PatchMapping("")
     public ResponseEntity<?> updateReport(ReportUpdateRequest reportUpdateRequest){
-        reportService.updateReport(reportUpdateRequest);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
-                .build());
+        Long reportId = reportService.updateReport(reportUpdateRequest);
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
+                .data(reportId)
+                .build();
     }
 
     @DeleteMapping("/{reportId}")
@@ -68,8 +75,9 @@ public class ReportController {
             @PathVariable Long reportId
     ){
         reportService.deleteReport(reportId);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
+                .status(HttpStatus.NO_CONTENT)
                 .data(null)
-                .build());
+                .build();
     }
 }

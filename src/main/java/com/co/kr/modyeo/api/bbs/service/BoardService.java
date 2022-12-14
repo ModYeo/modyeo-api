@@ -18,17 +18,17 @@ import java.util.List;
 public interface BoardService {
     Slice<ArticleResponse> getArticles(ArticleSearch articleSearch);
 
-    Article createArticle(ArticleRequest articleRequest);
+    Long createArticle(ArticleRequest articleRequest);
 
     ArticleDetail getArticle(Long id);
 
-    Article updateArticle(ArticleRequest articleRequest);
+    Long updateArticle(ArticleRequest articleRequest);
 
     void deleteArticle(Long articleId);
 
-    Reply createReply(ReplyRequest replyRequest);
+    Long createReply(ReplyRequest replyRequest);
 
-    Reply updateReply(ReplyRequest replyRequest);
+    Long updateReply(ReplyRequest replyRequest);
 
     void deleteReply(Long replyId);
 
@@ -38,7 +38,7 @@ public interface BoardService {
 
     void updateReplyRecommend(ReplyRecommendRequest replyRecommendRequest);
 
-    List<ArticleResponse> getArticlesMy(String email);
-
     List<ReplyResponse> getReplyMy(String email);
+
+    List<ArticleResponse> getArticleMyLike(String email);
 }

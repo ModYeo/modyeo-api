@@ -10,15 +10,15 @@ import com.co.kr.modyeo.api.report.domain.enumuerate.ReportType;
 import java.util.List;
 
 public interface ReportService {
-    void createReport(ReportCreateRequest reportCreateRequest);
+    Long createReport(ReportCreateRequest reportCreateRequest);
 
     ReportDetail getReport(Long reportId);
 
-    void updateReportStatus(Long reportId, ReportStatus status);
+    Long updateReportStatus(Long reportId, ReportStatus status);
 
     void deleteReport(Long reportId);
 
     List<ReportResponse> getReports(ReportType type);
 
-    void updateReport(ReportUpdateRequest reportUpdateRequest);
+    Long updateReport(ReportUpdateRequest reportUpdateRequest);
 }

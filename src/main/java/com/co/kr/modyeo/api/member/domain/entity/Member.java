@@ -47,6 +47,9 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+    @Column(name = "last_access_token")
+    private String lastAccessToken;
+
     @OneToMany(mappedBy = "member")
     private List<Crew> teamList = new ArrayList<>();
 
@@ -77,6 +80,7 @@ public class Member extends BaseEntity {
                   LocalDate birthDay,
                   Sex sex,
                   Authority authority,
+                  String lastAccessToken,
                   List<Crew> teamList,
                   List<MemberCategory> interestCategoryList,
                   List<MemberCollectionInfo> memberCollectionInfoList ) {
@@ -89,6 +93,7 @@ public class Member extends BaseEntity {
         this.birthDay = birthDay;
         this.sex = sex;
         this.authority = authority;
+        this.lastAccessToken = lastAccessToken;
         this.teamList = teamList;
         this.interestCategoryList = interestCategoryList;
         this.memberCollectionInfoList = memberCollectionInfoList;
@@ -103,4 +108,8 @@ public class Member extends BaseEntity {
     }
 
     public void changeProfilePath(String profilePath) {this.profilePath = profilePath;}
+
+    public void changeLastAccessToken(String accessToken) {
+        this.lastAccessToken = accessToken;
+    }
 }

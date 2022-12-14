@@ -61,7 +61,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Transactional
     @Override
-    public Article createArticle(ArticleRequest articleRequest) {
+    public Long createArticle(ArticleRequest articleRequest) {
         Category category = categoryRepository.findById(articleRequest.getCategoryId()).orElseThrow(
                 () -> ApiException.builder()
                         .errorMessage(CategoryErrorCode.NOT_FOUND_CATEGORY.getMessage())
@@ -69,7 +69,7 @@ public class BoardServiceImpl implements BoardService {
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
-        return articleRepository.save(ArticleRequest.createArticle(articleRequest, category));
+        return articleRepository.save(ArticleRequest.createArticle(articleRequest, category)).getId();
     }
 
     @Transactional
@@ -87,7 +87,8 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Article updateArticle(ArticleRequest articleRequest) {
+    @Transactional
+    public Long updateArticle(ArticleRequest articleRequest) {
         Article article = articleRepository.findById(articleRequest.getArticleId()).orElseThrow(
                 () -> ApiException.builder()
                         .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
@@ -110,10 +111,11 @@ public class BoardServiceImpl implements BoardService {
                 .isHidden(articleRequest.getIsHidden())
                 .build();
 
-        return article;
+        return article.getId();
     }
 
     @Override
+    @Transactional
     public void deleteArticle(Long articleId) {
         Article article = articleRepository.findById(articleId).orElseThrow(
                 () -> ApiException.builder()
@@ -126,7 +128,8 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public Reply createReply(ReplyRequest replyRequest) {
+    @Transactional
+    public Long createReply(ReplyRequest replyRequest) {
         Article article = articleRepository.findById(replyRequest.getArticleId()).orElseThrow(
                 () -> ApiException.builder()
                         .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
@@ -138,11 +141,12 @@ public class BoardServiceImpl implements BoardService {
                 ReplyRequest.toReply(replyRequest, article) : ReplyRequest.toNestedReply(replyRequest, article);
 
         replyRepository.save(reply);
-        return reply;
+        return reply.getId();
     }
 
     @Override
-    public Reply updateReply(ReplyRequest replyRequest) {
+    @Transactional
+    public Long updateReply(ReplyRequest replyRequest) {
         Reply reply = replyRepository.findById(replyRequest.getId()).orElseThrow(
                 () -> ApiException.builder()
                         .errorMessage(BoardErrorCode.NOT_FOUND_REPLY.getMessage())
@@ -154,7 +158,7 @@ public class BoardServiceImpl implements BoardService {
                 .content(reply.getContent())
                 .build();
 
-        return reply;
+        return reply.getId();
     }
 
     @Override
@@ -183,6 +187,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public void updateArticleRecommend(ArticleRecommendRequest articleRecommendRequest) {
         Member member = memberRepository.findById(articleRecommendRequest.getMemberId()).orElseThrow(
                 () -> ApiException.builder()
@@ -213,6 +218,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public void updateReplyRecommend(ReplyRecommendRequest replyRecommendRequest) {
         Member member = memberRepository.findById(replyRecommendRequest.getMemberId()).orElseThrow(
                 () -> ApiException.builder()
@@ -243,16 +249,16 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<ArticleResponse> getArticlesMy(String email) {
-        return articleRepository.findArticleByEmail(email).stream()
-                .map(ArticleResponse::toDto)
+    public List<ReplyResponse> getReplyMy(String email) {
+        return replyRepository.findReplyByEmail(email).stream()
+                .map(ReplyResponse::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ReplyResponse> getReplyMy(String email) {
-        return replyRepository.findReplyByEmail(email).stream()
-                .map(ReplyResponse::toDto)
+    public List<ArticleResponse> getArticleMyLike(String email) {
+        return articleRepository.findArticleByEmailAndRecommendY(email).stream()
+                .map(ArticleResponse::toDto)
                 .collect(Collectors.toList());
     }
 }

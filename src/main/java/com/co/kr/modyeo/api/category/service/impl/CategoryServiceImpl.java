@@ -27,21 +27,21 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    public Category createCategory(CategoryCreateRequest categoryCreateRequest) {
+    public Long createCategory(CategoryCreateRequest categoryCreateRequest) {
         overlapCategoryCheck(categoryCreateRequest);
         Category category = CategoryCreateRequest.createCategory(categoryCreateRequest);
-        return categoryRepository.save(category);
+        return categoryRepository.save(category).getId();
     }
 
     @Override
     public List<CategoryResponse> getCategories(CategorySearch categorySearch) {
         List<Category> categoryList = categoryRepository.searchCategory(categorySearch);
-        return categoryList.stream().map(CategoryResponse::toRes).collect(Collectors.toList());
+        return categoryList.stream().map(CategoryResponse::toDto).collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public void updateCategory(CategoryUpdateRequest categoryUpdateRequest) {
+    public Long updateCategory(CategoryUpdateRequest categoryUpdateRequest) {
         overlapCategoryCheck(categoryUpdateRequest);
         Category category = categoryRepository.findById(categoryUpdateRequest.getCategoryId())
                 .orElseThrow(() -> ApiException.builder()
@@ -51,6 +51,7 @@ public class CategoryServiceImpl implements CategoryService {
                         .build());
 
         category.changeCategory(categoryUpdateRequest.getName(), categoryUpdateRequest.getUseYn(), categoryUpdateRequest.getImagePath());
+        return category.getId();
     }
 
     @Override

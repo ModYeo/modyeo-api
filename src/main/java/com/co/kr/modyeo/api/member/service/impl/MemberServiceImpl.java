@@ -42,7 +42,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public void createMemberInfo(MemberCategoryRequest memberCategoryRequest) {
+    public Long createMemberInfo(MemberCategoryRequest memberCategoryRequest) {
         Member member = memberRepository.findById(memberCategoryRequest.getMemberId()).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -59,6 +59,8 @@ public class MemberServiceImpl implements MemberService {
 
             memberCategoryRepository.saveAll(memberCategoryList);
         }
+
+        return member.getId();
     }
 
     @Override
@@ -74,7 +76,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void updateNickname(NicknameUpdateRequest nicknameUpdateRequest) {
+    public Long updateNickname(NicknameUpdateRequest nicknameUpdateRequest) {
         Member member = memberRepository.findById(nicknameUpdateRequest.getMemberId()).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -83,10 +85,12 @@ public class MemberServiceImpl implements MemberService {
                         .build());
 
         member.changeNickname(nicknameUpdateRequest.getNickname());
+
+        return member.getId();
     }
 
     @Override
-    public void putProfilePath(MemberProfilePathRequest memberProfilePathRequest) {
+    public Long putProfilePath(MemberProfilePathRequest memberProfilePathRequest) {
         Member member = memberRepository.findById(memberProfilePathRequest.getMemberId()).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -95,6 +99,7 @@ public class MemberServiceImpl implements MemberService {
                         .build());
 
         member.changeProfilePath(member.getProfilePath());
+        return member.getId();
     }
 
     @Override

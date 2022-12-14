@@ -8,13 +8,13 @@ import com.co.kr.modyeo.api.member.domain.dto.response.MemberDetail;
 
 public interface MemberService {
 
-    void createMemberInfo(MemberCategoryRequest memberCategoryRequest);
+    Long createMemberInfo(MemberCategoryRequest memberCategoryRequest);
 
     MemberDetail getMember(Long memberId);
 
-    void updateNickname(NicknameUpdateRequest nicknameUpdateRequest);
+    Long updateNickname(NicknameUpdateRequest nicknameUpdateRequest);
 
-    void putProfilePath(MemberProfilePathRequest memberProfilePathRequest);
+    Long putProfilePath(MemberProfilePathRequest memberProfilePathRequest);
 
     ApplicationMemberDetail getTeamApplicationMember(Long memberId, Long teamId);
 }

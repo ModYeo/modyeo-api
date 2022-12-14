@@ -11,4 +11,6 @@ public interface ArticleCustomRepository {
     Slice<Article> searchArticle(ArticleSearch articleSearch, PageRequest pageRequest);
 
     List<Article> findArticleByEmail(String email);
+
+    List<Article> findArticleByEmailAndRecommendY(String email);
 }

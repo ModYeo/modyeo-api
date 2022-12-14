@@ -1,8 +1,8 @@
 package com.co.kr.modyeo.api.advertisement.service.impl;
 
 import com.co.kr.modyeo.api.advertisement.domain.entity.Advertisement;
-import com.co.kr.modyeo.api.advertisement.domain.enumerate.AdvertisementType;
 import com.co.kr.modyeo.api.advertisement.domain.request.AdvertisementCreateRequest;
+import com.co.kr.modyeo.api.advertisement.domain.request.AdvertisementSearch;
 import com.co.kr.modyeo.api.advertisement.domain.request.AdvertisementUpdateRequest;
 import com.co.kr.modyeo.api.advertisement.domain.response.AdvertisementDetail;
 import com.co.kr.modyeo.api.advertisement.domain.response.AdvertisementResponse;
@@ -11,6 +11,7 @@ import com.co.kr.modyeo.api.advertisement.service.AdvertisementService;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.exception.ApiException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,14 +28,15 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 
     @Override
     @Transactional
-    public void createAdvertisement(AdvertisementCreateRequest advertisementCreateRequest) {
+    public Long createAdvertisement(AdvertisementCreateRequest advertisementCreateRequest) {
         Advertisement advertisement = AdvertisementCreateRequest.toEntity(advertisementCreateRequest);
-        advertisementRepository.save(advertisement);
+        return advertisementRepository.save(advertisement).getId();
     }
 
     @Override
-    public List<AdvertisementResponse> getAdvertisements(AdvertisementType advertisementType) {
-        return advertisementRepository.findByUseYnAndType(Yn.Y, advertisementType)
+    public List<AdvertisementResponse> getAdvertisements(AdvertisementSearch advertisementSearch) {
+        PageRequest pageRequest = PageRequest.of(advertisementSearch.getOffset(), advertisementSearch.getLimit(), advertisementSearch.getDirection(), advertisementSearch.getOrderBy());
+        return advertisementRepository.searchAdvertisement(advertisementSearch,pageRequest)
                 .stream().map(AdvertisementResponse::toDto)
                 .collect(Collectors.toList());
     }
@@ -51,7 +53,7 @@ public class AdvertisementServiceImpl implements AdvertisementService {
 
     @Override
     @Transactional
-    public void updateAdvertisement(AdvertisementUpdateRequest advertisementUpdateRequest) {
+    public Long updateAdvertisement(AdvertisementUpdateRequest advertisementUpdateRequest) {
         Advertisement advertisement = advertisementRepository.findById(advertisementUpdateRequest.getId()).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -65,6 +67,8 @@ public class AdvertisementServiceImpl implements AdvertisementService {
                 .urlLink(advertisementUpdateRequest.getUrlLink())
                 .imagePath(advertisement.getImagePath())
                 .build();
+
+        return advertisement.getId();
     }
 
     @Override

@@ -21,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,10 +38,10 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     @Transactional
-    public Team createTeam(TeamRequest teamRequest) {
+    public Long createTeam(TeamRequest teamRequest) {
         overlapTeamCheck(teamRequest);
 
-        String memberEmail = SecurityUtil.getCurrentMemberId();
+        String memberEmail = SecurityUtil.getCurrentEmail();
 
         Member member = memberRepository.findByEmail(memberEmail)
                 .orElseThrow(()->ApiException.builder()
@@ -76,19 +75,19 @@ public class TeamServiceImpl implements TeamService {
 
         crewRepository.save(crew);
 
-        return team;
+        return team.getId();
     }
 
     @Override
     public Slice<TeamResponse> getTeams(TeamSearch teamSearch) {
         PageRequest page = PageRequest.of(teamSearch.getOffset(), teamSearch.getLimit(), teamSearch.getDirection(), teamSearch.getOrderBy());
         Slice<Team> teams = teamRepository.searchTeam(teamSearch,page);
-        return teams.map(TeamResponse::toRes);
+        return teams.map(TeamResponse::toDto);
     }
 
     @Override
     @Transactional
-    public Team updateTeam(TeamRequest teamRequest) {
+    public Long updateTeam(TeamRequest teamRequest) {
         overlapTeamCheck(teamRequest);
         Team findTeam = teamRepository.findTeamById(teamRequest.getTeam_id()).orElseThrow(() -> ApiException.builder()
                 .status(HttpStatus.BAD_REQUEST)
@@ -97,7 +96,7 @@ public class TeamServiceImpl implements TeamService {
                 .build());
 
         findTeam.changeTeamInfo(teamRequest.getName(), teamRequest.getProfilePath(), teamRequest.getDescription());
-        return findTeam;
+        return findTeam.getId();
     }
 
     @Override
@@ -119,11 +118,6 @@ public class TeamServiceImpl implements TeamService {
                 .errorMessage(TeamErrorCode.NOT_FOUND_TEAM.getMessage())
                 .errorCode(TeamErrorCode.NOT_FOUND_TEAM.getCode())
                 .build()));
-    }
-
-    @Override
-    public List<TeamResponse> getMyTeam(String email) {
-        return teamRepository.findMyTeam(email);
     }
 
     private void overlapTeamCheck(TeamRequest teamRequest){

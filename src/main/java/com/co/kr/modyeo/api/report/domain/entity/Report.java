@@ -21,6 +21,7 @@ public class Report extends BaseEntity {
     private Long id;
 
     @Column(name = "report_type")
+    @Enumerated(value = EnumType.STRING)
     private ReportType reportType;
 
     @Column(name = "target_id")
@@ -29,31 +30,34 @@ public class Report extends BaseEntity {
     private String title;
 
     @Column(name = "report_reason")
+    @Enumerated(value = EnumType.STRING)
     private ReportReason reportReason;
 
-    private String contents;
+    @Lob
+    private String content;
 
     @Column(name = "report_status")
+    @Enumerated(value = EnumType.STRING)
     private ReportStatus reportStatus;
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public Report(Long id, ReportType reportType, Long targetId, String title, ReportReason reportReason, String contents, ReportStatus reportStatus) {
+    public Report(Long id, ReportType reportType, Long targetId, String title, ReportReason reportReason, String content, ReportStatus reportStatus) {
         this.id = id;
         this.reportType = reportType;
         this.targetId = targetId;
         this.title = title;
         this.reportReason = reportReason;
-        this.contents = contents;
+        this.content = content;
         this.reportStatus = reportStatus;
     }
 
     @Builder(builderClassName = "createBuilder", builderMethodName = "createBuilder")
-    public Report(ReportType reportType, Long targetId, String title, ReportReason reportReason, String contents) {
+    public Report(ReportType reportType, Long targetId, String title, ReportReason reportReason, String content) {
         this.reportType = reportType;
         this.targetId = targetId;
         this.title = title;
         this.reportReason = reportReason;
-        this.contents = contents;
+        this.content = content;
         this.reportStatus = ReportStatus.RCPT;
     }
 
@@ -64,6 +68,6 @@ public class Report extends BaseEntity {
     public void changeReport(String title, ReportReason reportReason, String contents) {
         if (title != null) this.title = title;
         if (reportReason != null) this.reportReason = reportReason;
-        this.contents = contents;
+        this.content = contents;
     }
 }

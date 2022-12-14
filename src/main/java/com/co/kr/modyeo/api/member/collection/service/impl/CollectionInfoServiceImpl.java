@@ -42,14 +42,14 @@ public class CollectionInfoServiceImpl implements CollectionInfoService {
 
     @Override
     @Transactional
-    public void createCollectionInfo(CollectionInfoRequest collectionInfoRequest) {
+    public Long createCollectionInfo(CollectionInfoRequest collectionInfoRequest) {
         CollectionInfo collectionInfo = CollectionInfoRequest.toEntity(collectionInfoRequest);
-        collectionInfoRepository.save(collectionInfo);
+        return collectionInfoRepository.save(collectionInfo).getId();
     }
 
     @Override
     @Transactional
-    public void updateCollectionInfo(CollectionInfoRequest collectionInfoRequest) {
+    public Long updateCollectionInfo(CollectionInfoRequest collectionInfoRequest) {
         CollectionInfo collectionInfo = collectionInfoRepository.findById(collectionInfoRequest.getCollectionInfoId()).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -62,6 +62,7 @@ public class CollectionInfoServiceImpl implements CollectionInfoService {
                 .description(collectionInfoRequest.getDescription())
                 .useYn(collectionInfoRequest.getUseYn())
                 .build();
+        return collectionInfo.getId();
     }
 
     @Override

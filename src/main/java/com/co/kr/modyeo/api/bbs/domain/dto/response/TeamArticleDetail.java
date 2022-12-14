@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.bbs.domain.dto.response;
 
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamArticle;
+import com.co.kr.modyeo.api.team.domain.dto.response.TeamResponse;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
@@ -17,6 +18,10 @@ import java.util.stream.Collectors;
 public class TeamArticleDetail {
 
     private Long articleId;
+
+    private TeamResponse team;
+
+    private String filePath;
 
     private String title;
 
@@ -38,6 +43,8 @@ public class TeamArticleDetail {
     @Builder(builderClassName = "of", builderMethodName = "of")
     public TeamArticleDetail(Long articleId,
                              String title,
+                             String filePath,
+                             TeamResponse team,
                              String content,
                              Yn isHidden,
                              Long hitCount,
@@ -47,6 +54,8 @@ public class TeamArticleDetail {
                              List<TeamReplyResponse> replyResponses) {
         this.articleId = articleId;
         this.title = title;
+        this.filePath = filePath;
+        this.team = team;
         this.content = content;
         this.isHidden = isHidden;
         this.hitCount = hitCount;
@@ -60,6 +69,8 @@ public class TeamArticleDetail {
         return TeamArticleDetail.of()
                 .articleId(teamArticle.getId())
                 .title(teamArticle.getTitle())
+                .team(TeamResponse.toDto(teamArticle.getTeam()))
+                .filePath(teamArticle.getFilePath())
                 .content(teamArticle.getContent())
                 .isHidden(teamArticle.getIsHidden())
                 .hitCount(teamArticle.getHitCount())

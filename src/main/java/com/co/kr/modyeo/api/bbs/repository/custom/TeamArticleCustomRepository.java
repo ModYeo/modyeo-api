@@ -16,4 +16,6 @@ public interface TeamArticleCustomRepository {
     List<TeamArticle> findArticleByEmail(String email);
 
     List<TeamReply> findReplyByEmail(String email);
+
+    List<TeamArticle> findArticleByEmailAndRecommendY(String email);
 }

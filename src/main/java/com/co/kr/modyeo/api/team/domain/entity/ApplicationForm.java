@@ -31,12 +31,15 @@ public class ApplicationForm extends BaseEntity {
     private String dutyNote;
 
     @Column(name = "birthday_agree")
+    @Enumerated(value = EnumType.STRING)
     private Yn birthdayAgree;
 
     @Column(name = "sex_agree")
+    @Enumerated(value = EnumType.STRING)
     private Yn sexAgree;
 
     @Column(name = "geo_agree")
+    @Enumerated(value = EnumType.STRING)
     private Yn geoAgree;
 
     @Builder(builderClassName = "of", builderMethodName = "of")

@@ -4,6 +4,7 @@ import com.co.kr.modyeo.api.member.auth.domain.dto.*;
 import com.co.kr.modyeo.api.member.auth.service.AuthService;
 import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import com.co.kr.modyeo.common.result.ResponseHandler;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -43,16 +44,16 @@ public class AuthController {
             memberJoinDto.setPassword(password);
 
             MemberResponseDto memberResponseDto = authService.signup(memberJoinDto);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(JsonResultData.successResultBuilder()
-                            .data(memberResponseDto)
-                            .build());
+            return ResponseHandler.generate()
+                    .data(memberResponseDto)
+                    .status(HttpStatus.CREATED)
+                    .build();
         }else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(JsonResultData.failResultBuilder()
-                            .errorMessage(MemberErrorCode.ENTERED_EMAIL_AND_PASSWORD.getMessage())
-                            .errorCode(MemberErrorCode.ENTERED_EMAIL_AND_PASSWORD.getCode())
-                            .build());
+            return ResponseHandler.failResultGenerate()
+                    .errorMessage(MemberErrorCode.ENTERED_EMAIL_AND_PASSWORD.getMessage())
+                    .errorCode(MemberErrorCode.ENTERED_EMAIL_AND_PASSWORD.getCode())
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
         }
     }
 
@@ -75,15 +76,16 @@ public class AuthController {
                     .build();
 
             TokenDto tokenDto = authService.login(memberLoginDto);
-            return ResponseEntity.ok(JsonResultData.successResultBuilder()
+            return ResponseHandler.generate()
                     .data(tokenDto)
-                    .build());
+                    .status(HttpStatus.OK)
+                    .build();
         }else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(JsonResultData.failResultBuilder()
-                            .errorMessage(MemberErrorCode.ENTERED_EMAIL_AND_PASSWORD.getMessage())
-                            .errorCode(MemberErrorCode.ENTERED_EMAIL_AND_PASSWORD.getCode())
-                            .build());
+            return ResponseHandler.failResultGenerate()
+                    .errorMessage(MemberErrorCode.ENTERED_EMAIL_AND_PASSWORD.getMessage())
+                    .errorCode(MemberErrorCode.ENTERED_EMAIL_AND_PASSWORD.getCode())
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
         }
     }
 
@@ -91,18 +93,20 @@ public class AuthController {
     @PostMapping("/reissue")
     public ResponseEntity<?> reissue(@Valid @RequestBody TokenRequestDto tokenRequestDto) {
         TokenDto tokenDto = authService.reissue(tokenRequestDto);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
                 .data(tokenDto)
-                .build());
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @ApiOperation(value = "로그아웃 API")
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@Valid @RequestBody TokenRequestDto tokenRequestDto) {
         authService.logout(tokenRequestDto);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
                 .data(null)
-                .build());
+                .status(HttpStatus.OK)
+                .build();
     }
 
     @ApiOperation(value = "비밀번호 변경 API")
@@ -123,15 +127,28 @@ public class AuthController {
             passwordUpdateRequest.setPassword(password);
 
             authService.updatePassword(passwordUpdateRequest);
-            return ResponseEntity.ok(JsonResultData.successResultBuilder()
+            return ResponseHandler.generate()
                     .data(null)
-                    .build());
+                    .status(HttpStatus.OK)
+                    .build();
         }else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(JsonResultData.failResultBuilder()
-                            .errorMessage(MemberErrorCode.ENTERED_EMAIL_AND_PASSWORD.getMessage())
-                            .errorCode(MemberErrorCode.ENTERED_EMAIL_AND_PASSWORD.getCode())
-                            .build());
+            return ResponseHandler.failResultGenerate()
+                    .errorMessage(MemberErrorCode.ENTERED_EMAIL_AND_PASSWORD.getMessage())
+                    .errorCode(MemberErrorCode.ENTERED_EMAIL_AND_PASSWORD.getCode())
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
         }
+    }
+
+    @ApiOperation(value = "메일 인증 API")
+    @PostMapping("/mail")
+    public ResponseEntity<?> authMail(
+            @RequestParam(value = "email",name = "email",required = true)String email,
+        @RequestParam(value = "authNumber",name = "authNumber",required = true)String authNumber){
+        authService.authMail(email,authNumber);
+        return ResponseHandler.generate()
+                .data(null)
+                .status(HttpStatus.OK)
+                .build();
     }
 }

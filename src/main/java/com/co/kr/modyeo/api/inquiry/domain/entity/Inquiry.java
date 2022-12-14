@@ -30,6 +30,7 @@ public class Inquiry extends BaseEntity {
     private String title;
 
     @Column(name = "inquiry_content")
+    @Lob
     private String content; //TODO : MEMORY 계산 후 물리타입 결정하기.
 
     @Enumerated(value = EnumType.STRING)

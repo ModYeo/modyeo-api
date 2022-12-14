@@ -18,7 +18,9 @@ public enum TeamErrorCode {
 
     NOT_FOUND_APPLICATION_FORM("NOT_FOUND_APPLICATION_FORM","가입신청 폼을 찾지 못했습니다."),
 
-    NOT_FOUND_APPLICANT("NOT_FOUND_APPLICANT", "찾을 수 없는 가입신청입니다.");
+    NOT_FOUND_APPLICANT("NOT_FOUND_APPLICANT", "찾을 수 없는 가입신청입니다."),
+
+    EXIT_TEAM("EXIT_TEAM", "강제 퇴장당한 경우 다시 신청할 수 없습니다.");
 
     private final String code;
     private final String message;

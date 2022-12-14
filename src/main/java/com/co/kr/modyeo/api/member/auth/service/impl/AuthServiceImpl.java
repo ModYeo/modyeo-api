@@ -14,6 +14,7 @@ import com.co.kr.modyeo.common.exception.CustomAuthException;
 import com.co.kr.modyeo.common.exception.code.AuthErrorCode;
 import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import com.co.kr.modyeo.common.util.ModyeoMailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -22,8 +23,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -44,6 +47,8 @@ public class AuthServiceImpl implements AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     private final StringRedisTemplate redisTemplate;
+
+    private final ModyeoMailSender modyeoMailSender;
 
     @Override
     public MemberResponseDto signup(MemberJoinDto memberJoinDto) {
@@ -78,23 +83,28 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public TokenDto login(MemberLoginDto memberLoginDto) {
         UsernamePasswordAuthenticationToken authenticationToken = memberLoginDto.toAuthentication();
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        String refreshToken = redisTemplate.opsForValue().get("RT:" + authentication.getName());
+        if (refreshToken != null){
+            redisTemplate.delete("RT:" + authentication.getName());
 
-        TokenDto tokenDto = jwtTokenProvider.generateTokenDto(authentication);
+            Optional<Member> optionalMember = memberRepository.findByEmail(authentication.getName());
+            if (optionalMember.isPresent()){
+                Member member = optionalMember.get();
+                redisTemplate.opsForValue()
+                        .set(member.getLastAccessToken(), "logout", 1000 * 60 * 60, TimeUnit.MILLISECONDS);
+            }
+        }
 
-        redisTemplate.opsForValue()
-                .set("RT:" + authentication.getName(),
-                        tokenDto.getRefreshToken(),
-                        tokenDto.getAccessTokenExpiresIn(),
-                        TimeUnit.MILLISECONDS);
-
-        return tokenDto;
+        return getTokenDto(authentication);
     }
 
     @Override
+    @Transactional
     public TokenDto reissue(TokenRequestDto tokenRequestDto) {
         if (!jwtTokenProvider.validateToken(tokenRequestDto.getRefreshToken())) {
             throw new CustomAuthException(JsonResultData
@@ -115,14 +125,7 @@ public class AuthServiceImpl implements AuthService {
                     .build());
         }
 
-        TokenDto tokenDto = jwtTokenProvider.generateTokenDto(authentication);
-
-        redisTemplate.opsForValue()
-                .set("RT:" + authentication.getName(),
-                        tokenDto.getRefreshToken(),
-                        tokenDto.getAccessTokenExpiresIn(), TimeUnit.MILLISECONDS);
-
-        return tokenDto;
+        return getTokenDto(authentication);
     }
 
     @Override
@@ -156,5 +159,36 @@ public class AuthServiceImpl implements AuthService {
                         .build());
 
         member.changePassword(passwordUpdateRequest.getPassword(), passwordEncoder);
+    }
+
+    @Override
+    public void authMail(String email,String authNumber) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
+                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
+                        .build());
+
+        MailDto mailDto = MailDto.makeAuthSender(member, authNumber);
+        modyeoMailSender.send(mailDto);
+    }
+
+    private TokenDto getTokenDto(Authentication authentication) {
+        TokenDto tokenDto = jwtTokenProvider.generateTokenDto(authentication);
+
+        redisTemplate.opsForValue()
+                .set("RT:" + authentication.getName(),
+                        tokenDto.getRefreshToken(),
+                        tokenDto.getAccessTokenExpiresIn(),
+                        TimeUnit.MILLISECONDS);
+
+        Optional<Member> optionalMember = memberRepository.findByEmail(authentication.getName());
+        if (optionalMember.isPresent()){
+            Member member = optionalMember.get();
+            member.changeLastAccessToken(tokenDto.getAccessToken());
+        }
+
+        return tokenDto;
     }
 }

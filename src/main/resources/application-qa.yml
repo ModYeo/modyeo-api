@@ -25,6 +25,7 @@ spring:
   redis:
     host: skysrd.iptime.org
     port: 6379
+    password: modyeo!@
 
 #logging:
 #  level:

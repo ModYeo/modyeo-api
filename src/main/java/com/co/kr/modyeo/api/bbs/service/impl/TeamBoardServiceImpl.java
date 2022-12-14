@@ -4,10 +4,7 @@ import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamArticleRecommendRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamArticleRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamReplyRecommendRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamReplyRequest;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleDetail;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleResponse;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamReplyDetail;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamReplyResponse;
+import com.co.kr.modyeo.api.bbs.domain.dto.response.*;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.TeamArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamArticle;
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamReply;
@@ -55,7 +52,7 @@ public class TeamBoardServiceImpl implements TeamBoardService {
 
     @Override
     @Transactional
-    public void createTeamArticle(TeamArticleRequest teamArticleRequest) {
+    public Long createTeamArticle(TeamArticleRequest teamArticleRequest) {
         Team team = teamRepository.findById(teamArticleRequest.getTeamId())
                 .orElseThrow(() -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -64,10 +61,11 @@ public class TeamBoardServiceImpl implements TeamBoardService {
                         .build());
 
         TeamArticle article = TeamArticleRequest.createArticle(teamArticleRequest, team);
-        teamArticleRepository.save(article);
+        return teamArticleRepository.save(article).getId();
     }
 
     @Override
+    @Transactional
     public TeamArticleDetail getTeamArticle(Long teamArticleId) {
         TeamArticle teamArticle = teamArticleRepository.findById(teamArticleId)
                 .orElseThrow(() -> ApiException.builder()
@@ -89,7 +87,7 @@ public class TeamBoardServiceImpl implements TeamBoardService {
 
     @Override
     @Transactional
-    public void updateTeamArticle(TeamArticleRequest teamArticleRequest) {
+    public Long updateTeamArticle(TeamArticleRequest teamArticleRequest) {
         TeamArticle teamArticle = teamArticleRepository.findById(teamArticleRequest.getArticleId()).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -103,6 +101,8 @@ public class TeamBoardServiceImpl implements TeamBoardService {
                 .isHidden(teamArticleRequest.getIsHidden())
                 .title(teamArticleRequest.getTitle())
                 .build();
+
+        return teamArticle.getId();
     }
 
     @Override
@@ -120,7 +120,7 @@ public class TeamBoardServiceImpl implements TeamBoardService {
 
     @Override
     @Transactional
-    public void createTeamReply(TeamReplyRequest teamReplyRequest) {
+    public Long createTeamReply(TeamReplyRequest teamReplyRequest) {
         TeamArticle teamArticle = teamArticleRepository.findById(teamReplyRequest.getArticleId()).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -130,12 +130,12 @@ public class TeamBoardServiceImpl implements TeamBoardService {
 
         TeamReply teamReply = teamReplyRequest.getReplyDepth() == 0 ?
                 TeamReplyRequest.toTeamReply(teamArticle, teamReplyRequest.getContent()) : TeamReplyRequest.toTeamNestedReply(teamArticle, teamReplyRequest.getContent(), teamReplyRequest.getReplyGroup());
-        teamReplyRepository.save(teamReply);
+        return teamReplyRepository.save(teamReply).getId();
     }
 
     @Override
     @Transactional
-    public void updateTeamReply(TeamReplyRequest teamReplyRequest) {
+    public Long updateTeamReply(TeamReplyRequest teamReplyRequest) {
         TeamReply teamReply = teamReplyRepository.findById(teamReplyRequest.getReplyId()).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -144,6 +144,8 @@ public class TeamBoardServiceImpl implements TeamBoardService {
                         .build());
 
         teamReply.changeTeamReply(teamReplyRequest.getContent());
+
+        return teamReply.getId();
     }
 
     @Override
@@ -173,6 +175,7 @@ public class TeamBoardServiceImpl implements TeamBoardService {
     }
 
     @Override
+    @Transactional
     public void updateTeamArticleRecommend(TeamArticleRecommendRequest articleRecommendRequest) {
         Member member = memberRepository.findById(articleRecommendRequest.getMemberId()).orElseThrow(
                 () -> ApiException.builder()
@@ -203,6 +206,7 @@ public class TeamBoardServiceImpl implements TeamBoardService {
     }
 
     @Override
+    @Transactional
     public void updateTeamReplyRecommend(TeamReplyRecommendRequest replyRecommendRequest) {
         Member member = memberRepository.findById(replyRecommendRequest.getMemberId()).orElseThrow(
                 () -> ApiException.builder()
@@ -233,16 +237,16 @@ public class TeamBoardServiceImpl implements TeamBoardService {
     }
 
     @Override
-    public List<TeamArticleResponse> getArticlesMy(String email) {
-        return teamArticleRepository.findArticleByEmail(email)
-                .stream().map(TeamArticleResponse::toDto)
+    public List<TeamReplyResponse> getReplyMy(String email) {
+        return teamArticleRepository.findReplyByEmail(email)
+                .stream().map(TeamReplyResponse::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<TeamReplyResponse> getReplyMy(String email) {
-        return teamArticleRepository.findReplyByEmail(email)
-                .stream().map(TeamReplyResponse::toDto)
+    public List<TeamArticleResponse> getArticleMyLike(String email) {
+        return teamArticleRepository.findArticleByEmailAndRecommendY(email)
+                .stream().map(TeamArticleResponse::toDto)
                 .collect(Collectors.toList());
     }
 }

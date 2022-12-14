@@ -2,6 +2,7 @@ package com.co.kr.modyeo.common.exception;
 
 import com.co.kr.modyeo.common.exception.code.AuthErrorCode;
 import com.co.kr.modyeo.common.result.JsonResultData;
+import com.co.kr.modyeo.common.result.ResponseHandler;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import org.springframework.http.HttpStatus;
@@ -20,22 +21,20 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler({ApiException.class})
     public ResponseEntity<?> exceptionHandler(HttpServletRequest request, final ApiException e) {
-        return ResponseEntity
+        return ResponseHandler.failResultGenerate()
                 .status(e.getStatus())
-                .body(JsonResultData.failResultBuilder()
-                        .errorCode(e.getErrorEntity().getError().getCode())
-                        .errorMessage(e.getErrorEntity().getError().getMessage())
-                        .build());
+                .errorMessage(e.getErrorEntity().getError().getCode())
+                .errorCode(e.getErrorEntity().getError().getMessage())
+                .build();
     }
 
     @ExceptionHandler({CustomAuthException.class})
     public ResponseEntity<?> exceptionHandler(HttpServletRequest request, final CustomAuthException e) {
-        return ResponseEntity
+        return ResponseHandler.failResultGenerate()
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(JsonResultData.failResultBuilder()
-                        .errorCode(e.getErrorEntity().getError().getCode())
-                        .errorMessage(e.getErrorEntity().getError().getMessage())
-                        .build());
+                .errorMessage(e.getErrorEntity().getError().getCode())
+                .errorCode(e.getErrorEntity().getError().getMessage())
+                .build();
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
@@ -45,41 +44,37 @@ public class CustomExceptionHandler {
         for (ObjectError error : allErrors) {
             stringBuilder.append(error.getDefaultMessage()).append(" ");
         }
-        return ResponseEntity
+        return ResponseHandler.failResultGenerate()
                 .status(HttpStatus.BAD_REQUEST)
-                .body(JsonResultData.failResultBuilder()
-                        .errorCode(AuthErrorCode.BAD_REQUEST_BODY.getCode())
-                        .errorMessage(stringBuilder.toString())
-                        .build());
+                .errorCode(AuthErrorCode.BAD_REQUEST_BODY.getCode())
+                .errorMessage(stringBuilder.toString())
+                .build();
     }
 
     @ExceptionHandler({UsernameNotFoundException.class})
     public ResponseEntity<?> exceptionHandler(HttpServletRequest request, final UsernameNotFoundException e) {
-        return ResponseEntity
+        return ResponseHandler.failResultGenerate()
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(JsonResultData.failResultBuilder()
-                        .errorCode("NOT_FOUND_EMAIL")
-                        .errorMessage(e.getMessage())
-                        .build());
+                .errorCode("NOT_FOUND_EMAIL")
+                .errorMessage(e.getMessage())
+                .build();
     }
 
     @ExceptionHandler({ExpiredJwtException.class})
     public ResponseEntity<?> exceptionHandler(HttpServletRequest request, final ExpiredJwtException e) {
-        return ResponseEntity
+        return ResponseHandler.failResultGenerate()
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(JsonResultData.failResultBuilder()
-                        .errorCode(AuthErrorCode.EXPIRED_TOKEN.getCode())
-                        .errorMessage(AuthErrorCode.EXPIRED_TOKEN.getMessage())
-                        .build());
+                .errorCode(AuthErrorCode.EXPIRED_TOKEN.getCode())
+                .errorMessage(AuthErrorCode.EXPIRED_TOKEN.getMessage())
+                .build();
     }
 
     @ExceptionHandler({UnsupportedJwtException.class})
     public ResponseEntity<?> exceptionHandler(HttpServletRequest request, final UnsupportedJwtException e) {
-        return ResponseEntity
+        return ResponseHandler.failResultGenerate()
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(JsonResultData.failResultBuilder()
-                        .errorCode(AuthErrorCode.UNSUPPORTED_TOKEN.getCode())
-                        .errorMessage(AuthErrorCode.UNSUPPORTED_TOKEN.getMessage())
-                        .build());
+                .errorCode(AuthErrorCode.UNSUPPORTED_TOKEN.getCode())
+                .errorMessage(AuthErrorCode.UNSUPPORTED_TOKEN.getMessage())
+                .build();
     }
 }

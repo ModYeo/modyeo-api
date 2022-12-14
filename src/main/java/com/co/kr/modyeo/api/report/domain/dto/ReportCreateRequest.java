@@ -38,7 +38,7 @@ public class ReportCreateRequest {
                 .targetId(reportCreateRequest.getTargetId())
                 .title(reportCreateRequest.getTitle())
                 .reportReason(reportCreateRequest.getReportReason())
-                .contents(reportCreateRequest.getContents())
+                .content(reportCreateRequest.getContents())
                 .build();
     }
 }

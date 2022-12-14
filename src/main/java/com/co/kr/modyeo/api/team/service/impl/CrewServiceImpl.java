@@ -2,10 +2,14 @@ package com.co.kr.modyeo.api.team.service.impl;
 
 import com.co.kr.modyeo.api.team.domain.dto.request.CrewUpdateRequest;
 import com.co.kr.modyeo.api.team.domain.dto.response.CrewResponse;
+import com.co.kr.modyeo.api.team.domain.dto.search.CrewSearch;
+import com.co.kr.modyeo.api.team.domain.entity.enumerate.CrewLevel;
 import com.co.kr.modyeo.api.team.domain.entity.link.Crew;
 import com.co.kr.modyeo.api.team.repository.CrewRepository;
 import com.co.kr.modyeo.api.team.service.CrewService;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.exception.ApiException;
+import com.co.kr.modyeo.common.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,8 +26,19 @@ public class CrewServiceImpl implements CrewService {
     private final CrewRepository crewRepository;
 
     @Override
-    public List<CrewResponse> getCrew(Long teamId) {
-        return crewRepository.searchCrew(teamId)
+    public List<CrewResponse> getCrew(CrewSearch crewSearch) {
+        if (Yn.N.equals(crewSearch.getIsActivated())){
+            CrewLevel crewLevel = getCrewLevel(crewSearch.getTeamId());
+            if (Crew.checkAuth(crewLevel)){
+                throw ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode("NOT_AUTHORIZED")
+                        .errorMessage("권한이 없습니다.")
+                        .build();
+            }
+        }
+
+        return crewRepository.searchCrew(crewSearch)
                 .stream()
                 .map(CrewResponse::toDto)
                 .collect(Collectors.toList());
@@ -31,7 +46,7 @@ public class CrewServiceImpl implements CrewService {
 
     @Override
     @Transactional
-    public void updateCrewLevel(CrewUpdateRequest crewUpdateRequest) {
+    public Long updateCrewLevel(CrewUpdateRequest crewUpdateRequest) {
         Crew crew = crewRepository.findById(crewUpdateRequest.getCrewId()).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -39,10 +54,21 @@ public class CrewServiceImpl implements CrewService {
                         .errorMessage("찾을 수 없는 크루원입니다.")
                         .build());
 
+        CrewLevel crewLevel = getCrewLevel(crew.getTeam().getId());
+        if (Crew.checkAuth(crewLevel)){
+            throw ApiException.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .errorCode("NOT_AUTHORIZED")
+                    .errorMessage("권한이 없습니다.")
+                    .build();
+        }
+
         crew.changeLevel(crewUpdateRequest.getCrewLevel());
+        return crew.getId();
     }
 
     @Override
+    @Transactional
     public void deleteCrew(Long crewId) {
         Crew crew = crewRepository.findById(crewId).orElseThrow(
                 () -> ApiException.builder()
@@ -51,6 +77,52 @@ public class CrewServiceImpl implements CrewService {
                         .errorMessage("찾을 수 없는 크루원입니다.")
                         .build());
 
-        crew.inactiveCrew();
+        CrewLevel crewLevel = getCrewLevel(crew.getTeam().getId());
+        if (Crew.checkAuth(crewLevel)){
+            throw ApiException.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .errorCode("NOT_AUTHORIZED")
+                    .errorMessage("권한이 없습니다.")
+                    .build();
+        }
+
+        Crew.exit(crew);
+    }
+
+    @Override
+    @Transactional
+    public Long updateCrewActive(Long crewId) {
+        Crew crew = crewRepository.findById(crewId).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode("NOT_FOUND_CREW_MEMBER")
+                        .errorMessage("찾을 수 없는 크루원입니다.")
+                        .build());
+
+        CrewLevel crewLevel = getCrewLevel(crew.getTeam().getId());
+        if (Crew.checkAuth(crewLevel)){
+            throw ApiException.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .errorCode("NOT_AUTHORIZED")
+                    .errorMessage("권한이 없습니다.")
+                    .build();
+        }
+
+        Crew.activeCrew(crew);
+        return crew.getId();
+    }
+
+    @Override
+    @Transactional
+    public Long updateCrewInActive(Long teamId) {
+        String email = SecurityUtil.getCurrentEmail();
+        Crew crew = crewRepository.findCrewByTeamIdAndEmail(email, teamId);
+        Crew.leave(crew);
+        return crew.getId();
+    }
+
+    private CrewLevel getCrewLevel(Long teamId) {
+        String email = SecurityUtil.getCurrentEmail();
+        return crewRepository.findCrewLevelByTeamIdAndEmail(teamId,email);
     }
 }

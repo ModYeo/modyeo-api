@@ -25,6 +25,7 @@ public class TeamReply extends BaseEntity {
     @JoinColumn(name = "team_article_id")
     private TeamArticle teamArticle;
 
+    @Lob
     private String content;
 
     @Column(name = "reply_depth")

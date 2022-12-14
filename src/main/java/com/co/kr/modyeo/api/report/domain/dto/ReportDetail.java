@@ -58,7 +58,7 @@ public class ReportDetail {
                 .targetId(report.getTargetId())
                 .title(report.getTitle())
                 .reportReason(report.getReportReason())
-                .contents(report.getContents())
+                .contents(report.getContent())
                 .reportStatus(report.getReportStatus())
                 .createdTime(report.getCreatedDate())
                 .updatedTime(report.getLastModifiedDate())
