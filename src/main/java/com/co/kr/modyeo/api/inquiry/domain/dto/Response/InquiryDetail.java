@@ -1,14 +1,18 @@
 package com.co.kr.modyeo.api.inquiry.domain.dto.Response;
 
-import com.co.kr.modyeo.api.inquiry.domain.entity.Answer;
 import com.co.kr.modyeo.api.inquiry.domain.entity.Inquiry;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Data
+@NoArgsConstructor
 public class InquiryDetail {
     private Long id;
     private String title;
@@ -16,11 +20,11 @@ public class InquiryDetail {
     private String createdBy;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
-    private List<Answer> answerList = new ArrayList<>();
+    private List<AnswerResponse> answerList = new ArrayList<>();
 
     @Builder(builderMethodName = "of", builderClassName = "of")
     public InquiryDetail(Long id, String title, String content, String createdBy
-            , LocalDateTime createdTime, List<Answer> answerList) {
+            , LocalDateTime createdTime, List<AnswerResponse> answerList) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -37,7 +41,8 @@ public class InquiryDetail {
                 .content(inquiry.getContent())
                 .createdBy(inquiry.getCreatedBy())
                 .createdTime(inquiry.getCreatedDate())
-                //.answerList() TODO : 답변 리스트 있어야 함.
+                .answerList(inquiry.getAnswerList()!=null?
+                        inquiry.getAnswerList().stream().map(AnswerResponse::toDto).collect(Collectors.toList()):null)
                 .build();
     }
 }
