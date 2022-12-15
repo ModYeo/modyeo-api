@@ -6,7 +6,6 @@ import org.springframework.data.domain.Sort;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class TeamSearch extends SearchDto {
 
     private String name;
@@ -16,7 +15,8 @@ public class TeamSearch extends SearchDto {
     private Long memberId;
 
     @Builder
-    public TeamSearch(String name, Long categoryId,Long memberId) {
+    public TeamSearch(String name, Long categoryId,Long memberId,Integer limit, Integer offset, String orderBy, Sort.Direction direction) {
+        super(limit, offset, orderBy, direction);
         this.name = name;
         this.categoryId = categoryId;
         this.memberId = memberId;

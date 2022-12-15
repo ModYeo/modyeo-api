@@ -21,7 +21,7 @@ public class SecurityUtil {
                     .errorMessage(AuthErrorCode.SECURITY_CONTEXT_NOT_FOUND.getMessage())
                     .build());
         }
-        return Long.valueOf(authentication.getName());
+        return Long.parseLong(authentication.getName());
     }
 
     public static Authority checkAuthority() {

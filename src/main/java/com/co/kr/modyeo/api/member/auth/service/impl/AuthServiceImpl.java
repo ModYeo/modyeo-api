@@ -63,22 +63,25 @@ public class AuthServiceImpl implements AuthService {
         Member member = MemberJoinDto.toMember(memberJoinDto, passwordEncoder);
         member = memberRepository.save(member);
 
-        List<Long> collectionIdList = MemberJoinDto.CollectionInfoDto.getIdList(memberJoinDto.getCollectionInfoDtoList());
+        if (memberJoinDto.getCollectionInfoDtoList() != null && memberJoinDto.getCollectionInfoDtoList().size() > 0){
+            List<Long> collectionIdList = MemberJoinDto.CollectionInfoDto.getIdList(memberJoinDto.getCollectionInfoDtoList());
 
-        List<CollectionInfo> collectionInfoList = collectionInfoRepository.findByIdList(collectionIdList);
+            List<CollectionInfo> collectionInfoList = collectionInfoRepository.findByIdList(collectionIdList);
 
-        Member finalMember = member;
-        List<MemberCollectionInfo> memberCollectionInfoList = collectionInfoList.stream().map(collectionInfo ->{
-                    MemberJoinDto.CollectionInfoDto collectionInfoDto = memberJoinDto.getCollectionInfo(collectionInfo.getId());
-                    return MemberCollectionInfo.createMemberCollectionInfoBuilder()
-                            .member(finalMember)
-                            .collectionInfo(collectionInfo)
-                            .agreeYn(collectionInfoDto.getAgreeYn())
-                            .build();
-                })
-                .collect(Collectors.toList());
+            Member finalMember = member;
+            List<MemberCollectionInfo> memberCollectionInfoList = collectionInfoList.stream().map(collectionInfo ->{
+                        MemberJoinDto.CollectionInfoDto collectionInfoDto = memberJoinDto.getCollectionInfo(collectionInfo.getId());
+                        return MemberCollectionInfo.createMemberCollectionInfoBuilder()
+                                .member(finalMember)
+                                .collectionInfo(collectionInfo)
+                                .agreeYn(collectionInfoDto.getAgreeYn())
+                                .build();
+                    })
+                    .collect(Collectors.toList());
 
-        memberCollectionInfoRepository.saveAll(memberCollectionInfoList);
+            memberCollectionInfoRepository.saveAll(memberCollectionInfoList);
+        }
+
         return MemberResponseDto.toResponse(member);
     }
 
