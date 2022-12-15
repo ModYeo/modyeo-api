@@ -28,7 +28,7 @@ public class TeamArticleResponse {
 
     private Long hitCount;
 
-    private String createdBy;
+    private Long createdBy;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
@@ -42,7 +42,7 @@ public class TeamArticleResponse {
                                Integer replyCount,
                                Integer recommendCount,
                                Long hitCount,
-                               String createdBy,
+                               Long createdBy,
                                LocalDateTime createdTime) {
         this.articleId = articleId;
         this.title = title;

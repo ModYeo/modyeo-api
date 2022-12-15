@@ -31,7 +31,7 @@ public class ArticleDetail {
 
     private Integer recommendCount;
 
-    private String createdBy;
+    private Long createdBy;
 
     private CategoryResponse category;
 
@@ -41,7 +41,7 @@ public class ArticleDetail {
     private List<ReplyResponse> replyResponses = new ArrayList<>();
 
     @Builder(builderMethodName = "of", builderClassName = "of")
-    public ArticleDetail(Long articleId, String filePath, String title, String content, Yn isHidden, Long hitCount, Integer recommendCount, String createdBy, CategoryResponse category, LocalDateTime createdTime, List<ReplyResponse> replyResponses) {
+    public ArticleDetail(Long articleId, String filePath, String title, String content, Yn isHidden, Long hitCount, Integer recommendCount, Long createdBy, CategoryResponse category, LocalDateTime createdTime, List<ReplyResponse> replyResponses) {
         this.articleId = articleId;
         this.filePath = filePath;
         this.title = title;

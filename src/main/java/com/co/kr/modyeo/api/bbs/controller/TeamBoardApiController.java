@@ -7,7 +7,6 @@ import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.*;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.TeamArticleSearch;
 import com.co.kr.modyeo.api.bbs.service.TeamBoardService;
-import com.co.kr.modyeo.common.result.JsonResultData;
 import com.co.kr.modyeo.common.result.ResponseHandler;
 import com.co.kr.modyeo.common.util.SecurityUtil;
 import io.swagger.annotations.Api;
@@ -16,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -144,8 +142,8 @@ public class TeamBoardApiController {
     @ApiOperation(value = "내가 쓴 댓글 조회 API")
     @GetMapping("/reply/my")
     public ResponseEntity<?> getTeamReplyMy(){
-        String email =  SecurityUtil.getCurrentEmail();
-        List<TeamReplyResponse> teamReplyResponseList = teamBoardService.getReplyMy(email);
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        List<TeamReplyResponse> teamReplyResponseList = teamBoardService.getReplyMy(memberId);
         return ResponseHandler.generate()
                 .data(teamReplyResponseList)
                 .status(HttpStatus.OK)
@@ -155,8 +153,8 @@ public class TeamBoardApiController {
     @ApiOperation("내가 좋아요한 글 조회 API")
     @GetMapping("/article/my-like")
     public ResponseEntity<?> getTeamArticleMyLike(){
-        String email = SecurityUtil.getCurrentEmail();
-        List<TeamArticleResponse> articleResponseList = teamBoardService.getArticleMyLike(email);
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        List<TeamArticleResponse> articleResponseList = teamBoardService.getArticleMyLike(memberId);
         return ResponseHandler.generate()
                 .data(articleResponseList)
                 .status(HttpStatus.OK)

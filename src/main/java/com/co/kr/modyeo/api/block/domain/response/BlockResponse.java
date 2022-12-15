@@ -20,16 +20,16 @@ public class BlockResponse {
 
     private Yn isEnable;
 
-    private String createdBy;
+    private Long createdBy;
 
-    private String updatedBy;
+    private Long updatedBy;
 
     private LocalDateTime createdTime;
 
     private LocalDateTime updatedTime;
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public BlockResponse(Long blockId, Long targetId, BlockType type, Yn isEnable, String createdBy, String updatedBy, LocalDateTime createdTime, LocalDateTime updatedTime) {
+    public BlockResponse(Long blockId, Long targetId, BlockType type, Yn isEnable, Long createdBy, Long updatedBy, LocalDateTime createdTime, LocalDateTime updatedTime) {
         this.blockId = blockId;
         this.targetId = targetId;
         this.type = type;

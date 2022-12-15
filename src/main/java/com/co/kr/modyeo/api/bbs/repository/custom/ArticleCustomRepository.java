@@ -10,7 +10,7 @@ import java.util.List;
 public interface ArticleCustomRepository {
     Slice<Article> searchArticle(ArticleSearch articleSearch, PageRequest pageRequest);
 
-    List<Article> findArticleByEmail(String email);
+    List<Article> findArticleByEmail(Long memberId);
 
-    List<Article> findArticleByEmailAndRecommendY(String email);
+    List<Article> findArticleByEmailAndRecommendY(Long memberId);
 }

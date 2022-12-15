@@ -23,11 +23,11 @@ public class BlockRepositoryImpl extends Querydsl4RepositorySupport implements B
     public List<Block> searchBlocks(BlockSearch blockSearch) {
         return select(block)
                 .from(block)
-                .where(createdByEq(blockSearch.getEmail()))
+                .where(createdByEq(blockSearch.getMemberId()))
                 .fetch();
     }
 
-    private BooleanExpression createdByEq(String email) {
-        return StringUtils.hasText(email) ? block.createdBy.eq(email) : null;
+    private BooleanExpression createdByEq(Long memberId) {
+        return memberId != null && memberId > 0 ? block.createdBy.eq(memberId) : null;
     }
 }

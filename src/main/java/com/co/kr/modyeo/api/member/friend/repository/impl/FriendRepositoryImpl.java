@@ -13,13 +13,13 @@ import static com.co.kr.modyeo.api.member.domain.entity.QMember.member;
 import static com.co.kr.modyeo.api.member.friend.domain.entity.QFriend.friend;
 
 public class FriendRepositoryImpl extends Querydsl4RepositorySupport implements FriendCustomRepository {
-    public FriendRepositoryImpl(Class<?> domainClass) {
+    public FriendRepositoryImpl() {
         super(Friend.class);
     }
 
 
     @Override
-    public List<Friend> findApprovedByEmail(String email) {
+    public List<Friend> findApprovedByMemberId(Long memberId) {
         QMember receiveMember = new QMember("receiveMEmber");
         QMember sendMember = new QMember("sendMember");
 
@@ -27,30 +27,30 @@ public class FriendRepositoryImpl extends Querydsl4RepositorySupport implements 
                 .from(friend)
                 .innerJoin(friend.receiveMember, receiveMember)
                 .innerJoin(friend.sendMember, sendMember)
-                .where(memberEmailEq(receiveMember, email)
-                        .or(memberEmailEq(sendMember, email))
+                .where(memberIdEq(receiveMember, memberId)
+                        .or(memberIdEq(sendMember, memberId))
                         .and(friend.friendStatus.eq(FriendStatus.APPROVED)))
                 .fetch();
     }
 
     @Override
-    public List<Friend> findReceivedByEmail(String email) {
+    public List<Friend> findReceivedByMemberId(Long memberId) {
         return select(friend)
                 .from(friend)
                 .innerJoin(friend.receiveMember, member)
-                .where(memberEmailEq(member, email).and(friend.friendStatus.eq(FriendStatus.SUBMITTED)))
+                .where(memberIdEq(member, memberId).and(friend.friendStatus.eq(FriendStatus.SUBMITTED)))
                 .fetch();
     }
 
     @Override
-    public List<Friend> findSendByEmail(String email) {
+    public List<Friend> findSendByMemberId(Long memberId) {
         return select(friend)
                 .from(friend)
                 .innerJoin(friend.sendMember, member)
-                .where(memberEmailEq(member, email).and(friend.friendStatus.eq(FriendStatus.SUBMITTED)))
+                .where(memberIdEq(member, memberId).and(friend.friendStatus.eq(FriendStatus.SUBMITTED)))
                 .fetch();
     }
 
-    private BooleanExpression memberEmailEq(QMember member, String email) {
-        return email != null ? member.email.eq(email) : null; }
+    private BooleanExpression memberIdEq(QMember member, Long memberId) {
+        return memberId != null ? member.id.eq(memberId) : null; }
     }

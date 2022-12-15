@@ -10,7 +10,6 @@ import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.service.BoardService;
-import com.co.kr.modyeo.common.result.JsonResultData;
 import com.co.kr.modyeo.common.result.ResponseHandler;
 import com.co.kr.modyeo.common.util.SecurityUtil;
 import io.swagger.annotations.Api;
@@ -19,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -150,8 +148,8 @@ public class BoardApiController {
     @ApiOperation("내가 쓴 댓글 조회 API")
     @GetMapping("/reply/my")
     public ResponseEntity<?> getReplyMy(){
-        String email = SecurityUtil.getCurrentEmail();
-        List<ReplyResponse> replyResponseList = boardService.getReplyMy(email);
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        List<ReplyResponse> replyResponseList = boardService.getReplyMy(memberId);
         return ResponseHandler.generate()
                 .data(replyResponseList)
                 .status(HttpStatus.OK)
@@ -161,8 +159,8 @@ public class BoardApiController {
     @ApiOperation("내가 좋아요한 글 조회 API")
     @GetMapping("/article/my-like")
     public ResponseEntity<?> getArticleMyLike(){
-        String email = SecurityUtil.getCurrentEmail();
-        List<ArticleResponse> articleResponseList = boardService.getArticleMyLike(email);
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        List<ArticleResponse> articleResponseList = boardService.getArticleMyLike(memberId);
         return ResponseHandler.generate()
                 .data(articleResponseList)
                 .status(HttpStatus.OK)

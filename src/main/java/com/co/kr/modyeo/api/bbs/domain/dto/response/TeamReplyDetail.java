@@ -25,9 +25,9 @@ public class TeamReplyDetail {
 
     private Long replyGroup;
 
-    private String createdBy;
+    private Long createdBy;
 
-    private String updatedBy;
+    private Long updatedBy;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
@@ -50,9 +50,9 @@ public class TeamReplyDetail {
 
         private Long replyGroup;
 
-        private String createdBy;
+        private Long createdBy;
 
-        private String updatedBy;
+        private Long updatedBy;
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
         private LocalDateTime createdTime;
@@ -66,8 +66,8 @@ public class TeamReplyDetail {
                                      String content,
                                      Integer replyDepth,
                                      Long replyGroup,
-                                     String createdBy,
-                                     String updatedBy,
+                                     Long createdBy,
+                                     Long updatedBy,
                                      LocalDateTime createdTime,
                                      LocalDateTime updatedTime) {
             this.teamReplyId = teamReplyId;
@@ -102,8 +102,8 @@ public class TeamReplyDetail {
                            String content,
                            Integer replyDepth,
                            Long replyGroup,
-                           String createdBy,
-                           String updatedBy,
+                           Long createdBy,
+                           Long updatedBy,
                            LocalDateTime createdTime,
                            LocalDateTime updatedTime,
                            List<NestedTeamReplyDetail> nestedTeamReplyDetails) {
