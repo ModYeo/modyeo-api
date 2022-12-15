@@ -5,9 +5,7 @@ import com.co.kr.modyeo.api.team.domain.dto.request.TeamApplicationRequest;
 import com.co.kr.modyeo.api.team.domain.dto.response.ApplicationFormDetail;
 import com.co.kr.modyeo.api.team.domain.dto.response.MemberTeamResponse;
 import com.co.kr.modyeo.api.team.domain.entity.enumerate.JoinStatus;
-import com.co.kr.modyeo.api.team.domain.entity.link.MemberTeam;
 import com.co.kr.modyeo.api.team.service.TeamApplicationService;
-import com.co.kr.modyeo.common.result.JsonResultData;
 import com.co.kr.modyeo.common.result.ResponseHandler;
 import com.co.kr.modyeo.common.util.SecurityUtil;
 import io.swagger.annotations.Api;
@@ -15,7 +13,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -75,8 +72,8 @@ public class TeamApplicationApiController {
     public ResponseEntity<?> applicantCrew(
             @RequestBody TeamApplicationRequest teamApplicationRequest
     ) {
-        String email =  SecurityUtil.getCurrentEmail();
-        teamApplicationRequest.setEmail(email);
+        Long memberId =  SecurityUtil.getCurrentMemberId();
+        teamApplicationRequest.setMemberId(memberId);
 
         Long teamApplicationId = teamApplicationService.applicantCrew(teamApplicationRequest);
         return ResponseHandler.generate()

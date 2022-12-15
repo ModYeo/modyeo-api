@@ -21,7 +21,6 @@ import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.team.repository.TeamRepository;
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.common.util.SecurityUtil;
-import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -43,7 +42,7 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
     @Override
     @Transactional
     public Long applicantCrew(TeamApplicationRequest teamApplicationRequest) {
-        Member member = findMember(teamApplicationRequest.getEmail());
+        Member member = findMember(teamApplicationRequest.getMemberId());
         Team team = findTeam(teamApplicationRequest.getTeamId());
         MemberTeam memberTeam = memberTeamRepository.findByTeamAndMember(team, member);
         if (memberTeam != null) {
@@ -104,9 +103,9 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
                         .errorCode(TeamErrorCode.NOT_FOUND_TEAM.getCode())
                         .build());
 
-        String email = SecurityUtil.getCurrentEmail();
+        Long memberId = SecurityUtil.getCurrentMemberId();
 
-        CrewLevel crewLevel = crewRepository.findCrewLevelByTeamIdAndEmail(team.getId(), email);
+        CrewLevel crewLevel = crewRepository.findCrewLevelByTeamIdAndMemberId(team.getId(), memberId);
 
         if (crewLevel != null) {
             if (CrewLevel.EXIT.equals(crewLevel)) {
@@ -188,8 +187,8 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
         memberTeamRepository.delete(memberTeam);
     }
 
-    private Member findMember(String email) {
-        return memberRepository.findByEmail(email)
+    private Member findMember(Long memberId) {
+        return memberRepository.findById(memberId)
                 .orElseThrow(() -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
                         .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())

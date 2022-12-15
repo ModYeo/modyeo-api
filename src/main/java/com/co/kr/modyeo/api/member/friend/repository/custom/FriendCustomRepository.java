@@ -1,14 +1,13 @@
 package com.co.kr.modyeo.api.member.friend.repository.custom;
 
 import com.co.kr.modyeo.api.member.friend.domain.entity.Friend;
-import com.co.kr.modyeo.api.member.friend.enumerate.FriendStatus;
 
 import java.util.List;
 
 public interface FriendCustomRepository {
-    List<Friend> findApprovedByEmail(String email);
+    List<Friend> findApprovedByMemberId(Long memberId);
 
-    List<Friend> findReceivedByEmail(String email);
+    List<Friend> findReceivedByMemberId(Long memberId);
 
-    List<Friend> findSendByEmail(String email);
+    List<Friend> findSendByMemberId(Long memberId);
 }

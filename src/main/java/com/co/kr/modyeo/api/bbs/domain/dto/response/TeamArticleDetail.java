@@ -33,7 +33,7 @@ public class TeamArticleDetail {
 
     private Integer recommendCount;
 
-    private String createdBy;
+    private Long createdBy;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
@@ -49,7 +49,7 @@ public class TeamArticleDetail {
                              Yn isHidden,
                              Long hitCount,
                              Integer recommendCount,
-                             String createdBy,
+                             Long createdBy,
                              LocalDateTime createdTime,
                              List<TeamReplyResponse> replyResponses) {
         this.articleId = articleId;

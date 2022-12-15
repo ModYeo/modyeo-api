@@ -42,8 +42,8 @@ public class BlockController {
 
     @GetMapping("")
     public ResponseEntity<?> getBlocks(BlockSearch blockSearch){
-        String email = SecurityUtil.getCurrentEmail();
-        blockSearch.setEmail(email);
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        blockSearch.setMemberId(memberId);
         List<BlockResponse> blocks = blockService.getBlocks(blockSearch);
         return ResponseHandler.generate()
                 .data(blocks)

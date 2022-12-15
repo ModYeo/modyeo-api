@@ -33,7 +33,7 @@ public interface TeamBoardService {
 
     void updateTeamReplyRecommend(TeamReplyRecommendRequest replyRecommendRequest);
 
-    List<TeamReplyResponse> getReplyMy(String email);
+    List<TeamReplyResponse> getReplyMy(Long memberId);
 
-    List<TeamArticleResponse> getArticleMyLike(String email);
+    List<TeamArticleResponse> getArticleMyLike(Long memberId);
 }

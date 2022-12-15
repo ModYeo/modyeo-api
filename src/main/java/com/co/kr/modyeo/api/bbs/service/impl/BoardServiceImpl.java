@@ -249,15 +249,15 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<ReplyResponse> getReplyMy(String email) {
-        return replyRepository.findReplyByEmail(email).stream()
+    public List<ReplyResponse> getReplyMy(Long memberId) {
+        return replyRepository.findReplyByEmail(memberId).stream()
                 .map(ReplyResponse::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<ArticleResponse> getArticleMyLike(String email) {
-        return articleRepository.findArticleByEmailAndRecommendY(email).stream()
+    public List<ArticleResponse> getArticleMyLike(Long memberId) {
+        return articleRepository.findArticleByEmailAndRecommendY(memberId).stream()
                 .map(ArticleResponse::toDto)
                 .collect(Collectors.toList());
     }

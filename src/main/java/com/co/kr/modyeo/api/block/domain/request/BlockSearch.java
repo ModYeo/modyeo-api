@@ -10,5 +10,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class BlockSearch extends SearchDto {
 
-    private String email;
+    private Long memberId;
 }

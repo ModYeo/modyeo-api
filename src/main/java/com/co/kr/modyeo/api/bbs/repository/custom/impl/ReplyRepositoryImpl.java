@@ -15,9 +15,9 @@ public class ReplyRepositoryImpl extends Querydsl4RepositorySupport implements R
     }
 
     @Override
-    public List<Reply> findReplyByEmail(String email) {
+    public List<Reply> findReplyByEmail(Long memberId) {
         return selectFrom(reply)
-                .where(reply.createdBy.eq(email))
+                .where(reply.createdBy.eq(memberId))
                 .fetch();
     }
 }

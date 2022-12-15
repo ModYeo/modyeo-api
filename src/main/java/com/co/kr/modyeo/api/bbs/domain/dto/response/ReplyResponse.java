@@ -22,13 +22,13 @@ public class ReplyResponse {
 
     private Long replyGroup;
 
-    private String createdBy;
+    private Long createdBy;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
 
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public ReplyResponse(Long replyId, Long articleId, String content, Integer replyDepth, Long replyGroup, String createdBy, LocalDateTime createdTime) {
+    public ReplyResponse(Long replyId, Long articleId, String content, Integer replyDepth, Long replyGroup, Long createdBy, LocalDateTime createdTime) {
         this.replyId = replyId;
         this.articleId = articleId;
         this.content = content;

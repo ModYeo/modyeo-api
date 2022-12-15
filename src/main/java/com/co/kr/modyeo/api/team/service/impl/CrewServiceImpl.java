@@ -115,14 +115,14 @@ public class CrewServiceImpl implements CrewService {
     @Override
     @Transactional
     public Long updateCrewInActive(Long teamId) {
-        String email = SecurityUtil.getCurrentEmail();
-        Crew crew = crewRepository.findCrewByTeamIdAndEmail(email, teamId);
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        Crew crew = crewRepository.findCrewByTeamIdAndMemberId(memberId, teamId);
         Crew.leave(crew);
         return crew.getId();
     }
 
     private CrewLevel getCrewLevel(Long teamId) {
-        String email = SecurityUtil.getCurrentEmail();
-        return crewRepository.findCrewLevelByTeamIdAndEmail(teamId,email);
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        return crewRepository.findCrewLevelByTeamIdAndMemberId(teamId,memberId);
     }
 }

@@ -19,18 +19,18 @@ public class CategoryDetail {
 
     private Yn useYn;
 
-    private String createdBy;
+    private Long createdBy;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
 
-    private String updatedBy;
+    private Long updatedBy;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime updatedTime;
 
     @Builder(builderMethodName = "of", builderClassName = "of")
-    public CategoryDetail(Long categoryId, String categoryName, Yn useYn, String createdBy, LocalDateTime createdTime, String updatedBy, LocalDateTime updatedTime) {
+    public CategoryDetail(Long categoryId, String categoryName, Yn useYn, Long createdBy, LocalDateTime createdTime, Long updatedBy, LocalDateTime updatedTime) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.useYn = useYn;

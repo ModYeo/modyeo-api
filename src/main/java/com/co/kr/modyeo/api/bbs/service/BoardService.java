@@ -38,7 +38,7 @@ public interface BoardService {
 
     void updateReplyRecommend(ReplyRecommendRequest replyRecommendRequest);
 
-    List<ReplyResponse> getReplyMy(String email);
+    List<ReplyResponse> getReplyMy(Long memberId);
 
-    List<ArticleResponse> getArticleMyLike(String email);
+    List<ArticleResponse> getArticleMyLike(Long memberId);
 }

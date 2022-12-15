@@ -9,7 +9,7 @@ import java.util.List;
 public interface CrewCustomRepository {
     List<Crew> searchCrew(CrewSearch crewSearch);
 
-    CrewLevel findCrewLevelByTeamIdAndEmail(Long teamId, String email);
+    CrewLevel findCrewLevelByTeamIdAndMemberId(Long teamId, Long memberId);
 
-    Crew findCrewByTeamIdAndEmail(String email, Long teamId);
+    Crew findCrewByTeamIdAndMemberId(Long memberId, Long teamId);
 }

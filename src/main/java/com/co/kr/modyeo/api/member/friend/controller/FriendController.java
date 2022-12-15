@@ -5,9 +5,7 @@ import com.co.kr.modyeo.common.result.JsonResultData;
 import com.co.kr.modyeo.common.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.config.RepositoryConfigurationSource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,18 +19,18 @@ public class FriendController {
 
     @GetMapping("/")
     public ResponseEntity<?> approvedFriends() {
-        String email = SecurityUtil.getCurrentEmail();
+        Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(JsonResultData
                 .successResultBuilder()
-                .data(friendService.getApprovedFriends(email))
+                .data(friendService.getApprovedFriends(memberId))
                 .build());
     }
 
     @ApiOperation(value = "친구 요청 API")
     @PostMapping("/request/{receiver-id}")
     public ResponseEntity<?> requestFriend(@PathVariable(value = "receiver_id") Long receiverId) {
-        String email = SecurityUtil.getCurrentEmail();
-        friendService.sendFriendRequest(email, receiverId);
+        Long memberId = SecurityUtil.getCurrentMemberId();
+        friendService.sendFriendRequest(memberId, receiverId);
         return ResponseEntity.ok(JsonResultData
                 .successResultBuilder()
                 .data(null)
@@ -42,18 +40,18 @@ public class FriendController {
     @ApiOperation(value = "받은 친구 요청 확인 API")
     @GetMapping("/requests/receive")
     public ResponseEntity<?> getReceiveFriendRequests() {
-        String email = SecurityUtil.getCurrentEmail();
+        Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(friendService.getReceiveFriendRequests(email))
+                .data(friendService.getReceiveFriendRequests(memberId))
                 .build());
     }
 
     @ApiOperation(value = "보낸 친구 요청 확인 API")
     @GetMapping("/requests/send")
     public ResponseEntity<?> getSendFriendRequests() {
-        String email = SecurityUtil.getCurrentEmail();
+        Long memberId = SecurityUtil.getCurrentMemberId();
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(friendService.getSendFriendRequests(email))
+                .data(friendService.getSendFriendRequests(memberId))
                 .build());
     }
 
