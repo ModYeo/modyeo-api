@@ -53,7 +53,7 @@ public class TeamBoardApiController {
         Long articleId = teamBoardService.createTeamArticle(articleRequest);
         return ResponseHandler.generate()
                 .data(articleId)
-                .status(HttpStatus.OK)
+                .status(HttpStatus.CREATED)
                 .build();
     }
 
@@ -83,7 +83,7 @@ public class TeamBoardApiController {
         Long teamReplyId = teamBoardService.createTeamReply(teamReplyRequest);
         return ResponseHandler.generate()
                 .data(teamReplyId)
-                .status(HttpStatus.OK)
+                .status(HttpStatus.CREATED)
                 .build();
     }
 

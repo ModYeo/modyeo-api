@@ -27,7 +27,7 @@ public class AdvertisementApiController {
         Long advertisementId = advertisementService.createAdvertisement(advertisementCreateRequest);
         return ResponseHandler.generate()
                 .data(advertisementId)
-                .status(HttpStatus.OK)
+                .status(HttpStatus.CREATED)
                 .build();
     }
 

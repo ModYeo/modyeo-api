@@ -58,7 +58,7 @@ public class BoardApiController {
         Long articleId = boardService.createArticle(articleRequest);
         return ResponseHandler.generate()
                 .data(articleId)
-                .status(HttpStatus.OK)
+                .status(HttpStatus.CREATED)
                 .build();
     }
 
@@ -89,7 +89,7 @@ public class BoardApiController {
         Long replyId = boardService.createReply(replyRequest);
         return ResponseHandler.generate()
                 .data(replyId)
-                .status(HttpStatus.OK)
+                .status(HttpStatus.CREATED)
                 .build();
     }
 
