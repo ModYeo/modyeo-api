@@ -16,12 +16,12 @@ public class InquirySearch {
     private String title;
     private String content;
     private String createdBy;
-    private int offset;
-    private int limit;
+    private Integer offset;
+    private Integer limit;
 
     @Builder(builderMethodName = "of", builderClassName = "of")
     public InquirySearch(Long id, Sort.Direction direction, String orderBy, InquiryStatus status,
-                         String title, String content, String createdBy, int offset, int limit) {
+                         String title, String content, String createdBy, Integer offset, Integer limit) {
         this.id = id;
         this.status = status;
         this.direction = direction != null ? direction : Sort.Direction.DESC;
@@ -29,7 +29,7 @@ public class InquirySearch {
         this.title = title;
         this.content = content;
         this.createdBy = createdBy;
-        this.offset = offset;
-        this.limit = limit;
+        this.offset = offset != null ? offset : 0;
+        this.limit = limit != null ? limit : 10;
     }
 }

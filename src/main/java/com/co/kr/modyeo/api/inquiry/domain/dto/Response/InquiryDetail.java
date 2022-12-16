@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Data
@@ -41,8 +42,10 @@ public class InquiryDetail {
                 .content(inquiry.getContent())
                 .createdBy(inquiry.getCreatedBy())
                 .createdTime(inquiry.getCreatedDate())
-                .answerList(inquiry.getAnswerList()!=null?
-                        inquiry.getAnswerList().stream().map(AnswerResponse::toDto).collect(Collectors.toList()):null)
+                .answerList(
+                        inquiry.getAnswerList().stream().filter(Objects::nonNull)
+                        .map(AnswerResponse::toDto).collect(Collectors.toList())
+                )
                 .build();
     }
 }

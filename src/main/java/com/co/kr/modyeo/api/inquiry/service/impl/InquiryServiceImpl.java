@@ -12,7 +12,6 @@ import com.co.kr.modyeo.api.inquiry.domain.enumerate.InquiryStatus;
 import com.co.kr.modyeo.api.inquiry.repository.AnswerRepository;
 import com.co.kr.modyeo.api.inquiry.repository.InquiryRepository;
 import com.co.kr.modyeo.api.inquiry.service.InquiryService;
-import com.co.kr.modyeo.api.member.domain.enumerate.Authority;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.InquiryErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -40,18 +39,10 @@ public class InquiryServiceImpl implements InquiryService {
 
     //질문 리스트 조회
     @Override
-    public Slice<InquiryResponse> getAllInquiries(InquirySearch inquirySearch, Authority auth) {
+    public Slice<InquiryResponse> getSelectedInquiries(InquirySearch inquirySearch) {
         PageRequest pageRequest = PageRequest.of(inquirySearch.getOffset(), inquirySearch.getLimit(),
                                                  inquirySearch.getDirection(), inquirySearch.getOrderBy());
-        return inquiryRepository.getAllInquiries(inquirySearch, pageRequest, auth).map(InquiryResponse::toDto);
-    }
-
-    @Override
-    public Slice<InquiryResponse> getMyInquiries(InquirySearch inquirySearch){
-        PageRequest pageRequest = PageRequest.of(inquirySearch.getOffset(), inquirySearch.getLimit(),
-                                                 inquirySearch.getDirection(), inquirySearch.getOrderBy());
-        inquiryRepository.getMyInquiries(inquirySearch.getCreatedBy(), pageRequest);
-        return null;
+        return inquiryRepository.getSelectedInquiries(inquirySearch, pageRequest).map(InquiryResponse::toDto);
     }
 
     //상세조회
