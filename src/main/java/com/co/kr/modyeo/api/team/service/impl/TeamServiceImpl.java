@@ -41,9 +41,9 @@ public class TeamServiceImpl implements TeamService {
     public Long createTeam(TeamRequest teamRequest) {
         overlapTeamCheck(teamRequest);
 
-        String memberEmail = SecurityUtil.getCurrentEmail();
+        Long memberId = SecurityUtil.getCurrentMemberId();
 
-        Member member = memberRepository.findByEmail(memberEmail)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(()->ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
                         .errorCode("")

@@ -25,7 +25,7 @@ public class TeamDetail {
 
     private ScaleLevel scaleLevel;
 
-    private String createdBy;
+    private Long createdBy;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
@@ -33,7 +33,7 @@ public class TeamDetail {
     private List<CategoryResponse> categoryResponseList = new ArrayList<>();
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public TeamDetail(Long id, String name, ScaleLevel scaleLevel, String description, String createdBy, LocalDateTime createdTime, List<CategoryResponse> categoryResponseList) {
+    public TeamDetail(Long id, String name, ScaleLevel scaleLevel, String description, Long createdBy, LocalDateTime createdTime, List<CategoryResponse> categoryResponseList) {
         this.id = id;
         this.name = name;
         this.scaleLevel = scaleLevel;

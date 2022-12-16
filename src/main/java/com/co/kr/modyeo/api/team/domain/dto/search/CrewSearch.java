@@ -7,10 +7,10 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.Sort;
 
 @Setter
 @Getter
-@NoArgsConstructor
 public class CrewSearch extends SearchDto {
 
     private Long teamId;
@@ -18,4 +18,8 @@ public class CrewSearch extends SearchDto {
     private Yn isActivated;
 
     private CrewLevel level;
+
+    public CrewSearch(Integer limit, Integer offset, String orderBy, Sort.Direction direction) {
+        super(limit, offset, orderBy, direction);
+    }
 }

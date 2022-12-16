@@ -30,7 +30,6 @@ public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements
                 contentQuery.select(article)
                         .from(article)
                         .innerJoin(article.category, category)
-                        .innerJoin(member).on(article.createdBy.eq(member.email))
                         .fetchJoin()
                         .where(articleTitleLike(articleSearch.getTitle()),
                                 articleContentLike(articleSearch.getContent()),
@@ -43,24 +42,24 @@ public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements
     }
 
     @Override
-    public List<Article> findArticleByEmail(String email) {
+    public List<Article> findArticleByEmail(Long memberId) {
         return selectFrom(article)
-                .where(createdByEq(email))
+                .where(createdByEq(memberId))
                 .fetch();
     }
 
     @Override
-    public List<Article> findArticleByEmailAndRecommendY(String email) {
+    public List<Article> findArticleByEmailAndRecommendY(Long memberId) {
         return select(article)
                 .from(articleRecommend)
                 .innerJoin(articleRecommend.article, article)
-                .where(createdByEq(email),
+                .where(createdByEq(memberId),
                         articleRecommend.recommendYn.eq(Yn.Y))
                 .fetch();
     }
 
-    private BooleanExpression createdByEq(String email){
-        return StringUtils.hasText(email) ? article.createdBy.eq(email) : null;
+    private BooleanExpression createdByEq(Long memberId){
+        return memberId != null && memberId > 0 ? article.createdBy.eq(memberId) : null;
     }
 
     private BooleanExpression categoryIdEq(Long categoryId) {

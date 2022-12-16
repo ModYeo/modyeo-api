@@ -18,13 +18,13 @@ public class InquiryDetail {
     private Long id;
     private String title;
     private String content;
-    private String createdBy;
+    private Long createdBy;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
     private List<AnswerResponse> answerList = new ArrayList<>();
 
     @Builder(builderMethodName = "of", builderClassName = "of")
-    public InquiryDetail(Long id, String title, String content, String createdBy
+    public InquiryDetail(Long id, String title, String content, Long createdBy
             , LocalDateTime createdTime, List<AnswerResponse> answerList) {
         this.id = id;
         this.title = title;

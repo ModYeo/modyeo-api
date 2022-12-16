@@ -4,11 +4,15 @@ import com.co.kr.modyeo.common.dto.SearchDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.Sort;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class BlockSearch extends SearchDto {
 
-    private String email;
+    private Long memberId;
+
+    public BlockSearch(Integer limit, Integer offset, String orderBy, Sort.Direction direction) {
+        super(limit, offset, orderBy, direction);
+    }
 }

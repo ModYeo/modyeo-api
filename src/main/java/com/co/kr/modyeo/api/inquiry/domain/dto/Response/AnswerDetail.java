@@ -15,14 +15,14 @@ public class AnswerDetail {
     private Long answerId;
     private Long inquiryId;
     private String content;
-    private String createdBy;
+    private Long createdBy;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-mm-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
     private Authority authority;
 
     @Builder(builderClassName = "of", builderMethodName = "of")
     public AnswerDetail(Long answerId, Long inquiryId, String content,
-                        String createdBy, LocalDateTime createdTime, Authority authority){
+                        Long createdBy, LocalDateTime createdTime, Authority authority){
         this.answerId = answerId;
         this.inquiryId = inquiryId;
         this.content = content;

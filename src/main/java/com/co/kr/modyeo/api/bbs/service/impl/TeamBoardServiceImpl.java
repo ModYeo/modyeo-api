@@ -237,15 +237,15 @@ public class TeamBoardServiceImpl implements TeamBoardService {
     }
 
     @Override
-    public List<TeamReplyResponse> getReplyMy(String email) {
-        return teamArticleRepository.findReplyByEmail(email)
+    public List<TeamReplyResponse> getReplyMy(Long memberId) {
+        return teamArticleRepository.findReplyByMemberId(memberId)
                 .stream().map(TeamReplyResponse::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<TeamArticleResponse> getArticleMyLike(String email) {
-        return teamArticleRepository.findArticleByEmailAndRecommendY(email)
+    public List<TeamArticleResponse> getArticleMyLike(Long memberId) {
+        return teamArticleRepository.findArticleByEmailAndRecommendY(memberId)
                 .stream().map(TeamArticleResponse::toDto)
                 .collect(Collectors.toList());
     }

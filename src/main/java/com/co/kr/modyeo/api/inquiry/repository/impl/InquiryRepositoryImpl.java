@@ -10,13 +10,13 @@ import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 
 import static com.co.kr.modyeo.api.bbs.domain.entity.QArticle.article;
 import static com.co.kr.modyeo.api.inquiry.domain.entity.QInquiry.inquiry;
 import static com.co.kr.modyeo.api.inquiry.domain.entity.QAnswer.answer;
+import static com.co.kr.modyeo.api.member.domain.entity.QMember.member;
 
 public class InquiryRepositoryImpl extends Querydsl4RepositorySupport implements InquiryCustomRepository {
 
@@ -68,9 +68,8 @@ public class InquiryRepositoryImpl extends Querydsl4RepositorySupport implements
         return inquiry.authority.eq(auth);
     }
 
-    private BooleanExpression createdByEq(InquiryRequest inquiryRequest) {
-        String email = inquiryRequest.getCreatedBy();
-        return StringUtils.hasText(email) ? article.createdBy.eq(email) : null;
+    private BooleanExpression createdByEq(Long memberId) {
+        return memberId != null && memberId > 0 ? article.createdBy.eq(memberId) : null;
     }
 
     private BooleanExpression inquiryTitleLike(String title){
@@ -79,8 +78,8 @@ public class InquiryRepositoryImpl extends Querydsl4RepositorySupport implements
     private BooleanExpression inquiryContentLike(String content){
         return content != null ? inquiry.content.contains(content) : null;
     }
-    private BooleanExpression inquiryCreatedByEq(String userId){
-        return userId != null ? inquiry.createdBy.eq(userId) : null;
+    private BooleanExpression inquiryCreatedByEq(Long memberId){
+        return memberId != null ? inquiry.createdBy.eq(memberId) : null;
     }
     //private BooleanExpression inquiryCategoryIdEq(Catego){return null;} //TODO:향후 질의사항 카테고리 추가 해야 함.
     private BooleanExpression inquiryBetwCreatedTime(LocalDateTime fromTime, LocalDateTime toTime){

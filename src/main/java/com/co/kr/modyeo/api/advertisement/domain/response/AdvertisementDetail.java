@@ -32,12 +32,12 @@ public class AdvertisementDetail {
 
     private java.time.LocalDateTime lastModifiedDate;
 
-    private String createdBy;
+    private Long createdBy;
 
-    private String updatedBy;
+    private Long updatedBy;
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public AdvertisementDetail(Long advertisementId, String advertisementName, String urlLink, String imagePath, AdvertisementType type, Yn useYn, LocalDateTime createdDate, LocalDateTime lastModifiedDate, String createdBy, String updatedBy) {
+    public AdvertisementDetail(Long advertisementId, String advertisementName, String urlLink, String imagePath, AdvertisementType type, Yn useYn, LocalDateTime createdDate, LocalDateTime lastModifiedDate, Long createdBy, Long updatedBy) {
         this.advertisementId = advertisementId;
         this.advertisementName = advertisementName;
         this.urlLink = urlLink;

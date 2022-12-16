@@ -10,7 +10,6 @@ import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.FriendErrorCode;
 import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
-import com.co.kr.modyeo.common.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -28,8 +27,8 @@ public class FriendServiceImpl implements FriendService {
 
     @Transactional
     @Override
-    public void sendFriendRequest(String username, Long receiverId) {
-        Member sendMember = memberRepository.findByEmail(username)
+    public void sendFriendRequest(Long memberId, Long receiverId) {
+        Member sendMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> ApiException.builder()
                         .errorMessage(FriendErrorCode.SENDER_NOT_FOUND.getMessage())
                         .errorCode(FriendErrorCode.SENDER_NOT_FOUND.getCode())
@@ -92,36 +91,30 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public List<FriendResponse> getApprovedFriends(String email) {
-        List<Friend> friendList = friendRepository.findApprovedByEmail(email);
+    public List<FriendResponse> getApprovedFriends(Long memberId) {
+        List<Friend> friendList = friendRepository.findApprovedByMemberId(memberId);
 
-        List<FriendResponse> friendResponseList = friendList.stream()
+        return friendList.stream()
                 .map(FriendResponse::toResponse)
                 .collect(Collectors.toList());
-
-        return friendResponseList;
     }
 
     @Override
-    public List<FriendResponse> getReceiveFriendRequests(String email) {
-        List<Friend> friendList = friendRepository.findReceivedByEmail(email);
+    public List<FriendResponse> getReceiveFriendRequests(Long memberId) {
+        List<Friend> friendList = friendRepository.findReceivedByMemberId(memberId);
 
-        List<FriendResponse> friendResponseList = friendList.stream()
+        return friendList.stream()
                 .map(FriendResponse::toResponse)
                 .collect(Collectors.toList());
-
-        return friendResponseList;
     }
 
     @Override
-    public List<FriendResponse> getSendFriendRequests(String email) {
-        List<Friend> friendList = friendRepository.findSendByEmail(email);
+    public List<FriendResponse> getSendFriendRequests(Long memberId) {
+        List<Friend> friendList = friendRepository.findSendByMemberId(memberId);
 
-        List<FriendResponse> friendResponseList = friendList.stream()
+        return friendList.stream()
                 .map(FriendResponse::toResponse)
                 .collect(Collectors.toList());
-
-        return friendResponseList;
     }
 
     @Override

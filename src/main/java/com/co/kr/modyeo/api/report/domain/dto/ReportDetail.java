@@ -32,12 +32,12 @@ public class ReportDetail {
 
     private LocalDateTime updatedTime;
 
-    private String createdBy;
+    private Long createdBy;
 
-    private String updatedBy;
+    private Long updatedBy;
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public ReportDetail(Long id, ReportType reportType, Long targetId, String title, ReportReason reportReason, String contents, ReportStatus reportStatus, LocalDateTime createdTime, LocalDateTime updatedTime, String createdBy, String updatedBy) {
+    public ReportDetail(Long id, ReportType reportType, Long targetId, String title, ReportReason reportReason, String contents, ReportStatus reportStatus, LocalDateTime createdTime, LocalDateTime updatedTime, Long createdBy, Long updatedBy) {
         this.id = id;
         this.reportType = reportType;
         this.targetId = targetId;

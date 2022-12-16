@@ -22,15 +22,15 @@ public class CollectionInfoResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
 
-    private String createdBy;
+    private Long createdBy;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime updatedTime;
 
-    private String updatedBy;
+    private Long updatedBy;
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public CollectionInfoResponse(Long collectionInfoId, String collectionInfoName, String description,LocalDateTime createdTime, String createdBy, LocalDateTime updatedTime, String updatedBy) {
+    public CollectionInfoResponse(Long collectionInfoId, String collectionInfoName, String description,LocalDateTime createdTime, Long createdBy, LocalDateTime updatedTime, Long updatedBy) {
         this.collectionInfoId = collectionInfoId;
         this.collectionInfoName = collectionInfoName;
         this.description = description;

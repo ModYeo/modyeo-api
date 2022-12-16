@@ -6,7 +6,6 @@ import org.springframework.data.domain.Sort;
 
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ArticleSearch extends SearchDto {
 
     private String title;
@@ -20,7 +19,8 @@ public class ArticleSearch extends SearchDto {
     private Boolean isMyArticle;
 
     @Builder(builderMethodName = "of", builderClassName = "of")
-    public ArticleSearch(String title, String content, Long categoryId, Long memberId) {
+    public ArticleSearch(String title, String content, Long categoryId, Long memberId,Integer limit, Integer offset, String orderBy, Sort.Direction direction) {
+        super(limit, offset, orderBy, direction);
         this.title = title;
         this.categoryId = categoryId;
         this.memberId = memberId;

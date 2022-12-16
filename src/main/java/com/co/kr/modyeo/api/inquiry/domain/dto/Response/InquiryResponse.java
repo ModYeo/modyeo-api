@@ -18,14 +18,14 @@ public class InquiryResponse {
     private String title;
     private Authority authority;
     private InquiryStatus status;
-    private String createdBy;
+    private Long createdBy;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
 
     @QueryProjection // TODO : 뭔지 찾아보기
     @Builder(builderClassName = "of", builderMethodName = "of")
     public InquiryResponse(Long inquiryId, String title, Authority authority, LocalDateTime createdTime
-            , InquiryStatus status, String createdBy) {
+            , InquiryStatus status, Long createdBy) {
         this.inquiryId = inquiryId;
         this.title = title;
         this.authority = authority;

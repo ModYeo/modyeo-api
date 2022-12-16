@@ -11,7 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SecurityUtil {
-    public static String getCurrentEmail() {
+    public static Long getCurrentMemberId() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || authentication.getName() == null) {
@@ -21,7 +21,7 @@ public class SecurityUtil {
                     .errorMessage(AuthErrorCode.SECURITY_CONTEXT_NOT_FOUND.getMessage())
                     .build());
         }
-        return authentication.getName();
+        return Long.parseLong(authentication.getName());
     }
 
     public static Authority checkAuthority() {

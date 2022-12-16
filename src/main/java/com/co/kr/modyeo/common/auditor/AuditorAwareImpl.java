@@ -9,15 +9,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import java.util.Collection;
 import java.util.Optional;
 
-public class AuditorAwareImpl implements AuditorAware<String> {
+public class AuditorAwareImpl implements AuditorAware<Long> {
     @Override
-    public Optional<String> getCurrentAuditor() {
+    public Optional<Long> getCurrentAuditor() {
         return Optional.ofNullable(SecurityContextHolder.getContext())
                 .map(SecurityContext::getAuthentication)
                 .map(authentication -> {
                     Collection<? extends GrantedAuthority> auth = authentication.getAuthorities();
                     boolean isUser = auth.contains(new SimpleGrantedAuthority("ROLE_USER"));
-                    if (isUser) return authentication.getName();
+                    if (isUser) return Long.parseLong(authentication.getName());
                     return null;
                 });
     }

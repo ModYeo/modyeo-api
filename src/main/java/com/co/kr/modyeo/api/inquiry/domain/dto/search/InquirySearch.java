@@ -15,13 +15,13 @@ public class InquirySearch {
     private String orderBy;
     private String title;
     private String content;
-    private String createdBy;
+    private Long createdBy;
     private Integer offset;
     private Integer limit;
 
     @Builder(builderMethodName = "of", builderClassName = "of")
     public InquirySearch(Long id, Sort.Direction direction, String orderBy, InquiryStatus status,
-                         String title, String content, String createdBy, Integer offset, Integer limit) {
+                         String title, String content, Long createdBy, Integer offset, Integer limit) {
         this.id = id;
         this.status = status;
         this.direction = direction != null ? direction : Sort.Direction.DESC;

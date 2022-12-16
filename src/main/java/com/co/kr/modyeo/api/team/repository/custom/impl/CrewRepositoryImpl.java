@@ -35,27 +35,26 @@ public class CrewRepositoryImpl extends Querydsl4RepositorySupport implements Cr
     }
 
     @Override
-    public CrewLevel findCrewLevelByTeamIdAndEmail(Long teamId, String email) {
+    public CrewLevel findCrewLevelByTeamIdAndMemberId(Long teamId, Long memberId) {
         return select(crew.crewLevel)
                 .from(crew)
                 .innerJoin(crew.member, member)
-                .where(eqEmail(email),
+                .where(memberIdEq(memberId),
                         eqTeamId(teamId))
                 .fetchOne();
     }
 
     @Override
-    public Crew findCrewByTeamIdAndEmail(String email, Long teamId) {
+    public Crew findCrewByTeamIdAndMemberId(Long memberId, Long teamId) {
         return select(crew)
                 .from(crew)
-                .innerJoin(crew.member, member)
-                .where(eqEmail(email),
+                .where(memberIdEq(memberId),
                         eqTeamId(teamId))
                 .fetchOne();
     }
 
-    private BooleanExpression eqEmail(String email) {
-        return StringUtils.hasText(email) ? member.email.eq(email) : null;
+    private BooleanExpression memberIdEq(Long memberId) {
+        return memberId != null && memberId > 0 ? crew.member.id.eq(memberId) : null;
     }
 
     private BooleanExpression eqTeamId(Long teamId) {

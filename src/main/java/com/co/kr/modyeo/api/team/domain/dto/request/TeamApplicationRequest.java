@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TeamApplicationRequest {
 
-    private String email;
+    private Long memberId;
 
     private Long teamId;
 
