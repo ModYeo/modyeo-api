@@ -10,6 +10,7 @@ import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 
@@ -36,11 +37,11 @@ public class InquiryRepositoryImpl extends Querydsl4RepositorySupport implements
     }
 
     @Override
-    public Slice<Inquiry> getAllInquiries(InquirySearch inquirySearch, PageRequest pageRequest, Authority auth) {
+    public Slice<Inquiry> getSelectedInquiries(InquirySearch inquirySearch, PageRequest pageRequest) {
         return applySlicing(pageRequest, contentQuery ->
                 contentQuery.select(inquiry)
                         .from(inquiry)
-                        .innerJoin(answer.inquiry, inquiry)
+                        .innerJoin(inquiry.answerList, answer)
                         .fetchJoin()
                         .where(
                                 inquiryTitleLike(inquirySearch.getTitle()),
@@ -57,17 +58,6 @@ public class InquiryRepositoryImpl extends Querydsl4RepositorySupport implements
                         );
     }
 
-    @Override
-    public Slice<Inquiry> getMyInquiries(String userId, PageRequest pageRequest) {
-        return applySlicing(pageRequest, contentQuery->
-                contentQuery.select(inquiry)
-                        .from(inquiry)
-                        .innerJoin(answer.inquiry, inquiry)
-                        .fetchJoin()
-                        .where(inquiry.createdBy.eq(userId))
-        );
-    }
-
     private BooleanExpression statusCheck(InquiryStatus status){
         return status != null ? inquiry.status.eq(status) : null;
     }
@@ -80,7 +70,7 @@ public class InquiryRepositoryImpl extends Querydsl4RepositorySupport implements
 
     private BooleanExpression createdByEq(InquiryRequest inquiryRequest) {
         String email = inquiryRequest.getCreatedBy();
-        return email != null && !email.equals("") ? article.createdBy.eq(email) : null;
+        return StringUtils.hasText(email) ? article.createdBy.eq(email) : null;
     }
 
     private BooleanExpression inquiryTitleLike(String title){

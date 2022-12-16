@@ -6,8 +6,8 @@ import com.co.kr.modyeo.api.inquiry.domain.dto.Response.AnswerDetail;
 import com.co.kr.modyeo.api.inquiry.domain.dto.Response.InquiryDetail;
 import com.co.kr.modyeo.api.inquiry.domain.dto.Response.InquiryResponse;
 import com.co.kr.modyeo.api.inquiry.domain.dto.search.InquirySearch;
+import com.co.kr.modyeo.api.inquiry.domain.enumerate.InquiryStatus;
 import com.co.kr.modyeo.api.inquiry.service.InquiryService;
-import com.co.kr.modyeo.api.member.domain.enumerate.Authority;
 import com.co.kr.modyeo.common.result.JsonResultData;
 import com.co.kr.modyeo.common.result.ResponseHandler;
 import io.swagger.annotations.Api;
@@ -17,8 +17,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import static com.co.kr.modyeo.common.util.SecurityUtil.checkAuthority;
 
 @RestController
 @RequestMapping("/api")
@@ -30,38 +28,20 @@ public class InquiryApiController {
     @GetMapping(value="/inquiry")
     @ApiOperation(value="문의사항 Index 페이지 API")
     public ResponseEntity<?> getInquiryIndexPage(InquirySearch inquirySearch){
+        inquirySearch.setStatus(InquiryStatus.FREQUENT);
         Slice<InquiryResponse> inquiryResponseSlice = inquiryService.getInquiryIndexPage(inquirySearch);
         return ResponseEntity.ok(JsonResultData.successResultBuilder()
                 .data(inquiryResponseSlice)
                 .build());
     }
 
-    @GetMapping(value="/inquiry/my")
-    @ApiOperation(value="나의 문의사항 조회(일반유저) API")
-    public ResponseEntity<?> getMyInquiries(InquirySearch inquirySearch){
-        Authority auth = checkAuthority();
-        if (auth!=Authority.ROLE_USER) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        } else {
-            Slice<InquiryResponse> inquiryResponseSlice = inquiryService.getMyInquiries(inquirySearch);
-            return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                    .data(inquiryResponseSlice)
-                    .build());
-        }
-    }
-
-    @GetMapping(value = "/inquiry/admin")
-    @ApiOperation(value = "전체 문의사항 조회(관리자) API")
+    @GetMapping(value = "/inquiry/select")
+    @ApiOperation(value = "문의사항 조회 API")
     public ResponseEntity<?> getInquiries(InquirySearch inquirySearch) {
-        Authority auth = checkAuthority();
-        if (auth!=Authority.ROLE_ADMIN) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        } else {
-            Slice<InquiryResponse> inquiryResponseSlice = inquiryService.getAllInquiries(inquirySearch, auth);
+        Slice<InquiryResponse> inquiryResponseSlice = inquiryService.getSelectedInquiries(inquirySearch);
             return ResponseEntity.ok(JsonResultData.successResultBuilder()
                     .data(inquiryResponseSlice)
                     .build());
-        }
     }
 
     //문의사항 조회
