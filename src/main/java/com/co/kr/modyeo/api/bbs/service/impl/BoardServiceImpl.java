@@ -56,7 +56,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Slice<ArticleResponse> getArticles(ArticleSearch articleSearch) {
         PageRequest pageRequest = PageRequest.of(articleSearch.getOffset(), articleSearch.getLimit(), articleSearch.getDirection(), articleSearch.getOrderBy());
-        return articleRepository.searchArticle(articleSearch, pageRequest);
+        return articleRepository.searchArticle(articleSearch, pageRequest).map(ArticleResponse::toDto);
     }
 
     @Transactional
@@ -82,8 +82,18 @@ public class BoardServiceImpl implements BoardService {
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
+        Member member = memberRepository.findById(article.getCreatedBy()).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
+                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
+        ArticleDetail articleDetail = ArticleDetail.toDto(article);
+        articleDetail.setMember(ArticleDetail.Member.toDto(member));
         article.plusHitCount();
-        return ArticleDetail.toDto(article);
+
+        return articleDetail;
     }
 
     @Override
