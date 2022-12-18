@@ -4,9 +4,7 @@ import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -39,20 +37,8 @@ public class ArticleResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
 
-    @QueryProjection
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public ArticleResponse(Long articleId,
-                           String title,
-                           String content,
-                           Long categoryId,
-                           String categoryName,
-                           String filePath,
-                           Yn isHidden,
-                           Long hitCount,
-                           Integer recommendCount,
-                           Integer replyCount,
-                           Long createdBy,
-                           LocalDateTime createdTime) {
+    public ArticleResponse(Long articleId, String title, String content, Long categoryId, String categoryName, String filePath, Yn isHidden, Integer replyCount, Integer recommendCount, Long hitCount, Long createdBy, LocalDateTime createdTime) {
         this.articleId = articleId;
         this.title = title;
         this.content = content;
