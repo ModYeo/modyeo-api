@@ -1,11 +1,13 @@
 package com.co.kr.modyeo.api.bbs.repository.custom.impl;
 
+import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.api.bbs.repository.custom.ArticleCustomRepository;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -14,6 +16,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 import static com.co.kr.modyeo.api.bbs.domain.entity.QArticle.article;
+import static com.co.kr.modyeo.api.bbs.domain.entity.QReply.reply;
 import static com.co.kr.modyeo.api.bbs.domain.entity.link.QArticleRecommend.articleRecommend;
 import static com.co.kr.modyeo.api.category.domain.entity.QCategory.category;
 import static com.co.kr.modyeo.api.member.domain.entity.QMember.member;
@@ -25,12 +28,32 @@ public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements
     }
 
     @Override
-    public Slice<Article> searchArticle(ArticleSearch articleSearch, PageRequest pageRequest) {
+    public Slice<ArticleResponse> searchArticle(ArticleSearch articleSearch, PageRequest pageRequest) {
         return applySlicing(pageRequest, contentQuery ->
-                contentQuery.select(article)
+                contentQuery.select(Projections.constructor(ArticleResponse.class,
+                                article.id,
+                                article.title,
+                                article.content,
+                        article.category.id,
+                        article.category.name,
+                        article.filePath,
+                        article.isHidden,
+                        article.replyList.size(),
+                        article.articleRecommendList.size(),
+                        article.hitCount,
+                        article.createdBy,
+                        Projections.constructor(ArticleResponse.Member.class,
+                                member.id,
+                                member.email,
+                                member.nickname)),
+                        article.createdDate
+                        )
                         .from(article)
                         .innerJoin(article.category, category)
-                        .fetchJoin()
+                        .innerJoin(member).on(article.createdBy.eq(member.id))
+                        .innerJoin(article.articleRecommendList, articleRecommend)
+                        .innerJoin(article.replyList, reply)
+                        .groupBy(article.id)
                         .where(articleTitleLike(articleSearch.getTitle()),
                                 articleContentLike(articleSearch.getContent()),
                                 categoryIdEq(articleSearch.getCategoryId()),

@@ -56,7 +56,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public Slice<ArticleResponse> getArticles(ArticleSearch articleSearch) {
         PageRequest pageRequest = PageRequest.of(articleSearch.getOffset(), articleSearch.getLimit(), articleSearch.getDirection(), articleSearch.getOrderBy());
-        return articleRepository.searchArticle(articleSearch, pageRequest).map(ArticleResponse::toDto);
+        return articleRepository.searchArticle(articleSearch, pageRequest);
     }
 
     @Transactional
