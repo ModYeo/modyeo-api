@@ -1,12 +1,11 @@
 package com.co.kr.modyeo.api.bbs.domain.dto.response;
 
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamArticle;
+import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamResponse;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -34,6 +33,8 @@ public class TeamArticleDetail {
     private Integer recommendCount;
 
     private Long createdBy;
+
+    private Member member;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
@@ -79,5 +80,31 @@ public class TeamArticleDetail {
                 .createdTime(teamArticle.getCreatedDate())
                 .replyResponses(teamArticle.getTeamReplyList().stream().map(TeamReplyResponse::toDto).collect(Collectors.toList()))
                 .build();
+    }
+
+    @Getter
+    @Setter
+    public static class Member{
+
+        private Long memberId;
+
+        private String email;
+
+        private String nickname;
+
+        @Builder(builderClassName = "of",builderMethodName = "of")
+        public Member(Long memberId, String email, String nickname) {
+            this.memberId = memberId;
+            this.email = email;
+            this.nickname = nickname;
+        }
+
+        public static Member toDto(com.co.kr.modyeo.api.member.domain.entity.Member member) {
+            return Member.of()
+                    .memberId(member.getId())
+                    .email(member.getEmail())
+                    .nickname(member.getNickname())
+                    .build();
+        }
     }
 }
