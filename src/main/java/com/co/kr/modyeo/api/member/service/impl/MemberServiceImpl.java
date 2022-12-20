@@ -117,4 +117,9 @@ public class MemberServiceImpl implements MemberService {
 
         return detail;
     }
+
+    @Override
+    public boolean checkOverlapNickname(String nickname) {
+        return !memberRepository.existsByNickname(nickname);
+    }
 }
