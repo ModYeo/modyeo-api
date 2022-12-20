@@ -74,9 +74,18 @@ public class TeamBoardServiceImpl implements TeamBoardService {
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
-        teamArticle.plusHitCount();
+        Member member = memberRepository.findById(teamArticle.getCreatedBy()).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
+                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
 
-        return TeamArticleDetail.toDto(teamArticle);
+        teamArticle.plusHitCount();
+        TeamArticleDetail teamArticleDetail = TeamArticleDetail.toDto(teamArticle);
+        teamArticleDetail.setMember(TeamArticleDetail.Member.toDto(member));
+
+        return teamArticleDetail;
     }
 
     @Override
