@@ -82,8 +82,18 @@ public class BoardServiceImpl implements BoardService {
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
+        Member member = memberRepository.findById(article.getCreatedBy()).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
+                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+
+        ArticleDetail articleDetail = ArticleDetail.toDto(article);
+        articleDetail.setMember(ArticleDetail.Member.toDto(member));
         article.plusHitCount();
-        return ArticleDetail.toDto(article);
+
+        return articleDetail;
     }
 
     @Override

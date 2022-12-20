@@ -1,11 +1,13 @@
 package com.co.kr.modyeo.api.bbs.repository.custom.impl;
 
+import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.api.bbs.repository.custom.ArticleCustomRepository;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -14,6 +16,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 import static com.co.kr.modyeo.api.bbs.domain.entity.QArticle.article;
+import static com.co.kr.modyeo.api.bbs.domain.entity.QReply.reply;
 import static com.co.kr.modyeo.api.bbs.domain.entity.link.QArticleRecommend.articleRecommend;
 import static com.co.kr.modyeo.api.category.domain.entity.QCategory.category;
 import static com.co.kr.modyeo.api.member.domain.entity.QMember.member;
@@ -30,7 +33,6 @@ public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements
                 contentQuery.select(article)
                         .from(article)
                         .innerJoin(article.category, category)
-                        .fetchJoin()
                         .where(articleTitleLike(articleSearch.getTitle()),
                                 articleContentLike(articleSearch.getContent()),
                                 categoryIdEq(articleSearch.getCategoryId()),
