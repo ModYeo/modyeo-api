@@ -166,14 +166,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void authMail(String email,String authNumber) {
-        Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> ApiException.builder()
-                        .status(HttpStatus.BAD_REQUEST)
-                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
-                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
-                        .build());
-
-        MailDto mailDto = MailDto.makeAuthSender(member, authNumber);
+        MailDto mailDto = MailDto.makeAuthSender(email, authNumber);
         modyeoMailSender.send(mailDto);
     }
 

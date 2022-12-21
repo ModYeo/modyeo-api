@@ -1,17 +1,18 @@
 package com.co.kr.modyeo.common.util;
 
 import com.co.kr.modyeo.api.member.auth.domain.dto.MailDto;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class ModyeoMailSender {
     private JavaMailSender javaMailSender;
 
-    private static final String FROM_ADDRESS = "";
+    private static final String FROM_ADDRESS = "whdrlf98@gmail.com";
 
     public void send(MailDto mailDto){
         SimpleMailMessage message = new SimpleMailMessage();

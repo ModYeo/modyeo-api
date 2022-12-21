@@ -21,16 +21,16 @@ public class MailDto {
         this.message = message;
     }
 
-    public static MailDto makeAuthSender(Member member, String authNumber){
+    public static MailDto makeAuthSender(String email, String authNumber){
         return of()
-                .address(member.getEmail())
+                .address(email)
                 .title(makeTitle())
-                .message(makeMessage(member,authNumber))
+                .message(makeMessage(authNumber))
                 .build();
     }
 
-    private static String makeMessage(Member member, String authNumber) {
-        return member.getUsername() + "님의 인증메일이 도착했습니다.\n"+"인증번호" + authNumber;
+    private static String makeMessage(String authNumber) {
+        return "인증메일이 도착했습니다.\n"+"인증번호 : " + authNumber;
     }
 
     private static String makeTitle() {
