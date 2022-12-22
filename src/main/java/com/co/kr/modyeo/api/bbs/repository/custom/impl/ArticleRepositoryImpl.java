@@ -33,6 +33,7 @@ public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements
                 contentQuery.select(article)
                         .from(article)
                         .innerJoin(article.category, category)
+                        .fetchJoin()
                         .where(articleTitleLike(articleSearch.getTitle()),
                                 articleContentLike(articleSearch.getContent()),
                                 categoryIdEq(articleSearch.getCategoryId()),
