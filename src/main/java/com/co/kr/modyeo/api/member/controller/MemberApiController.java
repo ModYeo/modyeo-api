@@ -16,6 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/member")
@@ -76,6 +79,20 @@ public class MemberApiController {
         return ResponseHandler.generate()
                 .status(HttpStatus.OK)
                 .data(applicationMemberDetail)
+                .build();
+    }
+
+    @ApiOperation(value = "닉네임 중복 확인 API")
+    @GetMapping("/overlap-nickname")
+    public ResponseEntity<?> checkOverlapNickname(@RequestParam(value = "nickname", required = true, defaultValue = "") String nickname){
+        boolean enable = memberService.checkOverlapNickname(nickname);
+
+        Map<String,Object> result = new HashMap<>();
+        result.put("enable", enable);
+
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
+                .data(result)
                 .build();
     }
 }

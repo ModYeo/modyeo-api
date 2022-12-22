@@ -17,4 +17,6 @@ public interface MemberService {
     Long putProfilePath(MemberProfilePathRequest memberProfilePathRequest);
 
     ApplicationMemberDetail getTeamApplicationMember(Long memberId, Long teamId);
+
+    boolean checkOverlapNickname(String nickname);
 }
