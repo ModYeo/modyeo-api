@@ -6,9 +6,11 @@ import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.api.bbs.repository.custom.ArticleCustomRepository;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.util.StringUtils;
@@ -20,6 +22,7 @@ import static com.co.kr.modyeo.api.bbs.domain.entity.QReply.reply;
 import static com.co.kr.modyeo.api.bbs.domain.entity.link.QArticleRecommend.articleRecommend;
 import static com.co.kr.modyeo.api.category.domain.entity.QCategory.category;
 import static com.co.kr.modyeo.api.member.domain.entity.QMember.member;
+import static com.querydsl.core.types.ExpressionUtils.count;
 
 public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements ArticleCustomRepository {
 
@@ -28,12 +31,28 @@ public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements
     }
 
     @Override
-    public Slice<Article> searchArticle(ArticleSearch articleSearch, PageRequest pageRequest) {
+    public Slice<ArticleResponse> searchArticle(ArticleSearch articleSearch, PageRequest pageRequest) {
         return applySlicing(pageRequest, contentQuery ->
-                contentQuery.select(article)
+                contentQuery.select(Projections.constructor(ArticleResponse.class,
+                                article.id,
+                                article.title,
+                                article.content,
+                                category.id,
+                                category.name,
+                                article.filePath,
+                                article.isHidden,
+                                article.replyList.size(),
+                                ExpressionUtils.as(JPAExpressions.select(count(article.id))
+                                        .from(articleRecommend)
+                                        .where(articleRecommend.article.eq(article),
+                                                articleRecommend.recommendYn.eq(Yn.Y)),"recommendCount"),
+                                article.hitCount     ,
+                                article.createdBy,
+                                member.nickname,
+                                article.createdDate))
                         .from(article)
                         .innerJoin(article.category, category)
-                        .fetchJoin()
+                        .innerJoin(member).on(member.id.eq(article.createdBy))
                         .where(articleTitleLike(articleSearch.getTitle()),
                                 articleContentLike(articleSearch.getContent()),
                                 categoryIdEq(articleSearch.getCategoryId()),
