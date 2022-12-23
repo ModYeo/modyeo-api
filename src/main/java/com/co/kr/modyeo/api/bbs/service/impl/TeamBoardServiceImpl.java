@@ -91,7 +91,7 @@ public class TeamBoardServiceImpl implements TeamBoardService {
     @Override
     public Slice<TeamArticleResponse> getTeamArticles(TeamArticleSearch teamArticleSearch) {
         PageRequest pageRequest = PageRequest.of(teamArticleSearch.getOffset(), teamArticleSearch.getLimit(), teamArticleSearch.getDirection(), teamArticleSearch.getOrderBy());
-        return teamArticleRepository.searchTeamArticle(teamArticleSearch, pageRequest).map(TeamArticleResponse::toDto);
+        return teamArticleRepository.searchTeamArticle(teamArticleSearch, pageRequest);
     }
 
     @Override
