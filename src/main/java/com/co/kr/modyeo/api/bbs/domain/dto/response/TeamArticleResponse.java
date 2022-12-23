@@ -30,6 +30,8 @@ public class TeamArticleResponse {
 
     private Long createdBy;
 
+    private String nickname;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
 
@@ -43,6 +45,7 @@ public class TeamArticleResponse {
                                Integer recommendCount,
                                Long hitCount,
                                Long createdBy,
+                               String nickname,
                                LocalDateTime createdTime) {
         this.articleId = articleId;
         this.title = title;
@@ -52,6 +55,7 @@ public class TeamArticleResponse {
         this.replyCount = replyCount;
         this.recommendCount = recommendCount;
         this.hitCount = hitCount;
+        this.nickname = nickname;
         this.createdBy = createdBy;
         this.createdTime = createdTime;
     }

@@ -9,7 +9,7 @@ import org.springframework.data.domain.Slice;
 import java.util.List;
 
 public interface ArticleCustomRepository {
-    Slice<Article> searchArticle(ArticleSearch articleSearch, PageRequest pageRequest);
+    Slice<ArticleResponse> searchArticle(ArticleSearch articleSearch, PageRequest pageRequest);
 
     List<Article> findArticleByEmail(Long memberId);
 

@@ -1,12 +1,17 @@
 package com.co.kr.modyeo.api.bbs.repository.custom.impl;
 
+import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
+import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.TeamArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamArticle;
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamReply;
 import com.co.kr.modyeo.api.bbs.repository.custom.TeamArticleCustomRepository;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.util.StringUtils;
@@ -16,9 +21,11 @@ import java.util.List;
 import static com.co.kr.modyeo.api.bbs.domain.entity.QArticle.article;
 import static com.co.kr.modyeo.api.bbs.domain.entity.QTeamArticle.teamArticle;
 import static com.co.kr.modyeo.api.bbs.domain.entity.QTeamReply.teamReply;
+import static com.co.kr.modyeo.api.bbs.domain.entity.link.QArticleRecommend.articleRecommend;
 import static com.co.kr.modyeo.api.member.domain.entity.QMember.member;
 import static com.co.kr.modyeo.api.bbs.domain.entity.link.QTeamArticleRecommend.teamArticleRecommend;
 import static com.co.kr.modyeo.api.team.domain.entity.QTeam.team;
+import static com.querydsl.core.types.ExpressionUtils.count;
 
 public class TeamArticleRepositoryImpl extends Querydsl4RepositorySupport implements TeamArticleCustomRepository {
     public TeamArticleRepositoryImpl() {
@@ -26,11 +33,26 @@ public class TeamArticleRepositoryImpl extends Querydsl4RepositorySupport implem
     }
 
     @Override
-    public Slice<TeamArticle> searchTeamArticle(TeamArticleSearch teamArticleSearch, PageRequest pageRequest) {
+    public Slice<TeamArticleResponse> searchTeamArticle(TeamArticleSearch teamArticleSearch, PageRequest pageRequest) {
         return applySlicing(pageRequest, contentQuery ->
-                contentQuery.select(teamArticle)
+                contentQuery.select(Projections.constructor(TeamArticleResponse.class,
+                                teamArticle.id,
+                                teamArticle.title,
+                                teamArticle.content,
+                                teamArticle.filePath,
+                                teamArticle.isHidden,
+                                teamArticle.teamReplyList.size(),
+                                ExpressionUtils.as(JPAExpressions.select(count(teamArticle.id))
+                                        .from(teamArticleRecommend)
+                                        .where(teamArticleRecommend.teamArticle.eq(teamArticle),
+                                                teamArticleRecommend.recommendYn.eq(Yn.Y)),"recommendCount"),
+                                teamArticle.hitCount,
+                                teamArticle.createdBy,
+                                member.nickname,
+                                teamArticle.createdDate))
                         .from(teamArticle)
                         .innerJoin(teamArticle.team, team)
+                        .innerJoin(member).on(member.id.eq(teamArticle.createdBy))
                         .fetchJoin()
                         .where(articleTitleLike(teamArticleSearch.getTitle()),
                                 articleContentLike(teamArticleSearch.getContent()),

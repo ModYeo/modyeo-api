@@ -28,17 +28,19 @@ public class ArticleResponse {
 
     private Integer replyCount;
 
-    private Integer recommendCount;
+    private Long recommendCount;
 
     private Long hitCount;
 
     private Long createdBy;
 
+    private String nickname;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
 
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public ArticleResponse(Long articleId, String title, String content, Long categoryId, String categoryName, String filePath, Yn isHidden, Integer replyCount, Integer recommendCount, Long hitCount, Long createdBy, LocalDateTime createdTime) {
+    public ArticleResponse(Long articleId, String title, String content, Long categoryId, String categoryName, String filePath, Yn isHidden, Integer replyCount, Long recommendCount, Long hitCount, Long createdBy,String nickname, LocalDateTime createdTime) {
         this.articleId = articleId;
         this.title = title;
         this.content = content;
@@ -50,6 +52,7 @@ public class ArticleResponse {
         this.recommendCount = recommendCount;
         this.hitCount = hitCount;
         this.createdBy = createdBy;
+        this.nickname = nickname;
         this.createdTime = createdTime;
     }
 
@@ -63,7 +66,7 @@ public class ArticleResponse {
                 .content(article.getContent())
                 .isHidden(article.getIsHidden())
                 .hitCount(article.getHitCount())
-                .recommendCount((int) article.getArticleRecommendList().stream().filter(articleRecommend -> articleRecommend.getRecommendYn() == Yn.Y).count())
+                .recommendCount(article.getArticleRecommendList().stream().filter(articleRecommend -> articleRecommend.getRecommendYn() == Yn.Y).count())
                 .replyCount(article.getReplyList().size())
                 .createdBy(article.getCreatedBy())
                 .createdTime(article.getCreatedDate())
