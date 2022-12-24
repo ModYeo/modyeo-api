@@ -18,5 +18,5 @@ public interface MemberService {
 
     ApplicationMemberDetail getTeamApplicationMember(Long memberId, Long teamId);
 
-    boolean checkOverlapNickname(String nickname);
+    String checkOverlapNickname(String nickname);
 }

@@ -119,7 +119,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public boolean checkOverlapNickname(String nickname) {
-        return !memberRepository.existsByNickname(nickname);
+    public String checkOverlapNickname(String nickname) {
+        return memberRepository.existsByNickname(nickname)? "enable" : "disable";
     }
 }

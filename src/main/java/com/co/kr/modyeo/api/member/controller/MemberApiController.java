@@ -85,10 +85,7 @@ public class MemberApiController {
     @ApiOperation(value = "닉네임 중복 확인 API")
     @GetMapping("/overlap-nickname")
     public ResponseEntity<?> checkOverlapNickname(@RequestParam(value = "nickname", required = true, defaultValue = "") String nickname){
-        boolean enable = memberService.checkOverlapNickname(nickname);
-
-        Map<String,Object> result = new HashMap<>();
-        result.put("enable", enable);
+        String result = memberService.checkOverlapNickname(nickname);
 
         return ResponseHandler.generate()
                 .status(HttpStatus.OK)
