@@ -1,9 +1,6 @@
 package com.co.kr.modyeo.api.bbs.controller;
 
-import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRequest;
-import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRecommendRequest;
-import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyRecommendRequest;
-import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.*;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyDetail;
@@ -54,8 +51,8 @@ public class BoardApiController {
 
     @ApiOperation(value = "게시글 생성 API")
     @PostMapping("/article")
-    public ResponseEntity<?> createArticle(@RequestBody ArticleRequest articleRequest) {
-        Long articleId = boardService.createArticle(articleRequest);
+    public ResponseEntity<?> createArticle(@RequestBody ArticleCreateRequest articleCreateRequest) {
+        Long articleId = boardService.createArticle(articleCreateRequest);
         return ResponseHandler.generate()
                 .data(articleId)
                 .status(HttpStatus.CREATED)
@@ -64,8 +61,8 @@ public class BoardApiController {
 
     @ApiOperation(value = "게시글 수정 API")
     @PatchMapping("/article")
-    public ResponseEntity<?> updateArticle(@RequestBody ArticleRequest articleRequest) {
-        Long articleId = boardService.updateArticle(articleRequest);
+    public ResponseEntity<?> updateArticle(@RequestBody ArticleUpdateRequest articleUpdateRequest) {
+        Long articleId = boardService.updateArticle(articleUpdateRequest);
         return ResponseHandler.generate()
                 .data(articleId)
                 .status(HttpStatus.OK)

@@ -1,9 +1,6 @@
 package com.co.kr.modyeo.api.bbs.service.impl;
 
-import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRecommendRequest;
-import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRequest;
-import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyRecommendRequest;
-import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.*;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyDetail;
@@ -61,15 +58,15 @@ public class BoardServiceImpl implements BoardService {
 
     @Transactional
     @Override
-    public Long createArticle(ArticleRequest articleRequest) {
-        Category category = categoryRepository.findById(articleRequest.getCategoryId()).orElseThrow(
+    public Long createArticle(ArticleCreateRequest articleCreateRequest) {
+        Category category = categoryRepository.findById(articleCreateRequest.getCategoryId()).orElseThrow(
                 () -> ApiException.builder()
                         .errorMessage(CategoryErrorCode.NOT_FOUND_CATEGORY.getMessage())
                         .errorCode(CategoryErrorCode.NOT_FOUND_CATEGORY.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
-        return articleRepository.save(ArticleRequest.createArticle(articleRequest, category)).getId();
+        return articleRepository.save(ArticleCreateRequest.createArticle(articleCreateRequest, category)).getId();
     }
 
     @Transactional
@@ -98,15 +95,15 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public Long updateArticle(ArticleRequest articleRequest) {
-        Article article = articleRepository.findById(articleRequest.getArticleId()).orElseThrow(
+    public Long updateArticle(ArticleUpdateRequest articleUpdateRequest) {
+        Article article = articleRepository.findById(articleUpdateRequest.getArticleId()).orElseThrow(
                 () -> ApiException.builder()
                         .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
                         .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
-        Category category = categoryRepository.findById(articleRequest.getCategoryId()).orElseThrow(
+        Category category = categoryRepository.findById(articleUpdateRequest.getCategoryId()).orElseThrow(
                 () -> ApiException.builder()
                         .errorMessage(CategoryErrorCode.NOT_FOUND_CATEGORY.getMessage())
                         .errorCode(CategoryErrorCode.NOT_FOUND_CATEGORY.getCode())
@@ -115,10 +112,10 @@ public class BoardServiceImpl implements BoardService {
 
         article.updateArticleBuilder()
                 .category(category)
-                .title(articleRequest.getTitle())
-                .content(articleRequest.getContent())
-                .filePath(articleRequest.getFilePath())
-                .isHidden(articleRequest.getIsHidden())
+                .title(articleUpdateRequest.getTitle())
+                .content(articleUpdateRequest.getContent())
+                .filePath(articleUpdateRequest.getFilePath())
+                .isHidden(articleUpdateRequest.getIsHidden())
                 .build();
 
         return article.getId();

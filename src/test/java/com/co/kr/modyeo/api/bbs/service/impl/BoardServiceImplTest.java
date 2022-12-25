@@ -1,7 +1,7 @@
 package com.co.kr.modyeo.api.bbs.service.impl;
 
-import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRequest;
-import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleRecommendRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleCreateRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleUpdateRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
@@ -9,7 +9,6 @@ import com.co.kr.modyeo.api.bbs.repository.ArticleRepository;
 import com.co.kr.modyeo.api.bbs.repository.ReplyRepository;
 import com.co.kr.modyeo.api.bbs.service.BoardService;
 import com.co.kr.modyeo.api.category.repository.CategoryRepository;
-import com.co.kr.modyeo.common.enumerate.Yn;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -75,7 +74,7 @@ class BoardServiceImplTest {
 
     @Test
     void createArticle() {
-        ArticleRequest articleRequest = ArticleRequest.of()
+        ArticleCreateRequest articleCreateRequest = ArticleCreateRequest.of()
                 .title("test title")
                 .content("test contents")
                 .build();
@@ -87,14 +86,14 @@ class BoardServiceImplTest {
                 .build();
 
         given(articleRepository.save(any())).willReturn(article);
-        boardService.createArticle(articleRequest);
+        boardService.createArticle(articleCreateRequest);
 
         then(articleRepository).should().save(any());
     }
 
     @Test
     void updateArticle(){
-        ArticleRequest articleRequest = ArticleRequest.of()
+        ArticleUpdateRequest articleCreateRequest = ArticleUpdateRequest.of()
                 .title("test title2")
                 .content("test contents2")
                 .build();
@@ -107,7 +106,7 @@ class BoardServiceImplTest {
 
         given(articleRepository.findById(any())).willReturn(Optional.of(article));
 
-        Long id = boardService.updateArticle(articleRequest);
+        Long id = boardService.updateArticle(articleCreateRequest);
 
         then(articleRepository).should().findById(any());
     }

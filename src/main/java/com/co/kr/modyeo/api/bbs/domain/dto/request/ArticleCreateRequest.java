@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class ArticleRequest {
+public class ArticleCreateRequest {
 
-    private Long articleId;
 
     private Long categoryId;
 
@@ -26,8 +25,7 @@ public class ArticleRequest {
     private Yn isHidden;
 
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public ArticleRequest(Long articleId, String title, String content, String filePath, Long hitCount, Yn isHidden) {
-        this.articleId = articleId;
+    public ArticleCreateRequest(String title, String content, String filePath, Long hitCount, Yn isHidden) {
         this.title = title;
         this.content = content;
         this.filePath = filePath;
@@ -35,23 +33,22 @@ public class ArticleRequest {
         this.isHidden = isHidden;
     }
 
-    public static Article toEntity(ArticleRequest articleRequest) {
+    public static Article toEntity(ArticleCreateRequest articleCreateRequest) {
         return Article.of()
-                .id(articleRequest.articleId)
-                .title(articleRequest.title)
-                .content(articleRequest.content)
-                .filePath(articleRequest.filePath)
-                .hitCount(articleRequest.hitCount)
+                .title(articleCreateRequest.title)
+                .content(articleCreateRequest.content)
+                .filePath(articleCreateRequest.filePath)
+                .hitCount(articleCreateRequest.hitCount)
                 .build();
     }
 
-    public static Article createArticle(ArticleRequest articleRequest, Category category) {
+    public static Article createArticle(ArticleCreateRequest articleCreateRequest, Category category) {
         return Article.createArticleBuilder()
-                .content(articleRequest.getContent())
+                .content(articleCreateRequest.getContent())
                 .category(category)
-                .title(articleRequest.getTitle())
-                .filePath(articleRequest.getFilePath())
-                .isHidden(articleRequest.getIsHidden())
+                .title(articleCreateRequest.getTitle())
+                .filePath(articleCreateRequest.getFilePath())
+                .isHidden(articleCreateRequest.getIsHidden())
                 .build();
     }
 }
