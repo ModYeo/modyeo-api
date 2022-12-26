@@ -2,7 +2,7 @@ package com.co.kr.modyeo.api.member.auth.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AuthControllerTest {
+class AuthApiControllerTest {
 
     @org.junit.jupiter.api.Test
     void signup() {

@@ -3,7 +3,6 @@ package com.co.kr.modyeo.api.member.auth.controller;
 import com.co.kr.modyeo.api.member.auth.domain.dto.*;
 import com.co.kr.modyeo.api.member.auth.service.AuthService;
 import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
-import com.co.kr.modyeo.common.result.JsonResultData;
 import com.co.kr.modyeo.common.result.ResponseHandler;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,7 +20,7 @@ import java.util.Base64;
 @RequestMapping("/api/auth")
 @Api("인증 관련 API Controller")
 @RequiredArgsConstructor
-public class AuthController {
+public class AuthApiController {
 
     private final String BASIC_PREFIX = "Basic ";
     private final AuthService authService;

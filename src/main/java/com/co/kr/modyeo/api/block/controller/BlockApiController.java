@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/block")
 @RequiredArgsConstructor
-public class BlockController {
+public class BlockApiController {
 
     private final BlockService blockService;
 

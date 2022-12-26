@@ -1,6 +1,6 @@
 package com.co.kr.modyeo.member.auth.controller;
 
-import com.co.kr.modyeo.api.member.auth.controller.AuthController;
+import com.co.kr.modyeo.api.member.auth.controller.AuthApiController;
 import com.co.kr.modyeo.api.member.auth.domain.dto.MemberJoinDto;
 import com.co.kr.modyeo.api.member.auth.service.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,9 +20,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(value = AuthController.class)
+@WebMvcTest(value = AuthApiController.class)
 @AutoConfigureMockMvc
-class AuthControllerTest {
+class AuthApiControllerTest {
 
     MockMvc mockMvc;
 
