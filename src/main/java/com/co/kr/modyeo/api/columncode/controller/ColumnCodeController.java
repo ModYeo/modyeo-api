@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.columncode.controller;
 
 import com.co.kr.modyeo.api.columncode.domain.dto.request.ColumnCodeSearch;
+import com.co.kr.modyeo.api.columncode.domain.dto.response.ColumnCodeDetail;
 import com.co.kr.modyeo.api.columncode.domain.dto.response.ColumnCodeResponse;
 import com.co.kr.modyeo.api.columncode.domain.entity.ColumnCode;
 import com.co.kr.modyeo.api.columncode.service.ColumnCodeService;
@@ -32,6 +33,7 @@ public class ColumnCodeController {
 
     @GetMapping("/{column_code_id}")
     public ResponseEntity<?> getColumnCode(@PathVariable(value = "column_code_id") Long columnCodeId){
+        ColumnCodeDetail columnCodeDetail = columnCodeService.getColumnCode(columnCodeId);
         return ResponseHandler.generate()
                 .status(HttpStatus.OK)
                 .build();
