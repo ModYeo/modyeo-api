@@ -19,6 +19,7 @@ import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.api.team.repository.TeamRepository;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.BoardErrorCode;
 import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
@@ -139,6 +140,7 @@ public class TeamBoardServiceImpl implements TeamBoardService {
 
         TeamReply teamReply = teamReplyRequest.getReplyDepth() == 0 ?
                 TeamReplyRequest.toTeamReply(teamArticle, teamReplyRequest.getContent()) : TeamReplyRequest.toTeamNestedReply(teamArticle, teamReplyRequest.getContent(), teamReplyRequest.getReplyGroup());
+        teamArticle.plusReplyCount();
         return teamReplyRepository.save(teamReply).getId();
     }
 
@@ -167,6 +169,7 @@ public class TeamBoardServiceImpl implements TeamBoardService {
                         .errorCode(BoardErrorCode.NOT_FOUND_REPLY.getCode())
                         .build());
 
+        teamReply.getTeamArticle().minusReplyCount();
         teamReplyRepository.delete(teamReply);
     }
 
@@ -209,8 +212,14 @@ public class TeamBoardServiceImpl implements TeamBoardService {
                     .build();
 
             teamArticleRecommendRepository.save(teamArticleRecommend);
+            teamArticle.plusRecommendCount();
         } else {
             findTeamArticleRecommend.changeRecommendYn(articleRecommendRequest.getRecommendYn());
+            if (Yn.Y.equals(articleRecommendRequest.getRecommendYn())){
+                teamArticle.plusRecommendCount();
+            } else {
+                teamArticle.minusRecommendCount();
+            }
         }
     }
 

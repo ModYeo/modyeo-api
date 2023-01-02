@@ -42,6 +42,12 @@ public class TeamArticle extends BaseEntity {
 
     @Column(name = "hit_count")
     private Long hitCount;
+
+    @Column(name = "reply_count")
+    private int replyCount;
+
+    @Column(name = "recommend_count")
+    private int recommendCount;
     
     @OneToMany(mappedBy = "teamArticle", cascade = CascadeType.ALL)
     private List<TeamReply> teamReplyList = new ArrayList<>();
@@ -50,7 +56,7 @@ public class TeamArticle extends BaseEntity {
     private List<TeamArticleRecommend> teamArticleRecommendList = new ArrayList<>();
 
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public TeamArticle(Long id, Team team, String title, String content, String filePath, Yn isHidden, Long hitCount, List<TeamReply> teamReplyList, List<TeamArticleRecommend> teamArticleRecommendList) {
+    public TeamArticle(Long id, Team team, String title, String content, String filePath, Yn isHidden, Long hitCount, int replyCount, int recommendCount, List<TeamReply> teamReplyList, List<TeamArticleRecommend> teamArticleRecommendList) {
         this.id = id;
         this.team = team;
         this.title = title;
@@ -58,6 +64,8 @@ public class TeamArticle extends BaseEntity {
         this.filePath = filePath;
         this.isHidden = isHidden;
         this.hitCount = hitCount;
+        this.replyCount = replyCount;
+        this.recommendCount = recommendCount;
         this.teamReplyList = teamReplyList;
         this.teamArticleRecommendList = teamArticleRecommendList;
     }
@@ -69,6 +77,8 @@ public class TeamArticle extends BaseEntity {
         this.content = content;
         this.filePath = filePath;
         this.isHidden = isHidden;
+        this.replyCount = 0;
+        this.recommendCount = 0;
         this.hitCount = 0L;
     }
 
@@ -82,5 +92,21 @@ public class TeamArticle extends BaseEntity {
 
     public void plusHitCount() {
         this.hitCount++;
+    }
+
+    public void plusReplyCount() {
+        this.replyCount++;
+    }
+
+    public void minusReplyCount() {
+        this.replyCount--;
+    }
+
+    public void plusRecommendCount() {
+        this.recommendCount++;
+    }
+
+    public void minusRecommendCount() {
+        this.recommendCount--;
     }
 }

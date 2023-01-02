@@ -28,7 +28,7 @@ public class ArticleResponse {
 
     private Integer replyCount;
 
-    private Long recommendCount;
+    private Integer recommendCount;
 
     private Long hitCount;
 
@@ -40,7 +40,7 @@ public class ArticleResponse {
     private LocalDateTime createdTime;
 
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public ArticleResponse(Long articleId, String title, String content, Long categoryId, String categoryName, String filePath, Yn isHidden, Integer replyCount, Long recommendCount, Long hitCount, Long createdBy,String nickname, LocalDateTime createdTime) {
+    public ArticleResponse(Long articleId, String title, String content, Long categoryId, String categoryName, String filePath, Yn isHidden, Integer replyCount, Integer recommendCount, Long hitCount, Long createdBy,String nickname, LocalDateTime createdTime) {
         this.articleId = articleId;
         this.title = title;
         this.content = content;
@@ -66,7 +66,7 @@ public class ArticleResponse {
                 .content(article.getContent())
                 .isHidden(article.getIsHidden())
                 .hitCount(article.getHitCount())
-                .recommendCount(article.getArticleRecommendList().stream().filter(articleRecommend -> articleRecommend.getRecommendYn() == Yn.Y).count())
+                .recommendCount((int) article.getArticleRecommendList().stream().filter(articleRecommend -> articleRecommend.getRecommendYn() == Yn.Y).count())
                 .replyCount(article.getReplyList().size())
                 .createdBy(article.getCreatedBy())
                 .createdTime(article.getCreatedDate())

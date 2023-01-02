@@ -47,6 +47,7 @@ public class ArticleRecommend extends BaseEntity {
         return of()
                 .member(member)
                 .article(article)
+                .recommendYn(Yn.Y)
                 .build();
     }
 
