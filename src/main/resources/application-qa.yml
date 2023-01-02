@@ -3,7 +3,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: modyeo.authentication@gmail.com
-    password: modyeo_Qwpo1209
+    password: ztddswmtzfaqqcjm
     properties:
       mail:
         smtp:
