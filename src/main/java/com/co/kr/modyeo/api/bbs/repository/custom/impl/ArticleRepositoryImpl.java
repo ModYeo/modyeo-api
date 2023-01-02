@@ -41,12 +41,9 @@ public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements
                                 category.name,
                                 article.filePath,
                                 article.isHidden,
-                                article.replyList.size(),
-                                ExpressionUtils.as(JPAExpressions.select(count(article.id))
-                                        .from(articleRecommend)
-                                        .where(articleRecommend.article.eq(article),
-                                                articleRecommend.recommendYn.eq(Yn.Y)),"recommendCount"),
-                                article.hitCount     ,
+                                article.replyCount,
+                                article.recommendCount,
+                                article.hitCount,
                                 article.createdBy,
                                 member.nickname,
                                 article.createdDate))

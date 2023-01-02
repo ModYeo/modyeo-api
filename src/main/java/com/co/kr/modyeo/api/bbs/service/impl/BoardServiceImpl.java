@@ -19,6 +19,7 @@ import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.category.repository.CategoryRepository;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.BoardErrorCode;
 import com.co.kr.modyeo.common.exception.code.CategoryErrorCode;
@@ -148,6 +149,8 @@ public class BoardServiceImpl implements BoardService {
                 ReplyRequest.toReply(replyRequest, article) : ReplyRequest.toNestedReply(replyRequest, article);
 
         replyRepository.save(reply);
+        article.plusReplyCount();
+
         return reply.getId();
     }
 
@@ -178,6 +181,7 @@ public class BoardServiceImpl implements BoardService {
                         .build());
 
         replyRepository.delete(reply);
+        reply.getArticle().minusReplyCount();
     }
 
     @Override
@@ -219,8 +223,14 @@ public class BoardServiceImpl implements BoardService {
                     .build();
 
             articleRecommendRepository.save(articleRecommend);
+            article.plusRecommendCount();
         } else {
             findArticleRecommend.changeRecommendYn(articleRecommendRequest.getRecommendYn());
+            if (Yn.Y.equals(articleRecommendRequest.getRecommendYn())){
+                article.plusRecommendCount();
+            } else {
+                article.minusRecommendCount();
+            }
         }
     }
 

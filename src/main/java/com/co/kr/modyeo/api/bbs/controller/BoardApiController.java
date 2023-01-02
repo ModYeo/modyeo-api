@@ -123,7 +123,7 @@ public class BoardApiController {
     }
 
     @ApiOperation("게시글 추천 업데이트 API")
-    @PatchMapping("/article/recommend")
+    @PutMapping("/article/recommend")
     public ResponseEntity<?> updateArticleRecommend(ArticleRecommendRequest articleRecommendRequest) {
         boardService.updateArticleRecommend(articleRecommendRequest);
         return ResponseHandler.generate()
@@ -133,7 +133,7 @@ public class BoardApiController {
     }
 
     @ApiOperation("댓글 추천 업데이트 API")
-    @PatchMapping("/Reply/recommend")
+    @PutMapping("/Reply/recommend")
     public ResponseEntity<?> updateReplyRecommend(ReplyRecommendRequest replyRecommendRequest) {
         boardService.updateReplyRecommend(replyRecommendRequest);
         return ResponseHandler.generate()

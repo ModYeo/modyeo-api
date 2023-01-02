@@ -41,11 +41,8 @@ public class TeamArticleRepositoryImpl extends Querydsl4RepositorySupport implem
                                 teamArticle.content,
                                 teamArticle.filePath,
                                 teamArticle.isHidden,
-                                teamArticle.teamReplyList.size(),
-                                ExpressionUtils.as(JPAExpressions.select(count(teamArticle.id))
-                                        .from(teamArticleRecommend)
-                                        .where(teamArticleRecommend.teamArticle.eq(teamArticle),
-                                                teamArticleRecommend.recommendYn.eq(Yn.Y)),"recommendCount"),
+                                teamArticle.replyCount,
+                                teamArticle.recommendCount,
                                 teamArticle.hitCount,
                                 teamArticle.createdBy,
                                 member.nickname,
