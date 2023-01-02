@@ -1,6 +1,8 @@
 package com.co.kr.modyeo.api.columncode.controller;
 
+import com.co.kr.modyeo.api.columncode.domain.dto.request.ColumnCodeCreateRequest;
 import com.co.kr.modyeo.api.columncode.domain.dto.request.ColumnCodeSearch;
+import com.co.kr.modyeo.api.columncode.domain.dto.request.ColumnCodeUpdateRequest;
 import com.co.kr.modyeo.api.columncode.domain.dto.response.ColumnCodeDetail;
 import com.co.kr.modyeo.api.columncode.domain.dto.response.ColumnCodeResponse;
 import com.co.kr.modyeo.api.columncode.domain.entity.ColumnCode;
@@ -10,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/column-code")
@@ -36,6 +35,34 @@ public class ColumnCodeController {
         ColumnCodeDetail columnCodeDetail = columnCodeService.getColumnCode(columnCodeId);
         return ResponseHandler.generate()
                 .status(HttpStatus.OK)
+                .data(columnCodeDetail)
+                .build();
+    }
+
+    @PostMapping("")
+    public ResponseEntity<?> createColumnCode(@RequestBody ColumnCodeCreateRequest columnCodeCreateRequest){
+        Long columnCodeId = columnCodeService.createColumnCode(columnCodeCreateRequest);
+        return ResponseHandler.generate()
+                .status(HttpStatus.CREATED)
+                .data(columnCodeId)
+                .build();
+    }
+
+    @PatchMapping("")
+    public ResponseEntity<?> updateColumnCode(@RequestBody ColumnCodeUpdateRequest columnCodeUpdateRequest){
+        Long columnCodeId = columnCodeService.updateColumnCode(columnCodeUpdateRequest);
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
+                .data(columnCodeId)
+                .build();
+    }
+
+    @DeleteMapping("/{column_code_id}")
+    public ResponseEntity<?> deleteColumnCode(@PathVariable(value = "column_code_id") Long columnCodeId){
+        columnCodeService.deleteColumnCode(columnCodeId);
+        return ResponseHandler.generate()
+                .status(HttpStatus.NO_CONTENT)
+                .data(null)
                 .build();
     }
 }

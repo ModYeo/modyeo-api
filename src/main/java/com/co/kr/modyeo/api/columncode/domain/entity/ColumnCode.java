@@ -42,4 +42,11 @@ public class ColumnCode extends BaseEntity {
                 .description(description)
                 .build();
     }
+
+    @Builder(builderClassName = "updateBuilder", builderMethodName = "updateBuilder")
+    public static void change(ColumnCode columnCode, String name, String code, String description){
+        columnCode.name = name;
+        columnCode.code = code;
+        columnCode.description = description;
+    }
 }
