@@ -4,7 +4,6 @@ import com.co.kr.modyeo.api.columncode.domain.dto.request.ColumnCodeSearch;
 import com.co.kr.modyeo.api.columncode.domain.entity.ColumnCode;
 import com.co.kr.modyeo.api.columncode.repository.custom.ColumnCodeCustomRepository;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

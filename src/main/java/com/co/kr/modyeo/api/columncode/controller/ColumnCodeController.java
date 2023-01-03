@@ -5,7 +5,6 @@ import com.co.kr.modyeo.api.columncode.domain.dto.request.ColumnCodeSearch;
 import com.co.kr.modyeo.api.columncode.domain.dto.request.ColumnCodeUpdateRequest;
 import com.co.kr.modyeo.api.columncode.domain.dto.response.ColumnCodeDetail;
 import com.co.kr.modyeo.api.columncode.domain.dto.response.ColumnCodeResponse;
-import com.co.kr.modyeo.api.columncode.domain.entity.ColumnCode;
 import com.co.kr.modyeo.api.columncode.service.ColumnCodeService;
 import com.co.kr.modyeo.common.result.ResponseHandler;
 import lombok.RequiredArgsConstructor;
