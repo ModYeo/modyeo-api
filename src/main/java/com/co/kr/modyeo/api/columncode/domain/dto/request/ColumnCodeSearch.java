@@ -2,7 +2,6 @@ package com.co.kr.modyeo.api.columncode.domain.dto.request;
 
 import com.co.kr.modyeo.common.dto.SearchDto;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.domain.Sort;
 
