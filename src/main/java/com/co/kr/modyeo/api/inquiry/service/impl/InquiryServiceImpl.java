@@ -1,7 +1,6 @@
 package com.co.kr.modyeo.api.inquiry.service.impl;
 
-import com.co.kr.modyeo.api.inquiry.domain.dto.request.AnswerRequest;
-import com.co.kr.modyeo.api.inquiry.domain.dto.request.InquiryRequest;
+import com.co.kr.modyeo.api.inquiry.domain.dto.request.*;
 import com.co.kr.modyeo.api.inquiry.domain.dto.Response.AnswerDetail;
 import com.co.kr.modyeo.api.inquiry.domain.dto.Response.InquiryDetail;
 import com.co.kr.modyeo.api.inquiry.domain.dto.Response.InquiryResponse;
@@ -60,13 +59,15 @@ public class InquiryServiceImpl implements InquiryService {
 
     //질의생성
     @Override
-    public Inquiry createInquiry(InquiryRequest inquiryRequest) {
-        return inquiryRepository.save(InquiryRequest.createInquiry(inquiryRequest));
+    @Transactional
+    public Inquiry createInquiry(InquiryCreateRequest inquiryCreateRequest) {
+        return inquiryRepository.save(inquiryCreateRequest.createInquiry(inquiryCreateRequest));
     }
 
     @Override
-    public Inquiry updateInquiry(InquiryRequest inquiryRequest) {
-        Inquiry inquiry = inquiryRepository.findById(inquiryRequest.getId()).orElseThrow(
+    @Transactional
+    public Inquiry updateInquiry(InquiryUpdateRequest inquiryUpdateRequest) {
+        Inquiry inquiry = inquiryRepository.findById(inquiryUpdateRequest.getId()).orElseThrow(
                 () -> ApiException.builder()
                         .errorMessage(InquiryErrorCode.NOT_FOUND_INQUIRY.getMessage())
                         .errorCode(InquiryErrorCode.NOT_FOUND_INQUIRY.getCode())
@@ -74,8 +75,9 @@ public class InquiryServiceImpl implements InquiryService {
                         .build());
 
         inquiry.updateInquiryBuilder()
-                .title(inquiryRequest.getTitle())
-                .content(inquiryRequest.getContent())
+                .title(inquiryUpdateRequest.getTitle())
+                .content(inquiryUpdateRequest.getContent())
+                .isHidden(inquiryUpdateRequest.getIsHidden())
                 .build();
 
         return inquiry;
@@ -106,8 +108,9 @@ public class InquiryServiceImpl implements InquiryService {
     }
 
     @Override
-    public Answer createAnswer(AnswerRequest answerRequest) {
-        Inquiry inquiry = inquiryRepository.findById(answerRequest.getInquiryId()).orElseThrow(
+    @Transactional
+    public Answer createAnswer(AnswerCreateRequest answerCreateRequest) {
+        Inquiry inquiry = inquiryRepository.findById(answerCreateRequest.getInquiryId()).orElseThrow(
                 () -> ApiException.builder()
                         .errorMessage(InquiryErrorCode.NOT_FOUND_INQUIRY.getMessage())
                         .errorCode(InquiryErrorCode.NOT_FOUND_INQUIRY.getCode())
@@ -119,14 +122,15 @@ public class InquiryServiceImpl implements InquiryService {
             inquiry.updateInquiryStatusBuilder().status(InquiryStatus.COMPLETE).build();
         }
 
-        Answer savedAnswer = answerRepository.save(AnswerRequest.createAnswer(answerRequest, inquiry));
+        Answer savedAnswer = answerRepository.save(AnswerCreateRequest.createAnswer(answerCreateRequest, inquiry));
         inquiry.getAnswerList().add(savedAnswer);
         return savedAnswer;
     }
 
     @Override
-    public Answer updateAnswer(AnswerRequest answerRequest) {
-        Answer answer = answerRepository.findById(answerRequest.getAnswerId()).orElseThrow(
+    @Transactional
+    public Answer updateAnswer(AnswerUpdateRequest answerUpdateRequest) {
+        Answer answer = answerRepository.findById(answerUpdateRequest.getAnswerId()).orElseThrow(
                 () -> ApiException.builder()
                         .errorMessage(InquiryErrorCode.NOT_FOUND_ANSWER.getMessage())
                         .errorCode(InquiryErrorCode.NOT_FOUND_ANSWER.getCode())
@@ -135,7 +139,7 @@ public class InquiryServiceImpl implements InquiryService {
         );
         //answer.changeAnswer(answerRequest.getContent());
         answer.updateAnswerBuilder()
-                .content(answerRequest.getContent()).build();
+                .content(answerUpdateRequest.getContent()).build();
         return answer;
     }
 

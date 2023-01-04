@@ -1,7 +1,6 @@
 package com.co.kr.modyeo.api.inquiry.service;
 
-import com.co.kr.modyeo.api.inquiry.domain.dto.request.AnswerRequest;
-import com.co.kr.modyeo.api.inquiry.domain.dto.request.InquiryRequest;
+import com.co.kr.modyeo.api.inquiry.domain.dto.request.*;
 import com.co.kr.modyeo.api.inquiry.domain.dto.Response.AnswerDetail;
 import com.co.kr.modyeo.api.inquiry.domain.dto.Response.InquiryDetail;
 import com.co.kr.modyeo.api.inquiry.domain.dto.Response.InquiryResponse;
@@ -14,11 +13,11 @@ public interface InquiryService {
     Slice<InquiryResponse> getInquiryIndexPage(InquirySearch inquirySearch);
     Slice<InquiryResponse> getSelectedInquiries(InquirySearch inquirySearch);
     InquiryDetail getInquiryDetail(Long id);
-    Inquiry createInquiry(InquiryRequest inquiryRequest);
-    Inquiry updateInquiry(InquiryRequest inquiryRequest);
+    Inquiry createInquiry(InquiryCreateRequest InquiryCreateRequest);
+    Inquiry updateInquiry(InquiryUpdateRequest InquiryUpdateRequest);
     void deleteInquiry(Long id);
     AnswerDetail getAnswer(Long id);
-    Answer createAnswer(AnswerRequest answerRequest);
-    Answer updateAnswer(AnswerRequest answerRequest);
+    Answer createAnswer(AnswerCreateRequest answerRequest);
+    Answer updateAnswer(AnswerUpdateRequest answerRequest);
     void deleteAnswer(Long id);
 }

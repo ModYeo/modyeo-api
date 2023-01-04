@@ -1,6 +1,5 @@
-package com.co.kr.modyeo.api.inquiry.repository.impl;
+package com.co.kr.modyeo.api.inquiry.repository.custom.impl;
 
-import com.co.kr.modyeo.api.inquiry.domain.dto.request.InquiryRequest;
 import com.co.kr.modyeo.api.inquiry.domain.dto.search.InquirySearch;
 import com.co.kr.modyeo.api.inquiry.domain.entity.Inquiry;
 import com.co.kr.modyeo.api.inquiry.domain.enumerate.InquiryStatus;
@@ -13,10 +12,7 @@ import org.springframework.data.domain.Slice;
 
 import java.time.LocalDateTime;
 
-import static com.co.kr.modyeo.api.bbs.domain.entity.QArticle.article;
 import static com.co.kr.modyeo.api.inquiry.domain.entity.QInquiry.inquiry;
-import static com.co.kr.modyeo.api.inquiry.domain.entity.QAnswer.answer;
-import static com.co.kr.modyeo.api.member.domain.entity.QMember.member;
 
 public class InquiryRepositoryImpl extends Querydsl4RepositorySupport implements InquiryCustomRepository {
 
@@ -29,8 +25,8 @@ public class InquiryRepositoryImpl extends Querydsl4RepositorySupport implements
         return applySlicing(pageRequest, contentQuery ->
                     contentQuery.select(inquiry)
                             .from(inquiry)
-                            .innerJoin(inquiry, answer.inquiry)
                             .where(
+                                    inquiry.isHidden.eq('Y'),
                                     statusCheck(inquirySearch.getStatus())
                                   )
                             );
@@ -41,9 +37,10 @@ public class InquiryRepositoryImpl extends Querydsl4RepositorySupport implements
         return applySlicing(pageRequest, contentQuery ->
                 contentQuery.select(inquiry)
                         .from(inquiry)
-                        .innerJoin(inquiry.answerList, answer)
+                        //.innerJoin(inquiry.answerList, answer)
                         .fetchJoin()
                         .where(
+                                inquiry.isHidden.eq('Y'),
                                 inquiryTitleLike(inquirySearch.getTitle()),
                                 inquiryContentLike(inquirySearch.getContent()),
                                 inquiryCreatedByEq(inquirySearch.getCreatedBy())
@@ -66,10 +63,6 @@ public class InquiryRepositoryImpl extends Querydsl4RepositorySupport implements
         if (auth == Authority.ROLE_USER) return null;
         //if (auth == "my") return null;
         return inquiry.authority.eq(auth);
-    }
-
-    private BooleanExpression createdByEq(Long memberId) {
-        return memberId != null && memberId > 0 ? article.createdBy.eq(memberId) : null;
     }
 
     private BooleanExpression inquiryTitleLike(String title){
