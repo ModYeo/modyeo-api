@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/column-code")
 @RequiredArgsConstructor
@@ -39,7 +41,7 @@ public class ColumnCodeController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createColumnCode(@RequestBody ColumnCodeCreateRequest columnCodeCreateRequest){
+    public ResponseEntity<?> createColumnCode(@Valid @RequestBody ColumnCodeCreateRequest columnCodeCreateRequest){
         Long columnCodeId = columnCodeService.createColumnCode(columnCodeCreateRequest);
         return ResponseHandler.generate()
                 .status(HttpStatus.CREATED)
