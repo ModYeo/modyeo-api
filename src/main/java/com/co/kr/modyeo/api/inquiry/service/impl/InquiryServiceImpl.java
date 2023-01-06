@@ -1,7 +1,6 @@
 package com.co.kr.modyeo.api.inquiry.service.impl;
 
-import com.co.kr.modyeo.api.inquiry.domain.dto.request.AnswerRequest;
-import com.co.kr.modyeo.api.inquiry.domain.dto.request.InquiryRequest;
+import com.co.kr.modyeo.api.inquiry.domain.dto.request.*;
 import com.co.kr.modyeo.api.inquiry.domain.dto.Response.AnswerDetail;
 import com.co.kr.modyeo.api.inquiry.domain.dto.Response.InquiryDetail;
 import com.co.kr.modyeo.api.inquiry.domain.dto.Response.InquiryResponse;
@@ -12,7 +11,6 @@ import com.co.kr.modyeo.api.inquiry.domain.enumerate.InquiryStatus;
 import com.co.kr.modyeo.api.inquiry.repository.AnswerRepository;
 import com.co.kr.modyeo.api.inquiry.repository.InquiryRepository;
 import com.co.kr.modyeo.api.inquiry.service.InquiryService;
-import com.co.kr.modyeo.api.member.domain.enumerate.Authority;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.InquiryErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class InquiryServiceImpl implements InquiryService {
-
     private final InquiryRepository inquiryRepository;
 
     private final AnswerRepository answerRepository;
@@ -40,18 +37,10 @@ public class InquiryServiceImpl implements InquiryService {
 
     //질문 리스트 조회
     @Override
-    public Slice<InquiryResponse> getAllInquiries(InquirySearch inquirySearch, Authority auth) {
+    public Slice<InquiryResponse> getSelectedInquiries(InquirySearch inquirySearch) {
         PageRequest pageRequest = PageRequest.of(inquirySearch.getOffset(), inquirySearch.getLimit(),
                                                  inquirySearch.getDirection(), inquirySearch.getOrderBy());
-        return inquiryRepository.getAllInquiries(inquirySearch, pageRequest, auth).map(InquiryResponse::toDto);
-    }
-
-    @Override
-    public Slice<InquiryResponse> getMyInquiries(InquirySearch inquirySearch){
-        PageRequest pageRequest = PageRequest.of(inquirySearch.getOffset(), inquirySearch.getLimit(),
-                                                 inquirySearch.getDirection(), inquirySearch.getOrderBy());
-        inquiryRepository.getMyInquiries(inquirySearch.getCreatedBy(), pageRequest);
-        return null;
+        return inquiryRepository.getSelectedInquiries(inquirySearch, pageRequest).map(InquiryResponse::toDto);
     }
 
     //상세조회
@@ -69,13 +58,15 @@ public class InquiryServiceImpl implements InquiryService {
 
     //질의생성
     @Override
-    public Inquiry createInquiry(InquiryRequest inquiryRequest) {
-        return inquiryRepository.save(InquiryRequest.createInquiry(inquiryRequest));
+    @Transactional
+    public Long createInquiry(InquiryCreateRequest inquiryCreateRequest) {
+        return inquiryRepository.save(inquiryCreateRequest.createInquiry(inquiryCreateRequest)).getId();
     }
 
     @Override
-    public Inquiry updateInquiry(InquiryRequest inquiryRequest) {
-        Inquiry inquiry = inquiryRepository.findById(inquiryRequest.getId()).orElseThrow(
+    @Transactional
+    public Inquiry updateInquiry(InquiryUpdateRequest inquiryUpdateRequest) {
+        Inquiry inquiry = inquiryRepository.findById(inquiryUpdateRequest.getId()).orElseThrow(
                 () -> ApiException.builder()
                         .errorMessage(InquiryErrorCode.NOT_FOUND_INQUIRY.getMessage())
                         .errorCode(InquiryErrorCode.NOT_FOUND_INQUIRY.getCode())
@@ -83,8 +74,9 @@ public class InquiryServiceImpl implements InquiryService {
                         .build());
 
         inquiry.updateInquiryBuilder()
-                .title(inquiryRequest.getTitle())
-                .content(inquiryRequest.getContent())
+                .title(inquiryUpdateRequest.getTitle())
+                .content(inquiryUpdateRequest.getContent())
+                .isHidden(inquiryUpdateRequest.getIsHidden())
                 .build();
 
         return inquiry;
@@ -115,8 +107,9 @@ public class InquiryServiceImpl implements InquiryService {
     }
 
     @Override
-    public Answer createAnswer(AnswerRequest answerRequest) {
-        Inquiry inquiry = inquiryRepository.findById(answerRequest.getInquiryId()).orElseThrow(
+    @Transactional
+    public Long createAnswer(AnswerCreateRequest answerCreateRequest) {
+        Inquiry inquiry = inquiryRepository.findById(answerCreateRequest.getInquiryId()).orElseThrow(
                 () -> ApiException.builder()
                         .errorMessage(InquiryErrorCode.NOT_FOUND_INQUIRY.getMessage())
                         .errorCode(InquiryErrorCode.NOT_FOUND_INQUIRY.getCode())
@@ -128,14 +121,15 @@ public class InquiryServiceImpl implements InquiryService {
             inquiry.updateInquiryStatusBuilder().status(InquiryStatus.COMPLETE).build();
         }
 
-        Answer savedAnswer = answerRepository.save(AnswerRequest.createAnswer(answerRequest, inquiry));
+        Answer savedAnswer = answerRepository.save(AnswerCreateRequest.createAnswer(answerCreateRequest, inquiry));
         inquiry.getAnswerList().add(savedAnswer);
-        return savedAnswer;
+        return inquiry.getId();
     }
 
     @Override
-    public Answer updateAnswer(AnswerRequest answerRequest) {
-        Answer answer = answerRepository.findById(answerRequest.getAnswerId()).orElseThrow(
+    @Transactional
+    public Answer updateAnswer(AnswerUpdateRequest answerUpdateRequest) {
+        Answer answer = answerRepository.findById(answerUpdateRequest.getAnswerId()).orElseThrow(
                 () -> ApiException.builder()
                         .errorMessage(InquiryErrorCode.NOT_FOUND_ANSWER.getMessage())
                         .errorCode(InquiryErrorCode.NOT_FOUND_ANSWER.getCode())
@@ -144,7 +138,7 @@ public class InquiryServiceImpl implements InquiryService {
         );
         //answer.changeAnswer(answerRequest.getContent());
         answer.updateAnswerBuilder()
-                .content(answerRequest.getContent()).build();
+                .content(answerUpdateRequest.getContent()).build();
         return answer;
     }
 

@@ -1,14 +1,11 @@
 package com.co.kr.modyeo.api.inquiry.controller;
 
-import com.co.kr.modyeo.api.inquiry.domain.dto.request.AnswerRequest;
-import com.co.kr.modyeo.api.inquiry.domain.dto.request.InquiryRequest;
+import com.co.kr.modyeo.api.inquiry.domain.dto.request.*;
 import com.co.kr.modyeo.api.inquiry.domain.dto.Response.AnswerDetail;
 import com.co.kr.modyeo.api.inquiry.domain.dto.Response.InquiryDetail;
 import com.co.kr.modyeo.api.inquiry.domain.dto.Response.InquiryResponse;
 import com.co.kr.modyeo.api.inquiry.domain.dto.search.InquirySearch;
 import com.co.kr.modyeo.api.inquiry.service.InquiryService;
-import com.co.kr.modyeo.api.member.domain.enumerate.Authority;
-import com.co.kr.modyeo.common.result.JsonResultData;
 import com.co.kr.modyeo.common.result.ResponseHandler;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,7 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.co.kr.modyeo.common.util.SecurityUtil.checkAuthority;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api")
@@ -31,37 +28,20 @@ public class InquiryApiController {
     @ApiOperation(value="문의사항 Index 페이지 API")
     public ResponseEntity<?> getInquiryIndexPage(InquirySearch inquirySearch){
         Slice<InquiryResponse> inquiryResponseSlice = inquiryService.getInquiryIndexPage(inquirySearch);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
                 .data(inquiryResponseSlice)
-                .build());
+                .build();
     }
 
-    @GetMapping(value="/inquiry/my")
-    @ApiOperation(value="나의 문의사항 조회(일반유저) API")
-    public ResponseEntity<?> getMyInquiries(InquirySearch inquirySearch){
-        Authority auth = checkAuthority();
-        if (auth!=Authority.ROLE_USER) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        } else {
-            Slice<InquiryResponse> inquiryResponseSlice = inquiryService.getMyInquiries(inquirySearch);
-            return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                    .data(inquiryResponseSlice)
-                    .build());
-        }
-    }
-
-    @GetMapping(value = "/inquiry/admin")
-    @ApiOperation(value = "전체 문의사항 조회(관리자) API")
+    @GetMapping(value = "/inquiry/list")
+    @ApiOperation(value = "문의사항 조회 API")
     public ResponseEntity<?> getInquiries(InquirySearch inquirySearch) {
-        Authority auth = checkAuthority();
-        if (auth!=Authority.ROLE_ADMIN) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
-        } else {
-            Slice<InquiryResponse> inquiryResponseSlice = inquiryService.getAllInquiries(inquirySearch, auth);
-            return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                    .data(inquiryResponseSlice)
-                    .build());
-        }
+        Slice<InquiryResponse> inquiryResponseSlice = inquiryService.getSelectedInquiries(inquirySearch);
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
+                .data(inquiryResponseSlice)
+                .build();
     }
 
     //문의사항 조회
@@ -69,34 +49,33 @@ public class InquiryApiController {
     @ApiOperation(value = "문의사항 상세 조회")
     public ResponseEntity<?> getInquiryDetail(@PathVariable(name = "inquiry_id") Long id) {
         InquiryDetail inquiryDetail = inquiryService.getInquiryDetail(id);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(JsonResultData.successResultBuilder()
-                        .data(inquiryDetail)
-                        .build());
+
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
+                .data(inquiryDetail)
+                .build();
     }
 
     //문의사항 작성
     @PostMapping(value = "/inquiry")
     @ApiOperation(value = "문의사항 작성 API")
-    public ResponseEntity<?> createInquiry(@RequestBody InquiryRequest inquiryRequest) {
-        Long inquiryId = inquiryService.createInquiry(inquiryRequest).getId();
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(JsonResultData.successResultBuilder()
-                        .data(inquiryId)
-                        //리다이렉션 으로 '상세조회 호출'
-                        .build());
+    public ResponseEntity<?> createInquiry(@RequestBody @Valid InquiryCreateRequest InquiryCreateRequest) {
+        Long inquiryId = inquiryService.createInquiry(InquiryCreateRequest);
+        return ResponseHandler.generate()
+                .status(HttpStatus.CREATED)
+                .data(inquiryId)
+                .build();
     }
 
     //문의사항 수정
     @ApiOperation(value = "문의사항 수정 API")
     @PatchMapping(value = "/inquiry")
-    public ResponseEntity<?> updateInquiry(@RequestBody InquiryRequest inquiryRequest) {
-        Long inquiryId = inquiryService.updateInquiry(inquiryRequest).getId();
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(JsonResultData.successResultBuilder()
-                        .data(inquiryId)
-                        //리다이렉션 으로 '상세조회 호출'
-                        .build());
+    public ResponseEntity<?> updateInquiry(@RequestBody @Valid InquiryUpdateRequest InquiryUpdateRequest) {
+        Long inquiryId = inquiryService.updateInquiry(InquiryUpdateRequest).getId();
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
+                .data(inquiryId)
+                .build();
     }
 
     //문의사항 삭제
@@ -114,33 +93,32 @@ public class InquiryApiController {
     @GetMapping(value = "/answer/{answer_id}")
     public ResponseEntity<?> getAnswer(@PathVariable(name = "answer_id") Long id){
         AnswerDetail answerDetail = inquiryService.getAnswer(id);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
                 .data(answerDetail)
-                .build());
+                .build();
     }
 
     @ApiOperation(value = "답변 생성 API")
     @PostMapping(value = "/answer")
-    public ResponseEntity<?> createAnswer(@RequestBody AnswerRequest answerRequest) {
+    public ResponseEntity<?> createAnswer(@RequestBody @Valid AnswerCreateRequest answerCreateRequest) {
         //Answer answer = inquiryService.createAnswer(answerRequest);
-        Long inquiryId = inquiryService.createAnswer(answerRequest).getInquiry().getId();
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
+        Long inquiryId = inquiryService.createAnswer(answerCreateRequest);
+        return ResponseHandler.generate()
+                .status(HttpStatus.CREATED)
                 .data(inquiryId)
-                //리다이렉션 으로 '상세조회 호출' -> 댓글 작성 시 비동기로 작업 진행해야 한다고 생각하기 때문에. 해당 컴포넌트만 바꿔주면 되기 때문
-                .build()
-        );
+                .build();
     }
 
     @ApiOperation(value = "답변 수정 API")
     @PatchMapping(value = "/answer")
-    public ResponseEntity<?> updateAnswer(@RequestBody AnswerRequest answerRequest) {
+    public ResponseEntity<?> updateAnswer(@RequestBody @Valid AnswerUpdateRequest answerUpdateRequest) {
         //Answer answer = inquiryService.updateAnswer(answerRequest);
-        Long answerId = inquiryService.updateAnswer(answerRequest).getId();
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(answerId)
-                //리다이렉션 으로 '상세조회 호출' -> 댓글 수정 시 비동기로 작업 진행해야 한다고 생각하기 때문에. 해당 컴포넌트만 바꿔주면 되기 때문
-                .build()
-        );
+        Long inquiryId = inquiryService.updateAnswer(answerUpdateRequest).getInquiry().getId();
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
+                .data(inquiryId)
+                .build();
     }
 
     @ApiOperation(value = "답변 삭제 API")

@@ -1,4 +1,4 @@
-package com.co.kr.modyeo.api.inquiry.repository.impl;
+package com.co.kr.modyeo.api.inquiry.repository.custom.impl;
 
 import com.co.kr.modyeo.api.inquiry.domain.entity.Answer;
 import com.co.kr.modyeo.api.inquiry.repository.custom.AnswerCustomRepository;

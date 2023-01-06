@@ -41,31 +41,37 @@ public class Inquiry extends BaseEntity {
     @Column(name = "authority")
     private Authority authority;
 
+    @Column(name = "is_hidden")
+    private char isHidden;
+
     //종길's honey tips
     //전체생성자에는 "of" 붙여줌
     //필요에 따라 쓰는 생성자는 "create****" 으로 함.
     //Inquiry.of()
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public Inquiry(Long id, String title, String content, InquiryStatus status, Authority authority) {
+    public Inquiry(Long id, String title, String content, InquiryStatus status, Authority authority, char isHidden) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.status = status;
         this.authority = authority;
+        this.isHidden = isHidden;
     }
 
     @Builder(builderClassName = "createBuilder", builderMethodName = "createBuilder")
-    public Inquiry(String title, String content, Authority authority) {
+    public Inquiry(String title, String content) {
         this.title = title;
         this.content = content;
         this.authority = SecurityUtil.checkAuthority();
         this.status = (authority == Authority.ROLE_USER) ? InquiryStatus.WAITING : InquiryStatus.FREQUENT;
+        this.isHidden = 'Y';
     }
 
     @Builder(builderClassName = "updateInquiryBuilder", builderMethodName = "updateInquiryBuilder")
-    public void updateInquiry(String title, String content) {
+    public void updateInquiry(String title, String content, char isHidden) {
         this.title = title;
         this.content = content;
+        this.isHidden = isHidden;
     }
 
     @Builder(builderClassName = "updateInquiryStatusBuilder", builderMethodName = "updateInquiryStatusBuilder")
