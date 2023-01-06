@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class InquiryServiceImpl implements InquiryService {
-
     private final InquiryRepository inquiryRepository;
 
     private final AnswerRepository answerRepository;
