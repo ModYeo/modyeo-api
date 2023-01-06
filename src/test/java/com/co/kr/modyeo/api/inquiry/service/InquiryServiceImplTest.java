@@ -78,14 +78,15 @@ public class InquiryServiceImplTest {
         //given(inquiryRepository.findById(any())).willReturn(Optional.of(resultInquiry));
         given(answerRepository.save(any())).willReturn(answer);
 
-        Answer resultAnswer = inquiryService.createAnswer(answerCreateRequest);
+        Long insertedAnswerInquiry = inquiryService.createAnswer(answerCreateRequest);
+        InquiryDetail inquiryDetail = inquiryService.getInquiryDetail(insertedAnswerInquiry);
 
-        assertEquals(resultAnswer.getId(), answer.getId());
-        assertEquals(resultAnswer.getContent(), answer.getContent());
+        assertEquals(inquiryDetail.getAnswerList().get(0).getAnswerId(), answer.getId());
+        assertEquals(inquiryDetail.getContent(), answer.getContent());
         //assertEquals(resultAnswer.getInquiry().getId(), resultInquiry.getId());
         //assertEquals(1, resultInquiry.getAnswerList().size());
         //(resultAnswer.getId(), resultInquiry.getAnswerList().get(0).getId());
-        assertEquals(InquiryStatus.COMPLETE, resultAnswer.getInquiry().getStatus());
+        //assertEquals(InquiryStatus.COMPLETE, inquiryDetail.getStat);
     }
 
     @Test

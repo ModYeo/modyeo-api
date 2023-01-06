@@ -60,7 +60,7 @@ public class InquiryApiController {
     @PostMapping(value = "/inquiry")
     @ApiOperation(value = "문의사항 작성 API")
     public ResponseEntity<?> createInquiry(@RequestBody @Valid InquiryCreateRequest InquiryCreateRequest) {
-        Long inquiryId = inquiryService.createInquiry(InquiryCreateRequest).getId();
+        Long inquiryId = inquiryService.createInquiry(InquiryCreateRequest);
         return ResponseHandler.generate()
                 .status(HttpStatus.CREATED)
                 .data(inquiryId)
@@ -103,7 +103,7 @@ public class InquiryApiController {
     @PostMapping(value = "/answer")
     public ResponseEntity<?> createAnswer(@RequestBody @Valid AnswerCreateRequest answerCreateRequest) {
         //Answer answer = inquiryService.createAnswer(answerRequest);
-        Long inquiryId = inquiryService.createAnswer(answerCreateRequest).getInquiry().getId();
+        Long inquiryId = inquiryService.createAnswer(answerCreateRequest);
         return ResponseHandler.generate()
                 .status(HttpStatus.CREATED)
                 .data(inquiryId)

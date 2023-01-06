@@ -13,11 +13,11 @@ public interface InquiryService {
     Slice<InquiryResponse> getInquiryIndexPage(InquirySearch inquirySearch);
     Slice<InquiryResponse> getSelectedInquiries(InquirySearch inquirySearch);
     InquiryDetail getInquiryDetail(Long id);
-    Inquiry createInquiry(InquiryCreateRequest InquiryCreateRequest);
+    Long createInquiry(InquiryCreateRequest InquiryCreateRequest);
     Inquiry updateInquiry(InquiryUpdateRequest InquiryUpdateRequest);
     void deleteInquiry(Long id);
     AnswerDetail getAnswer(Long id);
-    Answer createAnswer(AnswerCreateRequest answerRequest);
+    Long createAnswer(AnswerCreateRequest answerRequest);
     Answer updateAnswer(AnswerUpdateRequest answerRequest);
     void deleteAnswer(Long id);
 }

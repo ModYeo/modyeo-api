@@ -59,8 +59,8 @@ public class InquiryServiceImpl implements InquiryService {
     //질의생성
     @Override
     @Transactional
-    public Inquiry createInquiry(InquiryCreateRequest inquiryCreateRequest) {
-        return inquiryRepository.save(inquiryCreateRequest.createInquiry(inquiryCreateRequest));
+    public Long createInquiry(InquiryCreateRequest inquiryCreateRequest) {
+        return inquiryRepository.save(inquiryCreateRequest.createInquiry(inquiryCreateRequest)).getId();
     }
 
     @Override
@@ -108,7 +108,7 @@ public class InquiryServiceImpl implements InquiryService {
 
     @Override
     @Transactional
-    public Answer createAnswer(AnswerCreateRequest answerCreateRequest) {
+    public Long createAnswer(AnswerCreateRequest answerCreateRequest) {
         Inquiry inquiry = inquiryRepository.findById(answerCreateRequest.getInquiryId()).orElseThrow(
                 () -> ApiException.builder()
                         .errorMessage(InquiryErrorCode.NOT_FOUND_INQUIRY.getMessage())
@@ -123,7 +123,7 @@ public class InquiryServiceImpl implements InquiryService {
 
         Answer savedAnswer = answerRepository.save(AnswerCreateRequest.createAnswer(answerCreateRequest, inquiry));
         inquiry.getAnswerList().add(savedAnswer);
-        return savedAnswer;
+        return inquiry.getId();
     }
 
     @Override
