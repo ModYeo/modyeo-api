@@ -62,7 +62,7 @@ public class BoardApiController {
 
     @ApiOperation(value = "게시글 수정 API")
     @PatchMapping("/article")
-    public ResponseEntity<?> updateArticle(@RequestBody ArticleUpdateRequest articleUpdateRequest) {
+    public ResponseEntity<?> updateArticle(@Valid @RequestBody ArticleUpdateRequest articleUpdateRequest) {
         Long articleId = boardService.updateArticle(articleUpdateRequest);
         return ResponseHandler.generate()
                 .data(articleId)

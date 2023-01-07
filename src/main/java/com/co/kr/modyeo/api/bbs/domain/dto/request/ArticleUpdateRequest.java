@@ -5,13 +5,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 @NoArgsConstructor
 public class ArticleUpdateRequest {
+
+    @NotNull
     private Long articleId;
 
+    @NotNull
     private Long categoryId;
 
+    @NotNull
     private String title;
 
     private String content;
