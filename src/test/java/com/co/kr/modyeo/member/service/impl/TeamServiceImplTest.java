@@ -1,7 +1,7 @@
 package com.co.kr.modyeo.member.service.impl;
 
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
-import com.co.kr.modyeo.api.team.domain.dto.request.TeamRequest;
+import com.co.kr.modyeo.api.team.domain.dto.request.TeamCreateRequest;
 import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.api.team.domain.entity.link.TeamCategory;
@@ -48,12 +48,12 @@ class TeamServiceImplTest {
         teamService = new TeamServiceImpl(teamRepository, teamCategoryRepository,crewRepository,memberRepository);
     }
 
-    private TeamRequest.CategoryDto categoryDto = TeamRequest.CategoryDto.builder()
+    private TeamCreateRequest.CategoryDto categoryDto = TeamCreateRequest.CategoryDto.builder()
             .id(1L)
             .name("test category")
             .build();
 
-    private TeamRequest crewCreateRequest = TeamRequest.builder()
+    private TeamCreateRequest crewCreateRequest = TeamCreateRequest.builder()
             .name("test crew")
             .categoryDtoList(new ArrayList<>(List.of(categoryDto)))
             .build();
@@ -61,7 +61,7 @@ class TeamServiceImplTest {
     @Test
     @DisplayName("crew 생성 테스트1")
     void crewCreate() {
-        Team team = TeamRequest.toEntity(crewCreateRequest);
+        Team team = TeamCreateRequest.toEntity(crewCreateRequest);
         TeamCategory teamCategory = TeamCategory.of()
                 .id(1L)
                 .team(team)
@@ -74,7 +74,7 @@ class TeamServiceImplTest {
         team = teamRepository.save(team);
 
         if(!crewCreateRequest.getCategoryDtoList().isEmpty()) {
-            for (TeamRequest.CategoryDto categoryDto : crewCreateRequest.getCategoryDtoList()) {
+            for (TeamCreateRequest.CategoryDto categoryDto : crewCreateRequest.getCategoryDtoList()) {
                 Category category = categoryDto.toEntity();
                 TeamCategory teamCategory1 = TeamCategory.of()
                         .team(team)
@@ -88,7 +88,7 @@ class TeamServiceImplTest {
     @Test
     @DisplayName("crew 생성 테스트2")
     void crewCreate2() {
-        Team team = TeamRequest.toEntity(crewCreateRequest);
+        Team team = TeamCreateRequest.toEntity(crewCreateRequest);
         TeamCategory teamCategory = TeamCategory.of()
                 .id(1L)
                 .team(team)

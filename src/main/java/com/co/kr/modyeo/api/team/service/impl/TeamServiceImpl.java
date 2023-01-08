@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.team.service.impl;
 
-import com.co.kr.modyeo.api.team.domain.dto.request.TeamRequest;
+import com.co.kr.modyeo.api.team.domain.dto.request.TeamCreateRequest;
+import com.co.kr.modyeo.api.team.domain.dto.request.TeamUpdateRequest;
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamDetail;
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamResponse;
 import com.co.kr.modyeo.api.team.domain.dto.search.TeamSearch;
@@ -38,8 +39,8 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     @Transactional
-    public Long createTeam(TeamRequest teamRequest) {
-        overlapTeamCheck(teamRequest);
+    public Long createTeam(TeamCreateRequest teamCreateRequest) {
+        overlapTeamCheck(teamCreateRequest);
 
         Long memberId = SecurityUtil.getCurrentMemberId();
 
@@ -50,13 +51,13 @@ public class TeamServiceImpl implements TeamService {
                         .errorMessage("")
                         .build());
 
-        Team team = TeamRequest.toEntity(teamRequest);
+        Team team = TeamCreateRequest.toEntity(teamCreateRequest);
         team = teamRepository.save(team);
 
-        if(!teamRequest.getCategoryDtoList().isEmpty()){
-            List<Category> categories = teamRequest
+        if(!teamCreateRequest.getCategoryDtoList().isEmpty()){
+            List<Category> categories = teamCreateRequest
                     .getCategoryDtoList().stream()
-                    .map(TeamRequest.CategoryDto::toEntity)
+                    .map(TeamCreateRequest.CategoryDto::toEntity)
                     .collect(Collectors.toList());
 
             Team finalTeam = team;
@@ -87,15 +88,15 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     @Transactional
-    public Long updateTeam(TeamRequest teamRequest) {
-        overlapTeamCheck(teamRequest);
-        Team findTeam = teamRepository.findTeamById(teamRequest.getTeam_id()).orElseThrow(() -> ApiException.builder()
+    public Long updateTeam(TeamUpdateRequest teamUpdateRequest) {
+        overlapTeamCheck(teamUpdateRequest);
+        Team findTeam = teamRepository.findTeamById(teamUpdateRequest.getTeamId()).orElseThrow(() -> ApiException.builder()
                 .status(HttpStatus.BAD_REQUEST)
                 .errorMessage(TeamErrorCode.NOT_FOUND_TEAM.getMessage())
                 .errorCode(TeamErrorCode.NOT_FOUND_TEAM.getCode())
                 .build());
 
-        findTeam.changeTeamInfo(teamRequest.getName(), teamRequest.getProfilePath(), teamRequest.getDescription());
+        findTeam.changeTeamInfo(teamUpdateRequest.getName(), teamUpdateRequest.getProfilePath(), teamUpdateRequest.getDescription());
         return findTeam.getId();
     }
 
@@ -120,8 +121,20 @@ public class TeamServiceImpl implements TeamService {
                 .build()));
     }
 
-    private void overlapTeamCheck(TeamRequest teamRequest){
-        Team findTeam = teamRepository.findByName(teamRequest.getName());
+    private void overlapTeamCheck(TeamCreateRequest teamCreateRequest){
+        Team findTeam = teamRepository.findByName(teamCreateRequest.getName());
+        if (findTeam != null){
+            throw ApiException.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .errorCode(TeamErrorCode.OVERLAP_TEAM.getCode())
+                    .errorMessage(TeamErrorCode.OVERLAP_TEAM.getMessage())
+                    .build();
+
+        }
+    }
+
+    private void overlapTeamCheck(TeamUpdateRequest teamCreateRequest){
+        Team findTeam = teamRepository.findByName(teamCreateRequest.getName());
         if (findTeam != null){
             throw ApiException.builder()
                     .status(HttpStatus.BAD_REQUEST)

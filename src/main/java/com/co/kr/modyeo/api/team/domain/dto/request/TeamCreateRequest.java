@@ -2,20 +2,19 @@ package com.co.kr.modyeo.api.team.domain.dto.request;
 
 import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
-import com.co.kr.modyeo.api.team.domain.entity.enumerate.ScaleLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class TeamRequest {
+public class TeamCreateRequest {
 
-    private Long team_id;
-
+    @NotNull
     private String name;
 
     private String description;
@@ -25,19 +24,18 @@ public class TeamRequest {
     private List<CategoryDto> categoryDtoList = new ArrayList<>();
 
     @Builder
-    public TeamRequest(Long team_id, String name, String description, String profilePath, List<CategoryDto> categoryDtoList) {
-        this.team_id = team_id;
+    public TeamCreateRequest( String name, String description, String profilePath, List<CategoryDto> categoryDtoList) {
         this.name = name;
         this.description = description;
         this.profilePath = profilePath;
         this.categoryDtoList = categoryDtoList;
     }
 
-    public static Team toEntity(TeamRequest teamRequest){
+    public static Team toEntity(TeamCreateRequest teamCreateRequest){
         return Team.createTeamBuilder()
-                .name(teamRequest.name)
-                .profilePath(teamRequest.getProfilePath())
-                .description(teamRequest.getDescription())
+                .name(teamCreateRequest.name)
+                .profilePath(teamCreateRequest.getProfilePath())
+                .description(teamCreateRequest.getDescription())
                 .build();
     }
 

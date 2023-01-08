@@ -1,24 +1,21 @@
 package com.co.kr.modyeo.api.team.controller;
 
-import com.co.kr.modyeo.api.team.domain.dto.request.TeamRequest;
+import com.co.kr.modyeo.api.team.domain.dto.request.TeamCreateRequest;
+import com.co.kr.modyeo.api.team.domain.dto.request.TeamUpdateRequest;
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamDetail;
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamResponse;
 import com.co.kr.modyeo.api.team.domain.dto.search.TeamSearch;
-import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.api.team.service.TeamService;
-import com.co.kr.modyeo.common.result.JsonResultData;
 import com.co.kr.modyeo.common.result.ResponseHandler;
-import com.co.kr.modyeo.common.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/team")
@@ -29,8 +26,8 @@ public class TeamApiController {
 
     @ApiOperation(value = "팀 생성 API")
     @PostMapping("")
-    public ResponseEntity<?> createTeam(@RequestBody TeamRequest teamRequest){
-        Long teamId = teamService.createTeam(teamRequest);
+    public ResponseEntity<?> createTeam(@Valid @RequestBody TeamCreateRequest teamCreateRequest){
+        Long teamId = teamService.createTeam(teamCreateRequest);
         return ResponseHandler.generate()
                 .status(HttpStatus.CREATED)
                 .data(teamId)
@@ -60,7 +57,7 @@ public class TeamApiController {
 
     @ApiOperation(value = "팀 수정 API")
     @PatchMapping("")
-    public ResponseEntity<?> updateTeam(@RequestBody TeamRequest teamRequest){
+    public ResponseEntity<?> updateTeam(@Valid @RequestBody TeamUpdateRequest teamRequest){
         Long teamId = teamService.updateTeam(teamRequest);
         return ResponseHandler.generate()
                 .status(HttpStatus.OK)
