@@ -12,6 +12,8 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.co.kr.modyeo.api.category.domain.entity.QCategory.category;
+import static com.co.kr.modyeo.api.member.domain.entity.QMember.member;
+import static com.co.kr.modyeo.api.member.domain.entity.link.QMemberCategory.memberCategory;
 
 @Repository
 public class CategoryRepositoryImpl implements CategoryCustomRepository {
@@ -25,8 +27,15 @@ public class CategoryRepositoryImpl implements CategoryCustomRepository {
     public List<Category> searchCategory(CategorySearch categorySearch) {
         return queryFactory
                 .selectFrom(category)
-                .where(categoryNameEq(categorySearch.getName()))
+                .innerJoin(memberCategory).on(category.eq(memberCategory.category))
+                .innerJoin(memberCategory.member,member)
+                .where(categoryNameEq(categorySearch.getName()),
+                        memberIdEq(categorySearch.getMemberId()))
                 .fetch();
+    }
+
+    private BooleanExpression memberIdEq(Long memberId) {
+        return memberId != null && memberId > 0 ? member.id.eq(memberId) : null;
     }
 
     private BooleanExpression categoryIdEq(Long id) {
