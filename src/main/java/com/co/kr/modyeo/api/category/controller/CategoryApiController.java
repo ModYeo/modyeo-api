@@ -5,11 +5,9 @@ import com.co.kr.modyeo.api.category.domain.dto.request.CategoryUpdateRequest;
 import com.co.kr.modyeo.api.category.domain.dto.response.CategoryDetail;
 import com.co.kr.modyeo.api.category.domain.dto.response.CategoryResponse;
 import com.co.kr.modyeo.api.category.domain.dto.search.CategorySearch;
-import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.category.service.CategoryService;
-import com.co.kr.modyeo.common.exception.code.CategoryErrorCode;
-import com.co.kr.modyeo.common.result.JsonResultData;
 import com.co.kr.modyeo.common.result.ResponseHandler;
+import com.co.kr.modyeo.common.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -54,6 +52,8 @@ public class CategoryApiController {
     @ApiOperation(value = "카테고리 리스트 조회 API")
     @GetMapping("")
     public ResponseEntity<?> getCategories(@Valid CategorySearch categorySearch) {
+        Long memberId = categorySearch.getIsMy() != null && categorySearch.getIsMy() ? SecurityUtil.getCurrentMemberId() : null;
+        categorySearch.setMemberId(memberId);
         List<CategoryResponse> categoryList = categoryService.getCategories(categorySearch);
         return ResponseHandler.generate()
                 .data(categoryList)
