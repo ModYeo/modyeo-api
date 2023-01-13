@@ -1,14 +1,12 @@
 package com.co.kr.modyeo.api.notice.controller;
 
+import com.co.kr.modyeo.api.notice.domain.dto.request.NoticeCreateRequest;
 import com.co.kr.modyeo.api.notice.service.NoticeService;
 import com.co.kr.modyeo.common.result.ResponseHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/notice")
@@ -26,9 +24,10 @@ public class NoticeApiController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createNotice(){
+    public ResponseEntity<?> createNotice(@RequestBody NoticeCreateRequest noticeCreateRequest){
+        Long noticeId = noticeService.createNotice(noticeCreateRequest);
         return ResponseHandler.generate()
-                .data(null)
+                .data(noticeId)
                 .status(HttpStatus.CREATED)
                 .build();
     }
