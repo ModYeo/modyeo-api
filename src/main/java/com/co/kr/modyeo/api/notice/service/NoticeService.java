@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.notice.service;
 
 import com.co.kr.modyeo.api.notice.domain.dto.request.NoticeCreateRequest;
+import com.co.kr.modyeo.api.notice.domain.dto.request.NoticeUpdateRequest;
 import com.co.kr.modyeo.api.notice.domain.dto.response.NoticeDetail;
 import com.co.kr.modyeo.api.notice.domain.dto.response.NoticeResponse;
 
@@ -12,4 +13,6 @@ public interface NoticeService {
     List<NoticeResponse> getNotices();
 
     NoticeDetail getNotice(Long id);
+
+    Long updateNotice(NoticeUpdateRequest noticeUpdateRequest);
 }

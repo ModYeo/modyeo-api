@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.api.notice.controller;
 
+import com.co.kr.modyeo.api.notice.domain.dto.request.NoticeUpdateRequest;
 import com.co.kr.modyeo.api.notice.domain.dto.request.NoticeCreateRequest;
 import com.co.kr.modyeo.api.notice.domain.dto.response.NoticeDetail;
 import com.co.kr.modyeo.api.notice.domain.dto.response.NoticeResponse;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -29,7 +31,7 @@ public class NoticeApiController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createNotice(@RequestBody NoticeCreateRequest noticeCreateRequest){
+    public ResponseEntity<?> createNotice(@Valid @RequestBody NoticeCreateRequest noticeCreateRequest){
         Long noticeId = noticeService.createNotice(noticeCreateRequest);
         return ResponseHandler.generate()
                 .data(noticeId)
@@ -42,6 +44,15 @@ public class NoticeApiController {
         NoticeDetail noticeDetail = noticeService.getNotice(id);
         return ResponseHandler.generate()
                 .data(noticeDetail)
+                .status(HttpStatus.OK)
+                .build();
+    }
+
+    @PatchMapping()
+    public ResponseEntity<?> updateNotice(@Valid @RequestBody NoticeUpdateRequest noticeUpdateRequest){
+        Long noticeId = noticeService.updateNotice(noticeUpdateRequest);
+        return ResponseHandler.generate()
+                .data(noticeId)
                 .status(HttpStatus.OK)
                 .build();
     }

@@ -49,4 +49,12 @@ public class Notice extends BaseEntity {
                 .useYn(Yn.Y)
                 .build();
     }
+
+    @Builder(builderMethodName = "updateBuilder", builderClassName = "updateBuilder")
+    public static void change(Notice notice, String title, String content, String imagePath, Yn useYn){
+        notice.title = title;
+        notice.content = content;
+        notice.imagePath = imagePath;
+        notice.useYn = useYn;
+    }
 }
