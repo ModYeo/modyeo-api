@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -51,7 +52,7 @@ public class BoardApiController {
 
     @ApiOperation(value = "게시글 생성 API")
     @PostMapping("/article")
-    public ResponseEntity<?> createArticle(@RequestBody ArticleCreateRequest articleCreateRequest) {
+    public ResponseEntity<?> createArticle(@Valid @RequestBody ArticleCreateRequest articleCreateRequest) {
         Long articleId = boardService.createArticle(articleCreateRequest);
         return ResponseHandler.generate()
                 .data(articleId)
@@ -61,7 +62,7 @@ public class BoardApiController {
 
     @ApiOperation(value = "게시글 수정 API")
     @PatchMapping("/article")
-    public ResponseEntity<?> updateArticle(@RequestBody ArticleUpdateRequest articleUpdateRequest) {
+    public ResponseEntity<?> updateArticle(@Valid @RequestBody ArticleUpdateRequest articleUpdateRequest) {
         Long articleId = boardService.updateArticle(articleUpdateRequest);
         return ResponseHandler.generate()
                 .data(articleId)

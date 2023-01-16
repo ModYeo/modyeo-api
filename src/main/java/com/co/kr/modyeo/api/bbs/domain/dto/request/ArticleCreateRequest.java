@@ -6,14 +6,18 @@ import com.co.kr.modyeo.common.enumerate.Yn;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.Min;
 
 @Data
 @NoArgsConstructor
 public class ArticleCreateRequest {
 
-
+    @Min(value = 1, message = "카테고리 아이디가 필요합니다.")
     private Long categoryId;
 
+    @Length(min = 1,message = "제목이 필요합니다.")
     private String title;
 
     private String content;

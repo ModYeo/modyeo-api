@@ -5,7 +5,6 @@ import com.co.kr.modyeo.api.columncode.domain.dto.request.ColumnCodeSearch;
 import com.co.kr.modyeo.api.columncode.domain.dto.request.ColumnCodeUpdateRequest;
 import com.co.kr.modyeo.api.columncode.domain.dto.response.ColumnCodeDetail;
 import com.co.kr.modyeo.api.columncode.domain.dto.response.ColumnCodeResponse;
-import com.co.kr.modyeo.api.columncode.domain.entity.ColumnCode;
 import com.co.kr.modyeo.api.columncode.service.ColumnCodeService;
 import com.co.kr.modyeo.common.result.ResponseHandler;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/column-code")
@@ -40,7 +41,7 @@ public class ColumnCodeController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createColumnCode(@RequestBody ColumnCodeCreateRequest columnCodeCreateRequest){
+    public ResponseEntity<?> createColumnCode(@Valid @RequestBody ColumnCodeCreateRequest columnCodeCreateRequest){
         Long columnCodeId = columnCodeService.createColumnCode(columnCodeCreateRequest);
         return ResponseHandler.generate()
                 .status(HttpStatus.CREATED)

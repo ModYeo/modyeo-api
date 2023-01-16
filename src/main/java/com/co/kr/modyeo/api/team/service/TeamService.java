@@ -1,20 +1,18 @@
 package com.co.kr.modyeo.api.team.service;
 
+import com.co.kr.modyeo.api.team.domain.dto.request.TeamUpdateRequest;
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamDetail;
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamResponse;
-import com.co.kr.modyeo.api.team.domain.entity.Team;
-import com.co.kr.modyeo.api.team.domain.dto.request.TeamRequest;
+import com.co.kr.modyeo.api.team.domain.dto.request.TeamCreateRequest;
 import com.co.kr.modyeo.api.team.domain.dto.search.TeamSearch;
 import org.springframework.data.domain.Slice;
 
-import java.util.List;
-
 public interface TeamService {
-    Long createTeam(TeamRequest teamRequest);
+    Long createTeam(TeamCreateRequest teamCreateRequest);
 
     Slice<TeamResponse> getTeams(TeamSearch teamSearch);
 
-    Long updateTeam(TeamRequest teamRequest);
+    Long updateTeam(TeamUpdateRequest teamCreateRequest);
 
     void deleteTeam(Long crewId);
 

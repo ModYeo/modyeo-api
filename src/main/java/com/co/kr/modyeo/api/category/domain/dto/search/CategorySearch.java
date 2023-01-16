@@ -9,6 +9,10 @@ import lombok.NoArgsConstructor;
 public class CategorySearch {
     private String name;
 
+    private Boolean isMy;
+
+    private Long memberId;
+
     @Builder
     public CategorySearch(String name) {
         this.name = name;
