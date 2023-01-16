@@ -50,7 +50,6 @@ public class TeamArticleRepositoryImpl extends Querydsl4RepositorySupport implem
                         .from(teamArticle)
                         .innerJoin(teamArticle.team, team)
                         .innerJoin(member).on(member.id.eq(teamArticle.createdBy))
-                        .fetchJoin()
                         .where(articleTitleLike(teamArticleSearch.getTitle()),
                                 articleContentLike(teamArticleSearch.getContent()),
                                 categoryIdEq(teamArticleSearch.getTeamId()),
