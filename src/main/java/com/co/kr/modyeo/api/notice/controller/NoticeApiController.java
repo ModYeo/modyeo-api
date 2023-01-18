@@ -48,12 +48,21 @@ public class NoticeApiController {
                 .build();
     }
 
-    @PatchMapping()
+    @PatchMapping("")
     public ResponseEntity<?> updateNotice(@Valid @RequestBody NoticeUpdateRequest noticeUpdateRequest){
         Long noticeId = noticeService.updateNotice(noticeUpdateRequest);
         return ResponseHandler.generate()
                 .data(noticeId)
                 .status(HttpStatus.OK)
+                .build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteNotice(@PathVariable Long id){
+        noticeService.deleteNotice(id);
+        return ResponseHandler.generate()
+                .data(null)
+                .status(HttpStatus.NO_CONTENT)
                 .build();
     }
 }

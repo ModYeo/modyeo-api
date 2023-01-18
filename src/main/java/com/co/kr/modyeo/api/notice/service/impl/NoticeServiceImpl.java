@@ -51,6 +51,7 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
+    @Transactional
     public Long updateNotice(NoticeUpdateRequest noticeUpdateRequest) {
         Notice notice = noticeRepository.findById(noticeUpdateRequest.getId()).orElseThrow(
                 () -> ApiException.builder()
@@ -68,5 +69,18 @@ public class NoticeServiceImpl implements NoticeService {
                 .build();
 
         return notice.getId();
+    }
+
+    @Override
+    @Transactional
+    public void deleteNotice(Long id) {
+        Notice notice = noticeRepository.findById(id).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage("공지사항을 찾지 못했습니다")
+                        .errorCode("NOT_FOUND_NOTICE")
+                        .status(HttpStatus.NOT_FOUND)
+                        .build());
+
+        noticeRepository.delete(notice);
     }
 }
