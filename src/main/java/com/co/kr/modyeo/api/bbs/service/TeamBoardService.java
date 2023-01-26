@@ -35,5 +35,5 @@ public interface TeamBoardService {
 
     List<TeamReplyResponse> getReplyMy(Long memberId);
 
-    List<TeamArticleResponse> getArticleMyLike(Long memberId);
+    List<TeamArticleResponse> getArticleLike(Long memberId);
 }

@@ -151,10 +151,9 @@ public class TeamBoardApiController {
     }
 
     @ApiOperation("내가 좋아요한 글 조회 API")
-    @GetMapping("/article/my-like")
-    public ResponseEntity<?> getTeamArticleMyLike(){
-        Long memberId = SecurityUtil.getCurrentMemberId();
-        List<TeamArticleResponse> articleResponseList = teamBoardService.getArticleMyLike(memberId);
+    @GetMapping("/article/like/{memberId}")
+    public ResponseEntity<?> getTeamArticleLike(@PathVariable Long memberId){
+        List<TeamArticleResponse> articleResponseList = teamBoardService.getArticleLike(memberId);
         return ResponseHandler.generate()
                 .data(articleResponseList)
                 .status(HttpStatus.OK)
