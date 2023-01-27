@@ -2,9 +2,12 @@ package com.co.kr.modyeo.api.member.service;
 
 import com.co.kr.modyeo.api.member.domain.dto.request.MemberCategoryRequest;
 import com.co.kr.modyeo.api.member.domain.dto.request.MemberProfilePathRequest;
+import com.co.kr.modyeo.api.member.domain.dto.request.MemberSearch;
 import com.co.kr.modyeo.api.member.domain.dto.request.NicknameUpdateRequest;
 import com.co.kr.modyeo.api.member.domain.dto.response.ApplicationMemberDetail;
 import com.co.kr.modyeo.api.member.domain.dto.response.MemberDetail;
+import com.co.kr.modyeo.api.member.domain.dto.response.MemberResponse;
+import org.springframework.data.domain.Slice;
 
 public interface MemberService {
 
@@ -18,5 +21,5 @@ public interface MemberService {
 
     ApplicationMemberDetail getTeamApplicationMember(Long memberId, Long teamId);
 
-    String checkOverlapNickname(String nickname);
+    Slice<MemberResponse> getMembers(MemberSearch memberSearch);
 }
