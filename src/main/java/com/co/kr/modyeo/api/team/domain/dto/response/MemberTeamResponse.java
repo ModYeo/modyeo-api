@@ -37,7 +37,7 @@ public class MemberTeamResponse {
     public static MemberTeamResponse toDto(MemberTeam memberTeam){
         return of()
                 .memberTeamId(memberTeam.getId())
-                .memberResponse(MemberResponse.toRes(memberTeam.getMember()))
+                .memberResponse(MemberResponse.toDto(memberTeam.getMember()))
                 .introduce(memberTeam.getIntroduce())
                 .joinStatus(memberTeam.getJoinStatus())
                 .createdDate(memberTeam.getCreatedDate())
@@ -50,18 +50,22 @@ public class MemberTeamResponse {
 
         private Long memberId;
 
-        private String email;
+        private String nickname;
+
+        private String profilePath;
 
         @Builder(builderClassName = "of",builderMethodName = "of")
-        public MemberResponse(Long memberId, String email) {
+        public MemberResponse(Long memberId, String nickname, String profilePath) {
             this.memberId = memberId;
-            this.email = email;
+            this.nickname = nickname;
+            this.profilePath = profilePath;
         }
 
-        public static MemberResponse toRes(Member member) {
+        public static MemberResponse toDto(Member member) {
             return MemberTeamResponse.MemberResponse.of()
                     .memberId(member.getId())
-                    .email(member.getEmail())
+                    .nickname(member.getProfilePath())
+                    .profilePath(member.getProfilePath())
                     .build();
         }
     }

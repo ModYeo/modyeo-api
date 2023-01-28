@@ -14,4 +14,6 @@ public interface AuthService {
     void updatePassword(PasswordUpdateRequest passwordUpdateRequest);
 
     void authMail(String email, String authNumber);
+
+    String checkOverlapNickname(String nickname);
 }

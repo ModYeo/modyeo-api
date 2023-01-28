@@ -41,6 +41,15 @@ public class MemberResponse {
         this.categoryResponses = categoryResponses;
     }
 
+    public MemberResponse(Long id, String nickname, String email, String username, Sex sex, LocalDate birthDay) {
+        this.id = id;
+        this.nickname = nickname;
+        this.email = email;
+        this.username = username;
+        this.sex = sex;
+        this.birthDay = birthDay;
+    }
+
     public static MemberResponse toRes(Member member) {
         return MemberResponse.of()
                 .id(member.getId())

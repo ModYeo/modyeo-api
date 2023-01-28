@@ -35,5 +35,5 @@ public interface BoardService {
 
     List<ReplyResponse> getReplyMy(Long memberId);
 
-    List<ArticleResponse> getArticleMyLike(Long memberId);
+    List<ArticleResponse> getArticleLike(Long memberId);
 }

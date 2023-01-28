@@ -170,6 +170,11 @@ public class AuthServiceImpl implements AuthService {
         modyeoMailSender.send(mailDto);
     }
 
+    @Override
+    public String checkOverlapNickname(String nickname) {
+        return memberRepository.existsByNickname(nickname)? "disable" : "enable";
+    }
+
     private TokenDto getTokenDto(Authentication authentication) {
         TokenDto tokenDto = jwtTokenProvider.generateTokenDto(authentication);
 

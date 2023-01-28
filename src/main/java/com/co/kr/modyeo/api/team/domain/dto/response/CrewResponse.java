@@ -16,14 +16,17 @@ public class CrewResponse {
 
     private String nickname;
 
+    private String profilePath;
+
     private CrewLevel crewLevel;
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public CrewResponse(Long crewId, Long memberId, String nickname, CrewLevel crewLevel) {
+    public CrewResponse(Long crewId, Long memberId, String nickname, CrewLevel crewLevel, String profilePath) {
         this.crewId = crewId;
         this.memberId = memberId;
         this.nickname = nickname;
         this.crewLevel = crewLevel;
+        this.profilePath = profilePath;
     }
 
     public static CrewResponse toDto(Crew crew) {
@@ -31,6 +34,7 @@ public class CrewResponse {
                 .crewId(crew.getId())
                 .memberId(crew.getMember().getId())
                 .nickname(crew.getMember().getNickname())
+                .profilePath(crew.getMember().getProfilePath())
                 .crewLevel(crew.getCrewLevel())
                 .build();
     }

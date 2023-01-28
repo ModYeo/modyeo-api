@@ -151,4 +151,15 @@ public class AuthController {
                 .status(HttpStatus.OK)
                 .build();
     }
+
+    @ApiOperation(value = "닉네임 중복 확인 API")
+    @GetMapping("/overlap-nickname")
+    public ResponseEntity<?> checkOverlapNickname(@RequestParam(value = "nickname", required = true, defaultValue = "") String nickname){
+        String result = authService.checkOverlapNickname(nickname);
+
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
+                .data(result)
+                .build();
+    }
 }

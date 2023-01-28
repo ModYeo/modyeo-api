@@ -31,8 +31,7 @@ public class BoardApiController {
     @ApiOperation(value = "게시글 상세 조회")
     @GetMapping("/article/{article_id}")
     public ResponseEntity<?> getArticle(
-            @PathVariable(value = "article_id") Long id
-    ) {
+            @PathVariable(value = "article_id") Long id) {
         ArticleDetail articleDetail = boardService.getArticle(id);
         return ResponseHandler.generate()
                 .data(articleDetail)
@@ -154,11 +153,10 @@ public class BoardApiController {
                 .build();
     }
 
-    @ApiOperation("내가 좋아요한 글 조회 API")
-    @GetMapping("/article/my-like")
-    public ResponseEntity<?> getArticleMyLike(){
-        Long memberId = SecurityUtil.getCurrentMemberId();
-        List<ArticleResponse> articleResponseList = boardService.getArticleMyLike(memberId);
+    @ApiOperation("좋아요한 글 조회 API")
+    @GetMapping("/article/like/{memberId}")
+    public ResponseEntity<?> getArticleLike(@PathVariable Long memberId){
+        List<ArticleResponse> articleResponseList = boardService.getArticleLike(memberId);
         return ResponseHandler.generate()
                 .data(articleResponseList)
                 .status(HttpStatus.OK)

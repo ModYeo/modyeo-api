@@ -2,22 +2,21 @@ package com.co.kr.modyeo.api.member.controller;
 
 import com.co.kr.modyeo.api.member.domain.dto.request.MemberCategoryRequest;
 import com.co.kr.modyeo.api.member.domain.dto.request.MemberProfilePathRequest;
+import com.co.kr.modyeo.api.member.domain.dto.request.MemberSearch;
 import com.co.kr.modyeo.api.member.domain.dto.request.NicknameUpdateRequest;
 import com.co.kr.modyeo.api.member.domain.dto.response.ApplicationMemberDetail;
 import com.co.kr.modyeo.api.member.domain.dto.response.MemberDetail;
+import com.co.kr.modyeo.api.member.domain.dto.response.MemberResponse;
 import com.co.kr.modyeo.api.member.service.MemberService;
-import com.co.kr.modyeo.common.result.JsonResultData;
 import com.co.kr.modyeo.common.result.ResponseHandler;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -82,14 +81,13 @@ public class MemberApiController {
                 .build();
     }
 
-    @ApiOperation(value = "닉네임 중복 확인 API")
-    @GetMapping("/overlap-nickname")
-    public ResponseEntity<?> checkOverlapNickname(@RequestParam(value = "nickname", required = true, defaultValue = "") String nickname){
-        String result = memberService.checkOverlapNickname(nickname);
-
+    @ApiOperation(value = "회원 슬라이스 조회")
+    @GetMapping("")
+    public ResponseEntity<?> getMembers(MemberSearch memberSearch){
+        Slice<MemberResponse> members = memberService.getMembers(memberSearch);
         return ResponseHandler.generate()
                 .status(HttpStatus.OK)
-                .data(result)
+                .data(members)
                 .build();
     }
 }

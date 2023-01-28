@@ -3,9 +3,11 @@ package com.co.kr.modyeo.api.member.service.impl;
 import com.co.kr.modyeo.api.category.repository.CategoryRepository;
 import com.co.kr.modyeo.api.member.domain.dto.request.MemberCategoryRequest;
 import com.co.kr.modyeo.api.member.domain.dto.request.MemberProfilePathRequest;
+import com.co.kr.modyeo.api.member.domain.dto.request.MemberSearch;
 import com.co.kr.modyeo.api.member.domain.dto.request.NicknameUpdateRequest;
 import com.co.kr.modyeo.api.member.domain.dto.response.ApplicationMemberDetail;
 import com.co.kr.modyeo.api.member.domain.dto.response.MemberDetail;
+import com.co.kr.modyeo.api.member.domain.dto.response.MemberResponse;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.domain.entity.link.MemberCategory;
 import com.co.kr.modyeo.api.member.repository.MemberCategoryRepository;
@@ -18,6 +20,8 @@ import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -119,7 +123,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public String checkOverlapNickname(String nickname) {
-        return memberRepository.existsByNickname(nickname)? "enable" : "disable";
+    public Slice<MemberResponse> getMembers(MemberSearch memberSearch) {
+        PageRequest pageRequest = PageRequest.of(memberSearch.getOffset(), memberSearch.getLimit(), memberSearch.getDirection(), memberSearch.getOrderBy());
+        return memberRepository.searchMember(memberSearch, pageRequest);
     }
 }

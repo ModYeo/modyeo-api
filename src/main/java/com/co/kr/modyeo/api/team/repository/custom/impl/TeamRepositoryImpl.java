@@ -5,7 +5,6 @@ import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
 import com.co.kr.modyeo.api.team.domain.dto.search.TeamSearch;
 import com.co.kr.modyeo.api.team.repository.custom.TeamCustomRepository;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +33,7 @@ public class TeamRepositoryImpl extends Querydsl4RepositorySupport implements Te
                         .from(team)
                         .innerJoin(team.categoryList, teamCategory)
                         .innerJoin(team.crewList, crew)
-                        .where(crewNameEq(teamSearch.getName()),
+                        .where(teamNameLike(teamSearch.getName()),
                                 memberIdEq(teamSearch.getMemberId()),
                                 categoryIdEq(teamSearch.getCategoryId())));
 
@@ -59,8 +58,8 @@ public class TeamRepositoryImpl extends Querydsl4RepositorySupport implements Te
         return id != null ? team.id.eq(id) : null;
     }
 
-    private BooleanExpression crewNameEq(String name) {
-        return StringUtils.hasText(name)  ? team.name.eq(name) : null;
+    private BooleanExpression teamNameLike(String name) {
+        return StringUtils.hasText(name)  ? team.name.contains(name) : null;
     }
 
     private BooleanExpression categoryIdEq(Long id) {
