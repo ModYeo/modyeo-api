@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -28,4 +30,7 @@ public class SiggArea {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sido_area_id")
     private SidoArea sidoArea;
+
+    @OneToMany(mappedBy = "emdArea")
+    private List<EmdArea> emdAreaList = new ArrayList<>();
 }

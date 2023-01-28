@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -23,4 +25,7 @@ public class SidoArea {
     private String name;
 
     private String version;
+
+    @OneToMany(mappedBy = "sidoArea")
+    private List<SiggArea> siggAreaList = new ArrayList<>();
 }
