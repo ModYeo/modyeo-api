@@ -1,10 +1,9 @@
 package com.co.kr.modyeo.api.geo.service;
 
-import com.co.kr.modyeo.api.geo.domain.entity.SidoArea;
-import org.w3c.dom.stylesheets.LinkStyle;
+import com.co.kr.modyeo.api.geo.domain.dto.response.SidoAreaResponse;
 
 import java.util.List;
 
 public interface GeoService {
-    List<SidoArea> getSidoInfo();
+    List<SidoAreaResponse> getGeoInfo();
 }

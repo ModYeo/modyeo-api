@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -16,8 +17,9 @@ public class GeoServiceImpl implements GeoService {
     private final SidoAreaRepository sidoAreaRepository;
 
     @Override
-    public List<SidoArea> getSidoInfo() {
-        sidoAreaRepository.findAll().stream().map(SidoAreaResponse)
-        return null;
+    public List<SidoAreaResponse> getGeoInfo() {
+        return sidoAreaRepository.findAll().stream()
+                .map(SidoAreaResponse::toDto)
+                .collect(Collectors.toList());
     }
 }
