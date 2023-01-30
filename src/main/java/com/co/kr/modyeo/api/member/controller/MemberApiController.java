@@ -1,9 +1,6 @@
 package com.co.kr.modyeo.api.member.controller;
 
-import com.co.kr.modyeo.api.member.domain.dto.request.MemberCategoryRequest;
-import com.co.kr.modyeo.api.member.domain.dto.request.MemberProfilePathRequest;
-import com.co.kr.modyeo.api.member.domain.dto.request.MemberSearch;
-import com.co.kr.modyeo.api.member.domain.dto.request.NicknameUpdateRequest;
+import com.co.kr.modyeo.api.member.domain.dto.request.*;
 import com.co.kr.modyeo.api.member.domain.dto.response.ApplicationMemberDetail;
 import com.co.kr.modyeo.api.member.domain.dto.response.MemberDetail;
 import com.co.kr.modyeo.api.member.domain.dto.response.MemberResponse;
@@ -88,6 +85,16 @@ public class MemberApiController {
         return ResponseHandler.generate()
                 .status(HttpStatus.OK)
                 .data(members)
+                .build();
+    }
+
+    @ApiOperation(value = "활동 지역 추가 API")
+    @PostMapping("/active-area")
+    public ResponseEntity<?> createMemberActiveArea(@RequestBody MemberActiveAreaRequest memberActiveAreaRequest){
+        Long memberActiveAreaId = memberService.createMemberActiveArea(memberActiveAreaRequest);
+        return ResponseHandler.generate()
+                .status(HttpStatus.CREATED)
+                .data(null)
                 .build();
     }
 }
