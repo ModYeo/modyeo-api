@@ -1,6 +1,5 @@
 package com.co.kr.modyeo.api.team.domain.entity;
 
-import com.co.kr.modyeo.api.team.domain.entity.enumerate.ScaleLevel;
 import com.co.kr.modyeo.api.team.domain.entity.link.Crew;
 import com.co.kr.modyeo.common.entity.BaseEntity;
 import com.co.kr.modyeo.api.team.domain.entity.link.TeamCategory;
@@ -39,6 +38,9 @@ public class Team extends BaseEntity {
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private List<Crew> crewList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    private List<TeamArea> activeAreaList = new ArrayList<>();
 
     @Builder(builderMethodName = "of", builderClassName = "of")
     public Team(Long id, String name, String description, String profilePath, List<TeamCategory> categoryList, List<Crew> crewList) {
