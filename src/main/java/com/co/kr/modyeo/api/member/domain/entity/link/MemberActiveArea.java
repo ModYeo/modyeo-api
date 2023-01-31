@@ -28,15 +28,15 @@ public class MemberActiveArea extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Column(name = "distance_meters")
-    private Integer distanceMeters;
+    @Column(name = "limit_meters")
+    private Integer limitMeters;
 
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public MemberActiveArea(Long id, EmdArea emdArea, Member member, Integer distanceMeters) {
+    public MemberActiveArea(Long id, EmdArea emdArea, Member member, Integer limitMeters) {
         this.id = id;
         this.emdArea = emdArea;
         this.member = member;
-        this.distanceMeters = distanceMeters;
+        this.limitMeters = limitMeters;
     }
 
     @Builder(builderClassName = "createBuilder", builderMethodName = "createBuilder")
@@ -44,7 +44,11 @@ public class MemberActiveArea extends BaseEntity {
         return of()
                 .emdArea(emdArea)
                 .member(member)
-                .distanceMeters(distanceMeters)
+                .limitMeters(distanceMeters)
                 .build();
+    }
+
+    public static void changeLimitMeters(MemberActiveArea memberActiveArea, Integer limitMeters) {
+        memberActiveArea.limitMeters = limitMeters;
     }
 }

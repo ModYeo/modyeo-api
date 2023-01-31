@@ -14,11 +14,15 @@ public interface MemberService {
 
     Long updateNickname(NicknameUpdateRequest nicknameUpdateRequest);
 
-    Long putProfilePath(MemberProfilePathRequest memberProfilePathRequest);
+    Long updateProfilePath(MemberProfilePathRequest memberProfilePathRequest);
 
     ApplicationMemberDetail getTeamApplicationMember(Long memberId, Long teamId);
 
     Slice<MemberResponse> getMembers(MemberSearch memberSearch);
 
     Long createMemberActiveArea(MemberActiveAreaRequest memberActiveAreaRequest);
+
+    void deleteMemberActiveArea(Long memberActiveAreaId);
+
+    Long updateLimitMeters(LimitMetersUpdateRequest limitMetersUpdateRequest);
 }

@@ -100,7 +100,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Long putProfilePath(MemberProfilePathRequest memberProfilePathRequest) {
+    public Long updateProfilePath(MemberProfilePathRequest memberProfilePathRequest) {
         Member member = memberRepository.findById(memberProfilePathRequest.getMemberId()).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -153,5 +153,30 @@ public class MemberServiceImpl implements MemberService {
         MemberActiveArea memberActiveArea = MemberActiveAreaRequest.toEntity(member, emdArea, memberActiveAreaRequest.getDistanceMeters());
 
         return memberActiveAreaRepository.save(memberActiveArea).getId();
+    }
+
+    @Override
+    public void deleteMemberActiveArea(Long memberActiveAreaId) {
+        MemberActiveArea memberActiveArea = memberActiveAreaRepository.findById(memberActiveAreaId).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode(AreaErrorCode.NOT_FOUND_AREA.getCode())
+                        .errorMessage(AreaErrorCode.NOT_FOUND_AREA.getMessage())
+                        .build());
+
+        memberActiveAreaRepository.delete(memberActiveArea);
+    }
+
+    @Override
+    public Long updateLimitMeters(LimitMetersUpdateRequest limitMetersUpdateRequest) {
+        MemberActiveArea memberActiveArea = memberActiveAreaRepository.findById(limitMetersUpdateRequest.getMemberActiveAreaId()).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode(AreaErrorCode.NOT_FOUND_AREA.getCode())
+                        .errorMessage(AreaErrorCode.NOT_FOUND_AREA.getMessage())
+                        .build());
+
+        MemberActiveArea.changeLimitMeters(memberActiveArea, limitMetersUpdateRequest.getLimitMeters());
+        return memberActiveArea.getId();
     }
 }
