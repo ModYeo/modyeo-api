@@ -64,7 +64,7 @@ public class MemberTeamResponse {
         public static MemberResponse toDto(Member member) {
             return MemberTeamResponse.MemberResponse.of()
                     .memberId(member.getId())
-                    .nickname(member.getProfilePath())
+                    .nickname(member.getNickname())
                     .profilePath(member.getProfilePath())
                     .build();
         }
