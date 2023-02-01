@@ -14,13 +14,13 @@ public class MemberActiveAreaRequest {
 
     private Long emdAreaId;
 
-    private Integer distanceMeters;
+    private Integer limitMeters;
 
-    public static MemberActiveArea toEntity(Member member, EmdArea emdArea, Integer distanceMeters){
+    public static MemberActiveArea toEntity(Member member, EmdArea emdArea, Integer limitMeters){
         return MemberActiveArea.of()
                 .member(member)
                 .emdArea(emdArea)
-                .distanceMeters(distanceMeters)
+                .limitMeters(limitMeters)
                 .build();
     }
 }

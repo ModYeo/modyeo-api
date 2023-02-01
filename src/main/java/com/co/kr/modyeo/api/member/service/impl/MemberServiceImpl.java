@@ -150,7 +150,7 @@ public class MemberServiceImpl implements MemberService {
                         .errorMessage(AreaErrorCode.NOT_FOUND_AREA.getMessage())
                         .build());
 
-        MemberActiveArea memberActiveArea = MemberActiveAreaRequest.toEntity(member, emdArea, memberActiveAreaRequest.getDistanceMeters());
+        MemberActiveArea memberActiveArea = MemberActiveAreaRequest.toEntity(member, emdArea, memberActiveAreaRequest.getLimitMeters());
 
         return memberActiveAreaRepository.save(memberActiveArea).getId();
     }
