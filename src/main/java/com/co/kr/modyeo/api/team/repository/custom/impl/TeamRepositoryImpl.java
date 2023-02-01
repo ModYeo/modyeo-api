@@ -16,6 +16,7 @@ import java.util.List;
 
 import static com.co.kr.modyeo.api.member.domain.entity.QMember.member;
 import static com.co.kr.modyeo.api.team.domain.entity.QTeam.team;
+import static com.co.kr.modyeo.api.team.domain.entity.QTeamActivArea.teamActivArea;
 import static com.co.kr.modyeo.api.team.domain.entity.link.QCrew.crew;
 import static com.co.kr.modyeo.api.team.domain.entity.link.QTeamCategory.teamCategory;
 
@@ -33,6 +34,7 @@ public class TeamRepositoryImpl extends Querydsl4RepositorySupport implements Te
                         .from(team)
                         .innerJoin(team.categoryList, teamCategory)
                         .innerJoin(team.crewList, crew)
+                        .innerJoin(team.areaList, teamActivArea)
                         .where(teamNameLike(teamSearch.getName()),
                                 memberIdEq(teamSearch.getMemberId()),
                                 categoryIdEq(teamSearch.getCategoryId())));

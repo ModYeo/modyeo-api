@@ -40,16 +40,17 @@ public class Team extends BaseEntity {
     private List<Crew> crewList = new ArrayList<>();
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
-    private List<TeamArea> activeAreaList = new ArrayList<>();
+    private List<TeamActivArea> areaList = new ArrayList<>();
 
     @Builder(builderMethodName = "of", builderClassName = "of")
-    public Team(Long id, String name, String description, String profilePath, List<TeamCategory> categoryList, List<Crew> crewList) {
+    public Team(Long id, String name, String description, String profilePath, List<TeamCategory> categoryList, List<Crew> crewList, List<TeamActivArea> areaList) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.profilePath = profilePath;
         this.categoryList = categoryList;
         this.crewList = crewList;
+        this.areaList = areaList;
     }
 
     @Builder(builderClassName = "createTeamBuilder", builderMethodName = "createTeamBuilder")

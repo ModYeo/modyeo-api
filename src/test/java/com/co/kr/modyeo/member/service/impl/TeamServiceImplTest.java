@@ -42,10 +42,21 @@ class TeamServiceImplTest {
     @Mock
     private MemberRepository memberRepository;
 
+    /*@Mock
+    private EmdAreaRepository emdAreaRepository;
+
+    @Mock
+    private TeamActivAreaRepository teamAreaRepository;*/
+
     @BeforeEach
     public void setup(){
         MockitoAnnotations.initMocks(this);
-        teamService = new TeamServiceImpl(teamRepository, teamCategoryRepository,crewRepository,memberRepository);
+        teamService = new TeamServiceImpl(
+                teamRepository, teamCategoryRepository,
+                crewRepository,memberRepository
+        //        ,
+        //        emdAreaRepository,teamAreaRepository
+        );
     }
 
     private TeamCreateRequest.CategoryDto categoryDto = TeamCreateRequest.CategoryDto.builder()

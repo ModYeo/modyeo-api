@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.api.team.domain.entity;
 
+import com.co.kr.modyeo.api.geo.domain.entity.EmdArea;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,9 +9,9 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Table
+@Table(name = "TEAM_ACTIVE_AREA")
 @NoArgsConstructor
-public class TeamArea {
+public class TeamActivArea {
     //1.활동지역아이디
     @Id
     @GeneratedValue
@@ -18,35 +19,35 @@ public class TeamArea {
     private Long activeId;
     //2.팀아이디
     @ManyToOne
-    @Column(name="team_id")
+    @JoinColumn(name="team_id")
     private Team team;
     //3.시도행정지역아이디
-    @Column(name="emd_area_id")
-    private Long emdId;
+    @ManyToOne
+    @JoinColumn(name="emd_area_id")
+    private EmdArea emdArea;
     //4.활동범위(위도, 경도 표시)
     @Column(name="limit_meters")
-    private Long limitMeters;
+    private Integer limitMeters;
 
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public TeamArea(Long activeId, Team team, Long emdId, Long limitMeters){
+    public TeamActivArea(Long activeId, Team team, EmdArea emdArea, Integer limitMeters){
         this.activeId = activeId;
         this.team = team;
-        this.emdId = emdId;
+        this.emdArea = emdArea;
         this.limitMeters = limitMeters;
     }
 
     @Builder(builderClassName = "createTeamAreaBuilder", builderMethodName = "createTeamAreaBuilder")
-    public static TeamArea createTeamArea(Team team, Long emdId, Long limitMeters){
-        return TeamArea.of().
+    public static TeamActivArea createTeamArea(Team team, EmdArea emdArea, Integer limitMeters){
+        return TeamActivArea.of().
                 team(team).
-                emdId(emdId).
+                emdArea(emdArea).
                 limitMeters(limitMeters).
                 build();
     }
 
-    @Builder(builderClassName = "changeTeamAreaBuilder", builderMethodName = "changeTeamAreaBuilder")
-    public void changeTeamActiveArea(Long emdId, Long limitMeters){
-        this.emdId = emdId;
+    @Builder(builderClassName = "updateTeamAreaBuilder", builderMethodName = "updateTeamAreaBuilder")
+    public void updateTeamActiveArea(Integer limitMeters){
         this.limitMeters = limitMeters;
     }
 }

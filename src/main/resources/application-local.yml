@@ -1,46 +1,35 @@
 spring:
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username:
-    password:
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-
   datasource:
-    url: jdbc:h2:mem:test
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://skysrd.iptime.org:3306/modyeo
+    hikari:
+      username: api
+      password: modyeo!@
+      driver-class-name: com.mysql.cj.jdbc.Driver
 
   jwt:
     secret: Z2VvLWdhdGhlcmluZy1zeXN0ZW0tbW9keWVvLWFwaS1zZXJ2ZXItc3ByaW5nLWJvb3QtanBhLWp3dC1zcHJpbmctc2VjdXJpdHktd2lydHRlci1hbmpvbmdnaWwtamFuZ21pbnNlb2stMjAyMi0wNi0wOQo=
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
-        format_sql: true
-        use_sql_comments: true
-        show_sql: true
-        default_batch_fetch_size: 1000
+      #        format_sql: true
+      #        use_sql_comments: true
+      #        show_sql: true
+      default_batch_fetch_size: 1000
     open-in-view: false
 
   redis:
-    host: localhost
+    host: skysrd.iptime.org
     port: 6379
     password: modyeo!@
 
-logging:
-  level:
-    org.hibernate.sql: debug
+#logging:
+#  level:
+#    org.hibernate.sql: debug
 
 
 profiles:
