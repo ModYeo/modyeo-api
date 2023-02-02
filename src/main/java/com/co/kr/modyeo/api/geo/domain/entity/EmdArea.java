@@ -13,7 +13,6 @@ import javax.persistence.*;
 @Table(name = "EMD_AREA")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EmdArea {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "emd_area_id")

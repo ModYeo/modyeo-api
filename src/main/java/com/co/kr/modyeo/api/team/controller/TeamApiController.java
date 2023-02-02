@@ -82,8 +82,8 @@ public class TeamApiController {
     }
 
     @ApiOperation(value="팀 활동지역 생성 API")
-    @PostMapping("/activArea")
-    public ResponseEntity<?> createTeamActivArea(
+    @PostMapping("/activeArea")
+    public ResponseEntity<?> createTeamActiveArea(
             @Valid @RequestBody TeamCreateActivAreaRequest teamCreateActivAreaRequest)
     {
         Long teamId = teamAreaService.createTeamActivArea(teamCreateActivAreaRequest);
@@ -94,7 +94,7 @@ public class TeamApiController {
     }
 
     @ApiOperation(value="팀 활동반경 수정 API")
-    @PatchMapping("/activArea")
+    @PatchMapping("/activeArea")
     public ResponseEntity<?> updateTeamLimitMeter(@RequestBody TeamUpdateLimitMeterRequest teamUpdateLimitMeterRequest){
         Long teamId = teamAreaService.updateTeamActivArea(teamUpdateLimitMeterRequest);
         return ResponseHandler.generate()
@@ -104,9 +104,10 @@ public class TeamApiController {
     }
 
     @ApiOperation(value="팀 활동지역 삭제 API")
-    @DeleteMapping({"/team_active_area_id"})
-    public ResponseEntity<?> deleteTeamArea(@PathVariable("team_active_area_id") Long teamActivAreaId){
-        teamAreaService.deleteTeamActivArea(teamActivAreaId);
+    @DeleteMapping({"/activeArea/{team_active_area_id}"})
+    public ResponseEntity<?> deleteTeamArea(
+            @PathVariable("team_active_area_id") Long teamActiveAreaId){
+        teamAreaService.deleteTeamActivArea(teamActiveAreaId);
         return ResponseHandler.generate()
                 .status(HttpStatus.NO_CONTENT)
                 .data(null)

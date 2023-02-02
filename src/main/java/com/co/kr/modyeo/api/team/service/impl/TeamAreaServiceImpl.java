@@ -5,7 +5,7 @@ import com.co.kr.modyeo.api.geo.repository.EmdAreaRepository;
 import com.co.kr.modyeo.api.team.domain.dto.request.TeamCreateActivAreaRequest;
 import com.co.kr.modyeo.api.team.domain.dto.request.TeamUpdateLimitMeterRequest;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
-import com.co.kr.modyeo.api.team.domain.entity.TeamActivArea;
+import com.co.kr.modyeo.api.team.domain.entity.TeamActiveArea;
 import com.co.kr.modyeo.api.team.repository.TeamActivAreaRepository;
 import com.co.kr.modyeo.api.team.repository.TeamRepository;
 import com.co.kr.modyeo.api.team.service.TeamAreaService;
@@ -14,8 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -40,7 +38,7 @@ public class TeamAreaServiceImpl implements TeamAreaService {
                         .errorMessage("")
                         .build());
 
-        TeamActivArea teamArea = TeamActivArea.createTeamArea(team, emdArea, teamCreateActivAreaRequest.getLimitMeters());
+        TeamActiveArea teamArea = TeamActiveArea.createTeamArea(team, emdArea, teamCreateActivAreaRequest.getLimitMeters());
         teamAreaRepository.save(teamArea);
         team.getAreaList().add(teamArea);
 
@@ -48,8 +46,8 @@ public class TeamAreaServiceImpl implements TeamAreaService {
     }
 
     @Override
-    public void deleteTeamActivArea(Long teamActivAreaId) {
-        TeamActivArea teamArea = teamAreaRepository.findById(teamActivAreaId).
+    public void deleteTeamActivArea(Long teamActiveAreaId) {
+        TeamActiveArea teamArea = teamAreaRepository.findById(teamActiveAreaId).
                 orElseThrow(()-> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
                         .errorCode("")
@@ -61,8 +59,21 @@ public class TeamAreaServiceImpl implements TeamAreaService {
 
     @Override
     public Long updateTeamActivArea(TeamUpdateLimitMeterRequest teamUpdateLimitMeterRequest) {
-        Optional<TeamActivArea> teamArea = teamAreaRepository.findById(teamUpdateLimitMeterRequest.getTeamId());
-        teamArea.get().updateTeamActiveArea(teamUpdateLimitMeterRequest.getLimitMeters());
-        return teamArea.get().getTeam().getId();
+        TeamActiveArea teamArea = teamAreaRepository.findById(teamUpdateLimitMeterRequest.getActiveAreaId())
+                .orElseThrow(()-> ApiException.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .errorCode("") //::TODO 이넘으로 만들어서 넣기.
+                    .errorMessage("")
+                    .build());
+
+        if (teamArea.getTeam().getId()==teamUpdateLimitMeterRequest.getTeamId()){
+            teamArea.updateTeamActiveArea(teamUpdateLimitMeterRequest.getLimitMeters());
+        } else ApiException.builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .errorCode("")
+                .errorMessage("")
+                .build();
+
+        return teamArea.getTeam().getId();
     }
 }

@@ -11,10 +11,10 @@ import javax.persistence.*;
 @Getter
 @Table(name = "TEAM_ACTIVE_AREA")
 @NoArgsConstructor
-public class TeamActivArea {
+public class TeamActiveArea {
     //1.활동지역아이디
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="team_active_area_id")
     private Long activeId;
     //2.팀아이디
@@ -30,7 +30,7 @@ public class TeamActivArea {
     private Integer limitMeters;
 
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public TeamActivArea(Long activeId, Team team, EmdArea emdArea, Integer limitMeters){
+    public TeamActiveArea(Long activeId, Team team, EmdArea emdArea, Integer limitMeters){
         this.activeId = activeId;
         this.team = team;
         this.emdArea = emdArea;
@@ -38,8 +38,8 @@ public class TeamActivArea {
     }
 
     @Builder(builderClassName = "createTeamAreaBuilder", builderMethodName = "createTeamAreaBuilder")
-    public static TeamActivArea createTeamArea(Team team, EmdArea emdArea, Integer limitMeters){
-        return TeamActivArea.of().
+    public static TeamActiveArea createTeamArea(Team team, EmdArea emdArea, Integer limitMeters){
+        return TeamActiveArea.of().
                 team(team).
                 emdArea(emdArea).
                 limitMeters(limitMeters).

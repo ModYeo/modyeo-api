@@ -14,6 +14,8 @@ public class TeamUpdateLimitMeterRequest {
     @NotNull
     Long teamId;
     @NotNull
+    Long activeAreaId;
+    @NotNull
     Integer limitMeters;
 
     @Builder(builderClassName = "of", builderMethodName = "of")

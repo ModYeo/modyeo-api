@@ -20,7 +20,7 @@ public class ModyeoMailSender {
         message.setFrom(FROM_ADDRESS);
         message.setSubject(mailDto.getTitle());
         message.setText(mailDto.getMessage());
-
+    //
         javaMailSender.send(message);
     }
 }
