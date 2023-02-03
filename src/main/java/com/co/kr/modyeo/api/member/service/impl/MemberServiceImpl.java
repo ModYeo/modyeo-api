@@ -135,6 +135,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public Long createMemberActiveArea(MemberActiveAreaRequest memberActiveAreaRequest) {
         Member member = memberRepository.findById(memberActiveAreaRequest.getMemberId()).orElseThrow(
                 () -> ApiException.builder()
@@ -152,10 +153,11 @@ public class MemberServiceImpl implements MemberService {
 
         MemberActiveArea memberActiveArea = MemberActiveAreaRequest.toEntity(member, emdArea, memberActiveAreaRequest.getLimitMeters());
 
-        return memberActiveAreaRepository.save(memberActiveArea).getId();
+        return memberActiveAreaRepository.save(memberActiveArea).getMember().getId();
     }
 
     @Override
+    @Transactional
     public void deleteMemberActiveArea(Long memberActiveAreaId) {
         MemberActiveArea memberActiveArea = memberActiveAreaRepository.findById(memberActiveAreaId).orElseThrow(
                 () -> ApiException.builder()
@@ -168,6 +170,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public Long updateLimitMeters(LimitMetersUpdateRequest limitMetersUpdateRequest) {
         MemberActiveArea memberActiveArea = memberActiveAreaRepository.findById(limitMetersUpdateRequest.getMemberActiveAreaId()).orElseThrow(
                 () -> ApiException.builder()
@@ -177,6 +180,6 @@ public class MemberServiceImpl implements MemberService {
                         .build());
 
         MemberActiveArea.changeLimitMeters(memberActiveArea, limitMetersUpdateRequest.getLimitMeters());
-        return memberActiveArea.getId();
+        return memberActiveArea.getMember().getId();
     }
 }
