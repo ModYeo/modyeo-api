@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.team.domain.dto.response;
 
 import com.co.kr.modyeo.api.category.domain.dto.response.CategoryResponse;
+import com.co.kr.modyeo.api.geo.domain.dto.response.EmdAreaResponse;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.api.team.domain.entity.enumerate.ScaleLevel;
 import lombok.*;
@@ -12,21 +13,16 @@ import java.util.stream.Collectors;
 @Data
 @NoArgsConstructor
 public class TeamResponse {
-
     private Long id;
     private String name;
-
     private String description;
-
     private ScaleLevel scaleLevel;
-
     private String profilePath;
-
     private List<CategoryResponse> categoryResponseList = new ArrayList<>();
 
-
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public TeamResponse(Long id, String name,ScaleLevel scaleLevel, String description, String profilePath, List<CategoryResponse> categoryResponses) {
+    public TeamResponse(Long id, String name,ScaleLevel scaleLevel, String description, String profilePath,
+                        List<CategoryResponse> categoryResponses) {
         this.id = id;
         this.name = name;
         this.scaleLevel = scaleLevel;

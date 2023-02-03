@@ -16,6 +16,7 @@ import java.util.List;
 
 import static com.co.kr.modyeo.api.member.domain.entity.QMember.member;
 import static com.co.kr.modyeo.api.team.domain.entity.QTeam.team;
+import static com.co.kr.modyeo.api.team.domain.entity.QTeamActiveArea.teamActiveArea;
 import static com.co.kr.modyeo.api.team.domain.entity.link.QCrew.crew;
 import static com.co.kr.modyeo.api.team.domain.entity.link.QTeamCategory.teamCategory;
 
@@ -32,11 +33,13 @@ public class TeamRepositoryImpl extends Querydsl4RepositorySupport implements Te
                 contentQuery.select(team)
                         .from(team)
                         .innerJoin(team.categoryList, teamCategory)
-                        .innerJoin(team.crewList, crew)
-                        .where(teamNameLike(teamSearch.getName()),
+                        .innerJoin(team.areaList, teamActiveArea)
+                        .where(
+                                teamNameLike(teamSearch.getName()),
                                 memberIdEq(teamSearch.getMemberId()),
-                                categoryIdEq(teamSearch.getCategoryId())));
-
+                                categoryIdEq(teamSearch.getCategoryId())
+                              )
+        );
     }
 
     private BooleanExpression memberIdEq(Long memberId) {
@@ -52,10 +55,6 @@ public class TeamRepositoryImpl extends Querydsl4RepositorySupport implements Te
                 .innerJoin(crew.member, member)
                 .where(member.email.eq(email))
                 .fetch();
-    }
-
-    private BooleanExpression crewIdEq(Long id) {
-        return id != null ? team.id.eq(id) : null;
     }
 
     private BooleanExpression teamNameLike(String name) {
