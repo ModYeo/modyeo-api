@@ -43,9 +43,21 @@ public class MemberDetail {
 
     private List<MemberCollectionInfoResponse> collectionInfoResponseList;
 
+    private List<MemberActiveAreaResponse> memberActiveAreaResponseList;
+
     @QueryProjection
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public MemberDetail(Long memberId, String username, Sex sex, String nickname, String profilePath, LocalDate birthDay, List<TeamResponse> teamResponseList, List<CategoryResponse> categoryResponseList, LocalDateTime createdTime, List<MemberCollectionInfoResponse> collectionInfoResponseList) {
+    public MemberDetail(Long memberId,
+                        String username,
+                        Sex sex,
+                        String nickname,
+                        String profilePath,
+                        LocalDate birthDay,
+                        List<TeamResponse> teamResponseList,
+                        List<CategoryResponse> categoryResponseList,
+                        LocalDateTime createdTime,
+                        List<MemberCollectionInfoResponse> collectionInfoResponseList,
+                        List<MemberActiveAreaResponse> memberActiveAreaResponseList) {
         this.memberId = memberId;
         this.username = username;
         this.sex = sex;
@@ -56,6 +68,7 @@ public class MemberDetail {
         this.teamResponseList = teamResponseList;
         this.categoryResponseList = categoryResponseList;
         this.collectionInfoResponseList = collectionInfoResponseList;
+        this.memberActiveAreaResponseList = memberActiveAreaResponseList;
     }
 
     public static MemberDetail createMemberDetail(Member member) {
@@ -97,6 +110,9 @@ public class MemberDetail {
                                 .description(memberCollectionInfo.getCollectionInfo().getDescription())
                                 .agreeYn(memberCollectionInfo.getAgreeYn())
                                 .build())
+                        .collect(Collectors.toList()))
+                .memberActiveAreaResponseList(member.getMemberActiveAreaList().stream()
+                        .map(MemberActiveAreaResponse::toDto)
                         .collect(Collectors.toList()))
                 .build();
     }

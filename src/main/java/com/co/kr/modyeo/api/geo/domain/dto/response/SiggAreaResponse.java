@@ -2,12 +2,16 @@ package com.co.kr.modyeo.api.geo.domain.dto.response;
 
 import com.co.kr.modyeo.api.geo.domain.entity.SiggArea;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Data
+@NoArgsConstructor
 public class SiggAreaResponse {
 
     private Long siggAreaId;

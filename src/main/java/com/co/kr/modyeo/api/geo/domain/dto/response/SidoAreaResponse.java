@@ -2,12 +2,18 @@ package com.co.kr.modyeo.api.geo.domain.dto.response;
 
 import com.co.kr.modyeo.api.geo.domain.entity.SidoArea;
 import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnNotWebApplication;
 
 import javax.persistence.Column;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+@Data
+@NoArgsConstructor
 public class SidoAreaResponse {
 
     private Long sidoAreaId;
