@@ -12,15 +12,13 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class TeamUpdateLimitMeterRequest {
     @NotNull
-    Long teamId;
-    @NotNull
     Long activeAreaId;
     @NotNull
     Integer limitMeters;
 
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public TeamUpdateLimitMeterRequest(Long teamId, Integer limitMeters){
-        this.teamId = teamId;
+    public TeamUpdateLimitMeterRequest(Long activeAreaId, Integer limitMeters){
+        this.activeAreaId = activeAreaId;
         this.limitMeters = limitMeters;
     }
 }

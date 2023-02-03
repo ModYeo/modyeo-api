@@ -66,13 +66,7 @@ public class TeamAreaServiceImpl implements TeamAreaService {
                     .errorMessage("")
                     .build());
 
-        if (teamArea.getTeam().getId()==teamUpdateLimitMeterRequest.getTeamId()){
-            teamArea.updateTeamActiveArea(teamUpdateLimitMeterRequest.getLimitMeters());
-        } else ApiException.builder()
-                .status(HttpStatus.BAD_REQUEST)
-                .errorCode("")
-                .errorMessage("")
-                .build();
+        teamArea.updateTeamActiveArea(teamUpdateLimitMeterRequest.getLimitMeters());
 
         return teamArea.getTeam().getId();
     }
