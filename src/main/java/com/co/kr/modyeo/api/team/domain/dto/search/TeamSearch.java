@@ -14,11 +14,15 @@ public class TeamSearch extends SearchDto {
 
     private Long memberId;
 
+    private Long emdId;
+
     @Builder
-    public TeamSearch(String name, Long categoryId,Long memberId,Integer limit, Integer offset, String orderBy, Sort.Direction direction) {
+    public TeamSearch(String name, Long categoryId,Long memberId, Long emdId,
+                      Integer limit, Integer offset, String orderBy, Sort.Direction direction) {
         super(limit, offset, orderBy, direction);
         this.name = name;
         this.categoryId = categoryId;
         this.memberId = memberId;
+        this.emdId = emdId;
     }
 }

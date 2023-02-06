@@ -5,7 +5,6 @@ import com.co.kr.modyeo.api.member.domain.dto.response.MemberResponse;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.repository.custom.MemberCustomRepository;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.domain.PageRequest;
@@ -14,8 +13,8 @@ import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
-import static com.co.kr.modyeo.api.member.collection.domain.entity.QCollectionInfo.collectionInfo;
 import static com.co.kr.modyeo.api.member.domain.entity.QMember.member;
+import static com.co.kr.modyeo.api.member.domain.entity.link.QMemberActiveArea.memberActiveArea;
 import static com.co.kr.modyeo.api.member.domain.entity.link.QMemberCategory.memberCategory;
 import static com.co.kr.modyeo.api.member.domain.entity.link.QMemberCollectionInfo.memberCollectionInfo;
 import static com.co.kr.modyeo.api.team.domain.entity.link.QCrew.crew;
@@ -33,6 +32,7 @@ public class MemberRepositoryImpl extends Querydsl4RepositorySupport implements 
                 .leftJoin(member.teamList, crew)
                 .leftJoin(member.interestCategoryList, memberCategory)
                 .leftJoin(member.memberCollectionInfoList, memberCollectionInfo)
+                .leftJoin(member.memberActiveAreaList, memberActiveArea)
                 .fetchJoin()
                 .where(memberIdEq(memberId))
                 .fetchOne());

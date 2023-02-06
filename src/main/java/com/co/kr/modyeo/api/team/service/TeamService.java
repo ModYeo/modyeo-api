@@ -12,7 +12,7 @@ public interface TeamService {
 
     Slice<TeamResponse> getTeams(TeamSearch teamSearch);
 
-    Long updateTeam(TeamUpdateRequest teamCreateRequest);
+    Long updateTeam(TeamUpdateRequest teamUpdateRequest);
 
     void deleteTeam(Long crewId);
 

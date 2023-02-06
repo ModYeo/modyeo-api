@@ -31,6 +31,6 @@ public class SiggArea {
     @JoinColumn(name = "sido_area_id")
     private SidoArea sidoArea;
 
-    @OneToMany(mappedBy = "emdArea")
+    @OneToMany(mappedBy = "siggArea")
     private List<EmdArea> emdAreaList = new ArrayList<>();
 }

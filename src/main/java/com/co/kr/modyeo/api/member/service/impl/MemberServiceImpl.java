@@ -1,15 +1,17 @@
 package com.co.kr.modyeo.api.member.service.impl;
 
 import com.co.kr.modyeo.api.category.repository.CategoryRepository;
-import com.co.kr.modyeo.api.member.domain.dto.request.MemberCategoryRequest;
-import com.co.kr.modyeo.api.member.domain.dto.request.MemberProfilePathRequest;
-import com.co.kr.modyeo.api.member.domain.dto.request.MemberSearch;
-import com.co.kr.modyeo.api.member.domain.dto.request.NicknameUpdateRequest;
+import com.co.kr.modyeo.api.geo.domain.entity.EmdArea;
+import com.co.kr.modyeo.api.member.domain.entity.link.MemberActiveArea;
+import com.co.kr.modyeo.common.exception.code.AreaErrorCode;
+import com.co.kr.modyeo.api.geo.repository.EmdAreaRepository;
+import com.co.kr.modyeo.api.member.domain.dto.request.*;
 import com.co.kr.modyeo.api.member.domain.dto.response.ApplicationMemberDetail;
 import com.co.kr.modyeo.api.member.domain.dto.response.MemberDetail;
 import com.co.kr.modyeo.api.member.domain.dto.response.MemberResponse;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.domain.entity.link.MemberCategory;
+import com.co.kr.modyeo.api.member.repository.MemberActiveAreaRepository;
 import com.co.kr.modyeo.api.member.repository.MemberCategoryRepository;
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.api.member.service.MemberService;
@@ -43,6 +45,10 @@ public class MemberServiceImpl implements MemberService {
     private final ApplicationFormRepository applicationFormRepository;
 
     private final MemberTeamRepository memberTeamRepository;
+
+    private final EmdAreaRepository emdAreaRepository;
+
+    private final MemberActiveAreaRepository memberActiveAreaRepository;
 
     @Override
     @Transactional
@@ -94,7 +100,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Long putProfilePath(MemberProfilePathRequest memberProfilePathRequest) {
+    public Long updateProfilePath(MemberProfilePathRequest memberProfilePathRequest) {
         Member member = memberRepository.findById(memberProfilePathRequest.getMemberId()).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -126,5 +132,51 @@ public class MemberServiceImpl implements MemberService {
     public Slice<MemberResponse> getMembers(MemberSearch memberSearch) {
         PageRequest pageRequest = PageRequest.of(memberSearch.getOffset(), memberSearch.getLimit(), memberSearch.getDirection(), memberSearch.getOrderBy());
         return memberRepository.searchMember(memberSearch, pageRequest);
+    }
+
+    @Override
+    public Long createMemberActiveArea(MemberActiveAreaRequest memberActiveAreaRequest) {
+        Member member = memberRepository.findById(memberActiveAreaRequest.getMemberId()).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
+                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
+                        .build());
+
+        EmdArea emdArea = emdAreaRepository.findById(memberActiveAreaRequest.getEmdAreaId()).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode(AreaErrorCode.NOT_FOUND_AREA.getCode())
+                        .errorMessage(AreaErrorCode.NOT_FOUND_AREA.getMessage())
+                        .build());
+
+        MemberActiveArea memberActiveArea = MemberActiveAreaRequest.toEntity(member, emdArea, memberActiveAreaRequest.getLimitMeters());
+
+        return memberActiveAreaRepository.save(memberActiveArea).getId();
+    }
+
+    @Override
+    public void deleteMemberActiveArea(Long memberActiveAreaId) {
+        MemberActiveArea memberActiveArea = memberActiveAreaRepository.findById(memberActiveAreaId).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode(AreaErrorCode.NOT_FOUND_AREA.getCode())
+                        .errorMessage(AreaErrorCode.NOT_FOUND_AREA.getMessage())
+                        .build());
+
+        memberActiveAreaRepository.delete(memberActiveArea);
+    }
+
+    @Override
+    public Long updateLimitMeters(LimitMetersUpdateRequest limitMetersUpdateRequest) {
+        MemberActiveArea memberActiveArea = memberActiveAreaRepository.findById(limitMetersUpdateRequest.getMemberActiveAreaId()).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode(AreaErrorCode.NOT_FOUND_AREA.getCode())
+                        .errorMessage(AreaErrorCode.NOT_FOUND_AREA.getMessage())
+                        .build());
+
+        MemberActiveArea.changeLimitMeters(memberActiveArea, limitMetersUpdateRequest.getLimitMeters());
+        return memberActiveArea.getId();
     }
 }

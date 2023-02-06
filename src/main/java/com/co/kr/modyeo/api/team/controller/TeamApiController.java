@@ -1,10 +1,13 @@
 package com.co.kr.modyeo.api.team.controller;
 
+import com.co.kr.modyeo.api.team.domain.dto.request.TeamCreateActivAreaRequest;
 import com.co.kr.modyeo.api.team.domain.dto.request.TeamCreateRequest;
+import com.co.kr.modyeo.api.team.domain.dto.request.TeamUpdateLimitMeterRequest;
 import com.co.kr.modyeo.api.team.domain.dto.request.TeamUpdateRequest;
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamDetail;
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamResponse;
 import com.co.kr.modyeo.api.team.domain.dto.search.TeamSearch;
+import com.co.kr.modyeo.api.team.service.TeamAreaService;
 import com.co.kr.modyeo.api.team.service.TeamService;
 import com.co.kr.modyeo.common.result.ResponseHandler;
 import io.swagger.annotations.Api;
@@ -23,6 +26,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class TeamApiController {
     private final TeamService teamService;
+    private final TeamAreaService teamAreaService;
 
     @ApiOperation(value = "팀 생성 API")
     @PostMapping("")
@@ -77,4 +81,36 @@ public class TeamApiController {
                 .build();
     }
 
+    @ApiOperation(value="팀 활동지역 생성 API")
+    @PostMapping("/activeArea")
+    public ResponseEntity<?> createTeamActiveArea(
+            @Valid @RequestBody TeamCreateActivAreaRequest teamCreateActivAreaRequest)
+    {
+        Long teamId = teamAreaService.createTeamActivArea(teamCreateActivAreaRequest);
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
+                .data(teamId)
+                .build();
+    }
+
+    @ApiOperation(value="팀 활동반경 수정 API")
+    @PatchMapping("/activeArea")
+    public ResponseEntity<?> updateTeamLimitMeter(@RequestBody TeamUpdateLimitMeterRequest teamUpdateLimitMeterRequest){
+        Long teamId = teamAreaService.updateTeamActivArea(teamUpdateLimitMeterRequest);
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
+                .data(teamId)
+                .build();
+    }
+
+    @ApiOperation(value="팀 활동지역 삭제 API")
+    @DeleteMapping({"/activeArea/{team_active_area_id}"})
+    public ResponseEntity<?> deleteTeamArea(
+            @PathVariable("team_active_area_id") Long teamActiveAreaId){
+        teamAreaService.deleteTeamActivArea(teamActiveAreaId);
+        return ResponseHandler.generate()
+                .status(HttpStatus.NO_CONTENT)
+                .data(null)
+                .build();
+    }
 }

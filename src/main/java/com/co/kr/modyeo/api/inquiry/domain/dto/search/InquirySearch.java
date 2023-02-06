@@ -9,11 +9,11 @@ import org.springframework.data.domain.Sort;
 public class InquirySearch {
     private Long id;
     private InquiryStatus status;
-    private Sort.Direction direction;
-    private String orderBy;
     private String title;
     private String content;
     private Long createdBy;
+    private Sort.Direction direction;
+    private String orderBy;
     private Integer offset;
     private Integer limit;
 

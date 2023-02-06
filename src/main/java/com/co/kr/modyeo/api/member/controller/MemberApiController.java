@@ -1,9 +1,6 @@
 package com.co.kr.modyeo.api.member.controller;
 
-import com.co.kr.modyeo.api.member.domain.dto.request.MemberCategoryRequest;
-import com.co.kr.modyeo.api.member.domain.dto.request.MemberProfilePathRequest;
-import com.co.kr.modyeo.api.member.domain.dto.request.MemberSearch;
-import com.co.kr.modyeo.api.member.domain.dto.request.NicknameUpdateRequest;
+import com.co.kr.modyeo.api.member.domain.dto.request.*;
 import com.co.kr.modyeo.api.member.domain.dto.response.ApplicationMemberDetail;
 import com.co.kr.modyeo.api.member.domain.dto.response.MemberDetail;
 import com.co.kr.modyeo.api.member.domain.dto.response.MemberResponse;
@@ -61,8 +58,8 @@ public class MemberApiController {
 
     @ApiOperation(value = "프로필 등록/변경 API")
     @PatchMapping("/profile-path")
-    public ResponseEntity<?> putProfilePath(@RequestBody MemberProfilePathRequest memberProfilePathRequest) {
-        Long memberId = memberService.putProfilePath(memberProfilePathRequest);
+    public ResponseEntity<?> updateProfilePath(@RequestBody MemberProfilePathRequest memberProfilePathRequest) {
+        Long memberId = memberService.updateProfilePath(memberProfilePathRequest);
         return ResponseHandler.generate()
                 .status(HttpStatus.OK)
                 .data(memberId)
@@ -88,6 +85,36 @@ public class MemberApiController {
         return ResponseHandler.generate()
                 .status(HttpStatus.OK)
                 .data(members)
+                .build();
+    }
+
+    @ApiOperation(value = "활동 지역 추가 API")
+    @PostMapping("/active-area")
+    public ResponseEntity<?> createMemberActiveArea(@RequestBody MemberActiveAreaRequest memberActiveAreaRequest){
+        Long memberActiveAreaId = memberService.createMemberActiveArea(memberActiveAreaRequest);
+        return ResponseHandler.generate()
+                .status(HttpStatus.CREATED)
+                .data(memberActiveAreaId)
+                .build();
+    }
+
+    @ApiOperation(value = "활동 지역 삭제 API")
+    @DeleteMapping("/active-area/{memberActiveAreaId}")
+    public ResponseEntity<?> deleteMemberActiveArea(@PathVariable Long memberActiveAreaId){
+        memberService.deleteMemberActiveArea(memberActiveAreaId);
+        return ResponseHandler.generate()
+                .status(HttpStatus.NO_CONTENT)
+                .data(null)
+                .build();
+    }
+
+    @ApiOperation(value = "활동지역 활동범위 변경 API")
+    @PatchMapping("/active-area")
+    public ResponseEntity<?> updateLimitMeters(LimitMetersUpdateRequest limitMetersUpdateRequest){
+        Long memberActiveAreaId = memberService.updateLimitMeters(limitMetersUpdateRequest);
+        return ResponseHandler.generate()
+                .status(HttpStatus.NO_CONTENT)
+                .data(memberActiveAreaId)
                 .build();
     }
 }
