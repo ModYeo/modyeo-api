@@ -273,7 +273,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<ArticleResponse> getArticleLike(Long memberId) {
+    public List<ArticleResponse> getLikeArticles(Long memberId) {
         return articleRepository.findArticleByEmailAndRecommendY(memberId).stream()
                 .map(ArticleResponse::toDto)
                 .collect(Collectors.toList());

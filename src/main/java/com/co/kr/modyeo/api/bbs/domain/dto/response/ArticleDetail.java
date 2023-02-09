@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.bbs.domain.dto.response;
 
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
+import com.co.kr.modyeo.api.bbs.domain.entity.link.ArticleRecommend;
 import com.co.kr.modyeo.api.category.domain.dto.response.CategoryResponse;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.common.enumerate.Yn;
@@ -41,8 +42,10 @@ public class ArticleDetail {
 
     private List<ReplyResponse> replyResponses = new ArrayList<>();
 
+    private List<ArticleRecommendResponse> articleRecommends = new ArrayList<>();
+
     @Builder(builderMethodName = "of", builderClassName = "of")
-    public ArticleDetail(Long articleId, String filePath, String title, String content, Yn isHidden, Long hitCount, Integer recommendCount, Long createdBy, CategoryResponse category, LocalDateTime createdTime, List<ReplyResponse> replyResponses) {
+    public ArticleDetail(Long articleId, String filePath, String title, String content, Yn isHidden, Long hitCount, Integer recommendCount, Long createdBy, Member member, CategoryResponse category, LocalDateTime createdTime, List<ReplyResponse> replyResponses, List<ArticleRecommendResponse> articleRecommends) {
         this.articleId = articleId;
         this.filePath = filePath;
         this.title = title;
@@ -51,9 +54,11 @@ public class ArticleDetail {
         this.hitCount = hitCount;
         this.recommendCount = recommendCount;
         this.createdBy = createdBy;
+        this.member = member;
         this.category = category;
         this.createdTime = createdTime;
         this.replyResponses = replyResponses;
+        this.articleRecommends = articleRecommends;
     }
 
     public static ArticleDetail toDto(Article article) {
@@ -69,6 +74,7 @@ public class ArticleDetail {
                 .createdBy(article.getCreatedBy())
                 .createdTime(article.getCreatedDate())
                 .replyResponses(article.getReplyList().stream().map(ReplyResponse::toDto).collect(Collectors.toList()))
+                .articleRecommends(article.getArticleRecommendList().stream().map(ArticleRecommendResponse::toDto).collect(Collectors.toList()))
                 .build();
     }
 

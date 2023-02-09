@@ -1,10 +1,7 @@
 package com.co.kr.modyeo.api.bbs.service;
 
 import com.co.kr.modyeo.api.bbs.domain.dto.request.*;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyDetail;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyResponse;
+import com.co.kr.modyeo.api.bbs.domain.dto.response.*;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import org.springframework.data.domain.Slice;
 
@@ -35,5 +32,5 @@ public interface BoardService {
 
     List<ReplyResponse> getReplyMy(Long memberId);
 
-    List<ArticleResponse> getArticleLike(Long memberId);
+    List<ArticleResponse> getLikeArticles(Long memberId);
 }

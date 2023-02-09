@@ -155,8 +155,8 @@ public class BoardApiController {
 
     @ApiOperation("좋아요한 글 조회 API")
     @GetMapping("/article/like/{memberId}")
-    public ResponseEntity<?> getArticleLike(@PathVariable Long memberId){
-        List<ArticleResponse> articleResponseList = boardService.getArticleLike(memberId);
+    public ResponseEntity<?> getLikeArticles(@PathVariable Long memberId){
+        List<ArticleResponse> articleResponseList = boardService.getLikeArticles(memberId);
         return ResponseHandler.generate()
                 .data(articleResponseList)
                 .status(HttpStatus.OK)
