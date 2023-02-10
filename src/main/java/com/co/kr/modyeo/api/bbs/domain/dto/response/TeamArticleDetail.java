@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.bbs.domain.dto.response;
 
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamArticle;
+import com.co.kr.modyeo.api.bbs.domain.entity.link.TeamArticleRecommend;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamResponse;
 import com.co.kr.modyeo.common.enumerate.Yn;
@@ -41,6 +42,8 @@ public class TeamArticleDetail {
 
     private List<TeamReplyResponse> replyResponses = new ArrayList<>();
 
+    private List<TeamArticleRecommendResponse> articleRecommends = new ArrayList<>();
+
     @Builder(builderClassName = "of", builderMethodName = "of")
     public TeamArticleDetail(Long articleId,
                              String title,
@@ -52,7 +55,8 @@ public class TeamArticleDetail {
                              Integer recommendCount,
                              Long createdBy,
                              LocalDateTime createdTime,
-                             List<TeamReplyResponse> replyResponses) {
+                             List<TeamReplyResponse> replyResponses,
+                             List<TeamArticleRecommendResponse> articleRecommends) {
         this.articleId = articleId;
         this.title = title;
         this.filePath = filePath;
@@ -64,6 +68,7 @@ public class TeamArticleDetail {
         this.createdBy = createdBy;
         this.createdTime = createdTime;
         this.replyResponses = replyResponses;
+        this.articleRecommends = articleRecommends;
     }
 
     public static TeamArticleDetail toDto(TeamArticle teamArticle) {
@@ -79,6 +84,7 @@ public class TeamArticleDetail {
                 .createdBy(teamArticle.getCreatedBy())
                 .createdTime(teamArticle.getCreatedDate())
                 .replyResponses(teamArticle.getTeamReplyList().stream().map(TeamReplyResponse::toDto).collect(Collectors.toList()))
+                .articleRecommends(teamArticle.getTeamArticleRecommendList().stream().map(TeamArticleRecommendResponse::toDto).collect(Collectors.toList()))
                 .build();
     }
 
