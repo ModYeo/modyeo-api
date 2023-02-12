@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.team.repository.custom.impl;
 
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamResponse;
+import com.co.kr.modyeo.api.team.domain.dto.search.MemberTeamSearch;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
 import com.co.kr.modyeo.api.team.domain.dto.search.TeamSearch;
@@ -36,14 +37,32 @@ public class TeamRepositoryImpl extends Querydsl4RepositorySupport implements Te
                         .innerJoin(team.areaList, teamActiveArea)
                         .where(
                                 teamNameLike(teamSearch.getName()),
-                                memberIdEq(teamSearch.getMemberId()),
                                 categoryIdEq(teamSearch.getCategoryId())
                               )
         );
     }
 
+    @Override
+    public Slice<Team> searchMemberTeam(MemberTeamSearch memberTeamSearch, Pageable pageable) {
+        return applySlicing(pageable, contentQuery ->
+                contentQuery.select(team)
+                        .from(team)
+                        .innerJoin(team.crewList, crew)
+                        .innerJoin(team.categoryList, teamCategory)
+                        .innerJoin(team.areaList, teamActiveArea)
+                        .where(
+                                memberIdEq(memberTeamSearch.getMemberId()),
+                                categoryIdEq(memberTeamSearch.getCategoryId()),
+                                emdIdEq(memberTeamSearch.getEmdId())
+                        )
+                );
+    }
+
+    private BooleanExpression emdIdEq(Long emdId){
+        return emdId != null && emdId > 0 ? teamActiveArea.activeId.eq(emdId) : null;
+    }
     private BooleanExpression memberIdEq(Long memberId) {
-        return memberId != null && memberId > 0 ? crew.member.id.eq(memberId): null;
+        return memberId != null && memberId > 0 ? crew.member.id.eq(memberId) : null;
     }
 
     @Override

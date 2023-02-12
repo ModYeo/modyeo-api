@@ -4,6 +4,7 @@ import com.co.kr.modyeo.api.team.domain.dto.request.TeamCreateRequest;
 import com.co.kr.modyeo.api.team.domain.dto.request.TeamUpdateRequest;
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamDetail;
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamResponse;
+import com.co.kr.modyeo.api.team.domain.dto.search.MemberTeamSearch;
 import com.co.kr.modyeo.api.team.domain.dto.search.TeamSearch;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.api.team.domain.entity.link.Crew;
@@ -84,6 +85,14 @@ public class TeamServiceImpl implements TeamService {
         PageRequest page = PageRequest.of(teamSearch.getOffset(), teamSearch.getLimit(), teamSearch.getDirection(), teamSearch.getOrderBy());
         Slice<Team> teams = teamRepository.searchTeam(teamSearch,page);
         return teams.map(TeamResponse::toDto);
+    }
+
+    public Slice<TeamResponse> getMemberTeam(MemberTeamSearch memberTeamSearch){
+        PageRequest page = PageRequest.of(memberTeamSearch.getOffset(), memberTeamSearch.getLimit(),
+                                          memberTeamSearch.getDirection(), memberTeamSearch.getOrderBy()
+                                         );
+        Slice<Team> memberTeam = teamRepository.searchMemberTeam(memberTeamSearch, page);
+        return memberTeam.map(TeamResponse::toDto);
     }
 
     @Override

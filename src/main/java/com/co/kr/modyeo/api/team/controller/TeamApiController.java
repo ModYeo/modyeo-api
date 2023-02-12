@@ -6,6 +6,7 @@ import com.co.kr.modyeo.api.team.domain.dto.request.TeamUpdateLimitMeterRequest;
 import com.co.kr.modyeo.api.team.domain.dto.request.TeamUpdateRequest;
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamDetail;
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamResponse;
+import com.co.kr.modyeo.api.team.domain.dto.search.MemberTeamSearch;
 import com.co.kr.modyeo.api.team.domain.dto.search.TeamSearch;
 import com.co.kr.modyeo.api.team.service.TeamAreaService;
 import com.co.kr.modyeo.api.team.service.TeamService;
@@ -47,6 +48,17 @@ public class TeamApiController {
                 .data(teamResponses)
                 .build();
     }
+
+    @ApiOperation(value="특정 멤버의 팀 슬라이스 조회 API")
+    @GetMapping("member")
+    public ResponseEntity<?> getSomeonesTeams(MemberTeamSearch memberTeamSearch){
+        Slice<TeamResponse> memberTeam = teamService.getMemberTeam(memberTeamSearch);
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
+                .data(memberTeam)
+                .build();
+    }
+
 
     @ApiOperation(value = "팀 상세 조회 API")
     @GetMapping("/{team_id}")
