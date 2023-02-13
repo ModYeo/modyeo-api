@@ -60,6 +60,7 @@ public class AuthController {
     @ApiOperation(value = "로그인 API")
     @PostMapping("/login")
     public ResponseEntity<?> login(
+            @RequestHeader("isAdmin") Boolean isAdmin,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) {
         if (authorization != null) {
             String authBasic = authorization.substring(BASIC_PREFIX.length());
@@ -73,6 +74,7 @@ public class AuthController {
             MemberLoginDto memberLoginDto = MemberLoginDto.of()
                     .email(email)
                     .password(password)
+                    .isAdmin(isAdmin)
                     .build();
 
             TokenDto tokenDto = authService.login(memberLoginDto);

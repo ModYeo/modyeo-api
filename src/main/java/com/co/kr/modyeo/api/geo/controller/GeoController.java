@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.geo.controller;
 import com.co.kr.modyeo.api.geo.domain.dto.response.SidoAreaResponse;
 import com.co.kr.modyeo.api.geo.service.GeoService;
 import com.co.kr.modyeo.common.result.ResponseHandler;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ public class GeoController {
 
     private final GeoService geoService;
 
+    @ApiOperation(value = "전체 지역 정보 조회")
     @GetMapping("")
     public ResponseEntity<?> getGeoInfo(){
         List<SidoAreaResponse> sidoAreaResponseList = geoService.getGeoInfo();

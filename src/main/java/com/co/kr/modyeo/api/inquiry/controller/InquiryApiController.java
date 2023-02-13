@@ -25,7 +25,7 @@ public class InquiryApiController {
     private final InquiryService inquiryService;
 
     @GetMapping(value="/inquiry")
-    @ApiOperation(value="문의사항 Index 페이지 API")
+    @ApiOperation(value="문의사항 Index 페이지 API(어드민)")
     public ResponseEntity<?> getInquiryIndexPage(InquirySearch inquirySearch){
         Slice<InquiryResponse> inquiryResponseSlice = inquiryService.getInquiryIndexPage(inquirySearch);
         return ResponseHandler.generate()
@@ -35,7 +35,7 @@ public class InquiryApiController {
     }
 
     @GetMapping(value = "/inquiry/list")
-    @ApiOperation(value = "문의사항 조회 API")
+    @ApiOperation(value = "문의사항 조회 API(어드민)")
     public ResponseEntity<?> getInquiries(InquirySearch inquirySearch) {
         Slice<InquiryResponse> inquiryResponseSlice = inquiryService.getSelectedInquiries(inquirySearch);
         return ResponseHandler.generate()
@@ -46,7 +46,7 @@ public class InquiryApiController {
 
     //문의사항 조회
     @GetMapping(value = "/inquiry/{inquiry_id}")
-    @ApiOperation(value = "문의사항 상세 조회")
+    @ApiOperation(value = "문의사항 상세 조회(어드민)")
     public ResponseEntity<?> getInquiryDetail(@PathVariable(name = "inquiry_id") Long id) {
         InquiryDetail inquiryDetail = inquiryService.getInquiryDetail(id);
 
@@ -99,7 +99,7 @@ public class InquiryApiController {
                 .build();
     }
 
-    @ApiOperation(value = "답변 생성 API")
+    @ApiOperation(value = "답변 생성 API(어드민)")
     @PostMapping(value = "/answer")
     public ResponseEntity<?> createAnswer(@RequestBody @Valid AnswerCreateRequest answerCreateRequest) {
         //Answer answer = inquiryService.createAnswer(answerRequest);
@@ -110,18 +110,18 @@ public class InquiryApiController {
                 .build();
     }
 
-    @ApiOperation(value = "답변 수정 API")
+    @ApiOperation(value = "답변 수정 API(어드민)")
     @PatchMapping(value = "/answer")
     public ResponseEntity<?> updateAnswer(@RequestBody @Valid AnswerUpdateRequest answerUpdateRequest) {
         //Answer answer = inquiryService.updateAnswer(answerRequest);
-        Long inquiryId = inquiryService.updateAnswer(answerUpdateRequest).getInquiry().getId();
+        Long inquiryId = inquiryService.updateAnswer(answerUpdateRequest);
         return ResponseHandler.generate()
                 .status(HttpStatus.OK)
                 .data(inquiryId)
                 .build();
     }
 
-    @ApiOperation(value = "답변 삭제 API")
+    @ApiOperation(value = "답변 삭제 API(어드민)")
     @DeleteMapping(value = "/answer/{answer_id}")
     public ResponseEntity<?> deleteAnswer(@PathVariable(name = "answer_id") Long id) {
         inquiryService.deleteAnswer(id);

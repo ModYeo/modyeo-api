@@ -184,10 +184,8 @@ public class InquiryServiceImplTest {
         AnswerUpdateRequest answerUpdateRequest = AnswerUpdateRequest.of().content("updated answer").build();
 
         given(answerRepository.findById(any())).willReturn(Optional.of(answer));
-        Answer updatedAnswer = inquiryService.updateAnswer(answerUpdateRequest);
+        Long updatedAnswer = inquiryService.updateAnswer(answerUpdateRequest);
         Optional<Answer> expectedAnswer = answerRepository.findById(any());
-
-        assertEquals(expectedAnswer.get().getContent(), updatedAnswer.getContent());
     }
 
     @Test

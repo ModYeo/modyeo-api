@@ -27,6 +27,8 @@ public enum AuthErrorCode {
     NOT_MATCH_TOKEN_INFO("NOT_MATCH_TOKEN_INFO", "토큰의 유저 정보가 일치하지 않습니다."),
     BAD_REQUEST_BODY("BAD_REQUEST_BODY", ""),
 
+    PERMISSION_DENIED("PERMISSION_DENIED", "접근 권한이 없는 사용자입니다."),
+
     NOT_MATCH_PASSWORD("NOT_MATCH_PASSWORD", "패스워드가 일치하지 않습니다.");
 
     private final String code;

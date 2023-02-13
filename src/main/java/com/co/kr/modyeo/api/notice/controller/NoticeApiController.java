@@ -6,6 +6,7 @@ import com.co.kr.modyeo.api.notice.domain.dto.response.NoticeDetail;
 import com.co.kr.modyeo.api.notice.domain.dto.response.NoticeResponse;
 import com.co.kr.modyeo.api.notice.service.NoticeService;
 import com.co.kr.modyeo.common.result.ResponseHandler;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ public class NoticeApiController {
 
     private final NoticeService noticeService;
 
+    @ApiOperation(value = "알림 목록 조회 API(어드민)")
     @GetMapping("")
     public ResponseEntity<?> getNotices(){
         List<NoticeResponse> noticeResponseList = noticeService.getNotices();
@@ -30,6 +32,7 @@ public class NoticeApiController {
                 .build();
     }
 
+    @ApiOperation(value = "알림 생성 API(어드민)")
     @PostMapping("")
     public ResponseEntity<?> createNotice(@Valid @RequestBody NoticeCreateRequest noticeCreateRequest){
         Long noticeId = noticeService.createNotice(noticeCreateRequest);
@@ -39,6 +42,7 @@ public class NoticeApiController {
                 .build();
     }
 
+    @ApiOperation(value = "알림 상세 조회 API(어드민)")
     @GetMapping("/{id}")
     public ResponseEntity<?> getNotice(@PathVariable Long id){
         NoticeDetail noticeDetail = noticeService.getNotice(id);
@@ -48,6 +52,7 @@ public class NoticeApiController {
                 .build();
     }
 
+    @ApiOperation(value = "알림 수정 API(어드민)")
     @PatchMapping("")
     public ResponseEntity<?> updateNotice(@Valid @RequestBody NoticeUpdateRequest noticeUpdateRequest){
         Long noticeId = noticeService.updateNotice(noticeUpdateRequest);
@@ -57,6 +62,7 @@ public class NoticeApiController {
                 .build();
     }
 
+    @ApiOperation(value = "알림 삭제 API(어드민)")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteNotice(@PathVariable Long id){
         noticeService.deleteNotice(id);
