@@ -16,10 +16,13 @@ public class MemberLoginDto {
 
     private String password;
 
+    private Boolean isAdmin;
+
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public MemberLoginDto(String email, String password) {
+    public MemberLoginDto(String email, String password, Boolean isAdmin) {
         this.email = email;
         this.password = password;
+        this.isAdmin = isAdmin;
     }
 
     public UsernamePasswordAuthenticationToken toAuthentication() {

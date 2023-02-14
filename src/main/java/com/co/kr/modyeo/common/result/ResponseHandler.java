@@ -1,6 +1,5 @@
 package com.co.kr.modyeo.common.result;
 
-import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
 import lombok.Builder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

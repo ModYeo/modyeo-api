@@ -9,6 +9,7 @@ import com.co.kr.modyeo.api.report.domain.enumuerate.ReportType;
 import com.co.kr.modyeo.api.report.service.ReportService;
 import com.co.kr.modyeo.common.result.JsonResultData;
 import com.co.kr.modyeo.common.result.ResponseHandler;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ public class ReportController {
 
     private final ReportService reportService;
 
+    @ApiOperation(value = "신고 생성 API")
     @PostMapping("")
     public ResponseEntity<?> createReport(ReportCreateRequest reportCreateRequest) {
         Long reportId = reportService.createReport(reportCreateRequest);
@@ -32,6 +34,7 @@ public class ReportController {
                 .build();
     }
 
+    @ApiOperation(value = "신고 상세 조회 API(어드민)")
     @GetMapping("/{reportId}")
     public ResponseEntity<?> getReport(@PathVariable Long reportId){
         ReportDetail report = reportService.getReport(reportId);
@@ -41,6 +44,7 @@ public class ReportController {
                 .build();
     }
 
+    @ApiOperation(value = "신고 목록 조회 API(어드민)")
     @GetMapping("/{type}")
     public ResponseEntity<?> getReports(@PathVariable ReportType type){
         List<ReportResponse> responseList = reportService.getReports(type);
@@ -50,6 +54,7 @@ public class ReportController {
                 .build();
     }
 
+    @ApiOperation(value = "신고 상태 변경 API(어드민)")
     @PatchMapping("/{reportId}/{status}")
     public ResponseEntity<?> updateReportStatus(
             @PathVariable Long reportId,
@@ -61,6 +66,7 @@ public class ReportController {
                 .build();
     }
 
+    @ApiOperation(value = "신고 변경 API")
     @PatchMapping("")
     public ResponseEntity<?> updateReport(ReportUpdateRequest reportUpdateRequest){
         Long reportId = reportService.updateReport(reportUpdateRequest);
@@ -70,6 +76,7 @@ public class ReportController {
                 .build();
     }
 
+    @ApiOperation(value = "신고 삭제 API")
     @DeleteMapping("/{reportId}")
     public ResponseEntity<?> deleteReport(
             @PathVariable Long reportId

@@ -18,6 +18,6 @@ public interface InquiryService {
     void deleteInquiry(Long id);
     AnswerDetail getAnswer(Long id);
     Long createAnswer(AnswerCreateRequest answerRequest);
-    Answer updateAnswer(AnswerUpdateRequest answerRequest);
+    Long updateAnswer(AnswerUpdateRequest answerRequest);
     void deleteAnswer(Long id);
 }

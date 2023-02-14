@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.member.auth.service.impl;
 
 import com.co.kr.modyeo.api.member.auth.domain.dto.*;
+import com.co.kr.modyeo.api.member.domain.enumerate.Authority;
 import com.co.kr.modyeo.common.provider.JwtTokenProvider;
 import com.co.kr.modyeo.api.member.auth.service.AuthService;
 import com.co.kr.modyeo.api.member.collection.domain.entity.CollectionInfo;
@@ -91,15 +92,14 @@ public class AuthServiceImpl implements AuthService {
         UsernamePasswordAuthenticationToken authenticationToken = memberLoginDto.toAuthentication();
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        String refreshToken = redisTemplate.opsForValue().get("RT:" + authentication.getName());
-        if (refreshToken != null){
-            redisTemplate.delete("RT:" + authentication.getName());
 
-            Optional<Member> optionalMember = memberRepository.findByEmail(authentication.getName());
-            if (optionalMember.isPresent()){
-                Member member = optionalMember.get();
-                redisTemplate.opsForValue()
-                        .set(member.getLastAccessToken(), "logout", 1000 * 60 * 60, TimeUnit.MILLISECONDS);
+        if (memberLoginDto.getIsAdmin()){
+            if (authentication.getAuthorities().stream().noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(Authority.ROLE_ADMIN.toString()))){
+                throw ApiException.builder()
+                        .status(HttpStatus.FORBIDDEN)
+                        .errorMessage(AuthErrorCode.PERMISSION_DENIED.getMessage())
+                        .errorCode(AuthErrorCode.PERMISSION_DENIED.getCode())
+                        .build();
             }
         }
 

@@ -28,7 +28,7 @@ public class CategoryApiController {
 
     private final CategoryService categoryService;
 
-    @ApiOperation(value = "카테고리 생성 API")
+    @ApiOperation(value = "카테고리 생성 API(어드민)")
     @PostMapping("")
     public ResponseEntity<?> createCategory(@Valid @RequestBody CategoryCreateRequest categoryCreateRequest) {
         Long categoryId = categoryService.createCategory(categoryCreateRequest);
@@ -38,7 +38,7 @@ public class CategoryApiController {
                 .build();
     }
 
-    @ApiOperation(value = "카테고리 상세 조회 API")
+    @ApiOperation(value = "카테고리 상세 조회 API(어드민)")
     @GetMapping("/{category_id}")
     public ResponseEntity<?> getCategory(
             @PathVariable(value = "category_id") Long categoryId) {
@@ -49,7 +49,7 @@ public class CategoryApiController {
                 .build();
     }
 
-    @ApiOperation(value = "카테고리 리스트 조회 API")
+    @ApiOperation(value = "카테고리 리스트 조회 API(어드민도 사용)")
     @GetMapping("")
     public ResponseEntity<?> getCategories(@Valid CategorySearch categorySearch) {
         Long memberId = categorySearch.getIsMy() != null && categorySearch.getIsMy() ? SecurityUtil.getCurrentMemberId() : null;
@@ -61,7 +61,7 @@ public class CategoryApiController {
                 .build();
     }
 
-    @ApiOperation(value = "카테고리 수정 API")
+    @ApiOperation(value = "카테고리 수정 API(어드민)")
     @PatchMapping("")
     public ResponseEntity<?> updateCategory(@Valid @RequestBody CategoryUpdateRequest categoryUpdateRequest) {
         Long categoryId = categoryService.updateCategory(categoryUpdateRequest);
@@ -71,7 +71,7 @@ public class CategoryApiController {
                 .build();
     }
 
-    @ApiOperation(value = "카테고리 삭제 API")
+    @ApiOperation(value = "카테고리 삭제 API(어드민)")
     @DeleteMapping("/{category_id}")
     public ResponseEntity<?> deleteCategory(@PathVariable(value = "category_id") Long categoryId) {
         categoryService.deleteCategory(categoryId);

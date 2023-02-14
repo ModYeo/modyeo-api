@@ -8,6 +8,7 @@ import com.co.kr.modyeo.api.block.domain.response.BlockResponse;
 import com.co.kr.modyeo.api.block.service.BlockService;
 import com.co.kr.modyeo.common.result.ResponseHandler;
 import com.co.kr.modyeo.common.util.SecurityUtil;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ public class BlockController {
 
     private final BlockService blockService;
 
+    @ApiOperation(value="차단 생성 API")
     @PostMapping("")
     public ResponseEntity<?> createBlock(@RequestBody BlockCreateRequest blockCreateRequest){
         Long blockId = blockService.createBlock(blockCreateRequest);
@@ -31,6 +33,7 @@ public class BlockController {
                 .build();
     }
 
+    @ApiOperation(value="차단 상세 조회 API")
     @GetMapping("/{block_id}")
     public ResponseEntity<?> getBlock(@PathVariable(value = "block_id")Long blockId){
         BlockDetail block = blockService.getBlock(blockId);
@@ -40,6 +43,7 @@ public class BlockController {
                 .build();
     }
 
+    @ApiOperation(value="차단 목록 조회 API")
     @GetMapping("")
     public ResponseEntity<?> getBlocks(BlockSearch blockSearch){
         Long memberId = SecurityUtil.getCurrentMemberId();
@@ -51,6 +55,7 @@ public class BlockController {
                 .build();
     }
 
+    @ApiOperation(value="차단 수정 API")
     @PatchMapping("")
     public ResponseEntity<?> updateBlock(@RequestBody BlockUpdateRequest blockUpdateRequest){
         Long blockId = blockService.updateBlock(blockUpdateRequest);
@@ -60,6 +65,7 @@ public class BlockController {
                 .build();
     }
 
+    @ApiOperation(value="차단 삭제 API")
     @DeleteMapping("/{block_id}")
     public ResponseEntity<?> deleteBlock(@PathVariable(value = "block_id")Long blockId){
         blockService.deleteBlock(blockId);

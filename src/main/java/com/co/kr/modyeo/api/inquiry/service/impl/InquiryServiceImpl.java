@@ -60,7 +60,7 @@ public class InquiryServiceImpl implements InquiryService {
     @Override
     @Transactional
     public Long createInquiry(InquiryCreateRequest inquiryCreateRequest) {
-        return inquiryRepository.save(inquiryCreateRequest.createInquiry(inquiryCreateRequest)).getId();
+        return inquiryRepository.save(InquiryCreateRequest.createInquiry(inquiryCreateRequest)).getId();
     }
 
     @Override
@@ -128,7 +128,7 @@ public class InquiryServiceImpl implements InquiryService {
 
     @Override
     @Transactional
-    public Answer updateAnswer(AnswerUpdateRequest answerUpdateRequest) {
+    public Long updateAnswer(AnswerUpdateRequest answerUpdateRequest) {
         Answer answer = answerRepository.findById(answerUpdateRequest.getAnswerId()).orElseThrow(
                 () -> ApiException.builder()
                         .errorMessage(InquiryErrorCode.NOT_FOUND_ANSWER.getMessage())
@@ -139,7 +139,7 @@ public class InquiryServiceImpl implements InquiryService {
         //answer.changeAnswer(answerRequest.getContent());
         answer.updateAnswerBuilder()
                 .content(answerUpdateRequest.getContent()).build();
-        return answer;
+        return answer.getInquiry().getId();
     }
 
     @Override
