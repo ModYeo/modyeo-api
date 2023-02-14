@@ -53,6 +53,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public MemberResponseDto signup(MemberJoinDto memberJoinDto) {
+        validPassword(memberJoinDto.getPassword());
         if (memberRepository.existsByEmail(memberJoinDto.getEmail())) {
             throw new CustomAuthException(JsonResultData
                     .failResultBuilder()
@@ -191,5 +192,9 @@ public class AuthServiceImpl implements AuthService {
         }
 
         return tokenDto;
+    }
+
+    public void validPassword(String password){
+
     }
 }
