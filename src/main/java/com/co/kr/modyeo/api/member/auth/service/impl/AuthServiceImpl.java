@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -195,6 +196,20 @@ public class AuthServiceImpl implements AuthService {
     }
 
     public void validPassword(String password){
+        if (password.length() <= 8 || password.length() >= 16){
+            throw ApiException.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .errorCode(AuthErrorCode.PASSWORD_NOT_ENOUGH_CONDITION.getCode())
+                    .errorMessage(AuthErrorCode.PASSWORD_NOT_ENOUGH_CONDITION.getMessage())
+                    .build();
+        }
 
+        if (!Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*#?&])[A-Za-z[0-9]$@$!%*#?&]{8,20}$",password)){
+            throw ApiException.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .errorCode(AuthErrorCode.PASSWORD_NOT_ENOUGH_CONDITION.getCode())
+                    .errorMessage(AuthErrorCode.PASSWORD_NOT_ENOUGH_CONDITION.getMessage())
+                    .build();
+        }
     }
 }
