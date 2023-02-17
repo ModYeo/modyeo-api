@@ -27,6 +27,8 @@ repositories {
 }
 
 dependencies {
+	implementation group: 'org.hibernate', name: 'hibernate-spatial', version: '5.6.9.Final'
+	implementation 'org.locationtech.jts:jts-core:1.16.1'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

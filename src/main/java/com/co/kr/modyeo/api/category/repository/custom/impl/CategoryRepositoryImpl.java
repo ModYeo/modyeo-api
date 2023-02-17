@@ -31,6 +31,7 @@ public class CategoryRepositoryImpl implements CategoryCustomRepository {
                 .innerJoin(memberCategory.member,member)
                 .where(categoryNameEq(categorySearch.getName()),
                         memberIdEq(categorySearch.getMemberId()))
+                .distinct()
                 .fetch();
     }
 

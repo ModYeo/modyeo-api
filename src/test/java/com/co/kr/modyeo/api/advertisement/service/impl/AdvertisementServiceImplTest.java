@@ -25,6 +25,7 @@ class AdvertisementServiceImplTest {
 
     @Test
     void createAdvertisement() {
+        System.out.println(org.hibernate.Version.getVersionString());
     }
 
     @Test

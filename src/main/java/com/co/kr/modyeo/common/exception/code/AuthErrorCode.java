@@ -2,6 +2,8 @@ package com.co.kr.modyeo.common.exception.code;
 
 import lombok.Getter;
 
+import javax.management.loading.MLetContent;
+
 @Getter
 public enum AuthErrorCode {
 
@@ -28,6 +30,8 @@ public enum AuthErrorCode {
     BAD_REQUEST_BODY("BAD_REQUEST_BODY", ""),
 
     PERMISSION_DENIED("PERMISSION_DENIED", "접근 권한이 없는 사용자입니다."),
+
+    PASSWORD_NOT_ENOUGH_CONDITION("PASSWORD_NOT_ENOUGH_CONDITION","패스워드 조건을 만족하지 못했습니다."),
 
     NOT_MATCH_PASSWORD("NOT_MATCH_PASSWORD", "패스워드가 일치하지 않습니다.");
 
