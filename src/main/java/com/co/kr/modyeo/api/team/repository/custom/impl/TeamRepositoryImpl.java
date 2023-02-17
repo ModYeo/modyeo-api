@@ -1,7 +1,7 @@
 package com.co.kr.modyeo.api.team.repository.custom.impl;
 
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamResponse;
-import com.co.kr.modyeo.api.team.domain.dto.search.MemberTeamSearch;
+import com.co.kr.modyeo.api.team.domain.dto.search.SomeoneTeamSearch;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
 import com.co.kr.modyeo.api.team.domain.dto.search.TeamSearch;
@@ -43,7 +43,7 @@ public class TeamRepositoryImpl extends Querydsl4RepositorySupport implements Te
     }
 
     @Override
-    public Slice<Team> searchMemberTeam(MemberTeamSearch memberTeamSearch, Pageable pageable) {
+    public Slice<Team> searchSomeoneTeam(SomeoneTeamSearch memberTeamSearch, Pageable pageable) {
         return applySlicing(pageable, contentQuery ->
                 contentQuery.select(team)
                         .from(team)
