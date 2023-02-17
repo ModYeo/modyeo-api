@@ -32,6 +32,8 @@ spring:
         use_sql_comments: true
         show_sql: true
         default_batch_fetch_size: 1000
+    database: mysql
+    database-platform: org.hibernate.spatial.dialect.mysql.MySQL56InnoDBSpatialDialect
     open-in-view: false
 
   redis:
