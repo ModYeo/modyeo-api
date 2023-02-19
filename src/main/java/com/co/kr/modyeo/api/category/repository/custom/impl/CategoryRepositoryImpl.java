@@ -27,11 +27,7 @@ public class CategoryRepositoryImpl implements CategoryCustomRepository {
     public List<Category> searchCategory(CategorySearch categorySearch) {
         return queryFactory
                 .selectFrom(category)
-                .innerJoin(memberCategory).on(category.eq(memberCategory.category))
-                .innerJoin(memberCategory.member,member)
-                .where(categoryNameEq(categorySearch.getName()),
-                        memberIdEq(categorySearch.getMemberId()))
-                .distinct()
+                .where(categoryNameEq(categorySearch.getName()))
                 .fetch();
     }
 
