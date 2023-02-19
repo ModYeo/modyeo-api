@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.category.repository.custom.impl;
 import com.co.kr.modyeo.api.category.domain.dto.search.CategorySearch;
 import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.category.repository.custom.CategoryCustomRepository;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
@@ -27,7 +28,8 @@ public class CategoryRepositoryImpl implements CategoryCustomRepository {
     public List<Category> searchCategory(CategorySearch categorySearch) {
         return queryFactory
                 .selectFrom(category)
-                .where(categoryNameEq(categorySearch.getName()))
+                .where(categoryNameEq(categorySearch.getName()),
+                        category.useYn.eq(Yn.Y))
                 .fetch();
     }
 
