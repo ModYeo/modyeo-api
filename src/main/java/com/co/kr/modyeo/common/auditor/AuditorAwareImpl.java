@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.common.auditor;
 
+import com.co.kr.modyeo.api.member.domain.enumerate.Authority;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,8 +17,9 @@ public class AuditorAwareImpl implements AuditorAware<Long> {
                 .map(SecurityContext::getAuthentication)
                 .map(authentication -> {
                     Collection<? extends GrantedAuthority> auth = authentication.getAuthorities();
-                    boolean isUser = auth.contains(new SimpleGrantedAuthority("ROLE_USER"));
-                    if (isUser) return Long.parseLong(authentication.getName());
+                    boolean isUser = auth.contains(new SimpleGrantedAuthority(Authority.ROLE_USER.toString()));
+                    boolean isAdmin = auth.contains(new SimpleGrantedAuthority(Authority.ROLE_ADMIN.toString()));
+                    if (isUser || isAdmin) return Long.parseLong(authentication.getName());
                     return null;
                 });
     }

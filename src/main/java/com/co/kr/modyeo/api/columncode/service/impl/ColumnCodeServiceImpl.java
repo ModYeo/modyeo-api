@@ -41,12 +41,14 @@ public class ColumnCodeServiceImpl implements ColumnCodeService {
     }
 
     @Override
+    @Transactional
     public Long createColumnCode(ColumnCodeCreateRequest columnCodeCreateRequest) {
         ColumnCode columnCode = ColumnCodeCreateRequest.toDto(columnCodeCreateRequest);
         return columnCodeRepository.save(columnCode).getId();
     }
 
     @Override
+    @Transactional
     public Long updateColumnCode(ColumnCodeUpdateRequest columnCodeUpdateRequest) {
         ColumnCode columnCode = columnCodeRepository.findById(columnCodeUpdateRequest.getColumnCodeId()).orElseThrow(
                 () -> ApiException.builder()
@@ -65,6 +67,7 @@ public class ColumnCodeServiceImpl implements ColumnCodeService {
     }
 
     @Override
+    @Transactional
     public void deleteColumnCode(Long columnCodeId) {
         ColumnCode columnCode = columnCodeRepository.findById(columnCodeId).orElseThrow(
                 () -> ApiException.builder()
