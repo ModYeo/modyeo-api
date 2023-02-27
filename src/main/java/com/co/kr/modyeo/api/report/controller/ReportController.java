@@ -45,7 +45,7 @@ public class ReportController {
     }
 
     @ApiOperation(value = "신고 목록 조회 API(어드민)")
-    @GetMapping("/{type}")
+    @GetMapping("/type/{type}")
     public ResponseEntity<?> getReports(@PathVariable ReportType type){
         List<ReportResponse> responseList = reportService.getReports(type);
         return ResponseHandler.generate()

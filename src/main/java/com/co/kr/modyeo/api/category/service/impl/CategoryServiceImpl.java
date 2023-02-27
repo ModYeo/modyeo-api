@@ -8,6 +8,7 @@ import com.co.kr.modyeo.api.category.domain.dto.search.CategorySearch;
 import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.category.repository.CategoryRepository;
 import com.co.kr.modyeo.api.category.service.CategoryService;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.CategoryErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public Long createCategory(CategoryCreateRequest categoryCreateRequest) {
-        overlapCategoryCheck(categoryCreateRequest);
+        overlapCategoryCheck(categoryCreateRequest.getName());
         Category category = CategoryCreateRequest.createCategory(categoryCreateRequest);
         return categoryRepository.save(category).getId();
     }
@@ -42,7 +43,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public Long updateCategory(CategoryUpdateRequest categoryUpdateRequest) {
-        overlapCategoryCheck(categoryUpdateRequest);
+        overlapCategoryCheck(categoryUpdateRequest.getName());
         Category category = categoryRepository.findById(categoryUpdateRequest.getCategoryId())
                 .orElseThrow(() -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -77,20 +78,8 @@ public class CategoryServiceImpl implements CategoryService {
                         .build()));
     }
 
-    private void overlapCategoryCheck(CategoryCreateRequest categoryCreateRequest) {
-        Category findCategory = categoryRepository.findByName(categoryCreateRequest.getName());
-        if (findCategory != null) {
-            throw ApiException.builder()
-                    .status(HttpStatus.BAD_REQUEST)
-                    .errorCode(CategoryErrorCode.OVERLAP_CATEGORY.getCode())
-                    .errorMessage(CategoryErrorCode.OVERLAP_CATEGORY.getMessage())
-                    .build();
-
-        }
-    }
-
-    private void overlapCategoryCheck(CategoryUpdateRequest categoryUpdateRequest) {
-        Category findCategory = categoryRepository.findByName(categoryUpdateRequest.getName());
+    private void overlapCategoryCheck(String categoryName) {
+        Category findCategory = categoryRepository.findByNameAndUseYn(categoryName, Yn.Y);
         if (findCategory != null) {
             throw ApiException.builder()
                     .status(HttpStatus.BAD_REQUEST)
