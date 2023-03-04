@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface MemberTeamRepository extends JpaRepository<MemberTeam,Long> , MemberTeamCustomRepository {
@@ -15,4 +16,6 @@ public interface MemberTeamRepository extends JpaRepository<MemberTeam,Long> , M
 
     @Query("select mt from MemberTeam mt join fetch mt.member m join fetch mt.team t where mt.id = :id")
     Optional<MemberTeam> findMemberTeamById(@Param("id") Long id);
+
+    List<MemberTeam> findByMember(Member member);
 }

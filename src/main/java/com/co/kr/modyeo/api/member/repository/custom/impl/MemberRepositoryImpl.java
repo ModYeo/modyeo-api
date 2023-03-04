@@ -18,6 +18,7 @@ import static com.co.kr.modyeo.api.member.domain.entity.link.QMemberActiveArea.m
 import static com.co.kr.modyeo.api.member.domain.entity.link.QMemberCategory.memberCategory;
 import static com.co.kr.modyeo.api.member.domain.entity.link.QMemberCollectionInfo.memberCollectionInfo;
 import static com.co.kr.modyeo.api.team.domain.entity.link.QCrew.crew;
+import static com.co.kr.modyeo.api.team.domain.entity.link.QMemberTeam.memberTeam;
 
 public class MemberRepositoryImpl extends Querydsl4RepositorySupport implements MemberCustomRepository {
 

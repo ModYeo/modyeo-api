@@ -1,10 +1,11 @@
 package com.co.kr.modyeo.api.member.domain.dto.response;
 
 import com.co.kr.modyeo.api.category.domain.dto.response.CategoryResponse;
-import com.co.kr.modyeo.api.member.collection.domain.dto.response.CollectionInfoResponse;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.domain.enumerate.Sex;
+import com.co.kr.modyeo.api.team.domain.dto.response.MemberTeamResponse;
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamResponse;
+import com.co.kr.modyeo.api.team.domain.entity.link.MemberTeam;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
@@ -45,6 +46,8 @@ public class MemberDetail {
 
     private List<MemberActiveAreaResponse> memberActiveAreaResponseList;
 
+    private List<MemberTeamResponse> applicationTeamList;
+
     @QueryProjection
     @Builder(builderClassName = "of", builderMethodName = "of")
     public MemberDetail(Long memberId,
@@ -57,7 +60,8 @@ public class MemberDetail {
                         List<CategoryResponse> categoryResponseList,
                         LocalDateTime createdTime,
                         List<MemberCollectionInfoResponse> collectionInfoResponseList,
-                        List<MemberActiveAreaResponse> memberActiveAreaResponseList) {
+                        List<MemberActiveAreaResponse> memberActiveAreaResponseList,
+                        List<MemberTeamResponse> applicationTeamList) {
         this.memberId = memberId;
         this.username = username;
         this.sex = sex;
@@ -69,9 +73,10 @@ public class MemberDetail {
         this.categoryResponseList = categoryResponseList;
         this.collectionInfoResponseList = collectionInfoResponseList;
         this.memberActiveAreaResponseList = memberActiveAreaResponseList;
+        this.applicationTeamList = applicationTeamList;
     }
 
-    public static MemberDetail createMemberDetail(Member member) {
+    public static MemberDetail createMemberDetail(Member member, List<MemberTeam> memberTeamList) {
         return of()
                 .memberId(member.getId())
                 .username(member.getUsername())
@@ -113,6 +118,8 @@ public class MemberDetail {
                         .collect(Collectors.toList()))
                 .memberActiveAreaResponseList(member.getMemberActiveAreaList().stream()
                         .map(MemberActiveAreaResponse::toDto)
+                        .collect(Collectors.toList()))
+                .applicationTeamList(memberTeamList.stream().map(MemberTeamResponse::toDto)
                         .collect(Collectors.toList()))
                 .build();
     }
