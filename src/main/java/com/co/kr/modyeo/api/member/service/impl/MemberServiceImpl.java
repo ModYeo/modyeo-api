@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.member.service.impl;
 import com.co.kr.modyeo.api.category.repository.CategoryRepository;
 import com.co.kr.modyeo.api.geo.domain.entity.EmdArea;
 import com.co.kr.modyeo.api.member.domain.entity.link.MemberActiveArea;
+import com.co.kr.modyeo.api.team.domain.entity.link.MemberTeam;
 import com.co.kr.modyeo.common.exception.code.AreaErrorCode;
 import com.co.kr.modyeo.api.geo.repository.EmdAreaRepository;
 import com.co.kr.modyeo.api.member.domain.dto.request.*;
@@ -82,7 +83,9 @@ public class MemberServiceImpl implements MemberService {
                         .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
                         .build());
 
-        return MemberDetail.createMemberDetail(member);
+        List<MemberTeam> memberTeamList = memberTeamRepository.findByMember(member);
+
+        return MemberDetail.createMemberDetail(member,memberTeamList);
     }
 
     @Override

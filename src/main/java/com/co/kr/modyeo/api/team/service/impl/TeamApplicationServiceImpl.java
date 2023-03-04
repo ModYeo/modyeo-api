@@ -45,14 +45,23 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
         Member member = findMember(teamApplicationRequest.getMemberId());
         Team team = findTeam(teamApplicationRequest.getTeamId());
         MemberTeam memberTeam = memberTeamRepository.findByTeamAndMember(team, member);
+        Crew crew = crewRepository.findByTeamAndMember(team, member);
         if (memberTeam != null) {
             if (memberTeam.getJoinStatus() != JoinStatus.APPROVAL) {
                 throw ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
-                        .errorCode(TeamErrorCode.ALREADY_JOINED_TEAM.getCode())
-                        .errorMessage(TeamErrorCode.ALREADY_JOINED_TEAM.getMessage())
+                        .errorCode(TeamErrorCode.ALREADY_APPLICANT_TEAM.getCode())
+                        .errorMessage(TeamErrorCode.ALREADY_APPLICANT_TEAM.getMessage())
                         .build();
             }
+        }
+
+        if (crew != null){
+            throw ApiException.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .errorCode(TeamErrorCode.ALREADY_JOINED_TEAM.getCode())
+                    .errorMessage(TeamErrorCode.ALREADY_JOINED_TEAM.getMessage())
+                    .build();
         }
 
 

@@ -23,8 +23,8 @@ public class CustomExceptionHandler {
     public ResponseEntity<?> exceptionHandler(HttpServletRequest request, final ApiException e) {
         return ResponseHandler.failResultGenerate()
                 .status(e.getStatus())
-                .errorMessage(e.getErrorEntity().getError().getCode())
-                .errorCode(e.getErrorEntity().getError().getMessage())
+                .errorMessage(e.getErrorEntity().getError().getMessage())
+                .errorCode(e.getErrorEntity().getError().getCode())
                 .build();
     }
 

@@ -196,7 +196,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     public void validPassword(String password){
-        if (password.length() <= 8 || password.length() >= 16){
+        if (password.length() < 8 || password.length() > 16){
             throw ApiException.builder()
                     .status(HttpStatus.BAD_REQUEST)
                     .errorCode(AuthErrorCode.PASSWORD_NOT_ENOUGH_CONDITION.getCode())

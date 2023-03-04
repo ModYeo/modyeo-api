@@ -14,8 +14,8 @@ class AuthServiceImplTest {
 
     @Test
     void validPassword() {
-        String password = "12!@!@D";
-        if (password.length() <= 8 || password.length() >= 16){
+        String password = "aA1!aaaa";
+        if (password.length() < 8 || password.length() > 16){
             throw ApiException.builder()
                     .status(HttpStatus.BAD_REQUEST)
                     .errorCode(AuthErrorCode.PASSWORD_NOT_ENOUGH_CONDITION.getCode())
