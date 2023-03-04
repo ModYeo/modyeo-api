@@ -1,6 +1,8 @@
 package com.co.kr.modyeo.api.member.auth.service.impl;
 
 import com.co.kr.modyeo.api.member.auth.domain.dto.*;
+import com.co.kr.modyeo.api.member.auth.domain.spec.AdminSpecification;
+import com.co.kr.modyeo.api.member.auth.domain.spec.PasswordSpecification;
 import com.co.kr.modyeo.api.member.domain.enumerate.Authority;
 import com.co.kr.modyeo.common.provider.JwtTokenProvider;
 import com.co.kr.modyeo.api.member.auth.service.AuthService;
@@ -52,9 +54,13 @@ public class AuthServiceImpl implements AuthService {
 
     private final ModyeoMailSender modyeoMailSender;
 
+    private final PasswordSpecification passwordSpecification;
+
+    private final AdminSpecification adminSpecification;
+
     @Override
     public MemberResponseDto signup(MemberJoinDto memberJoinDto) {
-        validPassword(memberJoinDto.getPassword());
+        passwordSpecification.check(memberJoinDto.getPassword());
         if (memberRepository.existsByEmail(memberJoinDto.getEmail())) {
             throw new CustomAuthException(JsonResultData
                     .failResultBuilder()
@@ -96,13 +102,7 @@ public class AuthServiceImpl implements AuthService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         if (memberLoginDto.getIsAdmin()){
-            if (authentication.getAuthorities().stream().noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(Authority.ROLE_ADMIN.toString()))){
-                throw ApiException.builder()
-                        .status(HttpStatus.FORBIDDEN)
-                        .errorMessage(AuthErrorCode.PERMISSION_DENIED.getMessage())
-                        .errorCode(AuthErrorCode.PERMISSION_DENIED.getCode())
-                        .build();
-            }
+            adminSpecification.check(authentication);
         }
 
         return getTokenDto(authentication);
@@ -187,29 +187,11 @@ public class AuthServiceImpl implements AuthService {
                         TimeUnit.MILLISECONDS);
 
         Optional<Member> optionalMember = memberRepository.findByEmail(authentication.getName());
-        if (optionalMember.isPresent()){
+        if (optionalMember.isPresent()) {
             Member member = optionalMember.get();
             member.changeLastAccessToken(tokenDto.getAccessToken());
         }
 
         return tokenDto;
-    }
-
-    public void validPassword(String password){
-        if (password.length() < 8 || password.length() > 16){
-            throw ApiException.builder()
-                    .status(HttpStatus.BAD_REQUEST)
-                    .errorCode(AuthErrorCode.PASSWORD_NOT_ENOUGH_CONDITION.getCode())
-                    .errorMessage(AuthErrorCode.PASSWORD_NOT_ENOUGH_CONDITION.getMessage())
-                    .build();
-        }
-
-        if (!Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*#?&])[A-Za-z[0-9]$@$!%*#?&]{8,20}$",password)){
-            throw ApiException.builder()
-                    .status(HttpStatus.BAD_REQUEST)
-                    .errorCode(AuthErrorCode.PASSWORD_NOT_ENOUGH_CONDITION.getCode())
-                    .errorMessage(AuthErrorCode.PASSWORD_NOT_ENOUGH_CONDITION.getMessage())
-                    .build();
-        }
     }
 }
