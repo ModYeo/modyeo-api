@@ -142,7 +142,7 @@ public class InquiryServiceImpl implements InquiryService {
                         .status(HttpStatus.BAD_REQUEST)
                         .build()
         );
-        //answer.changeAnswer(answerRequest.getContent());
+
         answer.updateAnswerBuilder()
                 .content(answerUpdateRequest.getContent()).build();
         return answer.getId();

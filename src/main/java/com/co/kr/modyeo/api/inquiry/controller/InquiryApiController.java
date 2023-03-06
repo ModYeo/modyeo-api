@@ -114,10 +114,10 @@ public class InquiryApiController {
     @PatchMapping(value = "/answer")
     public ResponseEntity<?> updateAnswer(@RequestBody @Valid AnswerUpdateRequest answerUpdateRequest) {
         //Answer answer = inquiryService.updateAnswer(answerRequest);
-        Long inquiryId = inquiryService.updateAnswer(answerUpdateRequest);
+        Long answerId = inquiryService.updateAnswer(answerUpdateRequest);
         return ResponseHandler.generate()
                 .status(HttpStatus.OK)
-                .data(inquiryId)
+                .data(answerId)
                 .build();
     }
 
