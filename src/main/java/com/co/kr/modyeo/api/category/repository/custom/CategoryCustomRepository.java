@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface CategoryCustomRepository {
     List<Category> searchCategory(CategorySearch categorySearch);
+
+    List<Category> findByCategoryIds(List<Long> categoryIds);
 }

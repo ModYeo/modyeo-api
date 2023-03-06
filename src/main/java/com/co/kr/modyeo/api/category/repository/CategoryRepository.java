@@ -15,7 +15,4 @@ public interface CategoryRepository extends JpaRepository<Category,Long> , Categ
    Category findByNameAndUseYn(String name, Yn useYn);
 
    //select * from category where name = ''
-
-   @Query(value = "select c from Category c where c.id in (:ids)")
-   List<Category> findByCategoryIds(@Param("ids") List<Long> categoryIds);
 }
