@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public class PasswordSpecification extends AbstractSpecification<String> {
     @Override
     public boolean isSatisfiedBy(String password) {
-        return password.length() < 8 || password.length() > 16 && Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*#?&])[A-Za-z[0-9]$@$!%*#?&]{8,20}$",password);
+        return password.length() >= 8 && password.length() <= 16 && Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*#?&])[A-Za-z[0-9]$@$!%*#?&]{8,20}$",password);
     }
 
     @Override

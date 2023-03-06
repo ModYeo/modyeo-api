@@ -40,20 +40,27 @@ public class MemberJoinDto {
     @DateTimeFormat(pattern = "yyyyMMdd")
     private LocalDate birthDay;
 
-    private List<CollectionInfoDto> collectionInfoDtoList;
+    private List<CollectionInfoDto> collectionInfoList;
+
+    private List<Long> categoryIdList;
+
+    private List<Long> emdIdList;
 
     public MemberJoinDto(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
-    public MemberJoinDto(String email, String password, String username, Sex sex, String nickname, LocalDate birthDay) {
+    public MemberJoinDto(String email, String password, String username, String nickname, Sex sex, LocalDate birthDay, List<CollectionInfoDto> collectionInfoList, List<Long> categoryIdList, List<Long> emdIdList) {
         this.email = email;
         this.password = password;
         this.username = username;
-        this.sex = sex;
         this.nickname = nickname;
+        this.sex = sex;
         this.birthDay = birthDay;
+        this.collectionInfoList = collectionInfoList;
+        this.categoryIdList = categoryIdList;
+        this.emdIdList = emdIdList;
     }
 
     public static Member toMember(MemberJoinDto memberJoinDto, PasswordEncoder passwordEncoder) {
@@ -73,7 +80,7 @@ public class MemberJoinDto {
     }
 
     public CollectionInfoDto getCollectionInfo(Long collectionId) {
-        return this.collectionInfoDtoList.stream()
+        return this.collectionInfoList.stream()
                 .filter(collectionInfoDto -> collectionInfoDto.getId().equals(collectionId))
                 .findFirst()
                 .orElseThrow();
