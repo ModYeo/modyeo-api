@@ -25,4 +25,6 @@ public interface MemberService {
     void deleteMemberActiveArea(Long memberActiveAreaId);
 
     Long updateLimitMeters(LimitMetersUpdateRequest limitMetersUpdateRequest);
+
+    Long updateDescription(DescriptionUpdateRequest descriptionUpdateRequest);
 }
