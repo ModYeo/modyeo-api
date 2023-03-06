@@ -26,7 +26,7 @@ public class SecurityUtil {
 
     public static Authority checkAuthority() {
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_USER"))) {
+        if (auth != null && auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals(Authority.ROLE_USER))) {
             return Authority.ROLE_USER;
         } else return Authority.ROLE_ADMIN;
     }

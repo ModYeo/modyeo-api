@@ -11,8 +11,10 @@ import com.co.kr.modyeo.api.inquiry.domain.enumerate.InquiryStatus;
 import com.co.kr.modyeo.api.inquiry.repository.AnswerRepository;
 import com.co.kr.modyeo.api.inquiry.repository.InquiryRepository;
 import com.co.kr.modyeo.api.inquiry.service.InquiryService;
+import com.co.kr.modyeo.api.member.domain.enumerate.Authority;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.InquiryErrorCode;
+import com.co.kr.modyeo.common.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -83,6 +85,7 @@ public class InquiryServiceImpl implements InquiryService {
     }
 
     @Override
+    @Transactional
     public void deleteInquiry(Long inquiryId) {
         Inquiry inquiry = inquiryRepository.findById(inquiryId).orElseThrow(
                 () -> ApiException.builder()
@@ -117,13 +120,16 @@ public class InquiryServiceImpl implements InquiryService {
                         .build()
         );
 
-        if (inquiry.getStatus()==InquiryStatus.WAITING) {
-            inquiry.updateInquiryStatusBuilder().status(InquiryStatus.COMPLETE).build();
+        if (inquiry.getStatus() == InquiryStatus.WAITING) {
+            Authority auth = SecurityUtil.checkAuthority();
+            if (auth == Authority.ROLE_ADMIN) {
+                inquiry.updateInquiryStatusBuilder().status(InquiryStatus.COMPLETE).build();
+            }
         }
 
         Answer savedAnswer = answerRepository.save(AnswerCreateRequest.createAnswer(answerCreateRequest, inquiry));
         inquiry.getAnswerList().add(savedAnswer);
-        return inquiry.getId();
+        return savedAnswer.getId();
     }
 
     @Override
@@ -139,10 +145,11 @@ public class InquiryServiceImpl implements InquiryService {
         //answer.changeAnswer(answerRequest.getContent());
         answer.updateAnswerBuilder()
                 .content(answerUpdateRequest.getContent()).build();
-        return answer.getInquiry().getId();
+        return answer.getId();
     }
 
     @Override
+    @Transactional
     public void deleteAnswer(Long id) {
         Answer answer = answerRepository.findById(id).orElseThrow(
                 () -> ApiException.builder()
