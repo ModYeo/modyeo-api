@@ -12,10 +12,10 @@ public class MemberProfilePathRequest {
     @NotNull
     private Long memberId;
 
-    private String filePath;
+    private String profilePath;
 
-    public MemberProfilePathRequest(Long memberId, String filePath) {
+    public MemberProfilePathRequest(Long memberId, String profilePath) {
         this.memberId = memberId;
-        this.filePath = filePath;
+        this.profilePath = profilePath;
     }
 }

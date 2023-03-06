@@ -33,6 +33,14 @@ public class CategoryRepositoryImpl implements CategoryCustomRepository {
                 .fetch();
     }
 
+    @Override
+    public List<Category> findByCategoryIds(List<Long> categoryIds) {
+        return queryFactory.select(category)
+                .from(category)
+                .where(category.id.in(categoryIds))
+                .fetch();
+    }
+
     private BooleanExpression memberIdEq(Long memberId) {
         return memberId != null && memberId > 0 ? member.id.eq(memberId) : null;
     }
