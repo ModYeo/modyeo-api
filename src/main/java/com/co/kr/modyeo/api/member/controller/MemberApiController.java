@@ -56,6 +56,16 @@ public class MemberApiController {
                 .build();
     }
 
+    @ApiOperation(value = "회원 소개글 변경 API")
+    @PatchMapping("/description")
+    public ResponseEntity<?> updateDescription(@RequestBody DescriptionUpdateRequest descriptionUpdateRequest){
+        Long memberId = memberService.updateDescription(descriptionUpdateRequest);
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
+                .data(memberId)
+                .build();
+    }
+
     @ApiOperation(value = "프로필 등록/변경 API")
     @PatchMapping("/profile-path")
     public ResponseEntity<?> updateProfilePath(@RequestBody MemberProfilePathRequest memberProfilePathRequest) {
