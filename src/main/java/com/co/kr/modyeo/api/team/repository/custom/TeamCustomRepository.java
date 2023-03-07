@@ -14,4 +14,6 @@ public interface TeamCustomRepository {
 
     Slice<Team> searchSomeoneTeam(SomeoneTeamSearch memberTeamSearch, Pageable pageable);
     List<TeamResponse> findMyTeam(String email);
+
+    List<Team> getRecommendTeams(Long emdId, List<Long> categoryIdList);
 }
