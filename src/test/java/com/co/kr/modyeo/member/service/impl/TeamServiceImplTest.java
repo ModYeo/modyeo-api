@@ -1,11 +1,13 @@
 package com.co.kr.modyeo.member.service.impl;
 
+import com.co.kr.modyeo.api.geo.repository.EmdAreaRepository;
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.api.team.domain.dto.request.TeamCreateRequest;
 import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.api.team.domain.entity.link.TeamCategory;
 import com.co.kr.modyeo.api.team.repository.CrewRepository;
+import com.co.kr.modyeo.api.team.repository.TeamActivAreaRepository;
 import com.co.kr.modyeo.api.team.repository.TeamCategoryRepository;
 import com.co.kr.modyeo.api.team.repository.TeamRepository;
 import com.co.kr.modyeo.api.team.service.TeamService;
@@ -42,20 +44,19 @@ class TeamServiceImplTest {
     @Mock
     private MemberRepository memberRepository;
 
-    /*@Mock
+    @Mock
     private EmdAreaRepository emdAreaRepository;
 
     @Mock
-    private TeamActivAreaRepository teamAreaRepository;*/
+    private TeamActivAreaRepository teamAreaRepository;
 
     @BeforeEach
     public void setup(){
         MockitoAnnotations.initMocks(this);
         teamService = new TeamServiceImpl(
                 teamRepository, teamCategoryRepository,
-                crewRepository,memberRepository
-        //        ,
-        //        emdAreaRepository,teamAreaRepository
+                crewRepository,memberRepository,
+                emdAreaRepository,teamAreaRepository
         );
     }
 

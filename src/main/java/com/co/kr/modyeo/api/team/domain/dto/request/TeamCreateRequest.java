@@ -1,14 +1,14 @@
 package com.co.kr.modyeo.api.team.domain.dto.request;
 
 import com.co.kr.modyeo.api.category.domain.entity.Category;
+import com.co.kr.modyeo.api.member.auth.domain.dto.MemberJoinDto;
 import com.co.kr.modyeo.api.team.domain.entity.Team;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -21,14 +21,18 @@ public class TeamCreateRequest {
 
     private String profilePath;
 
-    private List<CategoryDto> categoryDtoList = new ArrayList<>();
+    @NotNull
+    private List<Long> categoryIdList = new ArrayList<>();
+
+    @NotNull
+    private List<EmdAreaDto> emdAreaList = new ArrayList<>();
 
     @Builder
-    public TeamCreateRequest( String name, String description, String profilePath, List<CategoryDto> categoryDtoList) {
+    public TeamCreateRequest( String name, String description, String profilePath, List<Long> categoryIdList) {
         this.name = name;
         this.description = description;
         this.profilePath = profilePath;
-        this.categoryDtoList = categoryDtoList;
+        this.categoryIdList = categoryIdList;
     }
 
     public static Team toEntity(TeamCreateRequest teamCreateRequest){
@@ -39,23 +43,25 @@ public class TeamCreateRequest {
                 .build();
     }
 
-    @Data
-    @NoArgsConstructor
-    public static class CategoryDto{
+    public EmdAreaDto getEmdAreaDto(Long emdAreaId) {
+        return this.emdAreaList.stream()
+                .filter(emdAreaDto -> emdAreaDto.getId().equals(emdAreaId))
+                .findFirst()
+                .orElseThrow();
+    }
+
+    @Getter
+    @Setter
+    public static class EmdAreaDto {
+
         private Long id;
-        private String name;
 
-        @Builder
-        public CategoryDto(Long id, String name) {
-            this.id = id;
-            this.name = name;
-        }
+        private int limitMeters;
 
-        public Category toEntity(){
-            return Category.of()
-                    .id(this.id)
-                    .name(this.name)
-                    .build();
+        public static List<Long> getIdList(List<TeamCreateRequest.EmdAreaDto> emdAreaDtoList) {
+            return emdAreaDtoList.stream()
+                    .map(TeamCreateRequest.EmdAreaDto::getId)
+                    .collect(Collectors.toList());
         }
     }
 }
