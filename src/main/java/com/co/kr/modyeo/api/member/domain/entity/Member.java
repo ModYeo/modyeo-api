@@ -37,6 +37,8 @@ public class Member extends BaseEntity {
 
     private String nickname;
 
+    private String description;
+
     @Column(name = "profile_path")
     private String profilePath;
 
@@ -84,6 +86,7 @@ public class Member extends BaseEntity {
                   LocalDate birthDay,
                   Sex sex,
                   Authority authority,
+                  String description,
                   String lastAccessToken,
                   List<Crew> teamList,
                   List<MemberCategory> interestCategoryList,
@@ -98,6 +101,7 @@ public class Member extends BaseEntity {
         this.birthDay = birthDay;
         this.sex = sex;
         this.authority = authority;
+        this.description = description;
         this.lastAccessToken = lastAccessToken;
         this.teamList = teamList;
         this.interestCategoryList = interestCategoryList;
@@ -118,4 +122,6 @@ public class Member extends BaseEntity {
     public void changeLastAccessToken(String accessToken) {
         this.lastAccessToken = accessToken;
     }
+
+    public void changeDescription(String description) {this.description = description; }
 }

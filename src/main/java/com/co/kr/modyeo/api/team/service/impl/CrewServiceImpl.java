@@ -5,6 +5,7 @@ import com.co.kr.modyeo.api.team.domain.dto.response.CrewResponse;
 import com.co.kr.modyeo.api.team.domain.dto.search.CrewSearch;
 import com.co.kr.modyeo.api.team.domain.entity.enumerate.CrewLevel;
 import com.co.kr.modyeo.api.team.domain.entity.link.Crew;
+import com.co.kr.modyeo.api.team.domain.spec.CrewSpecification;
 import com.co.kr.modyeo.api.team.repository.CrewRepository;
 import com.co.kr.modyeo.api.team.service.CrewService;
 import com.co.kr.modyeo.common.enumerate.Yn;
@@ -25,17 +26,13 @@ public class CrewServiceImpl implements CrewService {
 
     private final CrewRepository crewRepository;
 
+    private final CrewSpecification crewSpecification;
+
     @Override
     public List<CrewResponse> getCrew(CrewSearch crewSearch) {
         if (Yn.N.equals(crewSearch.getIsActivated())){
             CrewLevel crewLevel = getCrewLevel(crewSearch.getTeamId());
-            if (Crew.checkAuth(crewLevel)){
-                throw ApiException.builder()
-                        .status(HttpStatus.BAD_REQUEST)
-                        .errorCode("NOT_AUTHORIZED")
-                        .errorMessage("권한이 없습니다.")
-                        .build();
-            }
+            crewSpecification.check(crewLevel);
         }
 
         return crewRepository.searchCrew(crewSearch)
@@ -55,13 +52,7 @@ public class CrewServiceImpl implements CrewService {
                         .build());
 
         CrewLevel crewLevel = getCrewLevel(crew.getTeam().getId());
-        if (Crew.checkAuth(crewLevel)){
-            throw ApiException.builder()
-                    .status(HttpStatus.BAD_REQUEST)
-                    .errorCode("NOT_AUTHORIZED")
-                    .errorMessage("권한이 없습니다.")
-                    .build();
-        }
+        crewSpecification.check(crewLevel);
 
         crew.changeLevel(crewUpdateRequest.getCrewLevel());
         return crew.getId();
@@ -78,13 +69,7 @@ public class CrewServiceImpl implements CrewService {
                         .build());
 
         CrewLevel crewLevel = getCrewLevel(crew.getTeam().getId());
-        if (Crew.checkAuth(crewLevel)){
-            throw ApiException.builder()
-                    .status(HttpStatus.BAD_REQUEST)
-                    .errorCode("NOT_AUTHORIZED")
-                    .errorMessage("권한이 없습니다.")
-                    .build();
-        }
+        crewSpecification.check(crewLevel);
 
         Crew.exit(crew);
     }
@@ -100,13 +85,7 @@ public class CrewServiceImpl implements CrewService {
                         .build());
 
         CrewLevel crewLevel = getCrewLevel(crew.getTeam().getId());
-        if (Crew.checkAuth(crewLevel)){
-            throw ApiException.builder()
-                    .status(HttpStatus.BAD_REQUEST)
-                    .errorCode("NOT_AUTHORIZED")
-                    .errorMessage("권한이 없습니다.")
-                    .build();
-        }
+        crewSpecification.check(crewLevel);
 
         Crew.activeCrew(crew);
         return crew.getId();

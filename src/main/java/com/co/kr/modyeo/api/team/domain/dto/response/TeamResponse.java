@@ -16,19 +16,20 @@ public class TeamResponse {
     private Long id;
     private String name;
     private String description;
-    private ScaleLevel scaleLevel;
     private String profilePath;
     private List<CategoryResponse> categoryResponseList = new ArrayList<>();
 
+    private int crewCount;
+
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public TeamResponse(Long id, String name,ScaleLevel scaleLevel, String description, String profilePath,
-                        List<CategoryResponse> categoryResponses) {
+    public TeamResponse(Long id, String name, String description, String profilePath,
+                        List<CategoryResponse> categoryResponses, int crewCount) {
         this.id = id;
         this.name = name;
-        this.scaleLevel = scaleLevel;
         this.description = description;
         this.profilePath = profilePath;
         this.categoryResponseList = categoryResponses;
+        this.crewCount = crewCount;
     }
 
     public TeamResponse(Long id, String name) {
@@ -40,13 +41,13 @@ public class TeamResponse {
         return of()
                 .id(team.getId())
                 .name(team.getName())
-//                .scaleLevel(team.getScaleLevel())
                 .description(team.getDescription())
                 .profilePath(team.getProfilePath())
                 .categoryResponses(team.getCategoryList().stream().map(crewCategory -> CategoryResponse.of()
                         .id(crewCategory.getCategory().getId())
                         .name(crewCategory.getCategory().getName())
                         .build()).collect(Collectors.toList()))
+                .crewCount(team.getCrewList().size())
                 .build();
     }
 }

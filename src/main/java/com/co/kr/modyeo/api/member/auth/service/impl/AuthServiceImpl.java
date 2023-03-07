@@ -1,19 +1,28 @@
 package com.co.kr.modyeo.api.member.auth.service.impl;
 
+import com.co.kr.modyeo.api.category.domain.entity.Category;
+import com.co.kr.modyeo.api.category.repository.CategoryRepository;
+import com.co.kr.modyeo.api.geo.domain.entity.EmdArea;
+import com.co.kr.modyeo.api.geo.repository.EmdAreaRepository;
 import com.co.kr.modyeo.api.member.auth.domain.dto.*;
-import com.co.kr.modyeo.api.member.domain.enumerate.Authority;
-import com.co.kr.modyeo.common.provider.JwtTokenProvider;
+import com.co.kr.modyeo.api.member.auth.domain.spec.AdminSpecification;
+import com.co.kr.modyeo.api.member.auth.domain.spec.PasswordSpecification;
 import com.co.kr.modyeo.api.member.auth.service.AuthService;
 import com.co.kr.modyeo.api.member.collection.domain.entity.CollectionInfo;
 import com.co.kr.modyeo.api.member.collection.repository.CollectionInfoRepository;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
+import com.co.kr.modyeo.api.member.domain.entity.link.MemberActiveArea;
+import com.co.kr.modyeo.api.member.domain.entity.link.MemberCategory;
 import com.co.kr.modyeo.api.member.domain.entity.link.MemberCollectionInfo;
+import com.co.kr.modyeo.api.member.repository.MemberActiveAreaRepository;
+import com.co.kr.modyeo.api.member.repository.MemberCategoryRepository;
 import com.co.kr.modyeo.api.member.repository.MemberCollectionInfoRepository;
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.CustomAuthException;
 import com.co.kr.modyeo.common.exception.code.AuthErrorCode;
 import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
+import com.co.kr.modyeo.common.provider.JwtTokenProvider;
 import com.co.kr.modyeo.common.result.JsonResultData;
 import com.co.kr.modyeo.common.util.ModyeoMailSender;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +38,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,9 +60,22 @@ public class AuthServiceImpl implements AuthService {
 
     private final ModyeoMailSender modyeoMailSender;
 
+    private final PasswordSpecification passwordSpecification;
+
+    private final AdminSpecification adminSpecification;
+
+    private final CategoryRepository categoryRepository;
+
+    private final EmdAreaRepository emdAreaRepository;
+
+    private final MemberCategoryRepository memberCategoryRepository;
+
+    private final MemberActiveAreaRepository memberActiveAreaRepository;
+
     @Override
+    @Transactional
     public MemberResponseDto signup(MemberJoinDto memberJoinDto) {
-        validPassword(memberJoinDto.getPassword());
+        passwordSpecification.check(memberJoinDto.getPassword());
         if (memberRepository.existsByEmail(memberJoinDto.getEmail())) {
             throw new CustomAuthException(JsonResultData
                     .failResultBuilder()
@@ -66,26 +87,35 @@ public class AuthServiceImpl implements AuthService {
         Member member = MemberJoinDto.toMember(memberJoinDto, passwordEncoder);
         member = memberRepository.save(member);
 
-        if (memberJoinDto.getCollectionInfoDtoList() != null && memberJoinDto.getCollectionInfoDtoList().size() > 0){
-            List<Long> collectionIdList = MemberJoinDto.CollectionInfoDto.getIdList(memberJoinDto.getCollectionInfoDtoList());
+        if (memberJoinDto.getCollectionInfoList() != null && memberJoinDto.getCollectionInfoList().size() > 0) {
+            saveCollectionInfo(member, memberJoinDto);
+        }
 
-            List<CollectionInfo> collectionInfoList = collectionInfoRepository.findByIdList(collectionIdList);
+        if (memberJoinDto.getCategoryIdList() != null) {
+            saveMemberCategory(member, memberJoinDto.getCategoryIdList());
+        }
 
-            Member finalMember = member;
-            List<MemberCollectionInfo> memberCollectionInfoList = collectionInfoList.stream().map(collectionInfo ->{
-                        MemberJoinDto.CollectionInfoDto collectionInfoDto = memberJoinDto.getCollectionInfo(collectionInfo.getId());
-                        return MemberCollectionInfo.createMemberCollectionInfoBuilder()
-                                .member(finalMember)
-                                .collectionInfo(collectionInfo)
-                                .agreeYn(collectionInfoDto.getAgreeYn())
-                                .build();
-                    })
-                    .collect(Collectors.toList());
-
-            memberCollectionInfoRepository.saveAll(memberCollectionInfoList);
+        if (memberJoinDto.getEmdAreaList() != null) {
+            saveMemberActiveArea(member, memberJoinDto);
         }
 
         return MemberResponseDto.toResponse(member);
+    }
+
+    private void saveMemberActiveArea(Member member, MemberJoinDto memberJoinDto) {
+        List<EmdArea> emdAreaList = emdAreaRepository.findByEmdIdList(MemberJoinDto.EmdAreaDto.getIdList(memberJoinDto.getEmdAreaList()));
+
+        List<MemberActiveArea> memberActiveAreaList = emdAreaList.stream().map(emdArea -> {
+                    MemberJoinDto.EmdAreaDto emdAreaDto = memberJoinDto.getEmdAreaDto(emdArea.getId());
+                    return MemberActiveArea.createBuilder()
+                            .member(member)
+                            .emdArea(emdArea)
+                            .distanceMeters(emdAreaDto.getLimitMeters())
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        memberActiveAreaRepository.saveAll(memberActiveAreaList);
     }
 
     @Override
@@ -95,14 +125,8 @@ public class AuthServiceImpl implements AuthService {
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        if (memberLoginDto.getIsAdmin()){
-            if (authentication.getAuthorities().stream().noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(Authority.ROLE_ADMIN.toString()))){
-                throw ApiException.builder()
-                        .status(HttpStatus.FORBIDDEN)
-                        .errorMessage(AuthErrorCode.PERMISSION_DENIED.getMessage())
-                        .errorCode(AuthErrorCode.PERMISSION_DENIED.getCode())
-                        .build();
-            }
+        if (memberLoginDto.getIsAdmin()) {
+            adminSpecification.check(authentication);
         }
 
         return getTokenDto(authentication);
@@ -155,6 +179,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public void updatePassword(PasswordUpdateRequest passwordUpdateRequest) {
         Member member = memberRepository.findByEmail(passwordUpdateRequest.getEmail())
                 .orElseThrow(() -> ApiException.builder()
@@ -167,14 +192,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void authMail(String email,String authNumber) {
+    public void authMail(String email, String authNumber) {
         MailDto mailDto = MailDto.makeAuthSender(email, authNumber);
         modyeoMailSender.send(mailDto);
     }
 
     @Override
     public String checkOverlapNickname(String nickname) {
-        return memberRepository.existsByNickname(nickname)? "disable" : "enable";
+        return memberRepository.existsByNickname(nickname) ? "disable" : "enable";
     }
 
     private TokenDto getTokenDto(Authentication authentication) {
@@ -187,7 +212,7 @@ public class AuthServiceImpl implements AuthService {
                         TimeUnit.MILLISECONDS);
 
         Optional<Member> optionalMember = memberRepository.findByEmail(authentication.getName());
-        if (optionalMember.isPresent()){
+        if (optionalMember.isPresent()) {
             Member member = optionalMember.get();
             member.changeLastAccessToken(tokenDto.getAccessToken());
         }
@@ -195,21 +220,32 @@ public class AuthServiceImpl implements AuthService {
         return tokenDto;
     }
 
-    public void validPassword(String password){
-        if (password.length() <= 8 || password.length() >= 16){
-            throw ApiException.builder()
-                    .status(HttpStatus.BAD_REQUEST)
-                    .errorCode(AuthErrorCode.PASSWORD_NOT_ENOUGH_CONDITION.getCode())
-                    .errorMessage(AuthErrorCode.PASSWORD_NOT_ENOUGH_CONDITION.getMessage())
-                    .build();
-        }
+    private void saveCollectionInfo(Member member, MemberJoinDto memberJoinDto) {
+        List<Long> collectionIdList = MemberJoinDto.CollectionInfoDto.getIdList(memberJoinDto.getCollectionInfoList());
 
-        if (!Pattern.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*#?&])[A-Za-z[0-9]$@$!%*#?&]{8,20}$",password)){
-            throw ApiException.builder()
-                    .status(HttpStatus.BAD_REQUEST)
-                    .errorCode(AuthErrorCode.PASSWORD_NOT_ENOUGH_CONDITION.getCode())
-                    .errorMessage(AuthErrorCode.PASSWORD_NOT_ENOUGH_CONDITION.getMessage())
-                    .build();
-        }
+        List<CollectionInfo> collectionInfoList = collectionInfoRepository.findByIdList(collectionIdList);
+
+        Member finalMember = member;
+        List<MemberCollectionInfo> memberCollectionInfoList = collectionInfoList.stream().map(collectionInfo -> {
+                    MemberJoinDto.CollectionInfoDto collectionInfoDto = memberJoinDto.getCollectionInfo(collectionInfo.getId());
+                    return MemberCollectionInfo.createMemberCollectionInfoBuilder()
+                            .member(finalMember)
+                            .collectionInfo(collectionInfo)
+                            .agreeYn(collectionInfoDto.getAgreeYn())
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        memberCollectionInfoRepository.saveAll(memberCollectionInfoList);
+    }
+
+    private void saveMemberCategory(Member member, List<Long> categoryIdList) {
+        List<Category> categoryList = categoryRepository.findByCategoryIds(categoryIdList);
+        List<MemberCategory> memberCategories = categoryList.stream().map(category -> MemberCategory.createMemberCategoryBuilder()
+                .category(category)
+                .member(member)
+                .build()).collect(Collectors.toList());
+
+        memberCategoryRepository.saveAll(memberCategories);
     }
 }

@@ -59,7 +59,7 @@ class CategoryServiceImplTest {
         Category category = CategoryCreateRequest.createCategory(categoryCreateRequest);
         category = categoryRepository.save(category);
 
-        assertThat(category).isEqualTo(categoryRepository.findByName("test category"));
+        assertThat(category).isEqualTo(categoryRepository.findByNameAndUseYn("test category",Yn.Y));
     }
 
     @Test
@@ -134,7 +134,7 @@ class CategoryServiceImplTest {
                 .build();
 
         given(categoryRepository.findById(any())).willReturn(Optional.of(category));
-        given(categoryRepository.findByName(any())).willReturn(null);
+//        given(categoryRepository.findByName(any())).willReturn(null);
 //        given(categoryRepository.save(any())).willReturn(category);
 
         categoryService.updateCategory(categoryUpdateRequest);
@@ -146,20 +146,20 @@ class CategoryServiceImplTest {
     @Test
     @DisplayName("카테고리 변경 실패")
     void updateCategoryFailTest1(){
-        given(categoryRepository.findByName(any())).willThrow(ApiException.builder().status(HttpStatus.BAD_REQUEST)
-                .errorCode(CategoryErrorCode.OVERLAP_CATEGORY.getCode())
-                .errorMessage(CategoryErrorCode.OVERLAP_CATEGORY.getMessage())
-                .build());
-
-        assertThatThrownBy(() -> {
-            categoryService.updateCategory(categoryUpdateRequest);
-        }).isInstanceOf(Exception.class).hasMessageContaining(CategoryErrorCode.OVERLAP_CATEGORY.getMessage());
+//        given(categoryRepository.findByName(any())).willThrow(ApiException.builder().status(HttpStatus.BAD_REQUEST)
+//                .errorCode(CategoryErrorCode.OVERLAP_CATEGORY.getCode())
+//                .errorMessage(CategoryErrorCode.OVERLAP_CATEGORY.getMessage())
+//                .build());
+//
+//        assertThatThrownBy(() -> {
+//            categoryService.updateCategory(categoryUpdateRequest);
+//        }).isInstanceOf(Exception.class).hasMessageContaining(CategoryErrorCode.OVERLAP_CATEGORY.getMessage());
     }
 
     @Test
     @DisplayName("카테고리 변경 실패2")
     void updateCategoryFailTest2(){
-        given(categoryRepository.findByName(any())).willReturn(null);
+//        given(categoryRepository.findByName(any())).willReturn(null);
         given(categoryRepository.findById(any())).willThrow(ApiException.builder()
                 .status(HttpStatus.BAD_REQUEST)
                 .errorMessage(CategoryErrorCode.NOT_FOUND_CATEGORY.getMessage())

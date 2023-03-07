@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.member.service.impl;
 import com.co.kr.modyeo.api.category.repository.CategoryRepository;
 import com.co.kr.modyeo.api.geo.domain.entity.EmdArea;
 import com.co.kr.modyeo.api.member.domain.entity.link.MemberActiveArea;
+import com.co.kr.modyeo.api.team.domain.entity.link.MemberTeam;
 import com.co.kr.modyeo.common.exception.code.AreaErrorCode;
 import com.co.kr.modyeo.api.geo.repository.EmdAreaRepository;
 import com.co.kr.modyeo.api.member.domain.dto.request.*;
@@ -82,10 +83,13 @@ public class MemberServiceImpl implements MemberService {
                         .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
                         .build());
 
-        return MemberDetail.createMemberDetail(member);
+        List<MemberTeam> memberTeamList = memberTeamRepository.findByMember(member);
+
+        return MemberDetail.createMemberDetail(member,memberTeamList);
     }
 
     @Override
+    @Transactional
     public Long updateNickname(NicknameUpdateRequest nicknameUpdateRequest) {
         Member member = memberRepository.findById(nicknameUpdateRequest.getMemberId()).orElseThrow(
                 () -> ApiException.builder()
@@ -100,6 +104,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public Long updateProfilePath(MemberProfilePathRequest memberProfilePathRequest) {
         Member member = memberRepository.findById(memberProfilePathRequest.getMemberId()).orElseThrow(
                 () -> ApiException.builder()
@@ -108,7 +113,7 @@ public class MemberServiceImpl implements MemberService {
                         .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
                         .build());
 
-        member.changeProfilePath(member.getProfilePath());
+        member.changeProfilePath(memberProfilePathRequest.getProfilePath());
         return member.getId();
     }
 
@@ -135,6 +140,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public Long createMemberActiveArea(MemberActiveAreaRequest memberActiveAreaRequest) {
         Member member = memberRepository.findById(memberActiveAreaRequest.getMemberId()).orElseThrow(
                 () -> ApiException.builder()
@@ -156,6 +162,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public void deleteMemberActiveArea(Long memberActiveAreaId) {
         MemberActiveArea memberActiveArea = memberActiveAreaRepository.findById(memberActiveAreaId).orElseThrow(
                 () -> ApiException.builder()
@@ -168,6 +175,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public Long updateLimitMeters(LimitMetersUpdateRequest limitMetersUpdateRequest) {
         MemberActiveArea memberActiveArea = memberActiveAreaRepository.findById(limitMetersUpdateRequest.getMemberActiveAreaId()).orElseThrow(
                 () -> ApiException.builder()
@@ -178,5 +186,19 @@ public class MemberServiceImpl implements MemberService {
 
         MemberActiveArea.changeLimitMeters(memberActiveArea, limitMetersUpdateRequest.getLimitMeters());
         return memberActiveArea.getId();
+    }
+
+    @Override
+    @Transactional
+    public Long updateDescription(DescriptionUpdateRequest descriptionUpdateRequest) {
+        Member member = memberRepository.findById(descriptionUpdateRequest.getMemberId()).orElseThrow(
+                () -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
+                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
+                        .build());
+
+        member.changeDescription(descriptionUpdateRequest.getDescription());
+        return member.getId();
     }
 }

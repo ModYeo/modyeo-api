@@ -16,6 +16,8 @@ public class MemberTeamResponse {
 
     private Long memberTeamId;
 
+    private Long teamId;
+
     private MemberResponse memberResponse;
 
     private String introduce;
@@ -26,8 +28,9 @@ public class MemberTeamResponse {
     private LocalDateTime createdDate;
 
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public MemberTeamResponse(Long memberTeamId, MemberResponse memberResponse, TeamResponse team, String introduce, JoinStatus joinStatus, LocalDateTime createdDate) {
+    public MemberTeamResponse(Long memberTeamId,Long teamId, MemberResponse memberResponse, TeamResponse team, String introduce, JoinStatus joinStatus, LocalDateTime createdDate) {
         this.memberTeamId = memberTeamId;
+        this.teamId = teamId;
         this.memberResponse = memberResponse;
         this.introduce = introduce;
         this.joinStatus = joinStatus;
@@ -37,6 +40,7 @@ public class MemberTeamResponse {
     public static MemberTeamResponse toDto(MemberTeam memberTeam){
         return of()
                 .memberTeamId(memberTeam.getId())
+                .teamId(memberTeam.getTeam().getId())
                 .memberResponse(MemberResponse.toDto(memberTeam.getMember()))
                 .introduce(memberTeam.getIntroduce())
                 .joinStatus(memberTeam.getJoinStatus())

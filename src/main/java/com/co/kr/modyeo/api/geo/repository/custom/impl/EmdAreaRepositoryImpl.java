@@ -39,6 +39,13 @@ public class EmdAreaRepositoryImpl extends Querydsl4RepositorySupport implements
                 ;
     }
 
+    @Override
+    public List<EmdArea> findByEmdIdList(List<Long> emdIdList) {
+        return selectFrom(emdArea)
+                .where(emdArea.id.in(emdIdList))
+                .fetch();
+    }
+
     private BooleanExpression containName(String name) {
         return StringUtils.hasText(name) ? emdArea.name.contains(name) : null;
     }
