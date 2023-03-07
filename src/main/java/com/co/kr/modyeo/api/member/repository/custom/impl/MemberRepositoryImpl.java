@@ -31,9 +31,9 @@ public class MemberRepositoryImpl extends Querydsl4RepositorySupport implements 
         return Optional.ofNullable(select(member)
                 .from(member)
                 .leftJoin(member.teamList, crew)
-                .leftJoin(member.interestCategoryList, memberCategory)
-                .leftJoin(member.memberCollectionInfoList, memberCollectionInfo)
-                .leftJoin(member.memberActiveAreaList, memberActiveArea)
+                .innerJoin(member.interestCategoryList, memberCategory)
+                .innerJoin(member.memberCollectionInfoList, memberCollectionInfo)
+                .innerJoin(member.memberActiveAreaList, memberActiveArea)
                 .fetchJoin()
                 .where(memberIdEq(memberId))
                 .fetchOne());

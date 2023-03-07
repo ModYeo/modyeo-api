@@ -23,8 +23,6 @@ public class TeamDetail {
 
     private String description;
 
-    private ScaleLevel scaleLevel;
-
     private Long createdBy;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
@@ -32,22 +30,23 @@ public class TeamDetail {
 
     private List<CategoryResponse> categoryResponseList = new ArrayList<>();
 
+    private int crewCount;
+
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public TeamDetail(Long id, String name, ScaleLevel scaleLevel, String description, Long createdBy, LocalDateTime createdTime, List<CategoryResponse> categoryResponseList) {
+    public TeamDetail(Long id, String name, String description, Long createdBy, LocalDateTime createdTime, List<CategoryResponse> categoryResponseList, int crewCount) {
         this.id = id;
         this.name = name;
-        this.scaleLevel = scaleLevel;
         this.description = description;
         this.createdBy = createdBy;
         this.createdTime = createdTime;
         this.categoryResponseList = categoryResponseList;
+        this.crewCount = crewCount;
     }
 
     public static TeamDetail toDto(Team team) {
         return of()
                 .id(team.getId())
                 .name(team.getName())
-//                .scaleLevel(team.getScaleLevel())
                 .description(team.getDescription())
                 .createdBy(team.getCreatedBy())
                 .createdTime(team.getCreatedDate())
@@ -55,6 +54,7 @@ public class TeamDetail {
                         .id(crewCategory.getCategory().getId())
                         .name(crewCategory.getCategory().getName())
                         .build()).collect(Collectors.toList()))
+                .crewCount(team.getCrewList().size())
                 .build();
     }
 }

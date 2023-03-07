@@ -1,11 +1,9 @@
 package com.co.kr.modyeo.api.member.auth.domain.dto;
 
 import com.co.kr.modyeo.api.member.domain.entity.Member;
-import com.co.kr.modyeo.api.member.domain.entity.embed.Address;
 import com.co.kr.modyeo.api.member.domain.enumerate.Authority;
 import com.co.kr.modyeo.api.member.domain.enumerate.Sex;
 import com.co.kr.modyeo.common.enumerate.Yn;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,12 +11,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.persistence.Column;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Getter
@@ -44,14 +38,14 @@ public class MemberJoinDto {
 
     private List<Long> categoryIdList;
 
-    private List<Long> emdIdList;
+    private List<EmdAreaDto> emdAreaList;
 
     public MemberJoinDto(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
-    public MemberJoinDto(String email, String password, String username, String nickname, Sex sex, LocalDate birthDay, List<CollectionInfoDto> collectionInfoList, List<Long> categoryIdList, List<Long> emdIdList) {
+    public MemberJoinDto(String email, String password, String username, String nickname, Sex sex, LocalDate birthDay, List<CollectionInfoDto> collectionInfoList, List<Long> categoryIdList, List<EmdAreaDto> emdAreaList) {
         this.email = email;
         this.password = password;
         this.username = username;
@@ -60,7 +54,7 @@ public class MemberJoinDto {
         this.birthDay = birthDay;
         this.collectionInfoList = collectionInfoList;
         this.categoryIdList = categoryIdList;
-        this.emdIdList = emdIdList;
+        this.emdAreaList = emdAreaList;
     }
 
     public static Member toMember(MemberJoinDto memberJoinDto, PasswordEncoder passwordEncoder) {
@@ -79,6 +73,13 @@ public class MemberJoinDto {
         return new UsernamePasswordAuthenticationToken(email, password);
     }
 
+    public EmdAreaDto getEmdAreaDto(Long emdAreaId){
+        return this.emdAreaList.stream()
+                .filter(emdAreaDto -> emdAreaDto.getId().equals(emdAreaId))
+                .findFirst()
+                .orElseThrow();
+    }
+
     public CollectionInfoDto getCollectionInfo(Long collectionId) {
         return this.collectionInfoList.stream()
                 .filter(collectionInfoDto -> collectionInfoDto.getId().equals(collectionId))
@@ -87,6 +88,7 @@ public class MemberJoinDto {
     }
 
     @Getter
+    @Setter
     public static class CollectionInfoDto {
 
         private Long id;
@@ -96,6 +98,21 @@ public class MemberJoinDto {
         public static List<Long> getIdList(List<CollectionInfoDto> collectionInfoDtoList) {
             return collectionInfoDtoList.stream()
                     .map(MemberJoinDto.CollectionInfoDto::getId)
+                    .collect(Collectors.toList());
+        }
+    }
+
+    @Getter
+    @Setter
+    public static class EmdAreaDto {
+
+        private Long id;
+
+        private int limitMeters;
+
+        public static List<Long> getIdList(List<EmdAreaDto> emdAreaDtoList) {
+            return emdAreaDtoList.stream()
+                    .map(MemberJoinDto.EmdAreaDto::getId)
                     .collect(Collectors.toList());
         }
     }
