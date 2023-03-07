@@ -95,20 +95,25 @@ public class AuthServiceImpl implements AuthService {
             saveMemberCategory(member, memberJoinDto.getCategoryIdList());
         }
 
-        if (memberJoinDto.getEmdIdList() != null){
-            saveMemberActiveArea(member,memberJoinDto.getEmdIdList());
+        if (memberJoinDto.getEmdAreaList() != null) {
+            saveMemberActiveArea(member, memberJoinDto);
         }
 
         return MemberResponseDto.toResponse(member);
     }
 
-    private void saveMemberActiveArea(Member member, List<Long> emdIdList) {
-        List<EmdArea> emdAreaList = emdAreaRepository.findByEmdIdList(emdIdList);
-        List<MemberActiveArea> memberActiveAreaList = emdAreaList.stream().map(emdArea -> MemberActiveArea.createBuilder()
-                .emdArea(emdArea)
-                .member(member)
-                .distanceMeters(0)
-                .build()).collect(Collectors.toList());
+    private void saveMemberActiveArea(Member member, MemberJoinDto memberJoinDto) {
+        List<EmdArea> emdAreaList = emdAreaRepository.findByEmdIdList(MemberJoinDto.EmdAreaDto.getIdList(memberJoinDto.getEmdAreaList()));
+
+        List<MemberActiveArea> memberActiveAreaList = emdAreaList.stream().map(emdArea -> {
+                    MemberJoinDto.EmdAreaDto emdAreaDto = memberJoinDto.getEmdAreaDto(emdArea.getId());
+                    return MemberActiveArea.createBuilder()
+                            .member(member)
+                            .emdArea(emdArea)
+                            .distanceMeters(emdAreaDto.getLimitMeters())
+                            .build();
+                })
+                .collect(Collectors.toList());
 
         memberActiveAreaRepository.saveAll(memberActiveAreaList);
     }
