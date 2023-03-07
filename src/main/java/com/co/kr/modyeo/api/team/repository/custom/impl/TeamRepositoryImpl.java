@@ -2,10 +2,10 @@ package com.co.kr.modyeo.api.team.repository.custom.impl;
 
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamResponse;
 import com.co.kr.modyeo.api.team.domain.dto.search.SomeoneTeamSearch;
-import com.co.kr.modyeo.api.team.domain.entity.Team;
-import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
 import com.co.kr.modyeo.api.team.domain.dto.search.TeamSearch;
+import com.co.kr.modyeo.api.team.domain.entity.Team;
 import com.co.kr.modyeo.api.team.repository.custom.TeamCustomRepository;
+import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.domain.Pageable;
@@ -37,7 +37,8 @@ public class TeamRepositoryImpl extends Querydsl4RepositorySupport implements Te
                         .innerJoin(team.areaList, teamActiveArea)
                         .where(
                                 teamNameLike(teamSearch.getName()),
-                                categoryIdEq(teamSearch.getCategoryId())
+                                categoryIdEq(teamSearch.getCategoryId()),
+                                emdIdEq(teamSearch.getEmdId())
                               )
         );
     }
@@ -59,7 +60,7 @@ public class TeamRepositoryImpl extends Querydsl4RepositorySupport implements Te
     }
 
     private BooleanExpression emdIdEq(Long emdId){
-        return emdId != null && emdId > 0 ? teamActiveArea.activeId.eq(emdId) : null;
+        return emdId != null && emdId > 0 ? teamActiveArea.emdArea.id.eq(emdId) : null;
     }
     private BooleanExpression memberIdEq(Long memberId) {
         return memberId != null && memberId > 0 ? crew.member.id.eq(memberId) : null;
@@ -74,6 +75,18 @@ public class TeamRepositoryImpl extends Querydsl4RepositorySupport implements Te
                 .innerJoin(crew.member, member)
                 .where(member.email.eq(email))
                 .fetch();
+    }
+
+    @Override
+    public List<Team> getRecommendTeams(Long emdId, List<Long> categoryIdList) {
+        return select(team)
+                .from(team)
+                .innerJoin(team.categoryList, teamCategory)
+                .innerJoin(team.areaList, teamActiveArea)
+                .where(
+                        teamCategory.category.id.in(categoryIdList),
+                        emdIdEq(emdId)
+                ).fetch();
     }
 
     private BooleanExpression teamNameLike(String name) {
