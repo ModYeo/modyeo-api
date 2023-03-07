@@ -8,6 +8,8 @@ import com.co.kr.modyeo.api.team.domain.dto.search.SomeoneTeamSearch;
 import com.co.kr.modyeo.api.team.domain.dto.search.TeamSearch;
 import org.springframework.data.domain.Slice;
 
+import java.util.List;
+
 public interface TeamService {
     Long createTeam(TeamCreateRequest teamCreateRequest);
 
@@ -18,4 +20,6 @@ public interface TeamService {
     void deleteTeam(Long crewId);
 
     TeamDetail getTeam(Long teamId);
+
+    List<TeamResponse> getRecommendTeams(Long emdId, List<Long> categoryIdList);
 }

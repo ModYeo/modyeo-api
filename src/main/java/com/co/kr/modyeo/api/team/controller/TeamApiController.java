@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/team")
@@ -36,6 +37,17 @@ public class TeamApiController {
         return ResponseHandler.generate()
                 .status(HttpStatus.CREATED)
                 .data(teamId)
+                .build();
+    }
+
+    @ApiOperation(value = "")
+    @GetMapping("/recommend")
+    public ResponseEntity<?> getRecommendTeams(@RequestParam(value = "emdId", name = "emdId", required = true) Long emdId,
+                                               @RequestParam(value = "categoryIdList", name = "categoryIdList", required = true)List<Long> categoryIdList){
+        List<TeamResponse> teamResponses = teamService.getRecommendTeams(emdId,categoryIdList);
+        return ResponseHandler.generate()
+                .status(HttpStatus.OK)
+                .data(teamResponses)
                 .build();
     }
 

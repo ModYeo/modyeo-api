@@ -167,6 +167,14 @@ public class TeamServiceImpl implements TeamService {
                 .build()));
     }
 
+    @Override
+    public List<TeamResponse> getRecommendTeams(Long emdId, List<Long> categoryIdList) {
+        List<Team> recommendTeams = teamRepository.getRecommendTeams(emdId, categoryIdList);
+        return recommendTeams.stream()
+                .map(TeamResponse::toDto)
+                .collect(Collectors.toList());
+    }
+
     private void overlapTeamCheck(TeamCreateRequest teamCreateRequest){
         Team findTeam = teamRepository.findByName(teamCreateRequest.getName());
         if (findTeam != null){
