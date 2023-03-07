@@ -126,7 +126,6 @@ public class InquiryServiceImpl implements InquiryService {
                 inquiry.updateInquiryStatusBuilder().status(InquiryStatus.COMPLETE).build();
             }
         }
-
         Answer savedAnswer = answerRepository.save(AnswerCreateRequest.createAnswer(answerCreateRequest, inquiry));
         inquiry.getAnswerList().add(savedAnswer);
         return savedAnswer.getId();
@@ -142,7 +141,6 @@ public class InquiryServiceImpl implements InquiryService {
                         .status(HttpStatus.BAD_REQUEST)
                         .build()
         );
-
         answer.updateAnswerBuilder()
                 .content(answerUpdateRequest.getContent()).build();
         return answer.getId();
@@ -158,7 +156,6 @@ public class InquiryServiceImpl implements InquiryService {
                         .status(HttpStatus.BAD_REQUEST)
                         .build()
         );
-
         answerRepository.delete(answer);
     }
 }

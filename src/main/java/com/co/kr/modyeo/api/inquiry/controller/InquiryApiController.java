@@ -28,6 +28,7 @@ public class InquiryApiController {
     @ApiOperation(value="문의사항 Index 페이지 API(어드민)")
     public ResponseEntity<?> getInquiryIndexPage(InquirySearch inquirySearch){
         Slice<InquiryResponse> inquiryResponseSlice = inquiryService.getInquiryIndexPage(inquirySearch);
+
         return ResponseHandler.generate()
                 .status(HttpStatus.OK)
                 .data(inquiryResponseSlice)
@@ -38,6 +39,7 @@ public class InquiryApiController {
     @ApiOperation(value = "문의사항 조회 API(어드민)")
     public ResponseEntity<?> getInquiries(InquirySearch inquirySearch) {
         Slice<InquiryResponse> inquiryResponseSlice = inquiryService.getSelectedInquiries(inquirySearch);
+
         return ResponseHandler.generate()
                 .status(HttpStatus.OK)
                 .data(inquiryResponseSlice)
@@ -61,6 +63,7 @@ public class InquiryApiController {
     @ApiOperation(value = "문의사항 작성 API")
     public ResponseEntity<?> createInquiry(@RequestBody @Valid InquiryCreateRequest InquiryCreateRequest) {
         Long inquiryId = inquiryService.createInquiry(InquiryCreateRequest);
+
         return ResponseHandler.generate()
                 .status(HttpStatus.CREATED)
                 .data(inquiryId)
@@ -72,6 +75,7 @@ public class InquiryApiController {
     @PatchMapping(value = "/inquiry")
     public ResponseEntity<?> updateInquiry(@RequestBody @Valid InquiryUpdateRequest InquiryUpdateRequest) {
         Long inquiryId = inquiryService.updateInquiry(InquiryUpdateRequest).getId();
+
         return ResponseHandler.generate()
                 .status(HttpStatus.OK)
                 .data(inquiryId)
@@ -83,6 +87,7 @@ public class InquiryApiController {
     @DeleteMapping(value = "/inquiry/{inquiry_id}")
     public ResponseEntity<?> deleteInquiry(@PathVariable(name = "inquiry_id") Long id) {
         inquiryService.deleteInquiry(id);
+
         return ResponseHandler.generate()
                 .status(HttpStatus.NO_CONTENT)
                 .data(null)
@@ -93,6 +98,7 @@ public class InquiryApiController {
     @GetMapping(value = "/answer/{answer_id}")
     public ResponseEntity<?> getAnswer(@PathVariable(name = "answer_id") Long id){
         AnswerDetail answerDetail = inquiryService.getAnswer(id);
+
         return ResponseHandler.generate()
                 .status(HttpStatus.OK)
                 .data(answerDetail)
@@ -104,6 +110,7 @@ public class InquiryApiController {
     public ResponseEntity<?> createAnswer(@RequestBody @Valid AnswerCreateRequest answerCreateRequest) {
         //Answer answer = inquiryService.createAnswer(answerRequest);
         Long answerId = inquiryService.createAnswer(answerCreateRequest);
+
         return ResponseHandler.generate()
                 .status(HttpStatus.CREATED)
                 .data(answerId)
@@ -115,6 +122,7 @@ public class InquiryApiController {
     public ResponseEntity<?> updateAnswer(@RequestBody @Valid AnswerUpdateRequest answerUpdateRequest) {
         //Answer answer = inquiryService.updateAnswer(answerRequest);
         Long answerId = inquiryService.updateAnswer(answerUpdateRequest);
+
         return ResponseHandler.generate()
                 .status(HttpStatus.OK)
                 .data(answerId)
@@ -125,6 +133,7 @@ public class InquiryApiController {
     @DeleteMapping(value = "/answer/{answer_id}")
     public ResponseEntity<?> deleteAnswer(@PathVariable(name = "answer_id") Long id) {
         inquiryService.deleteAnswer(id);
+
         return ResponseHandler.generate()
                 .status(HttpStatus.NO_CONTENT)
                 .data(null)
