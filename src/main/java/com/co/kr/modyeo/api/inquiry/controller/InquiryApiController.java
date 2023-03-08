@@ -103,10 +103,10 @@ public class InquiryApiController {
     @PostMapping(value = "/answer")
     public ResponseEntity<?> createAnswer(@RequestBody @Valid AnswerCreateRequest answerCreateRequest) {
         //Answer answer = inquiryService.createAnswer(answerRequest);
-        Long inquiryId = inquiryService.createAnswer(answerCreateRequest);
+        Long answerId = inquiryService.createAnswer(answerCreateRequest);
         return ResponseHandler.generate()
                 .status(HttpStatus.CREATED)
-                .data(inquiryId)
+                .data(answerId)
                 .build();
     }
 
@@ -114,10 +114,10 @@ public class InquiryApiController {
     @PatchMapping(value = "/answer")
     public ResponseEntity<?> updateAnswer(@RequestBody @Valid AnswerUpdateRequest answerUpdateRequest) {
         //Answer answer = inquiryService.updateAnswer(answerRequest);
-        Long inquiryId = inquiryService.updateAnswer(answerUpdateRequest);
+        Long answerId = inquiryService.updateAnswer(answerUpdateRequest);
         return ResponseHandler.generate()
                 .status(HttpStatus.OK)
-                .data(inquiryId)
+                .data(answerId)
                 .build();
     }
 
