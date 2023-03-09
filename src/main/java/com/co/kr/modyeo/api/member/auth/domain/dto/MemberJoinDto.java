@@ -35,13 +35,13 @@ public class MemberJoinDto {
     @DateTimeFormat(pattern = "yyyyMMdd")
     private LocalDate birthDay;
 
-    @NotNull
+    @NotNull(message = "수집정보동의여부는 필수입니다.")
     private List<CollectionInfoDto> collectionInfoList;
 
-    @NotNull
+    @NotNull(message = "카테고리 선택은 필수입니다.")
     private List<Long> categoryIdList;
 
-    @NotNull
+    @NotNull(message = "활동지역 선택은 필수입니다.")
     private List<EmdAreaDto> emdAreaList;
 
     public MemberJoinDto(String email, String password) {
