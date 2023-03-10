@@ -21,10 +21,10 @@ public class TeamCreateRequest {
 
     private String profilePath;
 
-    @NotNull
+    @NotNull(message = "카테고리 선택은 필수 입니다.")
     private List<Long> categoryIdList = new ArrayList<>();
 
-    @NotNull
+    @NotNull(message = "활동지역 선택은 필수 입니다.")
     private List<EmdAreaDto> emdAreaList = new ArrayList<>();
 
     @Builder

@@ -25,6 +25,7 @@ import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
 import com.co.kr.modyeo.common.provider.JwtTokenProvider;
 import com.co.kr.modyeo.common.result.JsonResultData;
 import com.co.kr.modyeo.common.util.ModyeoMailSender;
+import com.co.kr.modyeo.common.util.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -202,6 +204,32 @@ public class AuthServiceImpl implements AuthService {
         return memberRepository.existsByNickname(nickname) ? "disable" : "enable";
     }
 
+    @Override
+    public boolean tokenValid(TokenRequestDto tokenRequestDto) {
+        boolean isActive = true;
+        Authentication authentication = jwtTokenProvider.getAuthentication(tokenRequestDto.getAccessToken());
+
+        Long expiration = jwtTokenProvider.getExpiration(tokenRequestDto.getAccessToken());
+        if (expiration <= 0){
+            isActive = false;
+        }
+
+        Optional<Member> optionalMember = memberRepository.findById(Long.valueOf(authentication.getName()));
+        if (optionalMember.isPresent()){
+            Member member = optionalMember.get();
+            if (!tokenRequestDto.getAccessToken().equals(member.getLastAccessToken())) isActive = false;
+        }else {
+            isActive = false;
+        }
+
+        String refreshToken = redisTemplate.opsForValue().get("RT:" + authentication.getName());
+        if (refreshToken == null || !refreshToken.equals(tokenRequestDto.getRefreshToken())) {
+            isActive = false;
+        }
+
+        return isActive;
+    }
+
     private TokenDto getTokenDto(Authentication authentication) {
         TokenDto tokenDto = jwtTokenProvider.generateTokenDto(authentication);
 
@@ -211,7 +239,7 @@ public class AuthServiceImpl implements AuthService {
                         tokenDto.getAccessTokenExpiresIn(),
                         TimeUnit.MILLISECONDS);
 
-        Optional<Member> optionalMember = memberRepository.findByEmail(authentication.getName());
+        Optional<Member> optionalMember = memberRepository.findById(Long.valueOf(authentication.getName()));
         if (optionalMember.isPresent()) {
             Member member = optionalMember.get();
             member.changeLastAccessToken(tokenDto.getAccessToken());

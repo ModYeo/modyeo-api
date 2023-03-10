@@ -16,4 +16,6 @@ public interface AuthService {
     void authMail(String email, String authNumber);
 
     String checkOverlapNickname(String nickname);
+
+    boolean tokenValid(TokenRequestDto tokenRequestDto);
 }

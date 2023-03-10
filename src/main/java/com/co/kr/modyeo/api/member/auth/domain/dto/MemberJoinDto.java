@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,10 +35,13 @@ public class MemberJoinDto {
     @DateTimeFormat(pattern = "yyyyMMdd")
     private LocalDate birthDay;
 
+    @NotNull(message = "수집정보동의여부는 필수입니다.")
     private List<CollectionInfoDto> collectionInfoList;
 
+    @NotNull(message = "카테고리 선택은 필수입니다.")
     private List<Long> categoryIdList;
 
+    @NotNull(message = "활동지역 선택은 필수입니다.")
     private List<EmdAreaDto> emdAreaList;
 
     public MemberJoinDto(String email, String password) {
