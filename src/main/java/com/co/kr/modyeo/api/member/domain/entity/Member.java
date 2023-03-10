@@ -1,6 +1,5 @@
 package com.co.kr.modyeo.api.member.domain.entity;
 
-import com.co.kr.modyeo.api.member.collection.domain.entity.CollectionInfo;
 import com.co.kr.modyeo.api.member.domain.entity.link.MemberActiveArea;
 import com.co.kr.modyeo.api.member.domain.entity.link.MemberCategory;
 import com.co.kr.modyeo.api.member.domain.entity.link.MemberCollectionInfo;
@@ -12,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
@@ -23,6 +23,7 @@ import java.util.List;
 @Getter
 @Table(name = "MEMBER")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicUpdate
 public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

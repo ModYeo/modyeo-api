@@ -163,4 +163,14 @@ public class AuthController {
                 .data(result)
                 .build();
     }
+
+    @ApiOperation(value = "토큰 유효 여부 확인 API")
+    @PostMapping("/token/valid")
+    public ResponseEntity<?> tokenValid(@Valid @RequestBody TokenRequestDto tokenRequestDto) {
+        boolean isActive = authService.tokenValid(tokenRequestDto);
+        return ResponseHandler.generate()
+                .data(isActive)
+                .status(HttpStatus.OK)
+                .build();
+    }
 }
