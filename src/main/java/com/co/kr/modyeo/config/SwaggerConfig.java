@@ -1,5 +1,8 @@
 package com.co.kr.modyeo.config;
 
+import com.co.kr.modyeo.api.report.domain.dto.ReportResponse;
+import com.fasterxml.classmate.TypeResolver;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -20,7 +23,9 @@ import java.util.Set;
 
 @Configuration
 @EnableWebMvc
+@RequiredArgsConstructor
 public class SwaggerConfig {
+    private final TypeResolver typeResolver;
 
     private ApiInfo swaggerInfo() {
         return new ApiInfoBuilder()
@@ -32,6 +37,9 @@ public class SwaggerConfig {
     @Bean
     public Docket swaggerApi() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .additionalModels(
+                        typeResolver.resolve(ReportResponse.class)
+                )
                 .consumes(getConsumeContentTypes())
                 .produces(getProduceContentTypes())
                 .apiInfo(swaggerInfo())
