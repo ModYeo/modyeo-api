@@ -9,6 +9,7 @@ import com.co.kr.modyeo.api.report.domain.enumuerate.ReportType;
 import com.co.kr.modyeo.api.report.service.ReportService;
 import com.co.kr.modyeo.common.result.JsonResultData;
 import com.co.kr.modyeo.common.result.ResponseHandler;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Api(tags = "01. Report 서비스", description = "신고 서비스")
 @RestController
 @RequestMapping("/api/report")
 @RequiredArgsConstructor
