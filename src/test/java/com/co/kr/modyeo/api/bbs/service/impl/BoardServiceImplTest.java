@@ -5,10 +5,15 @@ import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleUpdateRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
+import com.co.kr.modyeo.api.bbs.repository.ArticleRecommendRepository;
 import com.co.kr.modyeo.api.bbs.repository.ArticleRepository;
+import com.co.kr.modyeo.api.bbs.repository.ReplyRecommendRepository;
 import com.co.kr.modyeo.api.bbs.repository.ReplyRepository;
 import com.co.kr.modyeo.api.bbs.service.BoardService;
+import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.category.repository.CategoryRepository;
+import com.co.kr.modyeo.api.member.repository.MemberRepository;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,10 +47,33 @@ class BoardServiceImplTest {
     @Mock
     private CategoryRepository categoryRepository;
 
+    @Mock
+    private MemberRepository memberRepository;
+
+    @Mock
+    private ArticleRecommendRepository articleRecommendRepository;
+
+    @Mock
+    private ReplyRecommendRepository replyRecommendRepository;
+
+    Category FIXTURE_CAT_01 = Category.of()
+            .id(1L)
+            .name("테스트 카테고리")
+            .imagePath("String")
+            .useYn(Yn.Y)
+            .build();
+
+    Article FIXTURE_ART_01 = Article.of()
+            .id(1L)
+                .title("test")
+                .content("test")
+                .category(FIXTURE_CAT_01)
+                .build();
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        //boardService = new BoardServiceImpl(articleRepository,replyRepository,categoryRepository);
+        boardService = new BoardServiceImpl(articleRepository,replyRepository,categoryRepository,memberRepository,articleRecommendRepository,replyRecommendRepository);
     }
 
     @Test
@@ -169,4 +197,11 @@ class BoardServiceImplTest {
 
         assertThat(article.getRecommendCount()).isEqualTo(0L);
     }*/
+
+    @Test
+    void getArticleSuccess() {
+        given(articleRepository.findArticle(any())).willReturn(FIXTURE_ART_01);
+        Article article = articleRepository.findArticle(1L);
+
+    }
 }

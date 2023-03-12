@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.api.bbs.repository.custom;
 
+import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
@@ -14,4 +15,6 @@ public interface ArticleCustomRepository {
     List<Article> findArticleByEmail(Long memberId);
 
     List<Article> findArticleByEmailAndRecommendY(Long memberId);
+
+    Article findArticle(Long id);
 }

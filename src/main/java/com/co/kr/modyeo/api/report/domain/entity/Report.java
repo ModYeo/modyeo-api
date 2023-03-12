@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.api.report.domain.entity;
 
+import com.co.kr.modyeo.api.report.domain.enumuerate.ReportReason;
 import com.co.kr.modyeo.api.report.domain.enumuerate.ReportStatus;
 import com.co.kr.modyeo.api.report.domain.enumuerate.ReportType;
 import com.co.kr.modyeo.common.entity.BaseEntity;

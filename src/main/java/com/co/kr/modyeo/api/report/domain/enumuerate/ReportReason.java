@@ -1,4 +1,4 @@
-package com.co.kr.modyeo.api.report.domain.entity;
+package com.co.kr.modyeo.api.report.domain.enumuerate;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

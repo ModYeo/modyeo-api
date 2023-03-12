@@ -1,10 +1,7 @@
 package com.co.kr.modyeo.api.bbs.service.impl;
 
 import com.co.kr.modyeo.api.bbs.domain.dto.request.*;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyDetail;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyResponse;
+import com.co.kr.modyeo.api.bbs.domain.dto.response.*;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.api.bbs.domain.entity.Reply;
@@ -73,23 +70,19 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     @Override
     public ArticleDetail getArticle(Long id) {
-        Article article = articleRepository.findById(id).orElseThrow(
-                () -> ApiException.builder()
-                        .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
-                        .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
-                        .status(HttpStatus.BAD_REQUEST)
-                        .build());
+        //게시글 조회
+        Article article = articleRepository.findArticle(id);
 
-        Member member = memberRepository.findById(article.getCreatedBy()).orElseThrow(
-                () -> ApiException.builder()
-                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
-                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
-                        .status(HttpStatus.BAD_REQUEST)
-                        .build());
+        //게시글 조횟 수 증가
+        article.plusHitCount();
+
+        Member member = findMember(article.getCreatedBy());
 
         ArticleDetail articleDetail = ArticleDetail.toDto(article);
         articleDetail.setMember(ArticleDetail.Member.toDto(member));
-        article.plusHitCount();
+
+        List<ReplyResponse> replyResponses = replyRepository.findByArticleId(id);
+        articleDetail.setReplyResponses(replyResponses);
 
         return articleDetail;
     }
@@ -97,12 +90,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public Long updateArticle(ArticleUpdateRequest articleUpdateRequest) {
-        Article article = articleRepository.findById(articleUpdateRequest.getArticleId()).orElseThrow(
-                () -> ApiException.builder()
-                        .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
-                        .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
-                        .status(HttpStatus.BAD_REQUEST)
-                        .build());
+        Article article = findArticle(articleUpdateRequest.getArticleId());
 
         Category category = categoryRepository.findById(articleUpdateRequest.getCategoryId()).orElseThrow(
                 () -> ApiException.builder()
@@ -125,12 +113,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public void deleteArticle(Long articleId) {
-        Article article = articleRepository.findById(articleId).orElseThrow(
-                () -> ApiException.builder()
-                        .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
-                        .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
-                        .status(HttpStatus.BAD_REQUEST)
-                        .build());
+        Article article = findArticle(articleId);
 
         articleRepository.delete(article);
     }
@@ -138,12 +121,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public Long createReply(ReplyRequest replyRequest) {
-        Article article = articleRepository.findById(replyRequest.getArticleId()).orElseThrow(
-                () -> ApiException.builder()
-                        .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
-                        .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
-                        .status(HttpStatus.BAD_REQUEST)
-                        .build());
+        Article article = findArticle(replyRequest.getArticleId());
 
         Reply reply = replyRequest.getReplyDepth() == 0 ?
                 ReplyRequest.toReply(replyRequest, article) : ReplyRequest.toNestedReply(replyRequest, article);
@@ -200,19 +178,9 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public void updateArticleRecommend(ArticleRecommendRequest articleRecommendRequest) {
-        Member member = memberRepository.findById(articleRecommendRequest.getMemberId()).orElseThrow(
-                () -> ApiException.builder()
-                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
-                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
-                        .status(HttpStatus.BAD_REQUEST)
-                        .build());
+        Member member = findMember(articleRecommendRequest.getMemberId());
 
-        Article article = articleRepository.findById(articleRecommendRequest.getArticleId()).orElseThrow(
-                () -> ApiException.builder()
-                        .errorMessage(BoardErrorCode.NOT_FOUND_REPLY.getMessage())
-                        .errorCode(BoardErrorCode.NOT_FOUND_REPLY.getCode())
-                        .status(HttpStatus.BAD_REQUEST)
-                        .build());
+        Article article = findArticle(articleRecommendRequest.getArticleId());
 
         ArticleRecommend findArticleRecommend = articleRecommendRepository.findByMemberAndArticle(member, article);
 
@@ -237,12 +205,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public void updateReplyRecommend(ReplyRecommendRequest replyRecommendRequest) {
-        Member member = memberRepository.findById(replyRecommendRequest.getMemberId()).orElseThrow(
-                () -> ApiException.builder()
-                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
-                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
-                        .status(HttpStatus.BAD_REQUEST)
-                        .build());
+        Member member = findMember(replyRecommendRequest.getMemberId());
 
         Reply reply = replyRepository.findById(replyRecommendRequest.getReplyId()).orElseThrow(
                 () -> ApiException.builder()
@@ -277,5 +240,23 @@ public class BoardServiceImpl implements BoardService {
         return articleRepository.findArticleByEmailAndRecommendY(memberId).stream()
                 .map(ArticleResponse::toDto)
                 .collect(Collectors.toList());
+    }
+
+    private Member findMember(Long memberId){
+        return memberRepository.findById(memberId).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
+                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+    }
+
+    private Article findArticle(Long articleId){
+        return articleRepository.findById(articleId).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
+                        .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
     }
 }

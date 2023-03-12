@@ -1,7 +1,7 @@
 package com.co.kr.modyeo.api.report.domain.dto;
 
 import com.co.kr.modyeo.api.report.domain.entity.Report;
-import com.co.kr.modyeo.api.report.domain.entity.ReportReason;
+import com.co.kr.modyeo.api.report.domain.enumuerate.ReportReason;
 import com.co.kr.modyeo.api.report.domain.enumuerate.ReportStatus;
 import com.co.kr.modyeo.api.report.domain.enumuerate.ReportType;
 import lombok.Builder;
