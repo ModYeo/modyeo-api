@@ -37,3 +37,6 @@ out/
 .vscode/
 
 application-*.yml
+
+docker/mysql/**
+docker/redis/**
