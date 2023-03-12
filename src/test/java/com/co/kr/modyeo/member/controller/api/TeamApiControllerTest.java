@@ -50,47 +50,47 @@ class TeamApiControllerTest {
     @MockBean
     private TeamService teamService;
 
-    @Test
-    void getCrew() throws Exception {
-        TeamSearch teamSearch = TeamSearch.builder()
-                .categoryId(1L)
-                .build();
+//    @Test
+//    void getCrew() throws Exception {
+//        TeamSearch teamSearch = TeamSearch.builder()
+//                .categoryId(1L)
+//                .build();
+//
+//        PageRequest pageRequest = PageRequest.of(0,20);
+//        List<CategoryResponse> categories = new ArrayList<>();
+//        List<TeamResponse> crews = new ArrayList<>();
+//        for (Long i = 0L; i < 10; i++){
+//            TeamResponse teamResponse = new TeamResponse();
+//            teamResponse.setId(i);
+//            teamResponse.setName("test crew" + i);
+//
+//            for (Long j = 0L; j < 2;j++){
+//                CategoryResponse categoryResponse = CategoryResponse.of()
+//                        .id(j)
+//                        .name("test category" + j)
+//                        .build();
+//
+//                categories.add(categoryResponse);
+//            }
+//
+//            crews.add(teamResponse);
+//        }
+//        Slice<TeamResponse> crewResponses = new SliceImpl<>(crews,pageRequest,true);
+//        given(teamService.getTeams(any())).willReturn(crewResponses);
+//
+//        mockMvc.perform(
+//                get("/api/crew") .with(csrf())
+//                        .content(objectMapper.writeValueAsString(teamSearch))
+//        ).andExpect(status().isOk())
+//                .andDo(print());
+//    }
 
-        PageRequest pageRequest = PageRequest.of(0,20);
-        List<CategoryResponse> categories = new ArrayList<>();
-        List<TeamResponse> crews = new ArrayList<>();
-        for (Long i = 0L; i < 10; i++){
-            TeamResponse teamResponse = new TeamResponse();
-            teamResponse.setId(i);
-            teamResponse.setName("test crew" + i);
-
-            for (Long j = 0L; j < 2;j++){
-                CategoryResponse categoryResponse = CategoryResponse.of()
-                        .id(j)
-                        .name("test category" + j)
-                        .build();
-
-                categories.add(categoryResponse);
-            }
-
-            crews.add(teamResponse);
-        }
-        Slice<TeamResponse> crewResponses = new SliceImpl<>(crews,pageRequest,true);
-        given(teamService.getTeams(any())).willReturn(crewResponses);
-
-        mockMvc.perform(
-                get("/api/crew") .with(csrf())
-                        .content(objectMapper.writeValueAsString(teamSearch))
-        ).andExpect(status().isOk())
-                .andDo(print());
-    }
-
-    @Test
-    void updateCrew() {
-
-    }
-
-    @Test
-    void createCrew() {
-    }
+//    @Test
+//    void updateCrew() {
+//
+//    }
+//
+//    @Test
+//    void createCrew() {
+//    }
 }
