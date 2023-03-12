@@ -10,6 +10,9 @@ import com.co.kr.modyeo.api.report.service.ReportService;
 import com.co.kr.modyeo.common.result.JsonResultData;
 import com.co.kr.modyeo.common.result.ResponseHandler;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +49,13 @@ public class ReportController {
 
     @ApiOperation(value = "신고 목록 조회 API(어드민)")
     @GetMapping("/type/{type}")
+    @ApiResponse(
+            responseCode = "200",
+            description = "성공",
+            content = @Content(
+                    schema = @Schema(implementation = ReportResponse.class)
+            )
+    )
     public ResponseEntity<?> getReports(@PathVariable ReportType type){
         List<ReportResponse> responseList = reportService.getReports(type);
         return ResponseHandler.generate()
