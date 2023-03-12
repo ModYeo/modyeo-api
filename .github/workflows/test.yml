@@ -3,7 +3,7 @@ name: Test
 on:
   pull_request:
     branches:
-      - main
+      - develop
 
 jobs:
   build-and-test:
@@ -19,4 +19,3 @@ jobs:
         run: chmod +x gradlew
       - name: Test With Gradle
         run: ./gradlew test
-
