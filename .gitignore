@@ -36,4 +36,7 @@ out/
 ### VS Code ###
 .vscode/
 
-*.yml
+application-*.yml
+
+docker/mysql/**
+docker/redis/**

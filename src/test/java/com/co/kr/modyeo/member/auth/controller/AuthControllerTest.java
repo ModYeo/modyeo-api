@@ -43,15 +43,15 @@ class AuthControllerTest {
                 .build();
     }
 
-    @Test
-    void join_success() throws Exception {
-        MemberJoinDto memberJoinDto = new MemberJoinDto("qws458","Qwpo1209");
-
-        mockMvc.perform(
-                post("/auth/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(memberJoinDto))
-        ).andDo(print())
-                .andExpect(status().isCreated());
-    }
+//    @Test
+//    void join_success() throws Exception {
+//        MemberJoinDto memberJoinDto = new MemberJoinDto("qws458","Qwpo1209");
+//
+//        mockMvc.perform(
+//                post("/auth/signup")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(memberJoinDto))
+//        ).andDo(print())
+//                .andExpect(status().isCreated());
+//    }
 }

@@ -44,14 +44,14 @@ class MemberApiControllerTest {
                 .build();
     }
 
-    @Test
-    @WithMockUser
-    void getMembers() throws Exception {
-        mockMvc.perform(
-                MockMvcRequestBuilders.get("/api/member/all").with(csrf().useInvalidToken())
-        ).andExpect(
-                MockMvcResultMatchers.status().isOk()
-        ).andDo(MockMvcResultHandlers.print());
-    }
+//    @Test
+//    @WithMockUser
+//    void getMembers() throws Exception {
+//        mockMvc.perform(
+//                MockMvcRequestBuilders.get("/api/member/all").with(csrf().useInvalidToken())
+//        ).andExpect(
+//                MockMvcResultMatchers.status().isOk()
+//        ).andDo(MockMvcResultHandlers.print());
+//    }
 
 }

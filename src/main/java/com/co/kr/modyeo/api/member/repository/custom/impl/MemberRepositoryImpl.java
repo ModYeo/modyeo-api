@@ -36,6 +36,7 @@ public class MemberRepositoryImpl extends Querydsl4RepositorySupport implements 
                 .innerJoin(member.memberActiveAreaList, memberActiveArea)
                 .fetchJoin()
                 .where(memberIdEq(memberId))
+                .distinct()
                 .fetchOne());
 
     }
