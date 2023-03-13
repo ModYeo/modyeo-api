@@ -8,6 +8,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Data
@@ -43,7 +44,9 @@ public class TeamResponse {
                 .name(team.getName())
                 .description(team.getDescription())
                 .profilePath(team.getProfilePath())
-                .categoryResponses(team.getCategoryList().stream().map(crewCategory -> CategoryResponse.of()
+                .categoryResponses(team.getCategoryList().stream()
+                        .filter(Objects::nonNull)
+                        .map(crewCategory -> CategoryResponse.of()
                         .id(crewCategory.getCategory().getId())
                         .name(crewCategory.getCategory().getName())
                         .build()).collect(Collectors.toList()))

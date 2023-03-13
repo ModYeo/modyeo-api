@@ -11,6 +11,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Data
@@ -80,11 +81,10 @@ public class TeamArticleDetail {
                 .content(teamArticle.getContent())
                 .isHidden(teamArticle.getIsHidden())
                 .hitCount(teamArticle.getHitCount())
-                .recommendCount(teamArticle.getTeamArticleRecommendList().size())
+                .recommendCount(teamArticle.getRecommendCount())
                 .createdBy(teamArticle.getCreatedBy())
                 .createdTime(teamArticle.getCreatedDate())
-                .replyResponses(teamArticle.getTeamReplyList().stream().map(TeamReplyResponse::toDto).collect(Collectors.toList()))
-                .articleRecommends(teamArticle.getTeamArticleRecommendList().stream().map(TeamArticleRecommendResponse::toDto).collect(Collectors.toList()))
+                .articleRecommends(teamArticle.getTeamArticleRecommendList().stream().filter(Objects::nonNull).map(TeamArticleRecommendResponse::toDto).collect(Collectors.toList()))
                 .build();
     }
 

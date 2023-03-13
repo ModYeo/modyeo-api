@@ -68,12 +68,15 @@ public class TeamBoardServiceImpl implements TeamBoardService {
     @Override
     @Transactional
     public TeamArticleDetail getTeamArticle(Long teamArticleId) {
-        TeamArticle teamArticle = teamArticleRepository.findById(teamArticleId)
+        //TODO:: 성능 개선 필요
+        TeamArticle teamArticle = teamArticleRepository.findTeamArticle(teamArticleId)
                 .orElseThrow(() -> ApiException.builder()
                         .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
                         .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
+
+        teamArticle.plusHitCount();
 
         Member member = memberRepository.findById(teamArticle.getCreatedBy()).orElseThrow(
                 () -> ApiException.builder()
@@ -82,9 +85,12 @@ public class TeamBoardServiceImpl implements TeamBoardService {
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
 
-        teamArticle.plusHitCount();
+
         TeamArticleDetail teamArticleDetail = TeamArticleDetail.toDto(teamArticle);
         teamArticleDetail.setMember(TeamArticleDetail.Member.toDto(member));
+
+        List<TeamReplyResponse> replyResponses = teamReplyRepository.findByTeamArticleId(teamArticleId);
+        teamArticleDetail.setReplyResponses(replyResponses);
 
         return teamArticleDetail;
     }
