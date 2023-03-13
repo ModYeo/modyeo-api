@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ArticleCustomRepository {
     Slice<ArticleResponse> searchArticle(ArticleSearch articleSearch, PageRequest pageRequest);
@@ -16,5 +17,5 @@ public interface ArticleCustomRepository {
 
     List<Article> findArticleByEmailAndRecommendY(Long memberId);
 
-    Article findArticle(Long id);
+    Optional<Article> findArticle(Long id);
 }

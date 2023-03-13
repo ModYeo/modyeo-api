@@ -8,6 +8,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Data
@@ -84,7 +85,7 @@ public class ArticleDetail {
                 .recommendCount(article.getRecommendCount())
                 .createdBy(article.getCreatedBy())
                 .createdTime(article.getCreatedDate())
-                .articleRecommends(article.getArticleRecommendList().stream().map(ArticleRecommendResponse::toDto).collect(Collectors.toList()))
+                .articleRecommends(article.getArticleRecommendList().stream().filter(Objects::nonNull).map(ArticleRecommendResponse::toDto).collect(Collectors.toList()))
                 .build();
     }
 

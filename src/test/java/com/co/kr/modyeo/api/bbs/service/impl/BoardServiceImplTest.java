@@ -1,11 +1,10 @@
 package com.co.kr.modyeo.api.bbs.service.impl;
 
-import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleCreateRequest;
-import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleUpdateRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
-import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
+import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
+import com.co.kr.modyeo.api.bbs.domain.entity.TeamReply;
 import com.co.kr.modyeo.api.bbs.repository.ArticleRecommendRepository;
 import com.co.kr.modyeo.api.bbs.repository.ArticleRepository;
 import com.co.kr.modyeo.api.bbs.repository.ReplyRecommendRepository;
@@ -13,8 +12,13 @@ import com.co.kr.modyeo.api.bbs.repository.ReplyRepository;
 import com.co.kr.modyeo.api.bbs.service.BoardService;
 import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.category.repository.CategoryRepository;
+import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.common.enumerate.Yn;
+import com.co.kr.modyeo.common.exception.ApiException;
+import com.co.kr.modyeo.common.exception.code.BoardErrorCode;
+import com.co.kr.modyeo.common.exception.code.CategoryErrorCode;
+import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,15 +28,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.http.HttpStatus;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class BoardServiceImplTest {
@@ -66,16 +72,34 @@ class BoardServiceImplTest {
 
     Article FIXTURE_ART_01 = Article.of()
             .id(1L)
-                .title("test")
-                .content("test")
-                .category(FIXTURE_CAT_01)
-                .hitCount(1L)
-                .build();
+            .title("test")
+            .content("test")
+            .category(FIXTURE_CAT_01)
+            .hitCount(1L)
+            .articleRecommendList(new ArrayList<>())
+            .build();
+
+    Member FIXTURE_MEM_01 = Member.of()
+            .id(1L)
+            .nickname("tester")
+            .email("test@qweqwe.com")
+            .build();
+
+    ReplyResponse FIXTURE_REPLY_01 = ReplyResponse.of()
+            .replyId(1L)
+            .articleId(1L)
+            .member(ReplyResponse.Member.of()
+                    .memberId(1L)
+                    .nickname("tester")
+                    .email("test@qweqwe.com")
+                    .build())
+            .content("test")
+            .build();
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        boardService = new BoardServiceImpl(articleRepository,replyRepository,categoryRepository,memberRepository,articleRecommendRepository,replyRecommendRepository);
+        boardService = new BoardServiceImpl(articleRepository, replyRepository, categoryRepository, memberRepository, articleRecommendRepository, replyRecommendRepository);
     }
 
     @Test
@@ -93,8 +117,8 @@ class BoardServiceImplTest {
                 .build();
 
         articleList.add(article);
-        PageRequest pageRequest = PageRequest.of(0,10);
-        Slice<Article> articles = new SliceImpl<>(articleList,pageRequest,false);
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        Slice<Article> articles = new SliceImpl<>(articleList, pageRequest, false);
 
 //        given(articleRepository.searchArticle(any(),any())).willReturn(articles);
 //        Slice<ArticleResponse> articleResponses = boardService.getArticles(articleRequest);
@@ -202,9 +226,43 @@ class BoardServiceImplTest {
 
     @Test
     void getArticleSuccess() {
-        given(articleRepository.findArticle(any())).willReturn(FIXTURE_ART_01);
+        given(articleRepository.findArticle(any())).willReturn(Optional.ofNullable(FIXTURE_ART_01));
+        given(memberRepository.findById(any())).willReturn(Optional.ofNullable(FIXTURE_MEM_01));
+        given(replyRepository.findByArticleId(any())).willReturn(List.of(FIXTURE_REPLY_01));
         ArticleDetail article = boardService.getArticle(1L);
 
+        assertThat(article.getArticleId()).isEqualTo(1L);
+        assertThat(article.getReplyResponses().size()).isEqualTo(1);
+        assertThat(article.getReplyResponses().get(0).getMember().getNickname()).isEqualTo("tester");
+        assertThat(article.getHitCount()).isEqualTo(2L);
+    }
 
+    @Test
+    void getArticleNotFound(){
+        given(articleRepository.findArticle(any())).willThrow(ApiException.builder()
+                .status(HttpStatus.BAD_REQUEST)
+                .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
+                .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
+                .status(HttpStatus.BAD_REQUEST)
+                .build());
+
+        assertThatThrownBy(() -> {
+            boardService.getArticle(1L);
+        }).isInstanceOf(Exception.class).hasMessageContaining(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage());
+    }
+
+
+    @Test
+    void getArticleNotFoundMember(){
+        given(articleRepository.findArticle(any())).willReturn(Optional.ofNullable(FIXTURE_ART_01));
+        given(memberRepository.findById(any())).willThrow(ApiException.builder()
+                .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
+                .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
+                .status(HttpStatus.BAD_REQUEST)
+                .build());
+
+        assertThatThrownBy(() -> {
+            boardService.getArticle(1L);
+        }).isInstanceOf(Exception.class).hasMessageContaining(MemberErrorCode.NOT_FOUND_MEMBER.getMessage());
     }
 }

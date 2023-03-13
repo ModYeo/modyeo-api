@@ -70,8 +70,13 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     @Override
     public ArticleDetail getArticle(Long id) {
+        //TODO: 쿼리 최적화 필요
         //게시글 조회
-        Article article = articleRepository.findArticle(id);
+        Article article = articleRepository.findArticle(id).orElseThrow(() -> ApiException.builder()
+                .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
+                .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
+                .status(HttpStatus.BAD_REQUEST)
+                .build());
 
         //게시글 조횟 수 증가
         article.plusHitCount();

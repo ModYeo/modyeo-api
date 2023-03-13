@@ -19,6 +19,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.co.kr.modyeo.api.bbs.domain.entity.QArticle.article;
 import static com.co.kr.modyeo.api.bbs.domain.entity.QReply.reply;
@@ -81,12 +82,12 @@ public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements
     }
 
     @Override
-    public Article findArticle(Long id) {
-        return selectFrom(article)
+    public Optional<Article> findArticle(Long id) {
+        return Optional.ofNullable(selectFrom(article)
                 .innerJoin(article.category, category)
                 .fetchJoin()
                 .where(articleIdEq(id))
-                .fetchOne();
+                .fetchOne());
     }
 
     private BooleanExpression articleIdEq(Long articleId) {
