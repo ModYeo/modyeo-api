@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.bbs.service.impl;
 
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleCreateRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.ArticleUpdateRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
@@ -68,6 +69,7 @@ class BoardServiceImplTest {
                 .title("test")
                 .content("test")
                 .category(FIXTURE_CAT_01)
+                .hitCount(1L)
                 .build();
 
     @BeforeEach
@@ -201,7 +203,8 @@ class BoardServiceImplTest {
     @Test
     void getArticleSuccess() {
         given(articleRepository.findArticle(any())).willReturn(FIXTURE_ART_01);
-        Article article = articleRepository.findArticle(1L);
+        ArticleDetail article = boardService.getArticle(1L);
+
 
     }
 }
