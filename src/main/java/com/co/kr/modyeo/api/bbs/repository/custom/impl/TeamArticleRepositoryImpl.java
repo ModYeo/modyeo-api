@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.bbs.repository.custom.impl;
 
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleResponse;
+import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamReplyResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.TeamArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamArticle;
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamReply;
@@ -9,6 +10,7 @@ import com.co.kr.modyeo.api.bbs.repository.custom.TeamArticleCustomRepository;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
 import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
@@ -17,11 +19,13 @@ import org.springframework.data.domain.Slice;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.co.kr.modyeo.api.bbs.domain.entity.QArticle.article;
 import static com.co.kr.modyeo.api.bbs.domain.entity.QTeamArticle.teamArticle;
 import static com.co.kr.modyeo.api.bbs.domain.entity.QTeamReply.teamReply;
 import static com.co.kr.modyeo.api.bbs.domain.entity.link.QArticleRecommend.articleRecommend;
+import static com.co.kr.modyeo.api.category.domain.entity.QCategory.category;
 import static com.co.kr.modyeo.api.member.domain.entity.QMember.member;
 import static com.co.kr.modyeo.api.bbs.domain.entity.link.QTeamArticleRecommend.teamArticleRecommend;
 import static com.co.kr.modyeo.api.team.domain.entity.QTeam.team;
@@ -81,6 +85,24 @@ public class TeamArticleRepositoryImpl extends Querydsl4RepositorySupport implem
                 .where(createdByEq(memberId),
                         teamArticleRecommend.recommendYn.eq(Yn.Y))
                 .fetch();
+    }
+
+    @Override
+    public Optional<TeamArticle> findTeamArticle(Long teamArticleId) {
+        return Optional.ofNullable(selectFrom(teamArticle)
+                .innerJoin(teamArticle.team, team)
+                .fetchJoin()
+                .where(articleIdEq(teamArticleId))
+                .fetchOne());
+    }
+
+    @Override
+    public List<TeamReplyResponse> findByArticleId(Long teamArticleId) {
+        return null;
+    }
+
+    private BooleanExpression articleIdEq(Long teamArticleId) {
+        return teamArticleId != null && teamArticleId > 0 ? teamArticle.id.eq(teamArticleId) : null;
     }
 
     private BooleanExpression createdByEq(Long memberId) {

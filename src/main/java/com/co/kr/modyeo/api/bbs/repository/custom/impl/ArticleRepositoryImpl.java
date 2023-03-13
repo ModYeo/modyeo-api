@@ -1,9 +1,11 @@
 package com.co.kr.modyeo.api.bbs.repository.custom.impl;
 
+import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.api.bbs.repository.custom.ArticleCustomRepository;
+import com.co.kr.modyeo.api.category.domain.dto.response.CategoryResponse;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
 import com.querydsl.core.types.ExpressionUtils;
@@ -11,11 +13,13 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.impl.JPAUpdateClause;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.co.kr.modyeo.api.bbs.domain.entity.QArticle.article;
 import static com.co.kr.modyeo.api.bbs.domain.entity.QReply.reply;
@@ -77,7 +81,20 @@ public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements
                 .fetch();
     }
 
-    private BooleanExpression createdByEq(Long memberId){
+    @Override
+    public Optional<Article> findArticle(Long id) {
+        return Optional.ofNullable(selectFrom(article)
+                .innerJoin(article.category, category)
+                .fetchJoin()
+                .where(articleIdEq(id))
+                .fetchOne());
+    }
+
+    private BooleanExpression articleIdEq(Long articleId) {
+        return articleId != null && articleId > 0 ? article.id.eq(articleId) : null;
+    }
+
+    private BooleanExpression createdByEq(Long memberId) {
         return memberId != null && memberId > 0 ? article.createdBy.eq(memberId) : null;
     }
 
@@ -86,10 +103,10 @@ public class ArticleRepositoryImpl extends Querydsl4RepositorySupport implements
     }
 
     private BooleanExpression articleContentLike(String content) {
-        return StringUtils.hasText(content)  ? article.content.contains(content) : null;
+        return StringUtils.hasText(content) ? article.content.contains(content) : null;
     }
 
     private BooleanExpression articleTitleLike(String title) {
-        return StringUtils.hasText(title)  ? article.title.contains(title) : null;
+        return StringUtils.hasText(title) ? article.title.contains(title) : null;
     }
 }
