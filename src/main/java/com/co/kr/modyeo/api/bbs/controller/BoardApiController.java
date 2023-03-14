@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.api.bbs.controller;
 
+import com.co.kr.modyeo.api.bbs.domain.dto.ReplyUpdateRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.*;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleResponse;
@@ -7,10 +8,14 @@ import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.service.BoardService;
+import com.co.kr.modyeo.api.report.domain.dto.ReportResponse;
 import com.co.kr.modyeo.common.result.ResponseHandler;
 import com.co.kr.modyeo.common.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
@@ -20,9 +25,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@Api(tags = "02. Board 서비스", description = "Board 서비스")
 @RestController
 @RequestMapping("/api/board")
-@Api("게시판 API Controller")
 @RequiredArgsConstructor
 public class BoardApiController {
 
@@ -30,6 +35,13 @@ public class BoardApiController {
 
     @ApiOperation(value = "게시글 상세 조회")
     @GetMapping("/article/{article_id}")
+    @ApiResponse(
+            responseCode = "200",
+            description = "성공",
+            content = @Content(
+                    schema = @Schema(implementation = ArticleDetail.class)
+            )
+    )
     public ResponseEntity<?> getArticle(
             @PathVariable(value = "article_id") Long id) {
         ArticleDetail articleDetail = boardService.getArticle(id);
@@ -41,6 +53,13 @@ public class BoardApiController {
 
     @ApiOperation(value = "게시글 슬라이스 조회 API")
     @GetMapping("/article")
+    @ApiResponse(
+            responseCode = "200",
+            description = "성공",
+            content = @Content(
+                    schema = @Schema(implementation = ArticleResponse.class)
+            )
+    )
     public ResponseEntity<?> getArticles(ArticleSearch articleSearch) {
         Slice<ArticleResponse> articleResponses = boardService.getArticles(articleSearch);
         return ResponseHandler.generate()
@@ -82,8 +101,8 @@ public class BoardApiController {
 
     @ApiOperation(value = "댓글 생성 API")
     @PostMapping("/reply")
-    public ResponseEntity<?> createReply(@RequestBody ReplyRequest replyRequest) {
-        Long replyId = boardService.createReply(replyRequest);
+    public ResponseEntity<?> createReply(@Valid @RequestBody ReplyCreateRequest replyCreateRequest) {
+        Long replyId = boardService.createReply(replyCreateRequest);
         return ResponseHandler.generate()
                 .data(replyId)
                 .status(HttpStatus.CREATED)
@@ -92,8 +111,8 @@ public class BoardApiController {
 
     @ApiOperation(value = "댓글 수정 API")
     @PatchMapping("/reply")
-    public ResponseEntity<?> updateReply(@RequestBody ReplyRequest replyRequest) {
-        Long replyId = boardService.updateReply(replyRequest);
+    public ResponseEntity<?> updateReply(@Valid @RequestBody ReplyUpdateRequest replyUpdateRequest) {
+        Long replyId = boardService.updateReply(replyUpdateRequest);
         return ResponseHandler.generate()
                 .data(replyId)
                 .status(HttpStatus.OK)
