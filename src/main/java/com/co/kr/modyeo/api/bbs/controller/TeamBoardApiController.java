@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/team-board")
-@Api("팀 게시판 API Controller")
+@Api(tags = "03. Team Board 서비스", description = "Team Board 서비스")
 @RequiredArgsConstructor
 public class TeamBoardApiController {
 
