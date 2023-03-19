@@ -173,4 +173,14 @@ public class AuthController {
                 .status(HttpStatus.OK)
                 .build();
     }
+
+    @ApiOperation(value = "이메일 중복 확인 API")
+    @GetMapping("/overlap-mail")
+    public  ResponseEntity<?> checkOverlapEmail(@RequestParam(value = "email", required = true, defaultValue = "") String email) {
+        String result = authService.checkOverlapEmail(email);
+        return ResponseHandler.generate()
+                .data(result)
+                .status(HttpStatus.OK)
+                .build();
+    }
 }
