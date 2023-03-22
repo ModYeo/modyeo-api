@@ -21,5 +21,5 @@ public interface TeamService {
 
     TeamDetail getTeam(Long teamId);
 
-    List<TeamResponse> getRecommendTeams(Long emdId, List<Long> categoryIdList);
+    List<TeamResponse> getRecommendTeams(Long emdId, List<Long> categoryIdList, Long memberId);
 }

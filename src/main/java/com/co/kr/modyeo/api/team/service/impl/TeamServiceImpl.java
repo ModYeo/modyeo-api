@@ -3,8 +3,6 @@ package com.co.kr.modyeo.api.team.service.impl;
 import com.co.kr.modyeo.api.category.repository.CategoryRepository;
 import com.co.kr.modyeo.api.geo.domain.entity.EmdArea;
 import com.co.kr.modyeo.api.geo.repository.EmdAreaRepository;
-import com.co.kr.modyeo.api.member.auth.domain.dto.MemberJoinDto;
-import com.co.kr.modyeo.api.member.domain.entity.link.MemberActiveArea;
 import com.co.kr.modyeo.api.team.domain.dto.request.TeamCreateRequest;
 import com.co.kr.modyeo.api.team.domain.dto.request.TeamUpdateRequest;
 import com.co.kr.modyeo.api.team.domain.dto.response.TeamDetail;
@@ -168,9 +166,12 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public List<TeamResponse> getRecommendTeams(Long emdId, List<Long> categoryIdList) {
+    public List<TeamResponse> getRecommendTeams(Long emdId, List<Long> categoryIdList, Long memberId) {
         List<Team> recommendTeams = teamRepository.getRecommendTeams(emdId, categoryIdList);
+        List<Team> myTeamList = teamRepository.findMyTeam(memberId);
+
         return recommendTeams.stream()
+                .filter(team -> !myTeamList.contains(team))
                 .map(TeamResponse::toDto)
                 .collect(Collectors.toList());
     }

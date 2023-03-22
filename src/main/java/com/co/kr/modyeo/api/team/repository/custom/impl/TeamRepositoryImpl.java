@@ -67,13 +67,11 @@ public class TeamRepositoryImpl extends Querydsl4RepositorySupport implements Te
     }
 
     @Override
-    public List<TeamResponse> findMyTeam(String email) {
-        return select(Projections.constructor(TeamResponse.class,
-                team.id, team.name))
+    public List<Team> findMyTeam(Long memberId) {
+        return select(team)
                 .from(team)
                 .innerJoin(team.crewList, crew)
-                .innerJoin(crew.member, member)
-                .where(member.email.eq(email))
+                .where(memberIdEq(memberId))
                 .fetch();
     }
 
