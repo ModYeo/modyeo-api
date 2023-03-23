@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -44,8 +45,9 @@ public class TeamApiController {
     @ApiOperation(value = "팀 추천 API")
     @GetMapping("/recommend")
     public ResponseEntity<?> getRecommendTeams(@RequestParam(value = "emdId", name = "emdId", required = true) Long emdId,
-                                               @RequestParam(value = "categoryIdList", name = "categoryIdList", required = true)List<Long> categoryIdList){
-        Long memberId = SecurityUtil.getCurrentMemberId();
+                                               @RequestParam(value = "categoryIdList", name = "categoryIdList", required = true)List<Long> categoryIdList,
+                                               Principal principal){
+        Long memberId = Long.valueOf(principal.getName());
         List<TeamResponse> teamResponses = teamService.getRecommendTeams(emdId,categoryIdList,memberId);
         return ResponseHandler.generate()
                 .status(HttpStatus.OK)
