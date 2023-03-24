@@ -13,7 +13,7 @@ public interface TeamCustomRepository {
     Slice<Team> searchTeam(TeamSearch teamSearch, Pageable pageable);
 
     Slice<Team> searchSomeoneTeam(SomeoneTeamSearch memberTeamSearch, Pageable pageable);
-    List<TeamResponse> findMyTeam(String email);
+    List<Team> findMyTeam(Long memberId);
 
     List<Team> getRecommendTeams(Long emdId, List<Long> categoryIdList);
 }
