@@ -47,8 +47,7 @@ public class TeamApiController {
     public ResponseEntity<?> getRecommendTeams(@RequestParam(value = "emdId", name = "emdId", required = true) Long emdId,
                                                @RequestParam(value = "categoryIdList", name = "categoryIdList", required = true)List<Long> categoryIdList,
                                                Principal principal){
-        Long memberId = Long.valueOf(principal.getName());
-        List<TeamResponse> teamResponses = teamService.getRecommendTeams(emdId,categoryIdList,memberId);
+        List<TeamResponse> teamResponses = teamService.getRecommendTeams(emdId,categoryIdList,Long.valueOf(principal.getName()));
         return ResponseHandler.generate()
                 .status(HttpStatus.OK)
                 .data(teamResponses)
