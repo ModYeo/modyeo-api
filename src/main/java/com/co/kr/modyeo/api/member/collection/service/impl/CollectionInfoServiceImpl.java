@@ -6,6 +6,8 @@ import com.co.kr.modyeo.api.member.collection.domain.dto.search.CollectionInfoSe
 import com.co.kr.modyeo.api.member.collection.domain.entity.CollectionInfo;
 import com.co.kr.modyeo.api.member.collection.repository.CollectionInfoRepository;
 import com.co.kr.modyeo.api.member.collection.service.CollectionInfoService;
+import com.co.kr.modyeo.api.member.domain.entity.link.MemberCollectionInfo;
+import com.co.kr.modyeo.api.member.repository.MemberCollectionInfoRepository;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.exception.ApiException;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,8 @@ import java.util.stream.Collectors;
 public class CollectionInfoServiceImpl implements CollectionInfoService {
 
     private final CollectionInfoRepository collectionInfoRepository;
+
+    private final MemberCollectionInfoRepository memberCollectionInfoRepository;
 
     @Override
     public List<CollectionInfoResponse> getCollectionInfos() {
@@ -75,6 +79,7 @@ public class CollectionInfoServiceImpl implements CollectionInfoService {
                         .errorCode("NOT_FOUND_COLLECTION_INFO")
                         .build());
 
+        memberCollectionInfoRepository.deleteByCollectionInfo(collectionInfo);
         collectionInfoRepository.delete(collectionInfo);
     }
 }
