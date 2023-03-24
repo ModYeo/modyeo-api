@@ -18,4 +18,6 @@ public interface AuthService {
     String checkOverlapNickname(String nickname);
 
     boolean tokenValid(TokenRequestDto tokenRequestDto);
+
+    String checkOverlapEmail(String email);
 }

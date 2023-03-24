@@ -230,6 +230,11 @@ public class AuthServiceImpl implements AuthService {
         return isActive;
     }
 
+    @Override
+    public String checkOverlapEmail(String email) {
+        return memberRepository.existsByEmail(email) ? "disable" : "enable";
+    }
+
     private TokenDto getTokenDto(Authentication authentication) {
         TokenDto tokenDto = jwtTokenProvider.generateTokenDto(authentication);
 
