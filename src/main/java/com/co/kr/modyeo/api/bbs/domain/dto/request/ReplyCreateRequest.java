@@ -4,11 +4,12 @@ import com.co.kr.modyeo.api.bbs.domain.entity.Article;
 import com.co.kr.modyeo.api.bbs.domain.entity.Reply;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 
-@Data
+@Getter
 @NoArgsConstructor
 public class ReplyCreateRequest {
 
