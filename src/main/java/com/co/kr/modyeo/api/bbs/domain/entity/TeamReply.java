@@ -52,17 +52,17 @@ public class TeamReply extends BaseEntity {
         return of()
                 .teamArticle(article)
                 .content(content)
-                .replyDepth(0)
+                .replyDepth(1)
                 .build();
     }
 
     @Builder(builderClassName = "createNestedTeamReplyBuilder", builderMethodName = "createNestedTeamReplyBuilder")
-    public static TeamReply createTeamNestedReply(TeamArticle article, String content, Long replyGroup) {
+    public static TeamReply createTeamNestedReply(TeamArticle article, String content, Long replyGroup, Integer replyDepth) {
         return of()
                 .teamArticle(article)
                 .content(content)
-                .replyDepth(1)
                 .replyGroup(replyGroup)
+                .replyDepth(replyDepth)
                 .build();
     }
 

@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 @Getter
 @Table(name = "REPLY")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicUpdate
 public class Reply extends BaseEntity {
 
     @Id
@@ -53,21 +55,20 @@ public class Reply extends BaseEntity {
         return of()
                 .article(article)
                 .content(content)
-                .replyDepth(0)
+                .replyDepth(1)
                 .build();
     }
 
     @Builder(builderClassName = "createNestedReplyBuilder", builderMethodName = "createNestedReplyBuilder")
-    public static Reply createNestedReply(Article article, String content, Long replyGroup) {
+    public static Reply createNestedReply(Article article, String content, Long replyGroup, Integer replyDepth) {
         return of()
                 .article(article)
                 .content(content)
-                .replyDepth(1)
+                .replyDepth(replyDepth)
                 .replyGroup(replyGroup)
                 .build();
     }
 
-    @Builder(builderClassName = "changeReplyBuilder", builderMethodName = "changeReplyBuilder")
     public void changeReply(String content) {
         this.content = content;
     }

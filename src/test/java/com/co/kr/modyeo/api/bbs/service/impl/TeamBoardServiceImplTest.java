@@ -1,8 +1,10 @@
 package com.co.kr.modyeo.api.bbs.service.impl;
 
+import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamReplyResponse;
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamArticle;
+import com.co.kr.modyeo.api.bbs.domain.entity.TeamReply;
 import com.co.kr.modyeo.api.bbs.repository.TeamArticleRecommendRepository;
 import com.co.kr.modyeo.api.bbs.repository.TeamArticleRepository;
 import com.co.kr.modyeo.api.bbs.repository.TeamReplyRecommendRepository;
@@ -78,13 +80,28 @@ class TeamBoardServiceImplTest {
             .teamArticleRecommendList(new ArrayList<>())
             .build();
 
+    TeamReply FIXTURE_REPLY_01 = TeamReply.of()
+            .id(1L)
+            .teamArticle(FIXTURE_ART_01)
+            .content("test")
+            .replyDepth(0)
+            .build();
+
+    TeamReply FIXTURE_REPLY_02 = TeamReply.of()
+            .id(2L)
+            .teamArticle(FIXTURE_ART_01)
+            .content("test")
+            .replyDepth(1)
+            .replyGroup(FIXTURE_REPLY_01.getId())
+            .build();
+
     Member FIXTURE_MEM_01 = Member.of()
             .id(1L)
             .nickname("tester")
             .email("test@qweqwe.com")
             .build();
 
-    TeamReplyResponse FIXTURE_REPLY_01 = TeamReplyResponse.of()
+    TeamReplyResponse FIXTURE_REPLY_RES_01 = TeamReplyResponse.of()
             .replyId(1L)
             .teamArticleId(1L)
             .member(TeamReplyResponse.Member.of()
@@ -93,6 +110,19 @@ class TeamBoardServiceImplTest {
                     .email("test@qweqwe.com")
                     .build())
             .content("test")
+            .build();
+
+    TeamReplyRequest FIXTURE_REPLY_REQ_01 = TeamReplyRequest.of()
+            .articleId(FIXTURE_ART_01.getId())
+            .content("test")
+            .replyDepth(0)
+            .build();
+
+    TeamReplyRequest FIXTURE_REPLY_REQ_02 = TeamReplyRequest.of()
+            .articleId(FIXTURE_ART_01.getId())
+            .content("test")
+            .replyDepth(1)
+            .replyGroup(FIXTURE_REPLY_01.getId())
             .build();
 
     @BeforeEach
@@ -118,7 +148,7 @@ class TeamBoardServiceImplTest {
     void getArticleSuccess() {
         given(teamArticleRepository.findTeamArticle(any())).willReturn(Optional.ofNullable(FIXTURE_ART_01));
         given(memberRepository.findById(any())).willReturn(Optional.ofNullable(FIXTURE_MEM_01));
-        given(teamReplyRepository.findByTeamArticleId(any())).willReturn(List.of(FIXTURE_REPLY_01));
+        given(teamReplyRepository.findByTeamArticleId(any())).willReturn(List.of(FIXTURE_REPLY_RES_01));
         TeamArticleDetail article = teamBoardService.getTeamArticle(1L);
 
         assertThat(article.getArticleId()).isEqualTo(1L);
@@ -154,5 +184,27 @@ class TeamBoardServiceImplTest {
         assertThatThrownBy(() -> {
             teamBoardService.getTeamArticle(1L);
         }).isInstanceOf(Exception.class).hasMessageContaining(MemberErrorCode.NOT_FOUND_MEMBER.getMessage());
+    }
+
+    @Test
+    void createTeamReplyDepth0(){
+        given(teamReplyRepository.save(any())).willReturn(FIXTURE_REPLY_01);
+        given(teamArticleRepository.findById(any())).willReturn(Optional.of(FIXTURE_ART_01));
+
+        Long teamReply = teamBoardService.createTeamReply(FIXTURE_REPLY_REQ_01);
+
+        assertThat(teamReply).isEqualTo(1L);
+        assertThat(FIXTURE_REPLY_01.getReplyDepth()).isEqualTo(0);
+    }
+
+    @Test
+    void createTeamReplyDepth1(){
+        given(teamReplyRepository.save(any())).willReturn(FIXTURE_REPLY_02);
+        given(teamArticleRepository.findById(any())).willReturn(Optional.of(FIXTURE_ART_01));
+
+        Long teamReply = teamBoardService.createTeamReply(FIXTURE_REPLY_REQ_02);
+
+        assertThat(teamReply).isEqualTo(2L);
+        assertThat(FIXTURE_REPLY_02.getReplyDepth()).isEqualTo(1);
     }
 }

@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.api.bbs.service.impl;
 
+import com.co.kr.modyeo.api.bbs.domain.dto.ReplyUpdateRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.*;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.*;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
@@ -125,13 +126,13 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public Long createReply(ReplyRequest replyRequest) {
-        Article article = findArticle(replyRequest.getArticleId());
+    public Long createReply(ReplyCreateRequest replyCreateRequest) {
+        Article article = findArticle(replyCreateRequest.getArticleId());
 
-        Reply reply = replyRequest.getReplyDepth() == 0 ?
-                ReplyRequest.toReply(replyRequest, article) : ReplyRequest.toNestedReply(replyRequest, article);
+        Reply reply = replyCreateRequest.getReplyDepth() == 1 ?
+                ReplyCreateRequest.toReply(replyCreateRequest, article) : ReplyCreateRequest.toNestedReply(replyCreateRequest, article);
 
-        replyRepository.save(reply);
+        reply = replyRepository.save(reply);
         article.plusReplyCount();
 
         return reply.getId();
@@ -139,29 +140,18 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public Long updateReply(ReplyRequest replyRequest) {
-        Reply reply = replyRepository.findById(replyRequest.getId()).orElseThrow(
-                () -> ApiException.builder()
-                        .errorMessage(BoardErrorCode.NOT_FOUND_REPLY.getMessage())
-                        .errorCode(BoardErrorCode.NOT_FOUND_REPLY.getCode())
-                        .status(HttpStatus.BAD_REQUEST)
-                        .build());
+    public Long updateReply(ReplyUpdateRequest replyUpdateRequest) {
+        Reply reply = findReply(replyUpdateRequest.getId());
 
-        reply.changeReplyBuilder()
-                .content(reply.getContent())
-                .build();
+        reply.changeReply(replyUpdateRequest.getContent());
 
         return reply.getId();
     }
 
     @Override
+    @Transactional
     public void deleteReply(Long replyId) {
-        Reply reply = replyRepository.findById(replyId).orElseThrow(
-                () -> ApiException.builder()
-                        .errorMessage(BoardErrorCode.NOT_FOUND_REPLY.getMessage())
-                        .errorCode(BoardErrorCode.NOT_FOUND_REPLY.getCode())
-                        .status(HttpStatus.BAD_REQUEST)
-                        .build());
+        Reply reply = findReply(replyId);
 
         replyRepository.delete(reply);
         reply.getArticle().minusReplyCount();
@@ -169,12 +159,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public ReplyDetail getReply(Long replyId) {
-        Reply reply = replyRepository.findById(replyId).orElseThrow(
-                () -> ApiException.builder()
-                        .errorMessage(BoardErrorCode.NOT_FOUND_REPLY.getMessage())
-                        .errorCode(BoardErrorCode.NOT_FOUND_REPLY.getCode())
-                        .status(HttpStatus.BAD_REQUEST)
-                        .build());
+        Reply reply = findReply(replyId);
 
         List<Reply> nestedReplies = replyRepository.findByReplyGroup(replyId);
         return ReplyDetail.toDto(reply, nestedReplies);
@@ -212,12 +197,7 @@ public class BoardServiceImpl implements BoardService {
     public void updateReplyRecommend(ReplyRecommendRequest replyRecommendRequest) {
         Member member = findMember(replyRecommendRequest.getMemberId());
 
-        Reply reply = replyRepository.findById(replyRecommendRequest.getReplyId()).orElseThrow(
-                () -> ApiException.builder()
-                        .errorMessage(BoardErrorCode.NOT_FOUND_REPLY.getMessage())
-                        .errorCode(BoardErrorCode.NOT_FOUND_REPLY.getCode())
-                        .status(HttpStatus.BAD_REQUEST)
-                        .build());
+        Reply reply = findReply(replyRecommendRequest.getReplyId());
 
         ReplyRecommend findReplyRecommend = replyRecommendRepository.findByMemberAndReply(member, reply);
 
@@ -261,6 +241,15 @@ public class BoardServiceImpl implements BoardService {
                 () -> ApiException.builder()
                         .errorMessage(BoardErrorCode.NOT_FOUND_ARTICLE.getMessage())
                         .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
+                        .status(HttpStatus.BAD_REQUEST)
+                        .build());
+    }
+
+    private Reply findReply(Long replyId){
+        return replyRepository.findById(replyId).orElseThrow(
+                () -> ApiException.builder()
+                        .errorMessage(BoardErrorCode.NOT_FOUND_REPLY.getMessage())
+                        .errorCode(BoardErrorCode.NOT_FOUND_REPLY.getCode())
                         .status(HttpStatus.BAD_REQUEST)
                         .build());
     }

@@ -144,8 +144,9 @@ public class TeamBoardServiceImpl implements TeamBoardService {
                         .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
                         .build());
 
-        TeamReply teamReply = teamReplyRequest.getReplyDepth() == 0 ?
-                TeamReplyRequest.toTeamReply(teamArticle, teamReplyRequest.getContent()) : TeamReplyRequest.toTeamNestedReply(teamArticle, teamReplyRequest.getContent(), teamReplyRequest.getReplyGroup());
+        TeamReply teamReply = teamReplyRequest.getReplyDepth() == 1 ?
+                TeamReplyRequest.toTeamReply(teamArticle, teamReplyRequest.getContent()) : TeamReplyRequest.toTeamNestedReply(teamArticle, teamReplyRequest.getContent(), teamReplyRequest.getReplyGroup(), teamReplyRequest.getReplyDepth());
+
         teamArticle.plusReplyCount();
         return teamReplyRepository.save(teamReply).getId();
     }
