@@ -185,6 +185,7 @@ public class TeamApplicationServiceImpl implements TeamApplicationService {
     }
 
     @Override
+    @Transactional
     public void deleteTeamApplication(Long memberTeamId) {
         MemberTeam memberTeam = memberTeamRepository.findById(memberTeamId).orElseThrow(
                 () -> ApiException.builder()

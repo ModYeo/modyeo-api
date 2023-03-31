@@ -11,6 +11,7 @@ import com.co.kr.modyeo.api.team.domain.dto.search.TeamSearch;
 import com.co.kr.modyeo.api.team.service.TeamAreaService;
 import com.co.kr.modyeo.api.team.service.TeamService;
 import com.co.kr.modyeo.common.result.ResponseHandler;
+import com.co.kr.modyeo.common.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -40,11 +42,12 @@ public class TeamApiController {
                 .build();
     }
 
-    @ApiOperation(value = "")
+    @ApiOperation(value = "팀 추천 API")
     @GetMapping("/recommend")
     public ResponseEntity<?> getRecommendTeams(@RequestParam(value = "emdId", name = "emdId", required = true) Long emdId,
-                                               @RequestParam(value = "categoryIdList", name = "categoryIdList", required = true)List<Long> categoryIdList){
-        List<TeamResponse> teamResponses = teamService.getRecommendTeams(emdId,categoryIdList);
+                                               @RequestParam(value = "categoryIdList", name = "categoryIdList", required = true)List<Long> categoryIdList,
+                                               Principal principal){
+        List<TeamResponse> teamResponses = teamService.getRecommendTeams(emdId,categoryIdList,Long.valueOf(principal.getName()));
         return ResponseHandler.generate()
                 .status(HttpStatus.OK)
                 .data(teamResponses)
