@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -62,9 +63,9 @@ class BoardApiControllerTest {
     @WithMockUser(username = "1")
     void deleteReply() throws Exception {
         mockMvc.perform(
-                get("/api/board/article/26")
+                delete("/api/board/reply/19")
         ).andExpect(
-                status().isOk()
+                status().is2xxSuccessful()
         ).andDo(print());
     }
 
