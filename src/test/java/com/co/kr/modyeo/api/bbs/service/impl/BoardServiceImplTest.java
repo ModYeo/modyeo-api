@@ -20,6 +20,7 @@ import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.BoardErrorCode;
 import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
+import com.co.kr.modyeo.common.util.ReflectionUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +32,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpStatus;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +41,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class BoardServiceImplTest {
@@ -96,6 +97,7 @@ class BoardServiceImplTest {
                     .email("test@qweqwe.com")
                     .build())
             .content("test")
+            .deleteYn(Yn.N)
             .build();
 
     Reply FIXTURE_REPLY_01 = Reply.of()
@@ -103,6 +105,7 @@ class BoardServiceImplTest {
             .article(FIXTURE_ART_01)
             .content("test")
             .replyDepth(1)
+            .deleteYn(Yn.N)
             .build();
 
     Reply FIXTURE_REPLY_02 = Reply.of()
@@ -111,6 +114,7 @@ class BoardServiceImplTest {
             .content("test")
             .replyDepth(2)
             .replyGroup(FIXTURE_REPLY_01.getId())
+            .deleteYn(Yn.N)
             .build();
 
     ReplyCreateRequest FIXTURE_REPLY_REQ_01 = ReplyCreateRequest.of()
@@ -269,6 +273,7 @@ class BoardServiceImplTest {
         assertThat(article.getArticleId()).isEqualTo(1L);
         assertThat(article.getReplyResponses().size()).isEqualTo(1);
         assertThat(article.getReplyResponses().get(0).getMember().getNickname()).isEqualTo("tester");
+        assertThat(article.getReplyResponses().get(0).getDeleteYn()).isEqualTo(Yn.N);
         assertThat(article.getHitCount()).isEqualTo(2L);
     }
 
@@ -343,11 +348,20 @@ class BoardServiceImplTest {
     }
 
     @Test
-    void deleteReply(){
-        given(replyRepository.findById(any())).willReturn(Optional.ofNullable(FIXTURE_REPLY_01));
-        boardService.deleteReply(FIXTURE_REPLY_01.getId());
+    void deleteReply() throws IllegalAccessException {
+        List<Field> allFields = ReflectionUtil.getAllFields(FIXTURE_REPLY_01);
 
+        for (Field allField : allFields) {
+            allField.setAccessible(true);
+            if (allField.getName().equals("createdBy")){
+                allField.set(FIXTURE_REPLY_01,1L);
+            }
+        }
+
+        given(replyRepository.findById(any())).willReturn(Optional.ofNullable(FIXTURE_REPLY_01));
+        boardService.deleteReply(FIXTURE_REPLY_01.getId(), 1L);
+
+        assertThat(FIXTURE_REPLY_01.getDeleteYn()).isEqualTo(Yn.Y);
         assertThat(FIXTURE_ART_01.getReplyCount()).isEqualTo(0);
-        then(replyRepository).should().delete(any());
     }
 }

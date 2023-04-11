@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -150,10 +151,18 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public void deleteReply(Long replyId) {
+    public void deleteReply(Long replyId, Long memberId) {
         Reply reply = findReply(replyId);
 
-        replyRepository.delete(reply);
+        if (!Objects.equals(reply.getCreatedBy(), memberId)){
+           throw ApiException.builder()
+                   .errorMessage(BoardErrorCode.NOT_DELETE_AUTH.getMessage())
+                   .errorCode(BoardErrorCode.NOT_DELETE_AUTH.getCode())
+                   .status(HttpStatus.FORBIDDEN)
+                   .build();
+        }
+
+        reply.delete();
         reply.getArticle().minusReplyCount();
     }
 
