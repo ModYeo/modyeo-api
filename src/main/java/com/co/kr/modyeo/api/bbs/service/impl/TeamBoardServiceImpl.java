@@ -168,7 +168,7 @@ public class TeamBoardServiceImpl implements TeamBoardService {
 
     @Override
     @Transactional
-    public void deleteTeamReply(Long teamReplyId) {
+    public void deleteTeamReply(Long teamReplyId, Long memberId) {
         TeamReply teamReply = teamReplyRepository.findById(teamReplyId).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -177,7 +177,7 @@ public class TeamBoardServiceImpl implements TeamBoardService {
                         .build());
 
         teamReply.getTeamArticle().minusReplyCount();
-        teamReplyRepository.delete(teamReply);
+        teamReply.delete();
     }
 
     @Override

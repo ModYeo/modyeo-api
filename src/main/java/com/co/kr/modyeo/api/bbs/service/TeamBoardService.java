@@ -25,7 +25,7 @@ public interface TeamBoardService {
 
     Long updateTeamReply(TeamReplyRequest teamReplyRequest);
 
-    void deleteTeamReply(Long teamReplyId);
+    void deleteTeamReply(Long teamReplyId, Long memberId);
 
     TeamReplyDetail getTeamReply(Long teamReplyId);
 
