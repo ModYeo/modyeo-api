@@ -31,7 +31,7 @@ class CollectionInfoApiControllerTest {
     @WithMockUser
     @Transactional
     void deleteCollectionInfo() throws Exception {
-        mockMvc.perform(delete("/api/collection-info/56"))
+        mockMvc.perform(delete("/api/collection-info/19"))
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }
