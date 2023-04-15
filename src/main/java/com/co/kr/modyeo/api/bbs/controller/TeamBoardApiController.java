@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -100,8 +101,9 @@ public class TeamBoardApiController {
     @ApiOperation(value = "팀 댓글 삭제 API")
     @DeleteMapping("/reply/{team_reply_id}")
     public ResponseEntity<?> deleteReply(
-            @PathVariable(value = "team_reply_id") Long teamReplyId) {
-        teamBoardService.deleteTeamReply(teamReplyId);
+            @PathVariable(value = "team_reply_id") Long teamReplyId,
+            Principal principal) {
+        teamBoardService.deleteTeamReply(teamReplyId, Long.valueOf(principal.getName()));
         return ResponseHandler.generate()
                 .status(HttpStatus.NO_CONTENT)
                 .data(null)

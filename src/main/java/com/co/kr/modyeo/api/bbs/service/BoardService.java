@@ -23,7 +23,7 @@ public interface BoardService {
 
     Long updateReply(ReplyUpdateRequest replyUpdateRequest);
 
-    void deleteReply(Long replyId);
+    void deleteReply(Long replyId, Long memberId);
 
     ReplyDetail getReply(Long replyId);
 

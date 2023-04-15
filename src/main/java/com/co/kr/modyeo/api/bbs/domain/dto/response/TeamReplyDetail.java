@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.bbs.domain.dto.response;
 
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamReply;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
@@ -24,6 +25,8 @@ public class TeamReplyDetail {
     private Integer replyDepth;
 
     private Long replyGroup;
+
+    private Yn deleteYn;
 
     private Long createdBy;
 
@@ -50,6 +53,8 @@ public class TeamReplyDetail {
 
         private Long replyGroup;
 
+        private Yn deleteYn;
+
         private Long createdBy;
 
         private Long updatedBy;
@@ -68,6 +73,7 @@ public class TeamReplyDetail {
                                      Long replyGroup,
                                      Long createdBy,
                                      Long updatedBy,
+                                     Yn deleteYn,
                                      LocalDateTime createdTime,
                                      LocalDateTime updatedTime) {
             this.teamReplyId = teamReplyId;
@@ -75,6 +81,7 @@ public class TeamReplyDetail {
             this.content = content;
             this.replyDepth = replyDepth;
             this.replyGroup = replyGroup;
+            this.deleteYn = deleteYn;
             this.createdBy = createdBy;
             this.updatedBy = updatedBy;
             this.createdTime = createdTime;
@@ -88,6 +95,7 @@ public class TeamReplyDetail {
                     .content(teamReply.getContent())
                     .replyDepth(teamReply.getReplyDepth())
                     .replyGroup(teamReply.getReplyGroup())
+                    .deleteYn(teamReply.getDeleteYn())
                     .createdBy(teamReply.getCreatedBy())
                     .updatedBy(teamReply.getUpdatedBy())
                     .createdTime(teamReply.getCreatedDate())
@@ -102,6 +110,7 @@ public class TeamReplyDetail {
                            String content,
                            Integer replyDepth,
                            Long replyGroup,
+                           Yn deleteYn,
                            Long createdBy,
                            Long updatedBy,
                            LocalDateTime createdTime,
@@ -112,6 +121,7 @@ public class TeamReplyDetail {
         this.content = content;
         this.replyDepth = replyDepth;
         this.replyGroup = replyGroup;
+        this.deleteYn = deleteYn;
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
         this.createdTime = createdTime;
@@ -126,6 +136,7 @@ public class TeamReplyDetail {
                 .content(teamReply.getContent())
                 .replyDepth(teamReply.getReplyDepth())
                 .replyGroup(teamReply.getReplyGroup())
+                .deleteYn(teamReply.getDeleteYn())
                 .createdBy(teamReply.getCreatedBy())
                 .updatedBy(teamReply.getUpdatedBy())
                 .createdTime(teamReply.getCreatedDate())

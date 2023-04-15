@@ -18,6 +18,7 @@ import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.BoardErrorCode;
 import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
+import com.co.kr.modyeo.common.util.ReflectionUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -77,6 +79,7 @@ class TeamBoardServiceImplTest {
             .content("test")
             .team(FIXTURE_TEAM_01)
             .hitCount(1L)
+            .replyCount(1)
             .teamArticleRecommendList(new ArrayList<>())
             .build();
 
@@ -85,6 +88,7 @@ class TeamBoardServiceImplTest {
             .teamArticle(FIXTURE_ART_01)
             .content("test")
             .replyDepth(0)
+            .deleteYn(Yn.N)
             .build();
 
     TeamReply FIXTURE_REPLY_02 = TeamReply.of()
@@ -92,6 +96,7 @@ class TeamBoardServiceImplTest {
             .teamArticle(FIXTURE_ART_01)
             .content("test")
             .replyDepth(1)
+            .deleteYn(Yn.N)
             .replyGroup(FIXTURE_REPLY_01.getId())
             .build();
 
@@ -206,5 +211,23 @@ class TeamBoardServiceImplTest {
 
         assertThat(teamReply).isEqualTo(2L);
         assertThat(FIXTURE_REPLY_02.getReplyDepth()).isEqualTo(1);
+    }
+
+    @Test
+    void deleteTeamReply() throws IllegalAccessException {
+        List<Field> allFields = ReflectionUtil.getAllFields(FIXTURE_REPLY_01);
+
+        for (Field allField : allFields) {
+            allField.setAccessible(true);
+            if (allField.getName().equals("createdBy")){
+                allField.set(FIXTURE_REPLY_01,1L);
+            }
+        }
+
+        given(teamReplyRepository.findById(any())).willReturn(Optional.ofNullable(FIXTURE_REPLY_01));
+        teamBoardService.deleteTeamReply(FIXTURE_REPLY_01.getId(), 1L);
+
+        assertThat(FIXTURE_REPLY_01.getDeleteYn()).isEqualTo(Yn.Y);
+        assertThat(FIXTURE_ART_01.getReplyCount()).isEqualTo(0);
     }
 }

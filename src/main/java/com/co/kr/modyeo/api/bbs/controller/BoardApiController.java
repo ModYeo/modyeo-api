@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @Api(tags = "02. Board 서비스", description = "Board 서비스")
@@ -122,8 +123,9 @@ public class BoardApiController {
     @ApiOperation(value = "댓글 삭제 API")
     @DeleteMapping("/reply/{reply_id}")
     public ResponseEntity<?> deleteReply(
-            @PathVariable(value = "reply_id") Long replyId) {
-        boardService.deleteReply(replyId);
+            @PathVariable(value = "reply_id") Long replyId,
+            Principal principal) {
+        boardService.deleteReply(replyId, Long.valueOf(principal.getName()));
         return ResponseHandler.generate()
                 .status(HttpStatus.NO_CONTENT)
                 .data(null)
