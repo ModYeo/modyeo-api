@@ -38,11 +38,12 @@ public class TeamReplyRequest {
                 .build();
     }
 
-    public static TeamReply toTeamNestedReply(TeamArticle teamArticle, String content, Long replyGroup) {
+    public static TeamReply toTeamNestedReply(TeamArticle teamArticle, String content, Long replyGroup, Integer replyDepth) {
         return TeamReply.createNestedTeamReplyBuilder()
                 .article(teamArticle)
                 .replyGroup(replyGroup)
                 .content(content)
+                .replyDepth(replyDepth)
                 .build();
     }
 }

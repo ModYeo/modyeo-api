@@ -1,10 +1,12 @@
 package com.co.kr.modyeo.api.bbs.service.impl;
 
+import com.co.kr.modyeo.api.bbs.domain.dto.ReplyUpdateRequest;
+import com.co.kr.modyeo.api.bbs.domain.dto.request.ReplyCreateRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.ReplyResponse;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
 import com.co.kr.modyeo.api.bbs.domain.entity.Article;
-import com.co.kr.modyeo.api.bbs.domain.entity.TeamReply;
+import com.co.kr.modyeo.api.bbs.domain.entity.Reply;
 import com.co.kr.modyeo.api.bbs.repository.ArticleRecommendRepository;
 import com.co.kr.modyeo.api.bbs.repository.ArticleRepository;
 import com.co.kr.modyeo.api.bbs.repository.ReplyRecommendRepository;
@@ -17,8 +19,8 @@ import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.BoardErrorCode;
-import com.co.kr.modyeo.common.exception.code.CategoryErrorCode;
 import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
+import com.co.kr.modyeo.common.util.ReflectionUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -76,6 +78,7 @@ class BoardServiceImplTest {
             .content("test")
             .category(FIXTURE_CAT_01)
             .hitCount(1L)
+            .replyCount(1)
             .articleRecommendList(new ArrayList<>())
             .build();
 
@@ -85,7 +88,7 @@ class BoardServiceImplTest {
             .email("test@qweqwe.com")
             .build();
 
-    ReplyResponse FIXTURE_REPLY_01 = ReplyResponse.of()
+    ReplyResponse FIXTURE_REPLY_RES_01 = ReplyResponse.of()
             .replyId(1L)
             .articleId(1L)
             .member(ReplyResponse.Member.of()
@@ -94,6 +97,42 @@ class BoardServiceImplTest {
                     .email("test@qweqwe.com")
                     .build())
             .content("test")
+            .deleteYn(Yn.N)
+            .build();
+
+    Reply FIXTURE_REPLY_01 = Reply.of()
+            .id(1L)
+            .article(FIXTURE_ART_01)
+            .content("test")
+            .replyDepth(1)
+            .deleteYn(Yn.N)
+            .build();
+
+    Reply FIXTURE_REPLY_02 = Reply.of()
+            .id(2L)
+            .article(FIXTURE_ART_01)
+            .content("test")
+            .replyDepth(2)
+            .replyGroup(FIXTURE_REPLY_01.getId())
+            .deleteYn(Yn.N)
+            .build();
+
+    ReplyCreateRequest FIXTURE_REPLY_REQ_01 = ReplyCreateRequest.of()
+            .articleId(FIXTURE_ART_01.getId())
+            .content("test")
+            .replyDepth(1)
+            .build();
+
+    ReplyCreateRequest FIXTURE_REPLY_REQ_02 = ReplyCreateRequest.of()
+            .articleId(FIXTURE_ART_01.getId())
+            .content("test")
+            .replyDepth(2)
+            .replyGroup(FIXTURE_REPLY_01.getId())
+            .build();
+
+    ReplyUpdateRequest FIXTURE_REPLY_UPDATE_REQUEST_01 = ReplyUpdateRequest.of()
+            .id(1L)
+            .content("test2")
             .build();
 
     @BeforeEach
@@ -228,12 +267,13 @@ class BoardServiceImplTest {
     void getArticleSuccess() {
         given(articleRepository.findArticle(any())).willReturn(Optional.ofNullable(FIXTURE_ART_01));
         given(memberRepository.findById(any())).willReturn(Optional.ofNullable(FIXTURE_MEM_01));
-        given(replyRepository.findByArticleId(any())).willReturn(List.of(FIXTURE_REPLY_01));
+        given(replyRepository.findByArticleId(any())).willReturn(List.of(FIXTURE_REPLY_RES_01));
         ArticleDetail article = boardService.getArticle(1L);
 
         assertThat(article.getArticleId()).isEqualTo(1L);
         assertThat(article.getReplyResponses().size()).isEqualTo(1);
         assertThat(article.getReplyResponses().get(0).getMember().getNickname()).isEqualTo("tester");
+        assertThat(article.getReplyResponses().get(0).getDeleteYn()).isEqualTo(Yn.N);
         assertThat(article.getHitCount()).isEqualTo(2L);
     }
 
@@ -264,5 +304,64 @@ class BoardServiceImplTest {
         assertThatThrownBy(() -> {
             boardService.getArticle(1L);
         }).isInstanceOf(Exception.class).hasMessageContaining(MemberErrorCode.NOT_FOUND_MEMBER.getMessage());
+    }
+
+    @Test
+    void createReplyDepth1(){
+        given(articleRepository.findById(any())).willReturn(Optional.ofNullable(FIXTURE_ART_01));
+        given(replyRepository.save(any())).willReturn(FIXTURE_REPLY_01);
+
+        Long replyId = boardService.createReply(FIXTURE_REPLY_REQ_01);
+        assertThat(replyId).isEqualTo(1L);
+        assertThat(FIXTURE_ART_01.getReplyCount()).isEqualTo(2);
+    }
+
+    @Test
+    void createReplyDepth2(){
+        given(articleRepository.findById(any())).willReturn(Optional.ofNullable(FIXTURE_ART_01));
+        given(replyRepository.save(any())).willReturn(FIXTURE_REPLY_02);
+
+        Long replyId = boardService.createReply(FIXTURE_REPLY_REQ_02);
+        assertThat(replyId).isEqualTo(2L);
+        assertThat(FIXTURE_ART_01.getReplyCount()).isEqualTo(2);
+    }
+
+    @Test
+    void updateReply(){
+        given(replyRepository.findById(any())).willReturn(Optional.ofNullable(FIXTURE_REPLY_01));
+        boardService.updateReply(FIXTURE_REPLY_UPDATE_REQUEST_01);
+
+        assertThat(FIXTURE_REPLY_01.getContent()).isEqualTo(FIXTURE_REPLY_UPDATE_REQUEST_01.getContent());
+    }
+
+    @Test
+    void updateReplyNoFound(){
+        given(replyRepository.findById(any())).willThrow(ApiException.builder()
+                .errorMessage(BoardErrorCode.NOT_FOUND_REPLY.getMessage())
+                .errorCode(BoardErrorCode.NOT_FOUND_REPLY.getCode())
+                .status(HttpStatus.BAD_REQUEST)
+                .build());
+
+        assertThatThrownBy(() -> {
+            boardService.updateReply(FIXTURE_REPLY_UPDATE_REQUEST_01);
+        }).isInstanceOf(Exception.class).hasMessageContaining(BoardErrorCode.NOT_FOUND_REPLY.getMessage());
+    }
+
+    @Test
+    void deleteReply() throws IllegalAccessException {
+        List<Field> allFields = ReflectionUtil.getAllFields(FIXTURE_REPLY_01);
+
+        for (Field allField : allFields) {
+            allField.setAccessible(true);
+            if (allField.getName().equals("createdBy")){
+                allField.set(FIXTURE_REPLY_01,1L);
+            }
+        }
+
+        given(replyRepository.findById(any())).willReturn(Optional.ofNullable(FIXTURE_REPLY_01));
+        boardService.deleteReply(FIXTURE_REPLY_01.getId(), 1L);
+
+        assertThat(FIXTURE_REPLY_01.getDeleteYn()).isEqualTo(Yn.Y);
+        assertThat(FIXTURE_ART_01.getReplyCount()).isEqualTo(0);
     }
 }

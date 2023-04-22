@@ -11,7 +11,6 @@ import com.co.kr.modyeo.api.team.domain.dto.search.TeamSearch;
 import com.co.kr.modyeo.api.team.service.TeamAreaService;
 import com.co.kr.modyeo.api.team.service.TeamService;
 import com.co.kr.modyeo.common.result.ResponseHandler;
-import com.co.kr.modyeo.common.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

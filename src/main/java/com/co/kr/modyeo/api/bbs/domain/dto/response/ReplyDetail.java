@@ -1,6 +1,7 @@
 package com.co.kr.modyeo.api.bbs.domain.dto.response;
 
 import com.co.kr.modyeo.api.bbs.domain.entity.Reply;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +24,8 @@ public class ReplyDetail {
     private Integer replyDepth;
 
     private Long replyGroup;
+
+    private Yn deleteYn;
 
     private Long createdBy;
 
@@ -49,6 +52,8 @@ public class ReplyDetail {
 
         private Long replyGroup;
 
+        private Yn deleteYn;
+
         private Long createdBy;
 
         private Long updatedBy;
@@ -67,6 +72,7 @@ public class ReplyDetail {
                                  Long replyGroup,
                                  Long createdBy,
                                  Long updatedBy,
+                                 Yn deleteYn,
                                  LocalDateTime createdTime,
                                  LocalDateTime updatedTime) {
             this.replyId = replyId;
@@ -76,6 +82,7 @@ public class ReplyDetail {
             this.replyGroup = replyGroup;
             this.createdBy = createdBy;
             this.updatedBy = updatedBy;
+            this.deleteYn = deleteYn;
             this.createdTime = createdTime;
             this.updatedTime = updatedTime;
         }
@@ -89,6 +96,7 @@ public class ReplyDetail {
                     .replyGroup(reply.getReplyGroup())
                     .createdBy(reply.getCreatedBy())
                     .updatedBy(reply.getUpdatedBy())
+                    .deleteYn(reply.getDeleteYn())
                     .createdTime(reply.getCreatedDate())
                     .updatedTime(reply.getLastModifiedDate())
                     .build();
@@ -103,6 +111,7 @@ public class ReplyDetail {
                        Long replyGroup,
                        Long createdBy,
                        Long updatedBy,
+                       Yn deleteYn,
                        LocalDateTime createdTime,
                        LocalDateTime updatedTime,
                        List<NestedReplyDetail> nestedReplyDetails) {
@@ -111,6 +120,7 @@ public class ReplyDetail {
         this.content = content;
         this.replyDepth = replyDepth;
         this.replyGroup = replyGroup;
+        this.deleteYn = deleteYn;
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
         this.createdTime = createdTime;
@@ -125,6 +135,7 @@ public class ReplyDetail {
                 .content(reply.getContent())
                 .replyDepth(reply.getReplyDepth())
                 .replyGroup(reply.getReplyGroup())
+                .deleteYn(reply.getDeleteYn())
                 .createdBy(reply.getCreatedBy())
                 .updatedBy(reply.getUpdatedBy())
                 .createdTime(reply.getCreatedDate())

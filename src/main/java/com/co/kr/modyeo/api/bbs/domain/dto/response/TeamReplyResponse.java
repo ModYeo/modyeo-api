@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.bbs.domain.dto.response;
 
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamReply;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
+import com.co.kr.modyeo.common.enumerate.Yn;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
@@ -22,13 +23,15 @@ public class TeamReplyResponse {
 
     private Long createdBy;
 
+    private Yn deleteYn;
+
     private Member member;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
 
     @Builder(builderClassName = "of", builderMethodName = "of")
-    public TeamReplyResponse(Long replyId, Long teamArticleId, String content, Integer replyDepth, Long replyGroup, Long createdBy, Member member, LocalDateTime createdTime) {
+    public TeamReplyResponse(Long replyId, Long teamArticleId, String content, Integer replyDepth, Long replyGroup, Long createdBy, Member member,Yn deleteYn, LocalDateTime createdTime) {
         this.replyId = replyId;
         this.teamArticleId = teamArticleId;
         this.content = content;
@@ -36,6 +39,7 @@ public class TeamReplyResponse {
         this.replyGroup = replyGroup;
         this.createdBy = createdBy;
         this.member = member;
+        this.deleteYn = deleteYn;
         this.createdTime = createdTime;
     }
 
@@ -47,6 +51,7 @@ public class TeamReplyResponse {
                 .replyDepth(reply.getReplyDepth())
                 .replyGroup(reply.getReplyGroup())
                 .createdBy(reply.getCreatedBy())
+                .deleteYn(reply.getDeleteYn())
                 .createdTime(reply.getCreatedDate())
                 .build();
     }

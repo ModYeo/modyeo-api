@@ -37,6 +37,7 @@ public class ReplyRepositoryImpl extends Querydsl4RepositorySupport implements R
                         member.id,
                         member.email,
                         member.nickname),
+                reply.deleteYn,
                 reply.createdDate
                 )).from(reply)
                 .innerJoin(member).on(reply.createdBy.eq(member.id))

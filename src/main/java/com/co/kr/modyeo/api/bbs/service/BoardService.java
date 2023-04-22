@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.api.bbs.service;
 
+import com.co.kr.modyeo.api.bbs.domain.dto.ReplyUpdateRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.request.*;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.*;
 import com.co.kr.modyeo.api.bbs.domain.dto.search.ArticleSearch;
@@ -18,11 +19,11 @@ public interface BoardService {
 
     void deleteArticle(Long articleId);
 
-    Long createReply(ReplyRequest replyRequest);
+    Long createReply(ReplyCreateRequest replyCreateRequest);
 
-    Long updateReply(ReplyRequest replyRequest);
+    Long updateReply(ReplyUpdateRequest replyUpdateRequest);
 
-    void deleteReply(Long replyId);
+    void deleteReply(Long replyId, Long memberId);
 
     ReplyDetail getReply(Long replyId);
 

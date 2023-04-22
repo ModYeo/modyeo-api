@@ -33,6 +33,7 @@ public class TeamReplyCustomRepositoryImpl  extends Querydsl4RepositorySupport i
                         member.id,
                         member.email,
                         member.nickname),
+                teamReply.deleteYn,
                 teamReply.createdDate
         )).from(teamReply)
                 .innerJoin(member).on(teamReply.createdBy.eq(member.id))

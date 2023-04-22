@@ -32,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -144,8 +145,9 @@ public class TeamBoardServiceImpl implements TeamBoardService {
                         .errorCode(BoardErrorCode.NOT_FOUND_ARTICLE.getCode())
                         .build());
 
-        TeamReply teamReply = teamReplyRequest.getReplyDepth() == 0 ?
-                TeamReplyRequest.toTeamReply(teamArticle, teamReplyRequest.getContent()) : TeamReplyRequest.toTeamNestedReply(teamArticle, teamReplyRequest.getContent(), teamReplyRequest.getReplyGroup());
+        TeamReply teamReply = teamReplyRequest.getReplyDepth() == 1 ?
+                TeamReplyRequest.toTeamReply(teamArticle, teamReplyRequest.getContent()) : TeamReplyRequest.toTeamNestedReply(teamArticle, teamReplyRequest.getContent(), teamReplyRequest.getReplyGroup(), teamReplyRequest.getReplyDepth());
+
         teamArticle.plusReplyCount();
         return teamReplyRepository.save(teamReply).getId();
     }
@@ -167,7 +169,7 @@ public class TeamBoardServiceImpl implements TeamBoardService {
 
     @Override
     @Transactional
-    public void deleteTeamReply(Long teamReplyId) {
+    public void deleteTeamReply(Long teamReplyId, Long memberId) {
         TeamReply teamReply = teamReplyRepository.findById(teamReplyId).orElseThrow(
                 () -> ApiException.builder()
                         .status(HttpStatus.BAD_REQUEST)
@@ -175,8 +177,16 @@ public class TeamBoardServiceImpl implements TeamBoardService {
                         .errorCode(BoardErrorCode.NOT_FOUND_REPLY.getCode())
                         .build());
 
+        if (!Objects.equals(teamReply.getCreatedBy(), memberId)){
+            throw ApiException.builder()
+                    .errorMessage(BoardErrorCode.NOT_DELETE_AUTH.getMessage())
+                    .errorCode(BoardErrorCode.NOT_DELETE_AUTH.getCode())
+                    .status(HttpStatus.FORBIDDEN)
+                    .build();
+        }
+
         teamReply.getTeamArticle().minusReplyCount();
-        teamReplyRepository.delete(teamReply);
+        teamReply.delete();
     }
 
     @Override

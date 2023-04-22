@@ -1,8 +1,10 @@
 package com.co.kr.modyeo.api.bbs.service.impl;
 
+import com.co.kr.modyeo.api.bbs.domain.dto.request.TeamReplyRequest;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamArticleDetail;
 import com.co.kr.modyeo.api.bbs.domain.dto.response.TeamReplyResponse;
 import com.co.kr.modyeo.api.bbs.domain.entity.TeamArticle;
+import com.co.kr.modyeo.api.bbs.domain.entity.TeamReply;
 import com.co.kr.modyeo.api.bbs.repository.TeamArticleRecommendRepository;
 import com.co.kr.modyeo.api.bbs.repository.TeamArticleRepository;
 import com.co.kr.modyeo.api.bbs.repository.TeamReplyRecommendRepository;
@@ -16,6 +18,7 @@ import com.co.kr.modyeo.common.enumerate.Yn;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.BoardErrorCode;
 import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
+import com.co.kr.modyeo.common.util.ReflectionUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +26,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -75,7 +79,25 @@ class TeamBoardServiceImplTest {
             .content("test")
             .team(FIXTURE_TEAM_01)
             .hitCount(1L)
+            .replyCount(1)
             .teamArticleRecommendList(new ArrayList<>())
+            .build();
+
+    TeamReply FIXTURE_REPLY_01 = TeamReply.of()
+            .id(1L)
+            .teamArticle(FIXTURE_ART_01)
+            .content("test")
+            .replyDepth(0)
+            .deleteYn(Yn.N)
+            .build();
+
+    TeamReply FIXTURE_REPLY_02 = TeamReply.of()
+            .id(2L)
+            .teamArticle(FIXTURE_ART_01)
+            .content("test")
+            .replyDepth(1)
+            .deleteYn(Yn.N)
+            .replyGroup(FIXTURE_REPLY_01.getId())
             .build();
 
     Member FIXTURE_MEM_01 = Member.of()
@@ -84,7 +106,7 @@ class TeamBoardServiceImplTest {
             .email("test@qweqwe.com")
             .build();
 
-    TeamReplyResponse FIXTURE_REPLY_01 = TeamReplyResponse.of()
+    TeamReplyResponse FIXTURE_REPLY_RES_01 = TeamReplyResponse.of()
             .replyId(1L)
             .teamArticleId(1L)
             .member(TeamReplyResponse.Member.of()
@@ -93,6 +115,19 @@ class TeamBoardServiceImplTest {
                     .email("test@qweqwe.com")
                     .build())
             .content("test")
+            .build();
+
+    TeamReplyRequest FIXTURE_REPLY_REQ_01 = TeamReplyRequest.of()
+            .articleId(FIXTURE_ART_01.getId())
+            .content("test")
+            .replyDepth(0)
+            .build();
+
+    TeamReplyRequest FIXTURE_REPLY_REQ_02 = TeamReplyRequest.of()
+            .articleId(FIXTURE_ART_01.getId())
+            .content("test")
+            .replyDepth(1)
+            .replyGroup(FIXTURE_REPLY_01.getId())
             .build();
 
     @BeforeEach
@@ -118,7 +153,7 @@ class TeamBoardServiceImplTest {
     void getArticleSuccess() {
         given(teamArticleRepository.findTeamArticle(any())).willReturn(Optional.ofNullable(FIXTURE_ART_01));
         given(memberRepository.findById(any())).willReturn(Optional.ofNullable(FIXTURE_MEM_01));
-        given(teamReplyRepository.findByTeamArticleId(any())).willReturn(List.of(FIXTURE_REPLY_01));
+        given(teamReplyRepository.findByTeamArticleId(any())).willReturn(List.of(FIXTURE_REPLY_RES_01));
         TeamArticleDetail article = teamBoardService.getTeamArticle(1L);
 
         assertThat(article.getArticleId()).isEqualTo(1L);
@@ -154,5 +189,45 @@ class TeamBoardServiceImplTest {
         assertThatThrownBy(() -> {
             teamBoardService.getTeamArticle(1L);
         }).isInstanceOf(Exception.class).hasMessageContaining(MemberErrorCode.NOT_FOUND_MEMBER.getMessage());
+    }
+
+    @Test
+    void createTeamReplyDepth0(){
+        given(teamReplyRepository.save(any())).willReturn(FIXTURE_REPLY_01);
+        given(teamArticleRepository.findById(any())).willReturn(Optional.of(FIXTURE_ART_01));
+
+        Long teamReply = teamBoardService.createTeamReply(FIXTURE_REPLY_REQ_01);
+
+        assertThat(teamReply).isEqualTo(1L);
+        assertThat(FIXTURE_REPLY_01.getReplyDepth()).isEqualTo(0);
+    }
+
+    @Test
+    void createTeamReplyDepth1(){
+        given(teamReplyRepository.save(any())).willReturn(FIXTURE_REPLY_02);
+        given(teamArticleRepository.findById(any())).willReturn(Optional.of(FIXTURE_ART_01));
+
+        Long teamReply = teamBoardService.createTeamReply(FIXTURE_REPLY_REQ_02);
+
+        assertThat(teamReply).isEqualTo(2L);
+        assertThat(FIXTURE_REPLY_02.getReplyDepth()).isEqualTo(1);
+    }
+
+    @Test
+    void deleteTeamReply() throws IllegalAccessException {
+        List<Field> allFields = ReflectionUtil.getAllFields(FIXTURE_REPLY_01);
+
+        for (Field allField : allFields) {
+            allField.setAccessible(true);
+            if (allField.getName().equals("createdBy")){
+                allField.set(FIXTURE_REPLY_01,1L);
+            }
+        }
+
+        given(teamReplyRepository.findById(any())).willReturn(Optional.ofNullable(FIXTURE_REPLY_01));
+        teamBoardService.deleteTeamReply(FIXTURE_REPLY_01.getId(), 1L);
+
+        assertThat(FIXTURE_REPLY_01.getDeleteYn()).isEqualTo(Yn.Y);
+        assertThat(FIXTURE_ART_01.getReplyCount()).isEqualTo(0);
     }
 }
