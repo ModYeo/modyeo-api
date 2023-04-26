@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/api/scheduler")
 @RequiredArgsConstructor
@@ -18,8 +20,9 @@ public class SchedulerApiController {
     private final SchedulerService schedulerService;
 
     @PostMapping()
-    public ResponseEntity<?> createScheduler(@RequestBody SchedulerCreateRequest schedulerCreateRequest){
-        schedulerService.createScheduler(schedulerCreateRequest);
+    public ResponseEntity<?> createScheduler(@RequestBody SchedulerCreateRequest schedulerCreateRequest,
+                                             Principal principal){
+        schedulerService.createScheduler(schedulerCreateRequest,Long.valueOf(principal.getName()));
         return ResponseHandler.generate()
                 .build();
     }

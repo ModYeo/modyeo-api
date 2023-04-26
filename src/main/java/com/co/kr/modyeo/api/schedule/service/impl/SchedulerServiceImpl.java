@@ -4,9 +4,12 @@ import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.category.repository.CategoryRepository;
 import com.co.kr.modyeo.api.geo.domain.entity.EmdArea;
 import com.co.kr.modyeo.api.geo.repository.EmdAreaRepository;
+import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerCreateRequest;
+import com.co.kr.modyeo.api.schedule.domain.entity.MemberScheduler;
 import com.co.kr.modyeo.api.schedule.domain.entity.Scheduler;
+import com.co.kr.modyeo.api.schedule.repository.MemberSchedulerRepository;
 import com.co.kr.modyeo.api.schedule.repository.SchedulerRepository;
 import com.co.kr.modyeo.api.schedule.service.SchedulerService;
 import lombok.RequiredArgsConstructor;
@@ -26,14 +29,25 @@ public class SchedulerServiceImpl implements SchedulerService {
 
     private final CategoryRepository categoryRepository;
 
+    private final MemberSchedulerRepository memberSchedulerRepository;
+
     @Override
     @Transactional
-    public Long createScheduler(SchedulerCreateRequest schedulerCreateRequest) {
+    public Long createScheduler(SchedulerCreateRequest schedulerCreateRequest, Long memberId) {
         EmdArea emdArea = emdAreaRepository.findById(schedulerCreateRequest.getEmdAreaId()).orElseThrow();
         Category category = categoryRepository.findById(schedulerCreateRequest.getCategoryId()).orElseThrow();
 
         Scheduler scheduler = SchedulerCreateRequest.toEntity(schedulerCreateRequest, emdArea, category);
-        schedulerRepository.save(scheduler);
+        scheduler = schedulerRepository.save(scheduler);
+
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        MemberScheduler memberScheduler = MemberScheduler.madeBuilder()
+                .scheduler(scheduler)
+                .member(member)
+                .build();
+
+        memberSchedulerRepository.save(memberScheduler);
+
         return scheduler.getId();
     }
 }
