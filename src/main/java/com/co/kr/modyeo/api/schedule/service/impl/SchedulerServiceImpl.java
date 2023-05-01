@@ -7,6 +7,9 @@ import com.co.kr.modyeo.api.geo.repository.EmdAreaRepository;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerCreateRequest;
+import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerSearch;
+import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerDetail;
+import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerResponse;
 import com.co.kr.modyeo.api.schedule.domain.entity.MemberScheduler;
 import com.co.kr.modyeo.api.schedule.domain.entity.Scheduler;
 import com.co.kr.modyeo.api.schedule.repository.MemberSchedulerRepository;
@@ -15,6 +18,8 @@ import com.co.kr.modyeo.api.schedule.service.SchedulerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -49,5 +54,17 @@ public class SchedulerServiceImpl implements SchedulerService {
         memberSchedulerRepository.save(memberScheduler);
 
         return scheduler.getId();
+    }
+
+    @Override
+    public List<SchedulerResponse> getSchedulers(SchedulerSearch schedulerSearch) {
+        List<Scheduler> schedulers = schedulerRepository.searchScheduler(schedulerSearch);
+
+        return null;
+    }
+
+    @Override
+    public SchedulerDetail getScheduler(Long schedulerId) {
+        return null;
     }
 }
