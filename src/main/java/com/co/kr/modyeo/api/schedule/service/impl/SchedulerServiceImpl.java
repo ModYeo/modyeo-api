@@ -59,7 +59,6 @@ public class SchedulerServiceImpl implements SchedulerService {
     @Override
     public List<SchedulerResponse> getSchedulers(SchedulerSearch schedulerSearch) {
         List<Scheduler> schedulers = schedulerRepository.searchScheduler(schedulerSearch);
-
         return null;
     }
 
