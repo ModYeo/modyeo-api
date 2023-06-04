@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.schedule.controller;
 
 import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerCreateRequest;
 import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerSearch;
+import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerUpdateRequest;
 import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerDetail;
 import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerResponse;
 import com.co.kr.modyeo.api.schedule.domain.entity.Scheduler;
@@ -48,6 +49,24 @@ public class SchedulerApiController {
         return ResponseHandler.generate()
                 .data(scheduler)
                 .status(HttpStatus.CREATED)
+                .build();
+    }
+
+    @DeleteMapping("/{schedulerId}")
+    public ResponseEntity<?> deleteScheduler(@PathVariable Long schedulerId){
+        schedulerService.deleteScheduler(schedulerId);
+        return ResponseHandler.generate()
+                .data(null)
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
+    @PutMapping("")
+    public ResponseEntity<?> updateScheduler(@RequestBody SchedulerUpdateRequest schedulerUpdateRequest){
+        Long schedulerId = schedulerService.updateScheduler(schedulerUpdateRequest);
+        return ResponseHandler.generate()
+                .data(schedulerId)
+                .status(HttpStatus.NO_CONTENT)
                 .build();
     }
 }

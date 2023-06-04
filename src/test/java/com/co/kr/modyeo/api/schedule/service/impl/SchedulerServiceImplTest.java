@@ -34,6 +34,7 @@ import java.util.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 class SchedulerServiceImplTest {
 
@@ -155,5 +156,15 @@ class SchedulerServiceImplTest {
         Slice<SchedulerResponse> schedulers = schedulerService.getSchedulers(schedulerSearch);
 
         assertThat(schedulers.getSize()).isEqualTo(1);
+    }
+
+    @Test
+    void deleteScheduler() {
+        given(schedulerRepository.findById(any())).willReturn(Optional.of(FIXTURE_SCH_01));
+
+        schedulerService.deleteScheduler(1L);
+
+        then(schedulerRepository).should().findById(any());
+        then(schedulerRepository).should().delete(any());
     }
 }

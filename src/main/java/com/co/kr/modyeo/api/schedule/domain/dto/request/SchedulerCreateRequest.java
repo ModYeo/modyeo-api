@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.schedule.domain.dto.request;
 import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.geo.domain.entity.EmdArea;
 import com.co.kr.modyeo.api.schedule.domain.entity.Scheduler;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -24,6 +25,7 @@ public class SchedulerCreateRequest {
     private String content;
 
     @NotNull
+    @JsonFormat
     private LocalDateTime meetingDate;
 
     @Builder(builderClassName = "of",builderMethodName = "of")

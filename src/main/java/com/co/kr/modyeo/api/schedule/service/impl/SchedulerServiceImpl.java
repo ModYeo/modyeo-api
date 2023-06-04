@@ -8,6 +8,7 @@ import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerCreateRequest;
 import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerSearch;
+import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerUpdateRequest;
 import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerDetail;
 import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerResponse;
 import com.co.kr.modyeo.api.schedule.domain.entity.MemberScheduler;
@@ -70,6 +71,23 @@ public class SchedulerServiceImpl implements SchedulerService {
     public SchedulerDetail getScheduler(Long schedulerId) {
         Scheduler scheduler = findScheduler(schedulerId);
         return SchedulerDetail.toDto(scheduler);
+    }
+
+    @Override
+    @Transactional
+    public void deleteScheduler(Long schedulerId) {
+        Scheduler scheduler = findScheduler(schedulerId);
+        schedulerRepository.delete(scheduler);
+    }
+
+    @Override
+    @Transactional
+    public Long updateScheduler(SchedulerUpdateRequest schedulerUpdateRequest) {
+        Scheduler scheduler = findScheduler(schedulerUpdateRequest.getSchedulerId());
+
+        //scheduler update
+
+        return scheduler.getId();
     }
 
     private Scheduler findScheduler(Long id) {
