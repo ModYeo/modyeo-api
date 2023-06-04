@@ -2,6 +2,7 @@ package com.co.kr.modyeo.common.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 @Getter
@@ -20,5 +21,9 @@ public class SearchDto {
         this.offset = offset == null ? 0 : offset;
         this.orderBy = orderBy == null ? "id" : orderBy;
         this.direction = direction == null ? Sort.Direction.DESC : direction;
+    }
+
+    public PageRequest getPageRequest(){
+        return PageRequest.of(this.getOffset(), this.getLimit(), this.getDirection(), this.getOrderBy());
     }
 }

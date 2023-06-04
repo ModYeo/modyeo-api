@@ -4,9 +4,10 @@ import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerSearch;
 import com.co.kr.modyeo.api.schedule.domain.entity.Scheduler;
 import com.co.kr.modyeo.api.schedule.repository.custom.SchedulerCustomRepository;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,13 +25,12 @@ public class SchedulerRepositoryImpl extends Querydsl4RepositorySupport implemen
     }
 
     @Override
-    public List<Scheduler> searchScheduler(SchedulerSearch schedulerSearch) {
-        return selectFrom(scheduler)
+    public Slice<Scheduler> searchScheduler(SchedulerSearch schedulerSearch, PageRequest pageRequest) {
+        return applySlicing(pageRequest, contentQuery -> contentQuery.selectFrom(scheduler)
                 .innerJoin(scheduler.category, category)
                 .innerJoin(scheduler.emdArea, emdArea)
                 .fetchJoin()
-                .where(searchDateFilter(schedulerSearch.getStartTime(),schedulerSearch.getEndTime()))
-                .fetch();
+                .where(searchDateFilter(schedulerSearch.getStartTime(),schedulerSearch.getEndTime())));
     }
 
     private BooleanExpression searchDateFilter(LocalDate startTime, LocalDate endTime) {

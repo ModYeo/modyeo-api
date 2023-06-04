@@ -15,7 +15,12 @@ import com.co.kr.modyeo.api.schedule.domain.entity.Scheduler;
 import com.co.kr.modyeo.api.schedule.repository.MemberSchedulerRepository;
 import com.co.kr.modyeo.api.schedule.repository.SchedulerRepository;
 import com.co.kr.modyeo.api.schedule.service.SchedulerService;
+import com.co.kr.modyeo.common.exception.ApiException;
+import com.co.kr.modyeo.common.exception.code.SchedulerErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,13 +62,25 @@ public class SchedulerServiceImpl implements SchedulerService {
     }
 
     @Override
-    public List<SchedulerResponse> getSchedulers(SchedulerSearch schedulerSearch) {
-        List<Scheduler> schedulers = schedulerRepository.searchScheduler(schedulerSearch);
-        return null;
+    public Slice<SchedulerResponse> getSchedulers(SchedulerSearch schedulerSearch) {
+        PageRequest pageRequest = schedulerSearch.getPageRequest();
+        Slice<Scheduler> schedulers = schedulerRepository.searchScheduler(schedulerSearch, pageRequest);
+        return schedulers.map(SchedulerResponse::toDto);
     }
 
     @Override
     public SchedulerDetail getScheduler(Long schedulerId) {
-        return null;
+        Scheduler scheduler = findScheduler(schedulerId);
+        return SchedulerDetail.toDto(scheduler);
+    }
+
+    private Scheduler findScheduler(Long id) {
+        return schedulerRepository.findById(id)
+                .orElseThrow(() -> ApiException.builder()
+                        .status(HttpStatus.NOT_FOUND)
+                        .errorCode(SchedulerErrorCode.NOT_FOUND_SCHEDULER.getCode())
+                        .errorMessage(SchedulerErrorCode.NOT_FOUND_SCHEDULER.getMessage())
+                        .build());
+
     }
 }

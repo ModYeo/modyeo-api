@@ -5,13 +5,14 @@ import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerSearch;
 import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerDetail;
 import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerResponse;
 import org.apache.tomcat.util.http.fileupload.util.LimitedInputStream;
+import org.springframework.data.domain.Slice;
 
 import java.util.List;
 
 public interface SchedulerService {
     Long createScheduler(SchedulerCreateRequest schedulerCreateRequest, Long memberId);
 
-    List<SchedulerResponse> getSchedulers(SchedulerSearch schedulerSearch);
+    Slice<SchedulerResponse> getSchedulers(SchedulerSearch schedulerSearch);
 
     SchedulerDetail getScheduler(Long schedulerId);
 }

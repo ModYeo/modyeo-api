@@ -8,6 +8,7 @@ import com.co.kr.modyeo.api.schedule.domain.entity.Scheduler;
 import com.co.kr.modyeo.api.schedule.service.SchedulerService;
 import com.co.kr.modyeo.common.result.ResponseHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class SchedulerApiController {
 
     @GetMapping()
     public ResponseEntity<?> getSchedulers(SchedulerSearch schedulerSearch){
-        List<SchedulerResponse> schedulers = schedulerService.getSchedulers(schedulerSearch);
+        Slice<SchedulerResponse> schedulers = schedulerService.getSchedulers(schedulerSearch);
         return ResponseHandler.generate()
                 .data(schedulers)
                 .status(HttpStatus.CREATED)

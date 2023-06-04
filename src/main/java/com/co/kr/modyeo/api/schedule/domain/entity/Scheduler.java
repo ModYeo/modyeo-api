@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -36,14 +38,18 @@ public class Scheduler extends BaseEntity {
 
     private LocalDateTime meetingDate;
 
+    @OneToMany(mappedBy = "scheduler")
+    private List<MemberScheduler> memberSchedulerList = new ArrayList<>();
+
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public Scheduler(Long id, String title, String content, EmdArea emdArea, Category category, LocalDateTime meetingDate) {
+    public Scheduler(Long id, String title, String content, EmdArea emdArea, Category category, LocalDateTime meetingDate, List<MemberScheduler> memberSchedulerList) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.emdArea = emdArea;
         this.category = category;
         this.meetingDate = meetingDate;
+        this.memberSchedulerList = memberSchedulerList;
     }
 
     @Builder(builderClassName = "createBuilder",builderMethodName = "createBuilder")
