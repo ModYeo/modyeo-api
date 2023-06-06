@@ -40,13 +40,17 @@ public class Scheduler extends BaseEntity {
     @Column(name = "categoryId")
     private Category category;
 
+    @Column(name = "meeting_date")
     private LocalDateTime meetingDate;
 
+    @Column(name = "meeting_place")
     private String meetingPlace;
 
+    @Column(name = "recruitment_count")
     private int recruitmentCount;
 
     @Enumerated(value = EnumType.STRING)
+    @Column(name = "scheduler_status")
     private SchedulerStatus schedulerStatus;
 
     @OneToMany(mappedBy = "scheduler")
