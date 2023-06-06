@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.schedule.domain.entity;
 
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.ApplicationType;
+import com.co.kr.modyeo.common.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,20 +14,21 @@ import javax.persistence.*;
 @Getter
 @Table(name = "MEMBER_SCHEDULER")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MemberScheduler {
+public class MemberScheduler extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "member_id")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "scheduler_id")
+    @JoinColumn(name = "scheduler_id")
     private Scheduler scheduler;
 
     @Enumerated(value = EnumType.STRING)
+    @Column(name = "application_type")
     private ApplicationType applicationType;
 
     @Builder(builderClassName = "of",builderMethodName = "of")

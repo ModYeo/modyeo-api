@@ -33,11 +33,11 @@ public class Scheduler extends BaseEntity {
     private String imagePath;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "emdAreaId")
+    @JoinColumn(name = "emdAreaId")
     private EmdArea emdArea;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name = "categoryId")
+    @JoinColumn(name = "categoryId")
     private Category category;
 
     @Column(name = "meeting_date")
