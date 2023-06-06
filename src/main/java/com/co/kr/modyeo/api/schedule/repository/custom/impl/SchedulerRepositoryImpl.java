@@ -33,6 +33,14 @@ public class SchedulerRepositoryImpl extends Querydsl4RepositorySupport implemen
                 .where(searchDateFilter(schedulerSearch.getStartTime(),schedulerSearch.getEndTime())));
     }
 
+    @Override
+    public Integer findRecruitmentCountBySchedulerId(Long schedulerId) {
+        return select(scheduler.recruitmentCount)
+                .from(scheduler)
+                .where(scheduler.id.eq(schedulerId))
+                .fetchOne();
+    }
+
     private BooleanExpression searchDateFilter(LocalDate startTime, LocalDate endTime) {
         BooleanExpression isGoeStartDate = scheduler.meetingDate.goe(LocalDateTime.of(startTime, LocalTime.MIN));
         BooleanExpression isLoeEndDate = scheduler.meetingDate.loe(LocalDateTime.of(endTime,LocalTime.MAX).withNano(0));

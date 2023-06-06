@@ -21,7 +21,7 @@ public class SchedulerSearch extends SearchDto {
 
     @Builder(builderClassName = "of",builderMethodName = "of")
     public SchedulerSearch(Integer limit, Integer offset, String orderBy, Sort.Direction direction, Long categoryId, LocalDate startTime, LocalDate endTime) {
-        super(limit, offset, orderBy, direction);
+        super(limit, offset, "meetingDate", Sort.Direction.ASC);
         this.categoryId = categoryId;
         this.startTime = startTime;
         this.endTime = endTime;

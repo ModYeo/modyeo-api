@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.schedule.service;
 
 import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerCreateRequest;
 import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerSearch;
+import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerStatusRequest;
 import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerUpdateRequest;
 import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerDetail;
 import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerResponse;
@@ -20,4 +21,6 @@ public interface SchedulerService {
     void deleteScheduler(Long schedulerId);
 
     Long updateScheduler(SchedulerUpdateRequest schedulerUpdateRequest);
+
+    Long updateStatus(SchedulerStatusRequest schedulerStatusRequest);
 }

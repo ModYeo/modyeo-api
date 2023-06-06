@@ -8,15 +8,18 @@ import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
 import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerCreateRequest;
 import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerSearch;
+import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerStatusRequest;
 import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerUpdateRequest;
 import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerDetail;
 import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerResponse;
 import com.co.kr.modyeo.api.schedule.domain.entity.MemberScheduler;
 import com.co.kr.modyeo.api.schedule.domain.entity.Scheduler;
+import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.ApplicationType;
 import com.co.kr.modyeo.api.schedule.repository.MemberSchedulerRepository;
 import com.co.kr.modyeo.api.schedule.repository.SchedulerRepository;
 import com.co.kr.modyeo.api.schedule.service.SchedulerService;
 import com.co.kr.modyeo.common.exception.ApiException;
+import com.co.kr.modyeo.common.exception.code.CategoryErrorCode;
 import com.co.kr.modyeo.common.exception.code.SchedulerErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -43,8 +46,18 @@ public class SchedulerServiceImpl implements SchedulerService {
     @Override
     @Transactional
     public Long createScheduler(SchedulerCreateRequest schedulerCreateRequest, Long memberId) {
-        EmdArea emdArea = emdAreaRepository.findById(schedulerCreateRequest.getEmdAreaId()).orElseThrow();
-        Category category = categoryRepository.findById(schedulerCreateRequest.getCategoryId()).orElseThrow();
+        EmdArea emdArea = emdAreaRepository.findById(schedulerCreateRequest.getEmdAreaId())
+                .orElseThrow(() -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode("")
+                        .errorMessage("")
+                        .build());
+        Category category = categoryRepository.findById(schedulerCreateRequest.getCategoryId())
+                .orElseThrow(() -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode(CategoryErrorCode.NOT_FOUND_CATEGORY.getCode())
+                        .errorMessage(CategoryErrorCode.NOT_FOUND_CATEGORY.getMessage())
+                        .build());
 
         Scheduler scheduler = SchedulerCreateRequest.toEntity(schedulerCreateRequest, emdArea, category);
         scheduler = schedulerRepository.save(scheduler);
@@ -85,8 +98,40 @@ public class SchedulerServiceImpl implements SchedulerService {
     public Long updateScheduler(SchedulerUpdateRequest schedulerUpdateRequest) {
         Scheduler scheduler = findScheduler(schedulerUpdateRequest.getSchedulerId());
 
+        Category category = categoryRepository.findById(schedulerUpdateRequest.getCategoryId())
+                .orElseThrow(() -> ApiException.builder()
+                        .status(HttpStatus.BAD_REQUEST)
+                        .errorCode(CategoryErrorCode.NOT_FOUND_CATEGORY.getCode())
+                        .errorMessage(CategoryErrorCode.NOT_FOUND_CATEGORY.getMessage())
+                        .build());
         //scheduler update
+        if (schedulerUpdateRequest.getRecruitmentCount() != null &&
+                scheduler.getMemberSchedulerList()
+                .stream()
+                .filter(memberScheduler ->
+                        memberScheduler.getApplicationType().equals(ApplicationType.APPROVE) || memberScheduler.getApplicationType().equals(ApplicationType.MADE)).count() < schedulerUpdateRequest.getRecruitmentCount()){
+            throw ApiException.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .errorCode(SchedulerErrorCode.RECRUITMENT_COUNT_OVER.getCode())
+                    .errorMessage(SchedulerErrorCode.RECRUITMENT_COUNT_OVER.getMessage())
+                    .build();
+        }
 
+        scheduler.updateScheduler(
+                category,
+                schedulerUpdateRequest.getImagePath(),
+                schedulerUpdateRequest.getTitle(),
+                schedulerUpdateRequest.getContent(),
+                schedulerUpdateRequest.getRecruitmentCount());
+
+        return scheduler.getId();
+    }
+
+    @Override
+    @Transactional
+    public Long updateStatus(SchedulerStatusRequest schedulerStatusRequest) {
+        Scheduler scheduler = findScheduler(schedulerStatusRequest.getSchedulerId());
+        scheduler.updateStatus(schedulerStatusRequest.getSchedulerStatus());
         return scheduler.getId();
     }
 

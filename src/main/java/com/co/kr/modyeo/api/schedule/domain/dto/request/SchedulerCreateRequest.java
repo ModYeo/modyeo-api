@@ -24,17 +24,23 @@ public class SchedulerCreateRequest {
 
     private String content;
 
+    private String imagePath;
+
     @NotNull
-    @JsonFormat
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime meetingDate;
 
+    private String meetingPlace;
+
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public SchedulerCreateRequest(Long categoryId, Long emdAreaId, String title, String content, LocalDateTime meetingDate) {
+    public SchedulerCreateRequest(Long categoryId, Long emdAreaId, String title, String content, LocalDateTime meetingDate, String imagePath, String meetingPlace) {
         this.categoryId = categoryId;
         this.emdAreaId = emdAreaId;
         this.title = title;
         this.content = content;
+        this.imagePath = imagePath;
         this.meetingDate = meetingDate;
+        this.meetingPlace = meetingPlace;
     }
 
 
@@ -43,6 +49,8 @@ public class SchedulerCreateRequest {
                 .title(schedulerCreateRequest.getTitle())
                 .content(schedulerCreateRequest.getContent())
                 .meetingDate(schedulerCreateRequest.getMeetingDate())
+                .imagePath(schedulerCreateRequest.getImagePath())
+                .meetingPlace(schedulerCreateRequest.getMeetingPlace())
                 .emdArea(emdArea)
                 .category(category)
                 .build();

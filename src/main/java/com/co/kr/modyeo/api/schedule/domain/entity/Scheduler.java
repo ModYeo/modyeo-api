@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.schedule.domain.entity;
 
 import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.geo.domain.entity.EmdArea;
+import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.SchedulerStatus;
 import com.co.kr.modyeo.common.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -28,6 +29,9 @@ public class Scheduler extends BaseEntity {
     @Lob
     private String content;
 
+    @Column(name = "image_path")
+    private String imagePath;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @Column(name = "emdAreaId")
     private EmdArea emdArea;
@@ -38,28 +42,55 @@ public class Scheduler extends BaseEntity {
 
     private LocalDateTime meetingDate;
 
+    private String meetingPlace;
+
+    private int recruitmentCount;
+
+    @Enumerated(value = EnumType.STRING)
+    private SchedulerStatus schedulerStatus;
+
     @OneToMany(mappedBy = "scheduler")
     private List<MemberScheduler> memberSchedulerList = new ArrayList<>();
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public Scheduler(Long id, String title, String content, EmdArea emdArea, Category category, LocalDateTime meetingDate, List<MemberScheduler> memberSchedulerList) {
+    public Scheduler(Long id, String title, String content, String imagePath, String meetingPlace, EmdArea emdArea, Category category, LocalDateTime meetingDate,SchedulerStatus schedulerStatus, List<MemberScheduler> memberSchedulerList, int recruitmentCount) {
         this.id = id;
         this.title = title;
         this.content = content;
+        this.imagePath = imagePath;
         this.emdArea = emdArea;
         this.category = category;
         this.meetingDate = meetingDate;
+        this.meetingPlace = meetingPlace;
+        this.schedulerStatus = schedulerStatus;
         this.memberSchedulerList = memberSchedulerList;
+        this.recruitmentCount = recruitmentCount;
     }
 
     @Builder(builderClassName = "createBuilder",builderMethodName = "createBuilder")
-    public static Scheduler create(String title, String content, EmdArea emdArea, Category category, LocalDateTime meetingDate){
+    public static Scheduler create(String title, String content,String imagePath, EmdArea emdArea, Category category, LocalDateTime meetingDate,String meetingPlace,int recruitmentCount){
         return of()
                 .title(title)
                 .content(content)
+                .imagePath(imagePath)
                 .emdArea(emdArea)
                 .category(category)
                 .meetingDate(meetingDate)
+                .meetingPlace(meetingPlace)
+                .schedulerStatus(SchedulerStatus.RECR)
+                .recruitmentCount(recruitmentCount)
                 .build();
+    }
+
+    public void updateStatus(SchedulerStatus status){
+        this.schedulerStatus = status;
+    }
+
+    public void updateScheduler(Category category, String imagePath, String title, String content, Integer recruitmentCount) {
+        this.category = category;
+        if (imagePath != null) this.imagePath = imagePath;
+        if (title != null) this.title = title;
+        if (content != null) this.content = content;
+        this.recruitmentCount = recruitmentCount;
     }
 }
