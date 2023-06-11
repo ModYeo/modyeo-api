@@ -5,6 +5,7 @@ import com.co.kr.modyeo.api.geo.domain.dto.response.EmdAreaDetail;
 import com.co.kr.modyeo.api.schedule.domain.entity.Scheduler;
 import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.ApplicationType;
 import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.SchedulerStatus;
+import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.SchedulerType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,6 +38,8 @@ public class SchedulerResponse {
 
     private SchedulerStatus schedulerStatus;
 
+    private SchedulerType schedulerType;
+
     @Builder(builderClassName = "of", builderMethodName = "of")
     public SchedulerResponse(
             Long schedulerId,
@@ -49,7 +52,8 @@ public class SchedulerResponse {
             CategoryResponse category,
             int applicantCount,
             int recruitmentCount,
-            SchedulerStatus schedulerStatus) {
+            SchedulerStatus schedulerStatus,
+            SchedulerType schedulerType) {
         this.schedulerId = schedulerId;
         this.title = title;
         this.content = content;
@@ -61,6 +65,7 @@ public class SchedulerResponse {
         this.applicantCount = applicantCount;
         this.recruitmentCount = recruitmentCount;
         this.schedulerStatus = schedulerStatus;
+        this.schedulerType = schedulerType;
     }
 
     public static SchedulerResponse toDto(Scheduler scheduler) {
@@ -79,6 +84,7 @@ public class SchedulerResponse {
                         .count())
                 .recruitmentCount(scheduler.getRecruitmentCount())
                 .schedulerStatus(scheduler.getSchedulerStatus())
+                .schedulerType(scheduler.getSchedulerType())
                 .build();
     }
 }

@@ -6,10 +6,7 @@ import com.co.kr.modyeo.api.geo.domain.entity.EmdArea;
 import com.co.kr.modyeo.api.geo.repository.EmdAreaRepository;
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.member.repository.MemberRepository;
-import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerCreateRequest;
-import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerSearch;
-import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerStatusRequest;
-import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerUpdateRequest;
+import com.co.kr.modyeo.api.schedule.domain.dto.request.*;
 import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerDetail;
 import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerResponse;
 import com.co.kr.modyeo.api.schedule.domain.entity.MemberScheduler;
@@ -18,8 +15,10 @@ import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.ApplicationType;
 import com.co.kr.modyeo.api.schedule.repository.MemberSchedulerRepository;
 import com.co.kr.modyeo.api.schedule.repository.SchedulerRepository;
 import com.co.kr.modyeo.api.schedule.service.SchedulerService;
+import com.co.kr.modyeo.api.schedule.service.factory.MemberSchedulerFactory;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.CategoryErrorCode;
+import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
 import com.co.kr.modyeo.common.exception.code.SchedulerErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +26,9 @@ import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.DayOfWeek;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -62,7 +64,7 @@ public class SchedulerServiceImpl implements SchedulerService {
         Scheduler scheduler = SchedulerCreateRequest.toEntity(schedulerCreateRequest, emdArea, category);
         scheduler = schedulerRepository.save(scheduler);
 
-        Member member = memberRepository.findById(memberId).orElseThrow();
+        Member member = findMember(memberId);
         MemberScheduler memberScheduler = MemberScheduler.madeBuilder()
                 .scheduler(scheduler)
                 .member(member)
@@ -107,9 +109,9 @@ public class SchedulerServiceImpl implements SchedulerService {
         //scheduler update
         if (schedulerUpdateRequest.getRecruitmentCount() != null &&
                 scheduler.getMemberSchedulerList()
-                .stream()
-                .filter(memberScheduler ->
-                        memberScheduler.getApplicationType().equals(ApplicationType.APPROVE) || memberScheduler.getApplicationType().equals(ApplicationType.MADE)).count() < schedulerUpdateRequest.getRecruitmentCount()){
+                        .stream()
+                        .filter(memberScheduler ->
+                                memberScheduler.getApplicationType().equals(ApplicationType.APPROVE) || memberScheduler.getApplicationType().equals(ApplicationType.MADE)).count() < schedulerUpdateRequest.getRecruitmentCount()) {
             throw ApiException.builder()
                     .status(HttpStatus.BAD_REQUEST)
                     .errorCode(SchedulerErrorCode.RECRUITMENT_COUNT_OVER.getCode())
@@ -135,6 +137,16 @@ public class SchedulerServiceImpl implements SchedulerService {
         return scheduler.getId();
     }
 
+    @Override
+    @Transactional
+    public Long createMemberScheduler(MemberSchedulerCreateRequest memberSchedulerCreateRequest) {
+        Scheduler scheduler = findScheduler(memberSchedulerCreateRequest.getSchedulerId());
+        Member member = findMember(memberSchedulerCreateRequest.getMemberId());
+        MemberScheduler memberScheduler = MemberSchedulerFactory.createMemberScheduler(member, scheduler);
+        memberSchedulerRepository.save(memberScheduler);
+        return scheduler.getId();
+    }
+
     private Scheduler findScheduler(Long id) {
         return schedulerRepository.findById(id)
                 .orElseThrow(() -> ApiException.builder()
@@ -143,5 +155,14 @@ public class SchedulerServiceImpl implements SchedulerService {
                         .errorMessage(SchedulerErrorCode.NOT_FOUND_SCHEDULER.getMessage())
                         .build());
 
+    }
+
+    private Member findMember(Long id){
+        return memberRepository.findById(id)
+                .orElseThrow(() -> ApiException.builder()
+                        .status(HttpStatus.NOT_FOUND)
+                        .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
+                        .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
+                        .build());
     }
 }

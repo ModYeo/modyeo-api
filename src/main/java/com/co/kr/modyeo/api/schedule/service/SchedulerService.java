@@ -1,9 +1,6 @@
 package com.co.kr.modyeo.api.schedule.service;
 
-import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerCreateRequest;
-import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerSearch;
-import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerStatusRequest;
-import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerUpdateRequest;
+import com.co.kr.modyeo.api.schedule.domain.dto.request.*;
 import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerDetail;
 import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerResponse;
 import org.apache.tomcat.util.http.fileupload.util.LimitedInputStream;
@@ -23,4 +20,6 @@ public interface SchedulerService {
     Long updateScheduler(SchedulerUpdateRequest schedulerUpdateRequest);
 
     Long updateStatus(SchedulerStatusRequest schedulerStatusRequest);
+
+    Long createMemberScheduler(MemberSchedulerCreateRequest memberSchedulerCreateRequest);
 }

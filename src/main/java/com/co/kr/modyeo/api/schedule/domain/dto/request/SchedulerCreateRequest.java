@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.schedule.domain.dto.request;
 import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.geo.domain.entity.EmdArea;
 import com.co.kr.modyeo.api.schedule.domain.entity.Scheduler;
+import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.SchedulerType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,8 +33,10 @@ public class SchedulerCreateRequest {
 
     private String meetingPlace;
 
+    private SchedulerType schedulerType;
+
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public SchedulerCreateRequest(Long categoryId, Long emdAreaId, String title, String content, LocalDateTime meetingDate, String imagePath, String meetingPlace) {
+    public SchedulerCreateRequest(Long categoryId, Long emdAreaId, String title, String content, LocalDateTime meetingDate, String imagePath, String meetingPlace, SchedulerType schedulerType) {
         this.categoryId = categoryId;
         this.emdAreaId = emdAreaId;
         this.title = title;
@@ -41,6 +44,7 @@ public class SchedulerCreateRequest {
         this.imagePath = imagePath;
         this.meetingDate = meetingDate;
         this.meetingPlace = meetingPlace;
+        this.schedulerType = schedulerType;
     }
 
 
@@ -51,6 +55,7 @@ public class SchedulerCreateRequest {
                 .meetingDate(schedulerCreateRequest.getMeetingDate())
                 .imagePath(schedulerCreateRequest.getImagePath())
                 .meetingPlace(schedulerCreateRequest.getMeetingPlace())
+                .schedulerType(schedulerCreateRequest.getSchedulerType())
                 .emdArea(emdArea)
                 .category(category)
                 .build();

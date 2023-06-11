@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.schedule.domain.entity;
 import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.geo.domain.entity.EmdArea;
 import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.SchedulerStatus;
+import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.SchedulerType;
 import com.co.kr.modyeo.common.entity.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -53,11 +54,26 @@ public class Scheduler extends BaseEntity {
     @Column(name = "scheduler_status")
     private SchedulerStatus schedulerStatus;
 
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "scheduler_type")
+    private SchedulerType schedulerType;
+
     @OneToMany(mappedBy = "scheduler")
     private List<MemberScheduler> memberSchedulerList = new ArrayList<>();
 
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public Scheduler(Long id, String title, String content, String imagePath, String meetingPlace, EmdArea emdArea, Category category, LocalDateTime meetingDate,SchedulerStatus schedulerStatus, List<MemberScheduler> memberSchedulerList, int recruitmentCount) {
+    public Scheduler(Long id,
+                     String title,
+                     String content,
+                     String imagePath,
+                     String meetingPlace,
+                     EmdArea emdArea,
+                     Category category,
+                     LocalDateTime meetingDate,
+                     SchedulerStatus schedulerStatus,
+                     List<MemberScheduler> memberSchedulerList,
+                     int recruitmentCount,
+                     SchedulerType schedulerType) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -69,10 +85,19 @@ public class Scheduler extends BaseEntity {
         this.schedulerStatus = schedulerStatus;
         this.memberSchedulerList = memberSchedulerList;
         this.recruitmentCount = recruitmentCount;
+        this.schedulerType = schedulerType;
     }
 
     @Builder(builderClassName = "createBuilder",builderMethodName = "createBuilder")
-    public static Scheduler create(String title, String content,String imagePath, EmdArea emdArea, Category category, LocalDateTime meetingDate,String meetingPlace,int recruitmentCount){
+    public static Scheduler create(String title,
+                                   String content,
+                                   String imagePath,
+                                   EmdArea emdArea,
+                                   Category category,
+                                   LocalDateTime meetingDate,
+                                   String meetingPlace,
+                                   int recruitmentCount,
+                                   SchedulerType schedulerType){
         return of()
                 .title(title)
                 .content(content)
@@ -83,6 +108,7 @@ public class Scheduler extends BaseEntity {
                 .meetingPlace(meetingPlace)
                 .schedulerStatus(SchedulerStatus.RECR)
                 .recruitmentCount(recruitmentCount)
+                .schedulerType(schedulerType)
                 .build();
     }
 

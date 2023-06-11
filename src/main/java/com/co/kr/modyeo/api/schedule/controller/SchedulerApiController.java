@@ -1,9 +1,6 @@
 package com.co.kr.modyeo.api.schedule.controller;
 
-import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerCreateRequest;
-import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerSearch;
-import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerStatusRequest;
-import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerUpdateRequest;
+import com.co.kr.modyeo.api.schedule.domain.dto.request.*;
 import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerDetail;
 import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerResponse;
 import com.co.kr.modyeo.api.schedule.service.SchedulerService;
@@ -75,6 +72,15 @@ public class SchedulerApiController {
         return ResponseHandler.generate()
                 .data(schedulerId)
                 .status(HttpStatus.OK)
+                .build();
+    }
+
+    @PostMapping("/member")
+    public ResponseEntity<?> createMemberScheduler(@RequestBody MemberSchedulerCreateRequest memberSchedulerCreateRequest){
+        Long schedulerId = schedulerService.createMemberScheduler(memberSchedulerCreateRequest);
+        return ResponseHandler.generate()
+                .data(schedulerId)
+                .status(HttpStatus.CREATED)
                 .build();
     }
 }

@@ -56,4 +56,13 @@ public class MemberScheduler extends BaseEntity {
                 .applicationType(ApplicationType.WAIT)
                 .build();
     }
+
+    @Builder(builderClassName = "approveBuilder",builderMethodName = "approveBuilder")
+    public static MemberScheduler approve(Member member,Scheduler scheduler){
+        return of()
+                .member(member)
+                .scheduler(scheduler)
+                .applicationType(ApplicationType.APPROVE)
+                .build();
+    }
 }

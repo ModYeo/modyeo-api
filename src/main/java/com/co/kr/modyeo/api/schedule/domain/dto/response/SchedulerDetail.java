@@ -5,6 +5,7 @@ import com.co.kr.modyeo.api.geo.domain.dto.response.EmdAreaDetail;
 import com.co.kr.modyeo.api.schedule.domain.entity.Scheduler;
 import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.ApplicationType;
 import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.SchedulerStatus;
+import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.SchedulerType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,6 +40,8 @@ public class SchedulerDetail {
 
     private SchedulerStatus schedulerStatus;
 
+    private SchedulerType schedulerType;
+
     @Builder(builderClassName = "of", builderMethodName = "of")
     public SchedulerDetail(
             Long schedulerId,
@@ -51,7 +54,8 @@ public class SchedulerDetail {
             String meetingPlace,
             LocalDateTime meetingDate,
             int recruitmentCount,
-            SchedulerStatus schedulerStatus) {
+            SchedulerStatus schedulerStatus,
+            SchedulerType schedulerType) {
         this.schedulerId = schedulerId;
         this.title = title;
         this.content = content;
@@ -63,6 +67,7 @@ public class SchedulerDetail {
         this.meetingPlace = meetingPlace;
         this.recruitmentCount = recruitmentCount;
         this.schedulerStatus = schedulerStatus;
+        this.schedulerType = schedulerType;
     }
 
     public static SchedulerDetail toDto(Scheduler scheduler) {
@@ -83,6 +88,7 @@ public class SchedulerDetail {
                         .build()).collect(Collectors.toList()))
                 .recruitmentCount(scheduler.getRecruitmentCount())
                 .schedulerStatus(scheduler.getSchedulerStatus())
+                .schedulerType(scheduler.getSchedulerType())
                 .build();
     }
 

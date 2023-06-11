@@ -27,10 +27,21 @@ public class SchedulerRepositoryImpl extends Querydsl4RepositorySupport implemen
     @Override
     public Slice<Scheduler> searchScheduler(SchedulerSearch schedulerSearch, PageRequest pageRequest) {
         return applySlicing(pageRequest, contentQuery -> contentQuery.selectFrom(scheduler)
-                .innerJoin(scheduler.category, category)
-                .innerJoin(scheduler.emdArea, emdArea)
-                .fetchJoin()
-                .where(searchDateFilter(schedulerSearch.getStartTime(),schedulerSearch.getEndTime())));
+                        .innerJoin(scheduler.category, category)
+                        .innerJoin(scheduler.emdArea, emdArea)
+                        .fetchJoin()
+                        .where(
+                                searchDateFilter(schedulerSearch.getStartTime(), schedulerSearch.getEndTime()),
+                                categoryIdEq(schedulerSearch.getCategoryId()),
+                                emdAreaIdEq(schedulerSearch.getEmdAreaId())));
+    }
+
+    private BooleanExpression emdAreaIdEq(Long emdAreaId) {
+        return emdAreaId != null? emdArea.id.eq(emdAreaId) : null;
+    }
+
+    private BooleanExpression categoryIdEq(Long categoryId) {
+        return categoryId != null? category.id.eq(categoryId) : null;
     }
 
     @Override
@@ -43,8 +54,8 @@ public class SchedulerRepositoryImpl extends Querydsl4RepositorySupport implemen
 
     private BooleanExpression searchDateFilter(LocalDate startTime, LocalDate endTime) {
         BooleanExpression isGoeStartDate = scheduler.meetingDate.goe(LocalDateTime.of(startTime, LocalTime.MIN));
-        BooleanExpression isLoeEndDate = scheduler.meetingDate.loe(LocalDateTime.of(endTime,LocalTime.MAX).withNano(0));
+        BooleanExpression isLoeEndDate = scheduler.meetingDate.loe(LocalDateTime.of(endTime, LocalTime.MAX).withNano(0));
 
-        return Expressions.allOf(isGoeStartDate,isLoeEndDate);
+        return Expressions.allOf(isGoeStartDate, isLoeEndDate);
     }
 }
