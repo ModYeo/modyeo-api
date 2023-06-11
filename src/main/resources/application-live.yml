@@ -1,19 +1,22 @@
 spring:
-  profiles:
-    active: live
-  datasource:
-    url: jdbc:h2:tcp:localhost/~/modyeo
-    hikari:
-      username: sa
-      password:
-      driver-class-name: org.h2.Driver
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: modyeo.authentication@gmail.com
+    password: ztddswmtzfaqqcjm
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
   jwt:
     secret: Z2VvLWdhdGhlcmluZy1zeXN0ZW0tbW9keWVvLWFwaS1zZXJ2ZXItc3ByaW5nLWJvb3QtanBhLWp3dC1zcHJpbmctc2VjdXJpdHktd2lydHRlci1hbmpvbmdnaWwtamFuZ21pbnNlb2stMjAyMi0wNi0wOQo=
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:

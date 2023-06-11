@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.schedule.controller;
 import com.co.kr.modyeo.api.schedule.domain.dto.request.*;
 import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerDetail;
 import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerResponse;
+import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.ApplicationType;
 import com.co.kr.modyeo.api.schedule.service.SchedulerService;
 import com.co.kr.modyeo.common.result.ResponseHandler;
 import lombok.RequiredArgsConstructor;
@@ -40,8 +41,8 @@ public class SchedulerApiController {
     }
 
     @GetMapping("/{schedulerId}")
-    public ResponseEntity<?> getScheduler(@PathVariable Long schedulerId) {
-        SchedulerDetail scheduler = schedulerService.getScheduler(schedulerId);
+    public ResponseEntity<?> getScheduler(@PathVariable Long schedulerId, Principal principal) {
+        SchedulerDetail scheduler = schedulerService.getScheduler(schedulerId, Long.parseLong(principal.getName()));
         return ResponseHandler.generate()
                 .data(scheduler)
                 .status(HttpStatus.CREATED)
@@ -87,8 +88,15 @@ public class SchedulerApiController {
                 .build();
     }
 
-    @GetMapping("/{schedulerId}")
-    public ResponseEntity<?> getMemberSchedulers(@PathVariable Long schedulerId) {
-        return null;
+    @PatchMapping("/member/{memberSchedulerId}/{status}")
+    public ResponseEntity<?> updateApplicationType(
+            @PathVariable Long memberSchedulerId,
+            @PathVariable("status") ApplicationType applicationType,
+            Principal principal) {
+        Long schedulerId = schedulerService.updateApplicationType(memberSchedulerId, Long.parseLong(principal.getName()), applicationType);
+        return ResponseHandler.generate()
+                .data(schedulerId)
+                .status(HttpStatus.OK)
+                .build();
     }
 }

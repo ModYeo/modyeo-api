@@ -136,7 +136,7 @@ class SchedulerServiceImplTest {
     void getScheduler(){
         given(schedulerRepository.findById(any())).willReturn(Optional.of(FIXTURE_SCH_01));
 
-        SchedulerDetail scheduler = schedulerService.getScheduler(1L);
+        SchedulerDetail scheduler = schedulerService.getScheduler(1L, 1L);
         assertThat(scheduler.getSchedulerId()).isEqualTo(FIXTURE_SCH_01.getId());
     }
 

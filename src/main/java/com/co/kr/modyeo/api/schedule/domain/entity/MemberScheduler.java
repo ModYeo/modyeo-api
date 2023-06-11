@@ -17,6 +17,7 @@ import javax.persistence.*;
 public class MemberScheduler extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_scheduler_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -64,5 +65,9 @@ public class MemberScheduler extends BaseEntity {
                 .scheduler(scheduler)
                 .applicationType(ApplicationType.APPROVE)
                 .build();
+    }
+
+    public void changeApplicationType(ApplicationType applicationType){
+        this.applicationType = applicationType;
     }
 }

@@ -1,10 +1,10 @@
 package com.co.kr.modyeo.api.schedule.domain.dto.request;
 
 import lombok.Getter;
-
-import java.time.LocalDateTime;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class SchedulerUpdateRequest {
 
     private Long schedulerId;

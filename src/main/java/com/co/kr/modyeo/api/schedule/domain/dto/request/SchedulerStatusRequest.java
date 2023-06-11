@@ -2,8 +2,10 @@ package com.co.kr.modyeo.api.schedule.domain.dto.request;
 
 import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.SchedulerStatus;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public class SchedulerStatusRequest {
 
     private Long schedulerId;

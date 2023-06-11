@@ -1,27 +1,31 @@
 package com.co.kr.modyeo.api.schedule.domain.dto.request;
 
 import com.co.kr.modyeo.common.dto.SearchDto;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.DayOfWeek;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class SchedulerSearch extends SearchDto {
 
     private Long categoryId;
 
     private Long emdAreaId;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    private LocalDate startTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime startTime;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    private LocalDate endTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime endTime;
 
     private List<DayOfWeek> dayOfWeeks;
 
@@ -32,8 +36,8 @@ public class SchedulerSearch extends SearchDto {
                            Sort.Direction direction,
                            Long categoryId,
                            Long emdAreaId,
-                           LocalDate startTime,
-                           LocalDate endTime,
+                           LocalDateTime startTime,
+                           LocalDateTime endTime,
                            List<DayOfWeek> dayOfWeeks) {
         super(limit, offset, orderBy, direction);
         this.categoryId = categoryId;

@@ -3,6 +3,7 @@ package com.co.kr.modyeo.api.schedule.service;
 import com.co.kr.modyeo.api.schedule.domain.dto.request.*;
 import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerDetail;
 import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerResponse;
+import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.ApplicationType;
 import org.springframework.data.domain.Slice;
 
 public interface SchedulerService {
@@ -10,7 +11,7 @@ public interface SchedulerService {
 
     Slice<SchedulerResponse> getSchedulers(SchedulerSearch schedulerSearch);
 
-    SchedulerDetail getScheduler(Long schedulerId);
+    SchedulerDetail getScheduler(Long schedulerId, Long memberId);
 
     void deleteScheduler(Long schedulerId, Long memberId);
 
@@ -19,4 +20,6 @@ public interface SchedulerService {
     Long updateStatus(SchedulerStatusRequest schedulerStatusRequest, Long memberId);
 
     Long createMemberScheduler(MemberSchedulerCreateRequest memberSchedulerCreateRequest);
+
+    Long updateApplicationType(Long memberSchedulerId, Long hostId, ApplicationType applicationType);
 }

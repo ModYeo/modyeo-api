@@ -2,13 +2,16 @@ package com.co.kr.modyeo.api.schedule.domain.entity;
 
 import com.co.kr.modyeo.api.category.domain.entity.Category;
 import com.co.kr.modyeo.api.geo.domain.entity.EmdArea;
+import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.ApplicationType;
 import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.SchedulerStatus;
 import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.SchedulerType;
 import com.co.kr.modyeo.common.entity.BaseEntity;
+import com.co.kr.modyeo.common.exception.ApiException;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -25,20 +28,22 @@ public class Scheduler extends BaseEntity {
     @Column(name = "scheduler_id")
     private Long id;
 
+    @Column(name = "scheduler_title")
     private String title;
 
     @Lob
+    @Column(name = "scheduler_content")
     private String content;
 
     @Column(name = "image_path")
     private String imagePath;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "emdAreaId")
+    @JoinColumn(name = "emd_area_id")
     private EmdArea emdArea;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoryId")
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @Column(name = "meeting_date")
@@ -122,5 +127,16 @@ public class Scheduler extends BaseEntity {
         if (title != null) this.title = title;
         if (content != null) this.content = content;
         this.recruitmentCount = recruitmentCount;
+    }
+
+    public MemberScheduler getHost(){
+        return this.memberSchedulerList.stream()
+                .filter(memberScheduler -> ApplicationType.MADE.equals(memberScheduler.getApplicationType()))
+                .findFirst()
+                .orElseThrow(() -> ApiException.builder()
+                        .status(HttpStatus.NOT_FOUND)
+                        .errorCode("NOT_FOUND_HOST")
+                        .errorMessage("호스트를 찾을 수 없습니다.")
+                        .build());
     }
 }

@@ -7,11 +7,14 @@ import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.SchedulerType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
+@NoArgsConstructor
 public class SchedulerCreateRequest {
 
     @NotNull
@@ -35,8 +38,10 @@ public class SchedulerCreateRequest {
 
     private SchedulerType schedulerType;
 
+    private int recruitmentCount;
+
     @Builder(builderClassName = "of",builderMethodName = "of")
-    public SchedulerCreateRequest(Long categoryId, Long emdAreaId, String title, String content, LocalDateTime meetingDate, String imagePath, String meetingPlace, SchedulerType schedulerType) {
+    public SchedulerCreateRequest(Long categoryId, Long emdAreaId, String title, String content, String imagePath, LocalDateTime meetingDate, String meetingPlace, SchedulerType schedulerType, int recruitmentCount) {
         this.categoryId = categoryId;
         this.emdAreaId = emdAreaId;
         this.title = title;
@@ -45,8 +50,8 @@ public class SchedulerCreateRequest {
         this.meetingDate = meetingDate;
         this.meetingPlace = meetingPlace;
         this.schedulerType = schedulerType;
+        this.recruitmentCount = recruitmentCount;
     }
-
 
     public static Scheduler toEntity(SchedulerCreateRequest schedulerCreateRequest, EmdArea emdArea, Category category) {
         return Scheduler.createBuilder()
@@ -56,6 +61,7 @@ public class SchedulerCreateRequest {
                 .imagePath(schedulerCreateRequest.getImagePath())
                 .meetingPlace(schedulerCreateRequest.getMeetingPlace())
                 .schedulerType(schedulerCreateRequest.getSchedulerType())
+                .recruitmentCount(schedulerCreateRequest.getRecruitmentCount())
                 .emdArea(emdArea)
                 .category(category)
                 .build();

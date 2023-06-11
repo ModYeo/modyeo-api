@@ -1,4 +1,4 @@
-package com.co.kr.modyeo.api.schedule.service.factory;
+package com.co.kr.modyeo.api.schedule.domain.factory;
 
 import com.co.kr.modyeo.api.member.domain.entity.Member;
 import com.co.kr.modyeo.api.schedule.domain.entity.MemberScheduler;

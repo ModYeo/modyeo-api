@@ -15,7 +15,8 @@ import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.ApplicationType;
 import com.co.kr.modyeo.api.schedule.repository.MemberSchedulerRepository;
 import com.co.kr.modyeo.api.schedule.repository.SchedulerRepository;
 import com.co.kr.modyeo.api.schedule.service.SchedulerService;
-import com.co.kr.modyeo.api.schedule.service.factory.MemberSchedulerFactory;
+import com.co.kr.modyeo.api.schedule.domain.factory.MemberSchedulerFactory;
+import com.co.kr.modyeo.api.schedule.domain.factory.SchedulerFactory;
 import com.co.kr.modyeo.common.exception.ApiException;
 import com.co.kr.modyeo.common.exception.code.CategoryErrorCode;
 import com.co.kr.modyeo.common.exception.code.MemberErrorCode;
@@ -80,24 +81,24 @@ public class SchedulerServiceImpl implements SchedulerService {
     }
 
     @Override
-    public SchedulerDetail getScheduler(Long schedulerId) {
+    public SchedulerDetail getScheduler(Long schedulerId, Long memberId) {
         Scheduler scheduler = findScheduler(schedulerId);
-        return SchedulerDetail.toDto(scheduler);
+        return SchedulerFactory.makeDto(scheduler, memberId);
     }
 
     @Override
     @Transactional
     public void deleteScheduler(Long schedulerId, Long memberId) {
-        checkAuth(schedulerId,memberId);
         Scheduler scheduler = findScheduler(schedulerId);
+        checkHost(scheduler, memberId);
         schedulerRepository.delete(scheduler);
     }
 
     @Override
     @Transactional
     public Long updateScheduler(SchedulerUpdateRequest schedulerUpdateRequest, Long memberId) {
-        checkAuth(schedulerUpdateRequest.getSchedulerId(),memberId);
         Scheduler scheduler = findScheduler(schedulerUpdateRequest.getSchedulerId());
+        checkHost(scheduler, memberId);
 
         Category category = categoryRepository.findById(schedulerUpdateRequest.getCategoryId())
                 .orElseThrow(() -> ApiException.builder()
@@ -109,8 +110,8 @@ public class SchedulerServiceImpl implements SchedulerService {
         if (schedulerUpdateRequest.getRecruitmentCount() != null &&
                 scheduler.getMemberSchedulerList()
                         .stream()
-                        .filter(memberScheduler ->
-                                memberScheduler.getApplicationType().equals(ApplicationType.APPROVE) || memberScheduler.getApplicationType().equals(ApplicationType.MADE)).count() < schedulerUpdateRequest.getRecruitmentCount()) {
+                        .filter(memberSchedulerStream ->
+                                memberSchedulerStream.getApplicationType().equals(ApplicationType.APPROVE) || memberSchedulerStream.getApplicationType().equals(ApplicationType.MADE)).count() > schedulerUpdateRequest.getRecruitmentCount()) {
             throw ApiException.builder()
                     .status(HttpStatus.BAD_REQUEST)
                     .errorCode(SchedulerErrorCode.RECRUITMENT_COUNT_OVER.getCode())
@@ -131,8 +132,8 @@ public class SchedulerServiceImpl implements SchedulerService {
     @Override
     @Transactional
     public Long updateStatus(SchedulerStatusRequest schedulerStatusRequest, Long memberId) {
-        checkAuth(schedulerStatusRequest.getSchedulerId(),memberId);
         Scheduler scheduler = findScheduler(schedulerStatusRequest.getSchedulerId());
+        checkHost(scheduler, memberId);
         scheduler.updateStatus(schedulerStatusRequest.getSchedulerStatus());
         return scheduler.getId();
     }
@@ -145,6 +146,14 @@ public class SchedulerServiceImpl implements SchedulerService {
         MemberScheduler memberScheduler = MemberSchedulerFactory.createMemberScheduler(member, scheduler);
         memberSchedulerRepository.save(memberScheduler);
         return scheduler.getId();
+    }
+
+    @Override
+    public Long updateApplicationType(Long memberSchedulerId, Long hostId, ApplicationType applicationType) {
+        MemberScheduler memberScheduler = memberSchedulerRepository.findById(memberSchedulerId).orElseThrow();
+        checkHost(memberScheduler.getScheduler(),hostId);
+        memberScheduler.changeApplicationType(applicationType);
+        return memberScheduler.getScheduler().getId();
     }
 
     private Scheduler findScheduler(Long id) {
@@ -166,12 +175,13 @@ public class SchedulerServiceImpl implements SchedulerService {
                         .build());
     }
 
-    private void checkAuth(Long memberId, Long schedulerId){
-        MemberScheduler memberScheduler = memberSchedulerRepository.findBySchedulerIdAndMemberId(memberId,schedulerId);
-        if (!ApplicationType.MADE.equals(memberScheduler.getApplicationType())){
+    private void checkHost(Scheduler scheduler, Long memberId){
+        MemberScheduler host = scheduler.getHost();
+
+        if (!host.getMember().getId().equals(memberId)){
             throw ApiException.builder()
                     .status(HttpStatus.FORBIDDEN)
-                    .errorCode("스케줄 삭제 권한이 없습니다.")
+                    .errorCode("스케줄에 대한 권한이 없습니다.")
                     .errorMessage("SCHEDULER_DELETE_AUTH_ERROR")
                     .build();
         }

@@ -70,7 +70,7 @@ public class SchedulerDetail {
         this.schedulerType = schedulerType;
     }
 
-    public static SchedulerDetail toDto(Scheduler scheduler) {
+    public static SchedulerDetail toDtoForHost(Scheduler scheduler) {
         return of()
                 .schedulerId(scheduler.getId())
                 .title(scheduler.getTitle())
@@ -86,6 +86,30 @@ public class SchedulerDetail {
                         .nickname(memberScheduler.getMember().getNickname())
                         .applicationType(memberScheduler.getApplicationType())
                         .build()).collect(Collectors.toList()))
+                .recruitmentCount(scheduler.getRecruitmentCount())
+                .schedulerStatus(scheduler.getSchedulerStatus())
+                .schedulerType(scheduler.getSchedulerType())
+                .build();
+    }
+
+    public static SchedulerDetail toDtoForGuest(Scheduler scheduler) {
+        return of()
+                .schedulerId(scheduler.getId())
+                .title(scheduler.getTitle())
+                .content(scheduler.getContent())
+                .imagePath(scheduler.getImagePath())
+                .meetingDate(scheduler.getMeetingDate())
+                .meetingPlace(scheduler.getMeetingPlace())
+                .emdArea(EmdAreaDetail.toDto(scheduler.getEmdArea()))
+                .category(CategoryResponse.toDto(scheduler.getCategory()))
+                .applicantList(scheduler.getMemberSchedulerList().stream().filter(memberScheduler ->
+                                (memberScheduler.getApplicationType().equals(ApplicationType.APPROVE) || memberScheduler.getApplicationType().equals(ApplicationType.MADE)))
+                        .map(memberScheduler -> MemberDto.of()
+                                .memberId(memberScheduler.getMember().getId())
+                                .email(memberScheduler.getMember().getEmail())
+                                .nickname(memberScheduler.getMember().getNickname())
+                                .applicationType(memberScheduler.getApplicationType())
+                                .build()).collect(Collectors.toList()))
                 .recruitmentCount(scheduler.getRecruitmentCount())
                 .schedulerStatus(scheduler.getSchedulerStatus())
                 .schedulerType(scheduler.getSchedulerType())
