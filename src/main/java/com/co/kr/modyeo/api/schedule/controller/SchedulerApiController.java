@@ -22,7 +22,7 @@ public class SchedulerApiController {
 
     @PostMapping()
     public ResponseEntity<?> createScheduler(@RequestBody SchedulerCreateRequest schedulerCreateRequest,
-                                             Principal principal){
+                                             Principal principal) {
         Long schedulerId = schedulerService.createScheduler(schedulerCreateRequest, Long.valueOf(principal.getName()));
         return ResponseHandler.generate()
                 .data(schedulerId)
@@ -31,7 +31,7 @@ public class SchedulerApiController {
     }
 
     @GetMapping()
-    public ResponseEntity<?> getSchedulers(SchedulerSearch schedulerSearch){
+    public ResponseEntity<?> getSchedulers(SchedulerSearch schedulerSearch) {
         Slice<SchedulerResponse> schedulers = schedulerService.getSchedulers(schedulerSearch);
         return ResponseHandler.generate()
                 .data(schedulers)
@@ -40,7 +40,7 @@ public class SchedulerApiController {
     }
 
     @GetMapping("/{schedulerId}")
-    public ResponseEntity<?> getScheduler(@PathVariable Long schedulerId){
+    public ResponseEntity<?> getScheduler(@PathVariable Long schedulerId) {
         SchedulerDetail scheduler = schedulerService.getScheduler(schedulerId);
         return ResponseHandler.generate()
                 .data(scheduler)
@@ -49,8 +49,9 @@ public class SchedulerApiController {
     }
 
     @DeleteMapping("/{schedulerId}")
-    public ResponseEntity<?> deleteScheduler(@PathVariable Long schedulerId){
-        schedulerService.deleteScheduler(schedulerId);
+    public ResponseEntity<?> deleteScheduler(@PathVariable Long schedulerId,
+                                             Principal principal) {
+        schedulerService.deleteScheduler(schedulerId, Long.parseLong(principal.getName()));
         return ResponseHandler.generate()
                 .data(null)
                 .status(HttpStatus.NO_CONTENT)
@@ -58,8 +59,9 @@ public class SchedulerApiController {
     }
 
     @PutMapping("")
-    public ResponseEntity<?> updateScheduler(@RequestBody SchedulerUpdateRequest schedulerUpdateRequest){
-        Long schedulerId = schedulerService.updateScheduler(schedulerUpdateRequest);
+    public ResponseEntity<?> updateScheduler(@RequestBody SchedulerUpdateRequest schedulerUpdateRequest,
+                                             Principal principal) {
+        Long schedulerId = schedulerService.updateScheduler(schedulerUpdateRequest, Long.parseLong(principal.getName()));
         return ResponseHandler.generate()
                 .data(schedulerId)
                 .status(HttpStatus.OK)
@@ -67,8 +69,9 @@ public class SchedulerApiController {
     }
 
     @PatchMapping("/status")
-    public ResponseEntity<?> updateStatus(@RequestBody SchedulerStatusRequest schedulerStatusRequest){
-        Long schedulerId = schedulerService.updateStatus(schedulerStatusRequest);
+    public ResponseEntity<?> updateStatus(@RequestBody SchedulerStatusRequest schedulerStatusRequest,
+                                          Principal principal) {
+        Long schedulerId = schedulerService.updateStatus(schedulerStatusRequest, Long.parseLong(principal.getName()));
         return ResponseHandler.generate()
                 .data(schedulerId)
                 .status(HttpStatus.OK)
@@ -76,11 +79,16 @@ public class SchedulerApiController {
     }
 
     @PostMapping("/member")
-    public ResponseEntity<?> createMemberScheduler(@RequestBody MemberSchedulerCreateRequest memberSchedulerCreateRequest){
+    public ResponseEntity<?> createMemberScheduler(@RequestBody MemberSchedulerCreateRequest memberSchedulerCreateRequest) {
         Long schedulerId = schedulerService.createMemberScheduler(memberSchedulerCreateRequest);
         return ResponseHandler.generate()
                 .data(schedulerId)
                 .status(HttpStatus.CREATED)
                 .build();
+    }
+
+    @GetMapping("/{schedulerId}")
+    public ResponseEntity<?> getMemberSchedulers(@PathVariable Long schedulerId) {
+        return null;
     }
 }

@@ -3,10 +3,7 @@ package com.co.kr.modyeo.api.schedule.service;
 import com.co.kr.modyeo.api.schedule.domain.dto.request.*;
 import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerDetail;
 import com.co.kr.modyeo.api.schedule.domain.dto.response.SchedulerResponse;
-import org.apache.tomcat.util.http.fileupload.util.LimitedInputStream;
 import org.springframework.data.domain.Slice;
-
-import java.util.List;
 
 public interface SchedulerService {
     Long createScheduler(SchedulerCreateRequest schedulerCreateRequest, Long memberId);
@@ -15,11 +12,11 @@ public interface SchedulerService {
 
     SchedulerDetail getScheduler(Long schedulerId);
 
-    void deleteScheduler(Long schedulerId);
+    void deleteScheduler(Long schedulerId, Long memberId);
 
-    Long updateScheduler(SchedulerUpdateRequest schedulerUpdateRequest);
+    Long updateScheduler(SchedulerUpdateRequest schedulerUpdateRequest, Long memberId);
 
-    Long updateStatus(SchedulerStatusRequest schedulerStatusRequest);
+    Long updateStatus(SchedulerStatusRequest schedulerStatusRequest, Long memberId);
 
     Long createMemberScheduler(MemberSchedulerCreateRequest memberSchedulerCreateRequest);
 }

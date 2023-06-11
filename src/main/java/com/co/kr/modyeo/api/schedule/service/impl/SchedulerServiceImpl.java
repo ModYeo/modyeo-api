@@ -27,9 +27,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.DayOfWeek;
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -90,14 +87,16 @@ public class SchedulerServiceImpl implements SchedulerService {
 
     @Override
     @Transactional
-    public void deleteScheduler(Long schedulerId) {
+    public void deleteScheduler(Long schedulerId, Long memberId) {
+        checkAuth(schedulerId,memberId);
         Scheduler scheduler = findScheduler(schedulerId);
         schedulerRepository.delete(scheduler);
     }
 
     @Override
     @Transactional
-    public Long updateScheduler(SchedulerUpdateRequest schedulerUpdateRequest) {
+    public Long updateScheduler(SchedulerUpdateRequest schedulerUpdateRequest, Long memberId) {
+        checkAuth(schedulerUpdateRequest.getSchedulerId(),memberId);
         Scheduler scheduler = findScheduler(schedulerUpdateRequest.getSchedulerId());
 
         Category category = categoryRepository.findById(schedulerUpdateRequest.getCategoryId())
@@ -131,7 +130,8 @@ public class SchedulerServiceImpl implements SchedulerService {
 
     @Override
     @Transactional
-    public Long updateStatus(SchedulerStatusRequest schedulerStatusRequest) {
+    public Long updateStatus(SchedulerStatusRequest schedulerStatusRequest, Long memberId) {
+        checkAuth(schedulerStatusRequest.getSchedulerId(),memberId);
         Scheduler scheduler = findScheduler(schedulerStatusRequest.getSchedulerId());
         scheduler.updateStatus(schedulerStatusRequest.getSchedulerStatus());
         return scheduler.getId();
@@ -164,5 +164,16 @@ public class SchedulerServiceImpl implements SchedulerService {
                         .errorCode(MemberErrorCode.NOT_FOUND_MEMBER.getCode())
                         .errorMessage(MemberErrorCode.NOT_FOUND_MEMBER.getMessage())
                         .build());
+    }
+
+    private void checkAuth(Long memberId, Long schedulerId){
+        MemberScheduler memberScheduler = memberSchedulerRepository.findBySchedulerIdAndMemberId(memberId,schedulerId);
+        if (!ApplicationType.MADE.equals(memberScheduler.getApplicationType())){
+            throw ApiException.builder()
+                    .status(HttpStatus.FORBIDDEN)
+                    .errorCode("스케줄 삭제 권한이 없습니다.")
+                    .errorMessage("SCHEDULER_DELETE_AUTH_ERROR")
+                    .build();
+        }
     }
 }

@@ -19,7 +19,6 @@ import com.co.kr.modyeo.api.schedule.repository.MemberSchedulerRepository;
 import com.co.kr.modyeo.api.schedule.repository.SchedulerRepository;
 import com.co.kr.modyeo.api.schedule.service.SchedulerService;
 import com.co.kr.modyeo.common.enumerate.Yn;
-import org.checkerframework.checker.nullness.Opt;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -161,8 +160,9 @@ class SchedulerServiceImplTest {
     @Test
     void deleteScheduler() {
         given(schedulerRepository.findById(any())).willReturn(Optional.of(FIXTURE_SCH_01));
+        given(memberSchedulerRepository.findBySchedulerIdAndMemberId(any(),any())).willReturn(FIXTURE_MEM_SCH_01);
 
-        schedulerService.deleteScheduler(1L);
+        schedulerService.deleteScheduler(1L, 1L);
 
         then(schedulerRepository).should().findById(any());
         then(schedulerRepository).should().delete(any());
