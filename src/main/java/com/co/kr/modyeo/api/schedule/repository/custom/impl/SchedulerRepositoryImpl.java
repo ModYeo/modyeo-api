@@ -2,6 +2,7 @@ package com.co.kr.modyeo.api.schedule.repository.custom.impl;
 
 import com.co.kr.modyeo.api.schedule.domain.dto.request.SchedulerSearch;
 import com.co.kr.modyeo.api.schedule.domain.entity.Scheduler;
+import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.DayOfWeekForMySql;
 import com.co.kr.modyeo.api.schedule.repository.custom.SchedulerCustomRepository;
 import com.co.kr.modyeo.common.support.Querydsl4RepositorySupport;
 import com.querydsl.core.types.Predicate;
@@ -30,26 +31,26 @@ public class SchedulerRepositoryImpl extends Querydsl4RepositorySupport implemen
     @Override
     public Slice<Scheduler> searchScheduler(SchedulerSearch schedulerSearch, PageRequest pageRequest) {
         return applySlicing(pageRequest, contentQuery -> contentQuery.selectFrom(scheduler)
-                        .innerJoin(scheduler.category, category)
-                        .innerJoin(scheduler.emdArea, emdArea)
-                        .fetchJoin()
-                        .where(
-                                searchDateFilter(schedulerSearch.getStartTime(), schedulerSearch.getEndTime()),
-                                categoryIdEq(schedulerSearch.getCategoryId()),
-                                emdAreaIdEq(schedulerSearch.getEmdAreaId()),
-                                dayOfWeekIn(schedulerSearch.getDayOfWeeks())));
+                .innerJoin(scheduler.category, category)
+                .innerJoin(scheduler.emdArea, emdArea)
+                .fetchJoin()
+                .where(
+                        searchDateFilter(schedulerSearch.getStartTime(), schedulerSearch.getEndTime()),
+                        categoryIdEq(schedulerSearch.getCategoryId()),
+                        emdAreaIdEq(schedulerSearch.getEmdAreaId()),
+                        dayOfWeekIn(schedulerSearch.getDayOfWeeks())));
     }
 
-    private BooleanExpression dayOfWeekIn(List<DayOfWeek> dayOfWeeks) {
-        return scheduler.meetingDate.dayOfWeek().in(dayOfWeeks.stream().map(DayOfWeek::getValue).collect(Collectors.toList()));
+    private BooleanExpression dayOfWeekIn(List<DayOfWeekForMySql> dayOfWeeks) {
+        return scheduler.meetingDate.dayOfWeek().in(dayOfWeeks.stream().map(DayOfWeekForMySql::getValue).collect(Collectors.toList()));
     }
 
     private BooleanExpression emdAreaIdEq(Long emdAreaId) {
-        return emdAreaId != null? emdArea.id.eq(emdAreaId) : null;
+        return emdAreaId != null ? emdArea.id.eq(emdAreaId) : null;
     }
 
     private BooleanExpression categoryIdEq(Long categoryId) {
-        return categoryId != null? category.id.eq(categoryId) : null;
+        return categoryId != null ? category.id.eq(categoryId) : null;
     }
 
     @Override

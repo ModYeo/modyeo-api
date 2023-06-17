@@ -149,6 +149,7 @@ public class SchedulerServiceImpl implements SchedulerService {
     }
 
     @Override
+    @Transactional
     public Long updateApplicationType(Long memberSchedulerId, Long hostId, ApplicationType applicationType) {
         MemberScheduler memberScheduler = memberSchedulerRepository.findById(memberSchedulerId).orElseThrow();
         checkHost(memberScheduler.getScheduler(),hostId);

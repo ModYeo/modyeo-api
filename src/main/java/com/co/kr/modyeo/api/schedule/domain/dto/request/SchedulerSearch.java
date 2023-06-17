@@ -1,5 +1,6 @@
 package com.co.kr.modyeo.api.schedule.domain.dto.request;
 
+import com.co.kr.modyeo.api.schedule.domain.entity.enumurate.DayOfWeekForMySql;
 import com.co.kr.modyeo.common.dto.SearchDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,7 +28,7 @@ public class SchedulerSearch extends SearchDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endTime;
 
-    private List<DayOfWeek> dayOfWeeks;
+    private List<DayOfWeekForMySql> dayOfWeeks;
 
     @Builder(builderClassName = "of",builderMethodName = "of")
     public SchedulerSearch(Integer limit,
@@ -38,7 +39,7 @@ public class SchedulerSearch extends SearchDto {
                            Long emdAreaId,
                            LocalDateTime startTime,
                            LocalDateTime endTime,
-                           List<DayOfWeek> dayOfWeeks) {
+                           List<DayOfWeekForMySql> dayOfWeeks) {
         super(limit, offset, orderBy, direction);
         this.categoryId = categoryId;
         this.emdAreaId = emdAreaId;
