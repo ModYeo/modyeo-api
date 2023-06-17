@@ -29,7 +29,7 @@ public class SwaggerConfig {
 
     private ApiInfo swaggerInfo() {
         return new ApiInfoBuilder()
-                .title("ModYeo API")
+                .title("ModYeo Backend API")
                 .description("ModYeo Backend API")
                 .build();
     }

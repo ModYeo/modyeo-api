@@ -2,17 +2,17 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username:
-    password:
+    username: modyeo.authentication@gmail.com
+    password: ztddswmtzfaqqcjm
     properties:
-       mail:
-         smtp:
+      mail:
+        smtp:
           auth: true
           starttls:
-             enable: true
+            enable: true
 
   datasource:
-    url: jdbc:mysql://skysrd.iptime.org:3306/modyeo
+    url: jdbc:mysql://modyeo-mysql:3306/modyeo
     hikari:
       username: api
       password: modyeo!@
@@ -37,7 +37,7 @@ spring:
     open-in-view: false
 
   redis:
-    host: skysrd.iptime.org
+    host: modyeo-redis
     port: 6379
     password: modyeo!@
 

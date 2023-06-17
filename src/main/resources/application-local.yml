@@ -12,7 +12,7 @@ spring:
             enable: true
 
   datasource:
-    url: jdbc:mysql://localhost:3306/modyeo
+    url: jdbc:mysql://skysrd.iptime.org:3306/modyeo
     hikari:
       username: api
       password: modyeo!@
@@ -23,22 +23,24 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
-      #        format_sql: true
-      #        use_sql_comments: true
-      #        show_sql: true
-      default_batch_fetch_size: 1000
+        format_sql: true
+        use_sql_comments: true
+        show_sql: true
+        default_batch_fetch_size: 1000
     open-in-view: false
     database: mysql
     database-platform: org.hibernate.spatial.dialect.mysql.MySQL56InnoDBSpatialDialect
 
   redis:
-    host: localhost
+    host: skysrd.iptime.org
     port: 6379
+    password: modyeo!@
+
 
 #logging:
 #  level:

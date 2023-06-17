@@ -1,5 +1,15 @@
 version: "3.7"
 services:
+  modyeo-api:
+    depends_on:
+      - modyeo-mysql
+      - modyeo-redis
+    image: sinkyoungdeok/modyeo-api
+    ports:
+      - "8080:80"
+    environment:
+      - USE_PROFILE=dev
+    restart: always
   modyeo-mysql:
     image: mysql:8.0
     platform: linux/amd64
