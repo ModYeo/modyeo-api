@@ -13,6 +13,4 @@ public interface FriendService {
     List<FriendResponse> getApprovedFriends(Long memberId);
     List<FriendResponse> getReceiveFriendRequests(Long memberId);
     List<FriendResponse> getSendFriendRequests(Long memberId);
-
-    void blockFriendRequest(Long friendId);
 }
