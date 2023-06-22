@@ -72,13 +72,4 @@ public class FriendController {
                 .data(null)
                 .build());
     }
-
-    @ApiOperation(value = "친구 차단 API")
-    @PostMapping("/request/block/{request-id}")
-    public ResponseEntity<?> blockFriendRequest(@PathVariable(value = "request-id") Long friendId) {
-        friendService.blockFriendRequest(friendId);
-        return ResponseEntity.ok(JsonResultData.successResultBuilder()
-                .data(null)
-                .build());
-    }
 }

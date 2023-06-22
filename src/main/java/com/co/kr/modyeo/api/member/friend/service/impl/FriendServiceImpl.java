@@ -116,15 +116,4 @@ public class FriendServiceImpl implements FriendService {
                 .map(FriendResponse::toResponse)
                 .collect(Collectors.toList());
     }
-
-    @Override
-    public void blockFriendRequest(Long friendId) {
-        Friend friend = friendRepository.findById(friendId)
-                .orElseThrow(() -> ApiException.builder()
-                        .errorMessage(FriendErrorCode.FRIEND_NOT_FOUND.getMessage())
-                        .errorCode(FriendErrorCode.FRIEND_NOT_FOUND.getCode())
-                        .status(HttpStatus.BAD_REQUEST)
-                        .build());
-        friend.blockFriend();
-    }
 }
